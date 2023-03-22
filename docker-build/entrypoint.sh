@@ -44,8 +44,10 @@ start_mysql() {
 cecho b "# FRAMELIX DOCKER - 😜  Huhuu!"
 echo ""
 
-if [ -z "$FRAMELIX_MODULE" ]; then
-  cecho r "Env FRAMELIX_MODULE not set. Aborting."
+
+
+if [ -z "$FRAMELIX_MODULES" ]; then
+  cecho r "Env FRAMELIX_MODULES not set. Aborting."
   exit 1
 fi
 
@@ -104,12 +106,6 @@ echo "$CHECKFOLDER OK."
 echo "Done."
 echo ""
 
-cecho y "# Write current module name \"$FRAMELIX_MODULE\" to /framelix/system/MODULE"
-echo ""
-echo $FRAMELIX_MODULE >/framelix/system/MODULE
-echo "Done."
-echo ""
-
 cecho y "# Checking required users and groups for existence"
 echo ""
 NGINX_USER=$(stat -L -c %u $FRAMELIX_USERDATA)
@@ -141,8 +137,8 @@ echo ""
 
 echo "[mysqld]
 innodb_buffer_pool_size=128M" >/etc/mysql/mariadb.conf.d/71-framelix.cnf
-# truncate/create error log file
 
+# truncate/create error log file
 echo "" >/var/log/mariadb-error.log
 echo "" >/var/log/mariadb-slow.log
 chmod 0777 /var/log/mariadb-*
@@ -185,6 +181,15 @@ if [ ! -d "$FRAMELIX_APPDATA/modules/$FRAMELIX_MODULE/public" ]; then
 fi
 echo "Done."
 echo ""
+
+# create nginx config files based on env variables
+echo "user $NGINX_USERNAME $NGINX_GROUPNAME;" >/etc/nginx/nginx-framelix-dynamic.conf
+
+php -f /framelix/system/create-nginx-sites-conf.php
+
+if [ "$?" != "0" ]:
+  exit 1
+fi
 
 # install extras for unit tests
 if [ $FRAMELIX_UNIT_TESTS -eq 1 ]; then
@@ -249,12 +254,6 @@ echo ""
 
 cecho y "# Starting nginx webserver"
 echo ""
-
-# create config files based on env variables
-echo "user $NGINX_USERNAME $NGINX_GROUPNAME;" >/etc/nginx/nginx-framelix-dynamic.conf
-
-cp /framelix/system/nginx-sites.conf /etc/nginx/sites-enabled/framelix-sites.conf
-sed -i "s/{module}/$FRAMELIX_MODULE/g" /etc/nginx/sites-enabled/framelix-sites.conf
 
 # truncate/create error log file
 echo "" >/var/log/nginx-error.log

@@ -10,7 +10,7 @@ use Framelix\FramelixTests\TestCase;
 
 use function realpath;
 
-use const FRAMELIX_APP_ROOT;
+use const FRAMELIX_APPDATA_FOLDER;
 
 final class ClassUtilsTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class ClassUtilsTest extends TestCase
         );
         $this->assertSame(
             ClassUtils::getFilePathForClassName(User::class),
-            FRAMELIX_APP_ROOT . "/modules/Framelix/src/Storable/User.php"
+            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/src/Storable/User.php"
         );
         $this->assertSame(ClassUtils::getModuleForClass(TestStorable1::class), "FramelixTests");
         $this->assertSame(ClassUtils::getModuleForClass(new TestStorable1()), "FramelixTests");

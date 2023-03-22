@@ -13,7 +13,7 @@ use function file_exists;
 use function is_object;
 use function json_encode;
 
-use const FRAMELIX_APP_ROOT;
+use const FRAMELIX_APPDATA_FOLDER;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
@@ -40,9 +40,9 @@ class JsonUtils
             return self::$cache[$cacheKey];
         }
         if ($module === null) {
-            $path = FRAMELIX_APP_ROOT . "/package.json";
+            $path = FRAMELIX_APPDATA_FOLDER . "/package.json";
         } else {
-            $path = FRAMELIX_APP_ROOT . "/modules/$module/package.json";
+            $path = FRAMELIX_APPDATA_FOLDER . "/modules/$module/package.json";
         }
         if (!file_exists($path)) {
             self::$cache[$cacheKey] = null;

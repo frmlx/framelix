@@ -21,7 +21,7 @@ use function strrpos;
 use function strtolower;
 use function substr;
 
-use const FRAMELIX_APP_ROOT;
+use const FRAMELIX_APPDATA_FOLDER;
 
 /**
  * Class utilities for frequent tasks
@@ -109,7 +109,7 @@ class ClassUtils
         }
         $exp = explode("\\", ltrim($className, "\\"));
         unset($exp[0]);
-        $path = FRAMELIX_APP_ROOT . "/modules/" . $exp[1];
+        $path = FRAMELIX_APPDATA_FOLDER . "/modules/" . $exp[1];
         unset($exp[1]);
         if (file_exists($path . "/src/" . implode("/", $exp) . ".php")) {
             return $path . "/src/" . implode("/", $exp) . ".php";
@@ -130,7 +130,7 @@ class ClassUtils
         }
         $file = realpath($file);
         $file = str_replace("/", "\\", $file);
-        $relativePath = substr($file, strlen(FRAMELIX_APP_ROOT . "/modules"));
+        $relativePath = substr($file, strlen(FRAMELIX_APPDATA_FOLDER . "/modules"));
         $className = "Framelix" . str_replace([
                 "\\" . "src" . "\\",
             ], "\\", $relativePath);

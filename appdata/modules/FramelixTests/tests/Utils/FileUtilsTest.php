@@ -26,7 +26,7 @@ final class FileUtilsTest extends TestCase
         );
         $this->assertSame(str_replace("\\", "/", __DIR__), FileUtils::normalizePath(__DIR__));
         $this->assertSame(str_replace("\\", "/", __DIR__), FileUtils::normalizePath(__DIR__, true));
-        $this->assertSame(str_replace("\\", "/", dirname(__DIR__, 4)), FRAMELIX_APP_ROOT);
+        $this->assertSame(str_replace("\\", "/", dirname(__DIR__, 4)), FRAMELIX_APPDATA_FOLDER);
         $this->assertSame(str_replace("\\", "/", dirname(__DIR__, 2)), FileUtils::getModuleRootPath(FRAMELIX_MODULE));
         $this->assertSame(str_replace("\\", "/", dirname(__DIR__, 2)), FileUtils::getModuleRootPath(FRAMELIX_MODULE));
         $this->assertSame(
