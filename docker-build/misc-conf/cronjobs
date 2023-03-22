@@ -1,0 +1,1 @@
+*/5 * * * * /usr/bin/framelix_console cron -c >> /var/log/framelix-cron.log 2>&1

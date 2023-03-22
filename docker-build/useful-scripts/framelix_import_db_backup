@@ -1,0 +1,26 @@
+#!/usr/bin/bash
+
+while getopts ":f:" opt; do
+    case $opt in
+    f)
+      if [ ! -f "$OPTARG" ]; then
+        echo File "$OPTARG" does not exist. Aborting.
+        exit 1
+      fi
+
+      echo -n "Drop and recreate database ... "
+      mysql -u root -papp -e "DROP DATABASE app; CREATE DATABASE app;"
+      echo "Done"
+
+      echo -n "Import $OPTARG into database ... "
+      mysql -u root -papp app < $OPTARG
+      echo "Done"
+
+      echo "All finished"
+      exit
+    esac
+done
+
+echo "Database 'app' will be deleted and recreated"
+echo "Use -f parameter and pass the filepath to the backup"
+echo "Place the file in /framelix/userdata/backups to get access to it."

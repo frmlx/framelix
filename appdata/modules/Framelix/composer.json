@@ -1,0 +1,10 @@
+{
+    "require": {
+        "robthree/twofactorauth": "^1.8",
+        "lbuchs/webauthn": "^1.1",
+        "mpdf/qrcode": "^1.2",
+        "phpoffice/phpspreadsheet": "^1.25",
+        "mpdf/mpdf": "^8.1",
+        "phpmailer/phpmailer": "^6.6"
+    }
+}

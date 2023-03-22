@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+for d in /framelix/appdata/modules/*/; do
+  if test -f "$d/composer.json"; then
+    echo "Composer install in $d"
+    cd $d
+    composer update
+    echo "Install done."
+  fi
+done

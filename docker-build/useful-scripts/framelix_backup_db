@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+# backup app database
+mkdir -p /framelix/userdata/backups
+FILENAME=$( date +"%Y-%m-%d-%H-%M-%S")
+FILENAME="$FILENAME.sql"
+FILENAME=${1:-$FILENAME}
+mysqldump -u root -papp app > /framelix/userdata/backups/$FILENAME
+NGINX_USERNAME=$(stat -L -c %U /framelix/userdata/)
+NGINX_GROUPNAME=$(stat -L -c %G /framelix/userdata/)
+chown $NGINX_USERNAME:$NGINX_GROUPNAME -R /framelix/userdata/backups
+echo "Backup is saved under userdata/backups/$FILENAME"

@@ -1,0 +1,310 @@
+{
+  "$schema": "schema.json",
+  "name": "framelix-web-types-handcrafted",
+  "version": "1.0.0",
+  "description-markup": "markdown",
+  "default-icon": "icon.png",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "framelix-button",
+          "description": "A clickable button with some customization options. Accept's a language key as well.",
+          "attributes": [
+            {
+              "name": "block",
+              "description": "Display as block element instead if inline",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "raw",
+              "description": "Just display the inner HTML as given, do not perform html modifications inside the tag.",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "disabled",
+              "description": "Disabled buttons are not clickable",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "small",
+              "description": "A small button with less padding and font size",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "href",
+              "description": "Load given url on click",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "target",
+              "description": "Target if link attributes is provided",
+              "required": false,
+              "value": {
+                "type": "enum"
+              },
+              "default": "_self",
+              "values": [
+                {
+                  "name": "_blank",
+                  "description": "A new tab/window"
+                },
+                {
+                  "name": "_self",
+                  "description": "Self window"
+                },
+                {
+                  "name": "_top",
+                  "description": "Top window (Helpful when inside an iframe)"
+                },
+                {
+                  "name": "modal",
+                  "description": "Modal window"
+                },
+                {
+                  "name": "none",
+                  "description": "Just load the url but do nothing with the result"
+                }
+              ]
+            },
+            {
+              "name": "jscall-url",
+              "description": "Load given JsCall url on click",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "confirm-message",
+              "description": "On button click, show this confirm message an proceed only if user accept confirm message",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "icon",
+              "description": "A material icon",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "bgcolor",
+              "description": "HTML Color (Any possible color including css variables)",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "textcolor",
+              "description": "HTML Text Color (Any possible color including css variables)",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "theme",
+              "description": "Theme styling",
+              "required": false,
+              "default": "default",
+              "value": {
+                "type": "enum"
+              },
+              "values": [
+                {
+                  "name": "default"
+                },
+                {
+                  "name": "primary"
+                },
+                {
+                  "name": "success"
+                },
+                {
+                  "name": "warning"
+                },
+                {
+                  "name": "error"
+                },
+                {
+                  "name": "light"
+                },
+                {
+                  "name": "transparent"
+                }
+              ]
+            }
+          ],
+          "source": {
+            "file": "../custom-elements/framelix-custom-element-button.js",
+            "offset": 0
+          }
+        },
+        {
+          "name": "framelix-image",
+          "description": "Display a responsive image tag that uses optimized thumbnails and lazy load.",
+          "attributes": [
+            {
+              "name": "minwidth",
+              "description": "Minimal width of image in pixel",
+              "required": false,
+              "value": {
+                "type": "number"
+              }
+            },
+            {
+              "name": "maxwidth",
+              "description": "Maximal width of image in pixel",
+              "required": false,
+              "value": {
+                "type": "number"
+              }
+            },
+            {
+              "name": "src",
+              "description": "Default image url",
+              "required": true,
+              "value": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "nolazy",
+              "description": "Disable lazy loading and display immediately",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "setparent",
+              "description": "Set the image url into the parents css background-image instead of an explicit image tag",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "recalculate",
+              "description": "The image is placed in a resizable container. Automatically recalculate matched thumbnail size after resize.",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "size-*",
+              "description": "Specific image urls provided for a max size of given width",
+              "pattern": {
+                "template": [
+                  "size-",
+                  {
+                    "regex": "[0-9]+"
+                  }
+                ]
+              }
+            }
+          ],
+          "source": {
+            "file": "../custom-elements/framelix-custom-element-image.js",
+            "offset": 0
+          }
+        },
+        {
+          "name": "framelix-alert",
+          "description": "Display a alert box with an optional hidable button. Accept's a language key as content as well.",
+          "attributes": [
+            {
+              "name": "hidable",
+              "description": "ID of the container. If set, the user can hide the alert and this choice will be remembered based on the ID provided. In the backend choice can be deleted with the settings buttons at the top right.",
+              "required": false,
+              "value": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "header",
+              "description": "A text to display as header inside the alert. Accept's a language key as well.",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "bgcolor",
+              "description": "HTML Color (Any possible color including css variables)",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "textcolor",
+              "description": "HTML Text Color (Any possible color including css variables)",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
+              "name": "theme",
+              "description": "Theme styling",
+              "required": false,
+              "default": "default",
+              "value": {
+                "type": "enum"
+              },
+              "values": [
+                {
+                  "name": "default"
+                },
+                {
+                  "name": "primary"
+                },
+                {
+                  "name": "success"
+                },
+                {
+                  "name": "warning"
+                },
+                {
+                  "name": "error"
+                },
+                {
+                  "name": "light"
+                },
+                {
+                  "name": "transparent"
+                }
+              ]
+            }
+          ],
+          "source": {
+            "file": "../custom-elements/framelix-custom-element-alert.js",
+            "offset": 0
+          }
+        }
+      ]
+    }
+  }
+}

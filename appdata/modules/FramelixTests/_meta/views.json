@@ -1,0 +1,95 @@
+{
+    "directoryListHash": "1|3224348491",
+    "views": {
+        "Framelix\\FramelixTests\\View\\BrowserTestView": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/browsertestview"
+        },
+        "Framelix\\FramelixTests\\View\\Form\\DateField": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/form\/datefield"
+        },
+        "Framelix\\FramelixTests\\View\\Index": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": ""
+        },
+        "Framelix\\FramelixTests\\View\\InitializePlaywright": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/initializeplaywright"
+        },
+        "Framelix\\FramelixTests\\View\\ModalWindow": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "Modal Window Tests",
+            "url": "\/modalwindow"
+        },
+        "Framelix\\FramelixTests\\View\\TestBackendView": {
+            "accessRole": true,
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/testbackendview"
+        },
+        "Framelix\\FramelixTests\\View\\TestBackendViewAccessRole": {
+            "accessRole": "rolenotexist",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/testbackendviewaccessrole"
+        },
+        "Framelix\\FramelixTests\\View\\TestView": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/testview"
+        },
+        "Framelix\\FramelixTests\\View\\TestViewCustomUrl": {
+            "accessRole": "*",
+            "customUrl": "\/custom",
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/testviewcustomurl"
+        },
+        "Framelix\\FramelixTests\\View\\TestViewRegexUrl": {
+            "accessRole": "*",
+            "customUrl": "~^\/regex\/(?<id>[0-9]+)~",
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "pageTitle": "{classLangKey}",
+            "url": "\/testviewregexurl"
+        }
+    }
+}

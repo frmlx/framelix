@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+# run this php command as correct user to fix permission issues in docker exec
+# docker exec does run as root by default
+
+NGINX_USERNAME=$(stat -L -c %U /framelix/userdata/)
+su $NGINX_USERNAME -s /usr/bin/php  -- "$@"

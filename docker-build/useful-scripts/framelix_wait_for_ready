@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+# the programm wait until framelix is ready
+
+echo ""
+echo -n "Waiting for container to be ready ..."
+
+FILE=/framelix/system/READY
+while true; do
+  if [ -f "$FILE" ]; then
+    echo -n .
+    break
+  fi
+  sleep 1
+done
+
+echo -n " READY!"
+echo ""
+echo ""

@@ -1,0 +1,46 @@
+.framelix-quick-search {
+  .framelix-quick-search-options {
+    .framelix-form {
+      padding: 0;
+      box-shadow: none;
+    }
+
+    .framelix-form-submit-status {
+      display: none;
+    }
+  }
+
+  .framelix-quick-search-input {
+    display: flex;
+    padding: 5px;
+    background: var(--color-page-bg-stencil);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    gap: 10px;
+
+    .material-icons {
+      align-self: center;
+      font-size: 24px;
+    }
+
+
+    .framelix-quick-search-input-editable {
+      font-size: 110%;
+      font-weight: bold;
+      flex: 1 1 auto;
+      padding: 5px 5px 5px 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+
+      &[data-placeholder]:empty::before {
+        content: attr(data-placeholder);
+      }
+
+      [data-placeholder]:empty:focus::before {
+        content: "";
+      }
+    }
+  }
+}

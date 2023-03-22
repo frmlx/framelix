@@ -1,0 +1,21 @@
+@media print {
+  .framelix-sidebar,
+  .framelix-sidebar-toggle,
+  .framelix-toast,
+  [data-flag-icon='1'],
+  button,
+  framelix-button,
+  .framelix-popup,
+  .framelix-top-bar {
+    display: none !important;
+  }
+  table {
+    border-spacing: 0 !important;
+  }
+  td, th {
+    border: 1px solid black !important;
+  }
+  .framelix-content {
+    padding: 0 !important;
+  }
+}

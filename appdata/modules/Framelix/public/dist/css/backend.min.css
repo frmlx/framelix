@@ -1,0 +1,455 @@
+@media print {
+  .framelix-sidebar,
+.framelix-sidebar-toggle,
+.framelix-toast,
+[data-flag-icon="1"],
+button,
+framelix-button,
+.framelix-popup,
+.framelix-top-bar {
+    display: none !important;
+  }
+  table {
+    border-spacing: 0 !important;
+  }
+  td, th {
+    border: 1px solid black !important;
+  }
+  .framelix-content {
+    padding: 0 !important;
+  }
+}
+:root {
+  --sidebar-width: min(100vw, 300px);
+  --sidebar-left: 0px;
+  --sidebar-left-closed: calc(var(--sidebar-width) * -1);
+  --sidebar-bg: #222;
+  --sidebar-bg-entry: #333;
+  --sidebar-bg-entry-hover: #444;
+  --sidebar-text-color: white;
+  --sidebar-hue: var(--color-primary-hue);
+  --sidebar-active-container-text-color: white;
+  counter-reset: container;
+}
+
+[data-color-scheme=dark] {
+  --sidebar-active-container-text-color: white;
+}
+
+html[data-sidebar-status=closed] {
+  --sidebar-left: var(--sidebar-left-closed);
+}
+
+html[data-sidebar-status=opened] {
+  --sidebar-left: 0px;
+}
+
+.framelix-sidebar {
+  position: fixed;
+  left: var(--sidebar-left);
+  top: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  color: var(--sidebar-text-color);
+  max-width: calc(100% - 20px);
+  overflow: auto;
+  transition: 0.2s;
+  box-sizing: border-box;
+  z-index: 2;
+}
+html[data-screen-size=s] .framelix-sidebar {
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px;
+}
+.framelix-sidebar::-webkit-scrollbar {
+  width: 0;
+}
+.framelix-sidebar .framelix-sidebar-entry {
+  border-radius: var(--border-radius);
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+1) {
+  --sidebar-active-container-bg-color: hsl(150, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(150, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+2) {
+  --sidebar-active-container-bg-color: hsl(200, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(200, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+3) {
+  --sidebar-active-container-bg-color: hsl(250, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(250, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+4) {
+  --sidebar-active-container-bg-color: hsl(300, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(300, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+5) {
+  --sidebar-active-container-bg-color: hsl(350, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(350, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+6) {
+  --sidebar-active-container-bg-color: hsl(400, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(400, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+7) {
+  --sidebar-active-container-bg-color: hsl(450, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(450, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+8) {
+  --sidebar-active-container-bg-color: hsl(500, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(500, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+9) {
+  --sidebar-active-container-bg-color: hsl(550, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(550, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+10) {
+  --sidebar-active-container-bg-color: hsl(600, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(600, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+11) {
+  --sidebar-active-container-bg-color: hsl(650, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(650, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+12) {
+  --sidebar-active-container-bg-color: hsl(700, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(700, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+13) {
+  --sidebar-active-container-bg-color: hsl(750, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(750, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+14) {
+  --sidebar-active-container-bg-color: hsl(800, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(800, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+15) {
+  --sidebar-active-container-bg-color: hsl(850, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(850, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+16) {
+  --sidebar-active-container-bg-color: hsl(900, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(900, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+17) {
+  --sidebar-active-container-bg-color: hsl(950, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(950, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+18) {
+  --sidebar-active-container-bg-color: hsl(1000, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1000, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+19) {
+  --sidebar-active-container-bg-color: hsl(1050, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1050, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+20) {
+  --sidebar-active-container-bg-color: hsl(1100, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1100, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+21) {
+  --sidebar-active-container-bg-color: hsl(1150, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1150, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+22) {
+  --sidebar-active-container-bg-color: hsl(1200, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1200, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+23) {
+  --sidebar-active-container-bg-color: hsl(1250, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1250, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+24) {
+  --sidebar-active-container-bg-color: hsl(1300, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1300, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+25) {
+  --sidebar-active-container-bg-color: hsl(1350, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1350, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+26) {
+  --sidebar-active-container-bg-color: hsl(1400, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1400, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+27) {
+  --sidebar-active-container-bg-color: hsl(1450, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1450, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+28) {
+  --sidebar-active-container-bg-color: hsl(1500, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1500, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+29) {
+  --sidebar-active-container-bg-color: hsl(1550, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1550, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-entry:nth-child(30n+30) {
+  --sidebar-active-container-bg-color: hsl(1600, 35%, calc(var(--is-dark-mode) * -20% + 60%));
+  --sidebar-active-container-bg-color-container-icon: hsl(1600, 35%, calc(var(--is-dark-mode) * -20% + 65%));
+}
+.framelix-sidebar .framelix-sidebar-link:any-link,
+.framelix-sidebar .framelix-sidebar-collapsable-title {
+  font-weight: normal;
+  color: var(--sidebar-text-color);
+  text-decoration: none;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: pointer;
+  border: 0;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: left;
+  overflow: hidden;
+  justify-content: start;
+  border-radius: var(--border-radius);
+  gap: 10px;
+  padding: 0;
+  margin: 0 0 1px;
+  background-color: var(--sidebar-bg-entry);
+  box-shadow: none;
+}
+.framelix-sidebar .framelix-sidebar-link:any-link:hover,
+.framelix-sidebar .framelix-sidebar-collapsable-title:hover {
+  background-color: var(--sidebar-bg-entry-hover);
+}
+.framelix-sidebar .framelix-sidebar-link:any-link:hover .framelix-sidebar-main-icon .material-icons,
+.framelix-sidebar .framelix-sidebar-collapsable-title:hover .framelix-sidebar-main-icon .material-icons {
+  transform: translateX(2px);
+}
+.framelix-sidebar .framelix-sidebar-link:any-link.framelix-sidebar-link-active,
+.framelix-sidebar .framelix-sidebar-collapsable-title.framelix-sidebar-link-active {
+  color: white;
+  background-color: var(--sidebar-active-container-bg-color);
+}
+.framelix-sidebar .framelix-sidebar-main-icon {
+  flex: 0 1 auto;
+  background-color: var(--sidebar-active-container-bg-color);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  min-height: 26px;
+  color: white;
+}
+.framelix-sidebar .framelix-sidebar-main-icon .material-icons {
+  transition: 0.2s;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.framelix-sidebar .framelix-sidebar-label {
+  flex: 1 1 auto;
+  line-height: 1.2;
+  align-self: center;
+}
+.framelix-sidebar .framelix-sidebar-label-nowrap {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+.framelix-sidebar .framelix-sidebar-label-small {
+  font-size: 75%;
+  line-height: 1.1;
+  font-weight: normal;
+}
+.framelix-sidebar .framelix-sidebar-badge {
+  background: red;
+  color: white;
+  border-radius: 50px;
+  width: 16px;
+  height: 16px;
+  line-height: 1;
+  font-size: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  margin-left: -13px;
+  margin-top: -10px;
+}
+.framelix-sidebar .framelix-sidebar-entries {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.framelix-sidebar-collapsable .framelix-sidebar-collapsable-title::after {
+  content: "expand_more";
+  font-family: "Material Icons", sans-serif;
+  transform: rotate(-90deg);
+  transition: 0.3s;
+  align-self: center;
+  margin-right: 10px;
+}
+.framelix-sidebar-collapsable .framelix-sidebar-collapsable-container {
+  display: none;
+  font-size: 90%;
+  font-weight: normal;
+}
+.framelix-sidebar-collapsable .framelix-sidebar-collapsable-container .framelix-sidebar-link .framelix-sidebar-main-icon {
+  background-color: var(--sidebar-active-container-bg-color-container-icon);
+}
+html[data-screen-size=l] .framelix-sidebar-collapsable .framelix-sidebar-collapsable-container .framelix-sidebar-link .framelix-sidebar-main-icon {
+  min-height: 20px;
+}
+.framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-collapsable-container {
+  display: block;
+}
+.framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-collapsable-title,
+.framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-link-active {
+  color: var(--sidebar-active-container-text-color);
+}
+.framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-collapsable-title::after,
+.framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-link-active::after {
+  transform: rotate(0deg);
+}
+
+.framelix-sidebar-toggle .icon {
+  transition: 0.2s;
+}
+html[data-sidebar-status=opened] .framelix-sidebar-toggle .icon {
+  transform: rotate(90deg);
+}
+
+.framelix-sidebar-inner {
+  padding: 10px;
+  box-sizing: border-box;
+  background: var(--sidebar-bg);
+  min-height: 100%;
+}
+
+.framelix-sidebar-logo {
+  margin-bottom: 10px;
+  text-align: center;
+  border-radius: var(--border-radius);
+}
+.framelix-sidebar-logo a:any-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.framelix-sidebar-logo img {
+  max-width: 100%;
+  max-height: 70px;
+  border-radius: var(--border-radius);
+}
+
+:root {
+  --font: var(--framelix-backend-font);
+  --font-size: 16px;
+  --line-height: 1.4;
+}
+
+html[data-layout="2"] body {
+  --xy: 19% 80%;
+  --hue: 180;
+  --sat: 50%;
+  --light: 50%;
+  --b: 25deg;
+  --a: 68deg;
+  --c0: hsl(var(--hue), calc(var(--sat)), calc(var(--light)));
+  --c1: hsl(calc(var(--hue)), calc(var(--sat)), calc(var(--light) - 5%));
+  --c2: hsl(calc(var(--hue)), calc(var(--sat)), calc(var(--light) - 10%));
+  --c3: hsl(calc(var(--hue)), calc(var(--sat)), calc(var(--light) - 15%));
+  background: conic-gradient(from var(--b) at var(--xy), var(--c0) var(--a), var(--c1) 20% 50%, var(--c2) 20% calc(180deg + var(--a)), var(--c3) 20%);
+}
+
+html[data-color-scheme=dark][data-layout="2"] body {
+  --light: 20%;
+  --sat: 10%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+h2:after, h3:after {
+  content: "";
+  display: block;
+  height: 2px;
+}
+
+.framelix-top-bar {
+  display: flex;
+  background: #222;
+  color: white;
+  position: sticky;
+  top: 0;
+  align-items: center;
+  z-index: 1;
+  gap: 10px;
+  transition: 0.2s;
+}
+html[data-sidebar-status=opened] .framelix-top-bar {
+  padding-left: var(--sidebar-width);
+}
+.framelix-top-bar framelix-button {
+  font-size: 24px;
+  min-width: 45px;
+  border-radius: 0;
+}
+.framelix-top-bar .framelix-page-title {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
+  font-size: inherit;
+  padding: 5px 20px;
+}
+
+hr {
+  border: 0;
+  margin: 5px 0;
+  display: block;
+  height: 2px;
+  background: var(--color-border-strong);
+}
+
+.framelix-content {
+  padding-left: calc(var(--sidebar-left) + var(--sidebar-width));
+  transition: 0.2s;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+}
+
+html[data-screen-size=s] .framelix-content {
+  padding: 0;
+}
+
+.framelix-content-inner {
+  min-width: 220px;
+  padding: 15px;
+  margin: 10px;
+  border-radius: var(--border-radius);
+  background: var(--color-page-bg-stencil-weak);
+}
+
+html:not([data-layout="2"]) .framelix-content-inner {
+  margin-bottom: 100px;
+  box-shadow: none;
+}
+
+html[data-layout="2"] .framelix-content {
+  padding: 15px 15px 15px calc(var(--sidebar-left) + var(--sidebar-width) + 15px);
+  gap: 10px;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+html[data-layout="2"] .framelix-content-inner {
+  max-width: 600px;
+  width: 100%;
+  padding: 30px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.01);
+  transition: 0.2s;
+  box-sizing: border-box;
+}
+html[data-layout="2"] .framelix-content-inner:focus-within {
+  box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.2);
+}

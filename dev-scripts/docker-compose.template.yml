@@ -1,0 +1,27 @@
+version: "3.4"
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  vol:
+    external: true
+    name: ${DOCKER_CONTAINER_NAME}_vol
+
+services:
+  app:
+    build: ..
+    restart: on-failure
+    volumes:
+      - ../appdata:/framelix/appdata_volume
+      - vol:/framelix/dbdata
+      - ../userdata:/framelix/userdata
+      - ./phpstorm-coverage:/opt/phpstorm-coverage
+    ports:
+      - "${PUBLICPORT}:443"
+    environment:
+      - COMPOSE_PROJECT_NAME
+      - FRAMELIX_MODULE=${MODULENAME}
+      - FRAMELIX_UNIT_TESTS
+      - FRAMELIX_PLAYWRIGHT_TESTS

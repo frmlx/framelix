@@ -1,0 +1,742 @@
+.framelix-form-field-captcha .framelix-form-field-captcha-verified {
+  display: inline-flex;
+  align-items: center;
+  margin: 5px 0;
+}
+.framelix-form-field-captcha .framelix-form-field-captcha-verified .framelix-loading {
+  margin-right: 10px;
+}
+.framelix-form-field-captcha .framelix-form-field-captcha-verified .material-icons {
+  font-size: 16px;
+  margin-right: 10px;
+  color: var(--color-success-hue);
+}
+
+.framelix-form-field-color .framelix-form-field-input {
+  padding: 4px;
+}
+.framelix-form-field-color .framelix-form-field-container-color-wrap {
+  display: flex;
+  align-items: center;
+  padding: 2px 5px;
+}
+.framelix-form-field-color .framelix-form-field-container-color-wrap label {
+  display: flex;
+  align-items: center;
+}
+.framelix-form-field-color input[type=text] {
+  flex: 1 1 auto;
+  background: initial;
+  margin-right: 10px;
+  padding: 3px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--color-input-text);
+}
+.framelix-form-field-color input[type=text]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.framelix-form-field-color input[type=text]::-webkit-color-swatch {
+  border: none;
+}
+.framelix-form-field-color input[type=color] {
+  cursor: pointer;
+  flex: 1 1 auto;
+  padding: 0;
+  height: 25px;
+  max-width: 30px;
+  background: initial;
+  -webkit-appearance: none;
+}
+.framelix-form-field-color input[type=color]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.framelix-form-field-color input[type=color]::-webkit-color-swatch {
+  border: none;
+}
+.framelix-form-field-color .framelix-form-field-container-color-pick {
+  display: none;
+}
+.framelix-form-field-color .framelix-form-field-container[data-empty="1"] input[type=color] {
+  position: absolute;
+  visibility: hidden;
+}
+.framelix-form-field-color .framelix-form-field-container[data-empty="1"] .framelix-form-field-container-color-pick {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.framelix-form-field-date-popup {
+  width: 230px;
+}
+
+.framelix-form-field-date-popup-monthpicker {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.framelix-form-field-date-popup-monthpicker .framelix-form-field .framelix-form-field-container {
+  margin: 0;
+}
+
+.framelix-form-field-date-popup-monthpicker-select {
+  flex: 1 1 auto;
+}
+
+.framelix-form-field-date-popup-calendar {
+  margin-bottom: 10px;
+}
+.framelix-form-field-date-popup-calendar table {
+  width: 100%;
+}
+.framelix-form-field-date-popup-calendar td {
+  padding: 5px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+}
+.framelix-form-field-date-popup-calendar td[data-other-month] {
+  opacity: 0.4;
+}
+.framelix-form-field-date-popup-calendar td[data-disabled] {
+  pointer-events: none;
+  opacity: 0.2;
+}
+.framelix-form-field-date-popup-calendar td[data-satsun] {
+  background: rgba(0, 0, 0, 0.1);
+}
+.framelix-form-field-date-popup-calendar td[data-selected] {
+  background: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
+}
+.framelix-form-field-date-popup-calendar td[data-today] {
+  outline: 1px solid var(--color-border-strong);
+}
+.framelix-form-field-date-popup-calendar td:hover {
+  background: var(--color-border-subtle);
+}
+
+.framelix-form-field-date-popup-actions {
+  display: flex;
+  gap: 5px;
+}
+.framelix-form-field-date-popup-actions framelix-button {
+  flex: 1 1 auto;
+}
+
+.framelix-form-field-datetime .framelix-form-field-input {
+  padding: 4px;
+}
+html[data-color-scheme=dark] .framelix-form-field-datetime ::-webkit-calendar-picker-indicator {
+  filter: invert(90%);
+}
+
+.framelix-form-field-file {
+  transition: 0.2s;
+}
+.framelix-form-field-file .framelix-form-field-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 5px;
+}
+.dragging .framelix-form-field-file {
+  border: 0;
+  background: hsla(var(--color-success-hue), 50%, 50%, 0.2);
+  box-shadow: hsl(var(--color-success-hue), 50%, 50%) 0 0 10px;
+  padding: 20px;
+  transition: 0.2s;
+  border-radius: var(--border-radius);
+}
+.framelix-form-field-file .framelix-form-field-file-file {
+  padding: 2px 5px;
+  background: var(--color-alert-default-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  margin-bottom: 3px;
+}
+.framelix-form-field-file .framelix-form-field-file-file[data-uploaded="1"] {
+  background: var(--color-alert-success-bg);
+  color: var(--color-alert-success-text);
+}
+.framelix-form-field-file .framelix-form-field-file-file[data-uploaded="1"] .framelix-form-field-file-file-remove {
+  opacity: 0;
+  pointer-events: none;
+}
+.framelix-form-field-file .framelix-form-field-file-file-strikethrough {
+  text-decoration: line-through;
+}
+.framelix-form-field-file .framelix-form-field-file-file-label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.framelix-form-field-file .framelix-form-field-file-file-label-size {
+  font-size: 90%;
+  line-height: 1.4;
+  opacity: 0.8;
+  min-width: 80px;
+  max-width: 80px;
+}
+.framelix-form-field-file .framelix-form-field-file-file-label-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(100% - 140px);
+}
+.framelix-form-field-file .framelix-form-field-file-file-remove {
+  color: var(--color-error-text);
+  min-width: 40px;
+  max-width: 40px;
+}
+
+.framelix-form-field-row[data-types=FramelixFormFieldHidden] {
+  display: none;
+}
+
+.framelix-mediabrowser-modal {
+  height: 80vh;
+  display: flex;
+  gap: 20px;
+}
+.framelix-mediabrowser-modal .framelix-mediabrowser-selected-info {
+  min-height: 70px;
+}
+.framelix-mediabrowser-modal [data-selected] framelix-button[data-action=select] {
+  background: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
+}
+
+.framelix-mediabrowser-selected-info {
+  margin-top: 10px;
+}
+
+.framelix-mediabrowser-left-window {
+  overflow: hidden;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-width: 280px;
+  max-width: 280px;
+  padding-right: 20px;
+  border-right: 2px solid var(--color-border-subtle);
+}
+html[data-screen-size=s] .framelix-mediabrowser-left-window {
+  display: none;
+}
+.framelix-mediabrowser-left-window .framelix-mediabrowser-tree-label {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  margin-bottom: 2px;
+}
+.framelix-mediabrowser-left-window .framelix-mediabrowser-tree-label[data-active="1"] {
+  background: var(--color-button-warning-bg);
+  color: var(--color-button-warning-text);
+}
+
+.framelix-mediabrowser-tree-childs {
+  margin-left: 10px;
+}
+
+.framelix-mediabrowser-right-window {
+  flex: 1 1 auto;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.framelix-mediabrowser-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.framelix-mediabrowser-actions > framelix-button {
+  flex: 1 1 auto;
+}
+.framelix-mediabrowser-actions > .framelix-form-field {
+  margin: 0;
+  padding: 0;
+  flex: 1 1 auto;
+}
+.framelix-mediabrowser-actions > .framelix-mediabrowser-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+html[data-screen-size=s] .framelix-mediabrowser-actions > .framelix-mediabrowser-view {
+  min-width: 100%;
+}
+.framelix-mediabrowser-actions > .framelix-mediabrowser-view .material-icons {
+  font-size: 24px;
+}
+
+.framelix-mediabrowser-scrollbody {
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.framelix-mediabrowser-files {
+  flex: 1 1 auto;
+  gap: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.framelix-mediabrowser-files-table {
+  flex: 1 1 auto;
+}
+.framelix-mediabrowser-files-table tr {
+  cursor: pointer;
+}
+.framelix-mediabrowser-files-table td[data-column-name=thumbnail] {
+  min-width: 50px;
+  max-width: 50px;
+  min-height: 20px;
+  background-repeat: no-repeat;
+  background-color: var(--color-page-bg-stencil-strong);
+  background-size: contain;
+  background-position: center;
+}
+
+.framelix-mediabrowser-thumbnail {
+  flex: 1 1 auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--color-page-bg-stencil-strong);
+  width: 100%;
+  min-height: 20px;
+}
+
+.framelix-mediabrowser-selected-thumbnails {
+  margin-top: 10px;
+}
+.framelix-mediabrowser-selected-thumbnails .framelix-mediabrowser-thumbnail {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  float: left;
+  min-width: 50px;
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  text-align: center;
+}
+.framelix-mediabrowser-selected-thumbnails .framelix-mediabrowser-thumbnail-more {
+  font-size: 90%;
+  text-align: center;
+  background: none;
+}
+
+.framelix-mediabrowser-edit-sort {
+  display: flex;
+  margin-bottom: 2px;
+  cursor: move;
+  gap: 10px;
+  align-items: center;
+}
+.framelix-mediabrowser-edit-sort:hover {
+  background: var(--color-page-bg-stencil);
+}
+.framelix-mediabrowser-edit-sort .framelix-mediabrowser-thumbnail {
+  min-width: 90px;
+  min-height: 90px;
+  max-width: 90px;
+  max-height: 90px;
+}
+.framelix-mediabrowser-edit-sort .framelix-form-field-input {
+  max-width: 60px;
+}
+
+.framelix-mediabrowser-entry {
+  text-align: center;
+  width: calc(100% * 1 / var(--entries-per-row) - 10px);
+  max-width: 100%;
+  border-radius: var(--border-radius);
+  background: var(--color-page-bg-stencil);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.framelix-mediabrowser-entry .framelix-mediabrowser-thumbnail {
+  aspect-ratio: 16/9;
+}
+.framelix-mediabrowser-entry .framelix-mediabrowser-label {
+  padding: 8px;
+  font-size: 90%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.framelix-mediabrowser-entry .framelix-mediabrowser-entry-actions {
+  display: flex;
+  gap: 5px;
+  background: var(--color-button-default-bg);
+  color: var(--color-button-default-text);
+  align-items: center;
+}
+.framelix-mediabrowser-entry .framelix-mediabrowser-entry-actions framelix-button {
+  flex: 1 1 auto;
+  margin: 0;
+}
+.framelix-mediabrowser-entry:hover {
+  background: var(--color-page-bg-stencil-strong);
+}
+
+.framelix-form-field-search .framelix-form-field-search-input {
+  margin-bottom: 3px;
+}
+.framelix-form-field-search .framelix-form-field-search-input framelix-button {
+  cursor: default;
+}
+.framelix-form-field-search .framelix-form-field-search-selected-options {
+  padding: 0;
+}
+.framelix-form-field-search .framelix-form-field-search-selected-options:empty {
+  display: none;
+}
+
+.framelix-form-field-search-popup.framelix-form-field-input {
+  padding: 0;
+}
+.framelix-form-field-search-popup[data-multiple="0"] .framelix-form-field-select-option-checkbox {
+  display: none;
+}
+
+.framelix-form-field-select .framelix-form-field-select-picker {
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  padding: 0;
+}
+.framelix-form-field-select .framelix-form-field-select-picker > framelix-button {
+  --padding: 0;
+  min-width: 30px;
+  max-width: 30px;
+  background-color: transparent;
+}
+.framelix-form-field[data-checked="0"] .framelix-form-field-select .framelix-form-field-select-picker > framelix-button[data-action=unset] {
+  display: none;
+}
+.framelix-form-field-select[data-checked="0"] [data-action=unset] {
+  display: none;
+}
+.framelix-form-field-select[data-options="0"] [data-action=open] {
+  display: none;
+}
+.framelix-form-field-select .framelix-form-field-select-options {
+  flex: 1 1 auto;
+  min-height: 32px;
+}
+.framelix-form-field-select[data-dropdown="1"] .framelix-form-field-select-picker .framelix-form-field-select-option-checkbox {
+  display: none;
+}
+.framelix-form-field-select[data-dropdown="1"] .framelix-form-field-select-picker .framelix-form-field-select-option:hover {
+  background: transparent;
+}
+.framelix-form-field-select[data-dropdown="1"]:not([data-disabled="1"]) .framelix-form-field-select-picker:hover > div {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.framelix-form-field-select-popup > .framelix-form-field-input {
+  padding: 0;
+  border: 0;
+}
+
+.framelix-form-field-select-popup framelix-button[data-unset] {
+  margin: 10px;
+}
+
+.framelix-form-field-select-search {
+  margin: 5px;
+}
+
+.framelix-form-field-select-option {
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  border-radius: var(--border-radius);
+  padding: 8px;
+  min-height: var(--framelix-form-field-min-height);
+  box-sizing: border-box;
+}
+.framelix-form-field-select-option:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.framelix-form-field-select-option:last-child {
+  border: 0;
+}
+.framelix-form-field-select-option .framelix-form-field-select-option-checkbox {
+  min-width: 32px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.framelix-textarea-autoheight-helper {
+  opacity: 0;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.framelix-textarea-autoheight {
+  resize: none;
+  overflow: hidden;
+}
+
+.framelix-form-field-time .framelix-form-field-input {
+  padding: 4px;
+}
+html[data-color-scheme=dark] .framelix-form-field-time ::-webkit-calendar-picker-indicator {
+  filter: invert(90%);
+}
+
+.framelix-form-field-toggle .framelix-form-field-input {
+  cursor: pointer;
+  user-select: none;
+  width: 68px;
+  padding: 3px;
+  display: inline-flex;
+  color: white;
+}
+.framelix-form-field-toggle .framelix-form-field-input input[type=checkbox] {
+  flex: 1 1 auto;
+  margin: 0;
+  height: auto;
+  width: auto;
+}
+.framelix-form-field-toggle .framelix-form-field-input[data-style=toggle] input:not(:checked) {
+  margin-right: calc(50% + 3px);
+}
+.framelix-form-field-toggle .framelix-form-field-input[data-style=toggle] input:checked {
+  margin-left: calc(50% + 3px);
+}
+.framelix-form-field-toggle .framelix-form-field-input[data-style=checkbox] {
+  width: 34px;
+}
+
+.framelix-form-field-twofactorcode .framelix-form-field-twofactorcode-label {
+  margin-bottom: 5px;
+}
+.framelix-form-field-twofactorcode .framelix-form-field-twofactorcode-backup {
+  margin-top: 15px;
+  font-size: 90%;
+}
+
+:root {
+  --framelix-form-field-min-height: 38px;
+}
+
+.framelix-form-field.framelix-form-field-single {
+  display: inline-block;
+  flex: inherit;
+}
+.framelix-form-field.framelix-form-field-single.framelix-form-field .framelix-form-field-container {
+  margin: 0;
+}
+
+.framelix-form-field-row {
+  display: flex;
+  padding: 4px 0 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.framelix-form-field-row[data-sizing=flow] .framelix-form-field {
+  flex: none;
+}
+.framelix-form-field-row.framelix-form-field-group-hidden {
+  display: none !important;
+}
+.framelix-form-field-row[data-field-group-id] {
+  padding-left: 10px;
+  border-left: 2px solid var(--color-page-bg-stencil-stronger);
+}
+.framelix-form-field-row[data-visible-fields-in-row="0"][data-visibility-hidden-method=hidden] {
+  display: none;
+}
+
+.framelix-form-field {
+  flex: 1 1 auto;
+}
+.framelix-form-field.framelix-form-field-hidden[data-visibility-hidden-method=transparent] {
+  opacity: 0.1;
+  pointer-events: none !important;
+  user-select: none;
+}
+.framelix-form-field.framelix-form-field-hidden[data-visibility-hidden-method=transparent] * {
+  pointer-events: none !important;
+}
+.framelix-form-field.framelix-form-field-hidden[data-visibility-hidden-method=hidden] {
+  display: none;
+}
+.framelix-form-field[data-disabled="1"] * {
+  cursor: default !important;
+  --color-input-background: var(--color-page-bg-stencil);
+}
+.framelix-form-field .framelix-form-field-label {
+  margin-bottom: 3px;
+  font-weight: bold;
+}
+.framelix-form-field .framelix-form-field-label-required:after {
+  content: " *";
+  position: relative;
+  font-weight: normal;
+  cursor: help;
+}
+.framelix-form-field .framelix-form-field-label-description {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 3px;
+}
+.framelix-form-field .framelix-form-field-container {
+  margin-top: 6px;
+}
+.framelix-form-field .framelix-form-field-container[data-field-with-button="1"] {
+  display: flex;
+}
+.framelix-form-field .framelix-form-field-container[data-field-with-button="1"] framelix-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 0 5px;
+  justify-content: center;
+}
+.framelix-form-field .framelix-form-field-container[data-field-with-button="1"] .framelix-form-field-input {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.framelix-form-field-input {
+  padding: 8px;
+  min-height: var(--framelix-form-field-min-height);
+  border: 0;
+  background: var(--color-input-background);
+  border-radius: var(--border-radius);
+  border: var(--color-input-border);
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--color-input-text);
+}
+.framelix-form-field-input[type=search]::-webkit-search-decoration, .framelix-form-field-input[type=search]::-webkit-search-cancel-button, .framelix-form-field-input[type=search]::-webkit-search-results-button, .framelix-form-field-input[type=search]::-webkit-search-results-decoration {
+  appearance: none;
+}
+.framelix-form-field-input::placeholder {
+  color: var(--color-input-text);
+  opacity: 0.7;
+}
+
+input[type=radio],
+input[type=checkbox] {
+  margin: 0;
+  appearance: none;
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  background-color: rgba(0, 0, 0, 0.3);
+  outline: 0;
+  border-radius: var(--border-radius);
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: 0.3s margin-left;
+  cursor: pointer;
+}
+input[type=radio]:hover,
+input[type=checkbox]:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+input[type=radio]:focus-within,
+input[type=checkbox]:focus-within {
+  background-color: rgba(0, 0, 0, 0.6);
+  outline: 2px solid black;
+}
+input[type=radio]:after,
+input[type=checkbox]:after {
+  content: "radio_button_unchecked";
+  font-family: "Material Icons", sans-serif;
+  line-height: 1;
+  display: block;
+  font-size: 12px;
+}
+input[type=radio]:checked,
+input[type=checkbox]:checked {
+  background-color: var(--color-input-checkbox-checked);
+}
+input[type=radio]:checked:after,
+input[type=checkbox]:checked:after {
+  content: "check";
+}
+
+.framelix-form {
+  margin-bottom: 20px;
+}
+
+.framelix-form-label {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.framelix-form-field-group {
+  margin: 10px 0;
+}
+.framelix-form-field-group[data-state="1"] framelix-button .icon {
+  transform: rotate(90deg);
+}
+
+.framelix-form-row-bottom {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.framelix-form-row-bottom .framelix-form-buttons {
+  margin-top: 10px;
+  display: inline-flex;
+  gap: 10px;
+}
+.framelix-form-row-bottom .framelix-form-submit-status {
+  margin-top: 5px;
+  opacity: 0;
+  transition: 0.3s;
+  flex: 1 1 auto;
+}
+
+.framelix-form-sticky-form-buttons .framelix-form-row-bottom {
+  background: var(--color-page-bg);
+  padding: 10px;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  border-top: 2px solid var(--color-border-subtle);
+}
+
+.framelix-modal .framelix-form-sticky-form-buttons .framelix-form-row-bottom {
+  bottom: -5px;
+  padding: 10px 0;
+}
+
+.framelix-form-submitting .framelix-form-buttons framelix-button[data-type=submit] {
+  opacity: 0.7;
+}
+.framelix-form-submitting .framelix-form-submit-status {
+  opacity: 1;
+}

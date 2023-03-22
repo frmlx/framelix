@@ -1,0 +1,21 @@
+[mysql]
+default-character-set=utf8mb4
+
+[mysqld]
+pid-file                = /run/mysqld/mysqld.pid
+basedir                 = /usr
+datadir                 = /framelix/dbdata
+bind-address            = 127.0.0.1
+
+log_error = /var/log/mariadb-error.log
+slow_query_log_file    = /var/log/mariadb-slow.log
+long_query_time        = 30
+
+expire_logs_days        = 10
+character-set-server  = utf8mb4
+collation-server      = utf8mb4_general_ci
+
+innodb_use_native_aio=0
+
+[mariadb]
+lower_case_table_names=1

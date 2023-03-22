@@ -1,0 +1,71 @@
+.framelix-form-field-file {
+
+  transition: .2s;
+
+  .framelix-form-field-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .dragging & {
+    border: 0;
+    background: hsla(var(--color-success-hue), 50%, 50%, 0.2);
+    box-shadow: hsl(var(--color-success-hue), 50%, 50%) 0 0 10px;
+    padding: 20px;
+    transition: .2s;
+    border-radius: var(--border-radius);
+  }
+
+  .framelix-form-field-file-file {
+    padding: 2px 5px;
+    background: var(--color-alert-default-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-bottom: 3px;
+
+    &[data-uploaded='1'] {
+      background: var(--color-alert-success-bg);
+      color: var(--color-alert-success-text);
+
+      .framelix-form-field-file-file-remove {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .framelix-form-field-file-file-strikethrough {
+    text-decoration: line-through;
+  }
+
+  .framelix-form-field-file-file-label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .framelix-form-field-file-file-label-size {
+    font-size: 90%;
+    line-height: 1.4;
+    opacity: 0.8;
+    min-width: 80px;
+    max-width: 80px;
+  }
+
+
+  .framelix-form-field-file-file-label-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: calc(100% - 140px);
+  }
+
+  .framelix-form-field-file-file-remove {
+    color: var(--color-error-text);
+    min-width: 40px;
+    max-width: 40px;
+  }
+}

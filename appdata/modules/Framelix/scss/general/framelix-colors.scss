@@ -1,0 +1,194 @@
+:root {
+  --color-primary-hue: 204;
+  --color-success-hue: 160;
+  --color-warning-hue: 28;
+  --color-error-hue: 353;
+
+  --color-contrast-modifier: 0%;
+
+  --color-primary-text: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 50%);
+  --color-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 50%);
+  --color-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 50%);
+  --color-error-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 50%);
+
+  --color-border-strong: #222;
+  --color-border-subtle: #aaa;
+
+  --color-page-bg-hue: 0;
+  --color-page-bg: #f5f7fb;
+  --color-page-bg-stencil-weak: white;
+  --color-page-bg-stencil: hsl(var(--color-primary-hue), 31%, 94%);
+  --color-page-bg-stencil-strong: hsl(var(--color-primary-hue), 31%, 90%);
+  --color-page-bg-stencil-stronger: hsl(var(--color-primary-hue), 31%, 85%);
+  --color-page-text: #111;
+
+  --color-alert-default-bg: var(--color-page-bg-stencil);
+  --color-alert-default-text: hsl(var(--color-primary-hue), 20%, 5%);
+  --color-alert-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-alert-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-alert-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-alert-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-alert-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-alert-error-text: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-alert-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-alert-primary-text: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 5%);
+
+  --color-toast-default-bg: hsl(var(--color-primary-hue), 20%, 25%);
+  --color-toast-default-text: white;
+  --color-toast-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-toast-success-text: white;
+  --color-toast-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-toast-warning-text: white;
+  --color-toast-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-toast-error-text: white;
+  --color-toast-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-toast-primary-text: white;
+
+  --color-button-default-bg: #444;
+  --color-button-default-text: white;
+  --color-button-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-button-success-text: white;
+  --color-button-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-button-warning-text: white;
+  --color-button-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-button-error-text: white;
+  --color-button-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 40%);
+  --color-button-primary-text: white;
+
+  --color-modal-default-bg: var(--color-page-bg);
+  --color-modal-default-text: var(--color-page-text);
+  --color-modal-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-modal-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-modal-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-modal-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-modal-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-modal-error-text: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-modal-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-modal-primary-text: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 5%);
+
+  --color-popup-default-bg: black;
+  --color-popup-default-text: white;
+  --color-popup-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-popup-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-popup-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-popup-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-popup-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-popup-error-text: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+  --color-popup-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
+  --color-popup-primary-text: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 5%);
+
+  --color-input-background: white;
+  --color-input-border: 1px solid #ddd;
+  --color-input-text: var(--color-page-text);
+  --color-input-checkbox-background: var(--color-input-background);
+  --color-input-checkbox-checked: var(--color-button-primary-bg);
+
+  --color-table-zebra: hsl(var(--color-primary-hue), 20%, 95%);
+
+  --color-progressbar-1: #f1c40f;
+  --color-progressbar-2: #2c3e50;
+
+  ::-webkit-scrollbar {
+    width: 15px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 100px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media not print {
+  [data-color-scheme='dark'] {
+
+    --color-primary-hue: 204;
+    --color-success-hue: 160;
+    --color-warning-hue: 28;
+    --color-error-hue: 353;
+    --color-page-bg-hue: 200;
+
+    --color-primary-text: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 70%);
+    --color-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 70%);
+    --color-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 70%);
+    --color-error-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 70%);
+
+    --color-border-strong: #777;
+    --color-border-subtle: #444;
+
+    --color-page-bg: #111;
+    --color-page-bg-stencil-weak: #1c1c1c;
+    --color-page-bg-stencil: hsl(0, 0%, 18%);
+    --color-page-bg-stencil-strong: hsl(0, 0%, 21%);
+    --color-page-bg-stencil-stronger: hsl(0, 0%, 25%);
+    --color-page-text: white;
+
+    --color-alert-default-bg: var(--color-page-bg-stencil);
+    --color-alert-default-text: white;
+    --color-alert-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-alert-success-text: white;
+    --color-alert-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-alert-warning-text: white;
+    --color-alert-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-alert-error-text: white;
+    --color-alert-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-alert-primary-text: white;
+
+    --color-toast-default-bg: #333;
+    --color-toast-default-text: white;
+    --color-toast-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-toast-success-text: white;
+    --color-toast-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-toast-warning-text: white;
+    --color-toast-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-toast-error-text: white;
+    --color-toast-primary-bg: #333;
+    --color-toast-primary-text: white;
+
+    --color-button-default-bg: #333;
+    --color-button-default-text: white;
+    --color-button-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 30%);
+    --color-button-success-text: white;
+    --color-button-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 30%);
+    --color-button-warning-text: white;
+    --color-button-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 30%);
+    --color-button-error-text: white;
+    --color-button-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-button-primary-text: white;
+
+    --color-modal-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-modal-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 80%);
+    --color-modal-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-modal-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 80%);
+    --color-modal-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-modal-error-text: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 80%);
+    --color-modal-primary-bg: var(--color-page-bg-stencil-weak);
+    --color-modal-primary-text: white;
+
+    --color-popup-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-popup-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 80%);
+    --color-popup-warning-bg: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-popup-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 80%);
+    --color-popup-error-bg: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
+    --color-popup-error-text: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 80%);
+    --color-popup-primary-bg: var(--color-page-bg-stencil-weak);
+    --color-popup-primary-text: white;
+
+    --color-input-background: #333;
+    --color-input-text: white;
+    --color-input-border: none;
+
+    --color-table-zebra: rgba(255, 255, 255, 0.05)
+  }
+}
+
+[data-color-contrast='less'] {
+  --color-contrast-modifier: -40%;
+}
+
+[data-color-contrast='more'] {
+  --color-contrast-modifier: 30%;
+}

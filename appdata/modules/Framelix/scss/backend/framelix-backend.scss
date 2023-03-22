@@ -1,0 +1,125 @@
+:root {
+  --font: var(--framelix-backend-font);
+  --font-size: 16px;
+  --line-height: 1.4;
+}
+
+html[data-layout='2'] body {
+  --xy: 19% 80%;
+  --hue: 180;
+  --sat: 50%;
+  --light: 50%;
+  --b: 25deg;
+  --a: 68deg;
+  --c0: hsl(var(--hue), calc(var(--sat)), calc(var(--light)));
+  --c1: hsl(calc(var(--hue)), calc(var(--sat)), calc(var(--light) - 5%));
+  --c2: hsl(calc(var(--hue)), calc(var(--sat)), calc(var(--light) - 10%));
+  --c3: hsl(calc(var(--hue)), calc(var(--sat)), calc(var(--light) - 15%));
+  background: conic-gradient(from var(--b) at var(--xy), var(--c0) var(--a), var(--c1) 20% 50%, var(--c2) 20% calc(180deg + var(--a)), var(--c3) 20%);
+}
+
+html[data-color-scheme='dark'][data-layout='2'] body {
+  --light: 20%;
+  --sat: 10%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+h2, h3 {
+  &:after {
+    content: "";
+    display: block;
+    height: 2px;
+  }
+}
+
+.framelix-top-bar {
+  display: flex;
+  background: #222;
+  color: white;
+  position: sticky;
+  top: 0;
+  align-items: center;
+  z-index: 1;
+  gap: 10px;
+  transition: .2s;
+
+  html[data-sidebar-status='opened'] & {
+    padding-left: var(--sidebar-width);
+  }
+
+  framelix-button {
+    font-size: 24px;
+    min-width: 45px;
+    border-radius: 0;
+  }
+
+  .framelix-page-title {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1 1 auto;
+    font-size: inherit;
+    padding: 5px 20px;
+  }
+}
+
+hr {
+  border: 0;
+  margin: 5px 0;
+  display: block;
+  height: 2px;
+  background: var(--color-border-strong);
+}
+
+.framelix-content {
+  padding-left: calc(var(--sidebar-left) + var(--sidebar-width));
+  transition: .2s;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+}
+
+html[data-screen-size='s'] .framelix-content {
+  padding: 0;
+}
+
+.framelix-content-inner {
+  min-width: 220px;
+  padding: 15px;
+  margin: 10px;
+  border-radius: var(--border-radius);
+  background: var(--color-page-bg-stencil-weak);
+}
+
+html:not([data-layout='2']) .framelix-content-inner {
+  margin-bottom: 100px;
+  box-shadow: none;
+}
+
+html[data-layout='2'] {
+
+  .framelix-content {
+    padding: 15px 15px 15px calc(var(--sidebar-left) + var(--sidebar-width) + 15px);
+    gap:10px;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+
+  .framelix-content-inner {
+    max-width: 600px;
+    width: 100%;
+    padding: 30px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.01);
+    transition: .2s;
+    box-sizing: border-box;
+
+    &:focus-within {
+      box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.2);
+    }
+  }
+}

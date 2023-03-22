@@ -1,0 +1,103 @@
+framelix-button {
+  display: inline-flex;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  box-sizing: border-box;
+  align-items: center;
+  background: var(--color-button-default-bg);
+  color: var(--color-button-default-text);
+  --padding: 8px 10px;
+  --hover-color: calc(255 * var(--is-light-mode));
+  --light-color: calc(255 * var(--is-dark-mode));
+  transition: .2s;
+  overflow: hidden;
+
+  .icon {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    padding: var(--padding);
+    display: flex;
+    align-self: stretch;
+    background: rgba(0, 0, 0, 0.2);
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    .material-icons {
+      flex: 1 1 auto;
+      line-height: inherit;
+    }
+  }
+
+  &[haslabel] .icon {
+    max-width: 36px;
+  }
+
+  &:not([haslabel]) .icon {
+    background: transparent;
+  }
+
+  .label {
+    flex: 1 1 auto;
+    padding: var(--padding);
+    justify-content: center;
+  }
+
+  &:hover {
+    box-shadow: rgba(var(--hover-color), var(--hover-color), var(--hover-color), 0.2) inset 0 0 9999px;
+  }
+
+  &:active {
+    box-shadow: rgba(var(--hover-color), var(--hover-color), var(--hover-color), 0.5) inset 0 0 9999px;
+  }
+
+  &[small] {
+    font-size: 0.8rem;
+    --padding: 4px 6px;
+  }
+
+  &[block] {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  &[theme='default'] {
+    background: var(--color-button-default-bg);
+    color: var(--color-button-default-text);
+  }
+
+  &[theme='primary'] {
+    background: var(--color-button-primary-bg);
+    color: var(--color-button-primary-text);
+  }
+
+  &[theme='success'] {
+    background: var(--color-button-success-bg);
+    color: var(--color-button-success-text);
+  }
+
+  &[theme='warning'] {
+    background: var(--color-button-warning-bg);
+    color: var(--color-button-warning-text);
+  }
+
+  &[theme='error'] {
+    background: var(--color-button-error-bg);
+    color: var(--color-button-error-text);
+  }
+
+  &[theme='light'] {
+    background: var(--color-page-bg-stencil);
+    color: var(--color-page-text);
+  }
+
+  &[theme='transparent'] {
+    background: rgba(var(--light-color), var(--light-color), var(--light-color), 0.07);
+    color: inherit;
+    --hover-color: 0;
+  }
+}

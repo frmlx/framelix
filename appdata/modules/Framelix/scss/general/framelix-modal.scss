@@ -1,0 +1,86 @@
+.framelix-modal {
+  text-align: center;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  padding: 20px;
+  width: 100vw;
+  height: 100vh;
+
+  &::backdrop {
+    border: 0;
+    background: rgba(0, 0, 0, 0.9);
+    outline: 0;
+    z-index: 0 !important;
+  }
+
+  &:focus-visible {
+    outline: 0;
+  }
+
+  .framelix-modal-inner {
+    text-align: left;
+    background: var(--color-modal-default-bg);
+    color: var(--color-modal-default-text);
+    border-radius: var(--border-radius);
+    box-shadow: rgba(0, 0, 0, 0.2) 2px 4px 13px;
+    position: relative;
+    display: flex;
+    max-width: 80vw;
+    max-height: 90vh;
+    width: 85vw;
+    @include insertColorSelectors("framelix-modal-inner", "modal");
+  }
+
+  .framelix-modal-content {
+    min-width: 20px;
+    min-height: 20px;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .framelix-modal-content-maximized {
+    width: 94vw;
+    height: 90vh;
+  }
+
+  .framelix-modal-header {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .framelix-modal-body {
+    flex: 1 1 auto;
+    overflow: auto;
+    // a little padding top and bottom to fix hidden styles that has outline
+    padding: 5px;
+  }
+
+  .framelix-modal-footer {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+
+    framelix-button {
+      flex: 1 1 auto;
+    }
+  }
+
+  .framelix-modal-close {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    z-index: 1;
+
+    framelix-button {
+      padding: 10px;
+    }
+  }
+
+}

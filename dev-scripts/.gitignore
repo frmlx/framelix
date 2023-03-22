@@ -1,0 +1,5 @@
+appdata
+userdata
+.idea
+.env
+docker-compose.yml

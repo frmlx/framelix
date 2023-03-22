@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+framelix_php /framelix/appdata/modules/Framelix/console.php "$@"

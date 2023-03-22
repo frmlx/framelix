@@ -1,0 +1,11 @@
+.framelix-textarea-autoheight-helper {
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.framelix-textarea-autoheight {
+    resize: none;
+    overflow: hidden;
+}
