@@ -205,6 +205,7 @@ class Table implements JsonSerializable
                     return;
                 }
                 $firstRow = reset($data);
+                // todo: fix db connection
                 $objects = Storable::getByIds(
                     ArrayUtils::map($data, "0"),
                     $firstRow[1] ?? null

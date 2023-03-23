@@ -4,6 +4,7 @@ namespace Framelix\Framelix\Db;
 
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Utils\ArrayUtils;
+use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\PhpDocParser;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -60,10 +61,10 @@ class StorableSchema
 
     /**
      * The database connection id to use
-     * This will override any default behaviour
-     * @var string|null
+     * Default is the module name of the storable if not overriden
+     * @var string
      */
-    public ?string $connectionId = null;
+    public string $connectionId;
 
     /**
      * Constructor
@@ -71,7 +72,9 @@ class StorableSchema
      */
     public function __construct(public string $className)
     {
+        $storableModule = ClassUtils::getModuleForClass($className);
         $this->tableName = strtolower(trim(str_replace("\\", "_", $className), "_"));
+        $this->connectionId = $storableModule;
     }
 
     /**

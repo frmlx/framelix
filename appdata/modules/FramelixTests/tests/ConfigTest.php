@@ -19,8 +19,8 @@ final class ConfigTest extends TestCase
         $this->assertSame($originalSalt, Config::$salts['default']);
 
         $this->assertSame(
-            '/framelix/userdata/FramelixTests/private/config/test.php',
-            Config::getUserConfigFilePath('test')
+            '/framelix/userdata/FramelixTests/private/config/03-custom.php',
+            Config::getUserConfigFilePath('03-custom')
         );
 
         $this->assertInstanceOf(

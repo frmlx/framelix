@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "1|2003947756",
+    "directoryListHash": "3|2003947756",
     "views": {
         "Framelix\\Framelix\\View\\Api": {
             "accessRole": "*",
@@ -7,6 +7,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/api"
         },
@@ -16,6 +17,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/config"
         },
@@ -25,6 +27,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/config\/moduleconfig"
         },
@@ -34,6 +37,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/config\/testemail"
         },
@@ -43,6 +47,7 @@
             "devModeOnly": true,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/dev\/langeditor"
         },
@@ -52,6 +57,7 @@
             "devModeOnly": true,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/dev\/update"
         },
@@ -61,6 +67,7 @@
             "devModeOnly": true,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/dev\/updatedatabase"
         },
@@ -70,6 +77,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/dev\/upgradeinfo"
         },
@@ -79,6 +87,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/forgotpassword"
         },
@@ -88,6 +97,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/login"
         },
@@ -97,6 +107,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/login2fa"
         },
@@ -106,6 +117,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/logout"
         },
@@ -115,6 +127,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/logs\/errorlogs"
         },
@@ -124,15 +137,17 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/logs\/systemeventlogs"
         },
         "Framelix\\Framelix\\View\\Backend\\Setup": {
             "accessRole": "*",
-            "customUrl": "\/setup",
+            "customUrl": "~.*~",
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": true,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/setup"
         },
@@ -142,6 +157,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/user\/basic"
         },
@@ -151,6 +167,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/user\/cancelsimulation"
         },
@@ -160,6 +177,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/user"
         },
@@ -169,6 +187,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/user\/password"
         },
@@ -178,6 +197,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/user\/roles"
         },
@@ -187,6 +207,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/user\/search"
         },
@@ -196,6 +217,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/email"
         },
@@ -205,6 +227,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/emailverification"
         },
@@ -214,6 +237,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/fido2"
         },
@@ -223,6 +247,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile"
         },
@@ -232,6 +257,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/password"
         },
@@ -241,6 +267,7 @@
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/twofactor"
         },
@@ -250,6 +277,7 @@
             "devModeOnly": false,
             "multilanguage": false,
             "urlPriority": 0,
+            "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/storablefilethumbnail"
         }

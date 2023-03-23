@@ -12,6 +12,7 @@ use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\ObjectTransformable;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
+use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\JsonUtils;
 use JsonSerializable;
 use ReflectionClass;
@@ -109,7 +110,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
      */
     final public static function getConnectionId(): string
     {
-        return self::getStorableSchema(static::class)->connectionId ?? "default";
+        return self::getStorableSchema(static::class)->connectionId;
     }
 
     /**

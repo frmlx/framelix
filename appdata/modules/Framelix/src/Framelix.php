@@ -10,7 +10,6 @@ use Framelix\Framelix\View\Backend\Setup;
 
 use function call_user_func_array;
 use function class_exists;
-use function dirname;
 use function error_reporting;
 use function explode;
 use function file_exists;
@@ -24,7 +23,6 @@ use function set_error_handler;
 use function set_exception_handler;
 use function set_time_limit;
 use function spl_autoload_register;
-use function str_ends_with;
 use function str_replace;
 use function str_starts_with;
 use function substr;
@@ -110,22 +108,12 @@ class Framelix
         Config::$devMode = !!($_SERVER['FRAMELIX_DEVMODE'] ?? null);
 
         // setup required, skip everything and init with minimal data
-        $userConfigFile = Config::getUserConfigFilePath("01-core");
-        if (!Config::$appSetupDone) {
+        if (!Config::doesUserConfigFileExist()) {
+            View::$availableViews = [];
             if (self::isCli()) {
-                echo "App not properly configured.\nSetup via Web-Interface or create a config file at " . $userConfigFile . "\n\n";
                 return;
             }
-            $baseFolder = str_ends_with(
-                $_SERVER['REQUEST_URI'],
-                "/"
-            ) ? substr($_SERVER['REQUEST_URI'], 0, 1) : dirname($_SERVER['REQUEST_URI']);
-            if (!str_ends_with($_SERVER['REQUEST_URI'], "/setup")) {
-                Url::create($baseFolder . "/setup")->redirect();
-            }
-            Config::$applicationHost = $_SERVER['HTTP_HOST'];
-            Config::$applicationUrlPrefix = trim(str_replace("/setup", "", $_SERVER['REQUEST_URI']), "/");
-            View::addAvailableView(Setup::class);
+            View::addAvailableView(Setup::class, false);
             return;
         } elseif (Config::$salts['default'] === 'none') {
             throw new FatalError('You have to set a proper random default salt with Config::addSalt()');

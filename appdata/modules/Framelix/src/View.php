@@ -37,6 +37,8 @@ use function strlen;
 use function strtolower;
 use function substr;
 
+use function var_dump;
+
 use const FRAMELIX_MODULE;
 use const SORT_DESC;
 
@@ -48,7 +50,7 @@ abstract class View implements JsonSerializable
     /**
      * Increase this number when something important changes in metadata handling
      */
-    public const METADATA_VERSION = 1;
+    public const METADATA_VERSION = 3;
 
     /**
      * The current active view
@@ -120,6 +122,14 @@ abstract class View implements JsonSerializable
      * @var bool
      */
     protected bool $multilanguage = true;
+
+    /**
+     * The view is default hidden from access via url
+     * It need to be added manually with View::addAvailableView(viewClass, true) to make it available
+     * Used for setup url for example
+     * @var bool
+     */
+    protected bool $hiddenView = false;
 
     /**
      * Get translated page title
@@ -302,12 +312,16 @@ abstract class View implements JsonSerializable
     /**
      * Add given view as available view
      * @param string $viewClass
+     * @param  bool $skipHiddenViews If true, then ignore views that are set to hidden
      */
-    public static function addAvailableView(string $viewClass): void
+    public static function addAvailableView(string $viewClass, bool $skipHiddenViews = true): void
     {
         $metadata = self::getMetadataForView($viewClass);
         if ($metadata) {
             if ($metadata['devModeOnly'] && !Config::$devMode) {
+                return;
+            }
+            if (($metadata['hiddenView'] ?? null) && $skipHiddenViews) {
                 return;
             }
             self::$availableViews[$viewClass] = $metadata;
@@ -416,14 +430,6 @@ abstract class View implements JsonSerializable
                 }
 
                 $defaultProps = $reflection->getDefaultProperties();
-                // this is just a dev helper
-                // @codeCoverageIgnoreStart
-                if (($defaultProps['accessRole'] ?? null) === null) {
-                    throw new FatalError(
-                        "Property $viewClass->'accessRole' must be set, use \"*\" to allow everybody"
-                    );
-                }
-                // @codeCoverageIgnoreEnd
                 $pageTitle = $defaultProps['pageTitle'] ?? '';
                 $url = "/" . strtolower(implode("/", $exp));
                 $metadata['views'][$viewClass] = [
@@ -432,6 +438,7 @@ abstract class View implements JsonSerializable
                     'devModeOnly' => $defaultProps['devModeOnly'],
                     'multilanguage' => $defaultProps['multilanguage'],
                     'urlPriority' => $defaultProps['urlPriority'],
+                    'hiddenView' => $defaultProps['hiddenView'] ?? false,
                     'pageTitle' => $pageTitle,
                     'url' => rtrim($url, "/"),
                 ];

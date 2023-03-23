@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Storable;
 
+use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\View;
 
@@ -14,6 +15,12 @@ use Framelix\Framelix\View;
  */
 class UserWebAuthn extends StorableExtended
 {
+    protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
+    {
+        parent::setupStorableSchema($selfStorableSchema);
+        $selfStorableSchema->connectionId = FRAMELIX_MODULE;
+    }
+
     /**
      * Get edit url
      * @return Url|null

@@ -44,6 +44,8 @@ use function strtoupper;
 use function unlink;
 use function var_dump;
 
+use const FRAMELIX_MODULE;
+
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     public function setUp(): void
@@ -219,7 +221,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         Mysql::$instances = [];
         if ($simulateDefaultConnection) {
-            Config::$dbConnections['default'] = Config::$dbConnections['test'];
+            Config::$dbConnections[FRAMELIX_MODULE] = Config::$dbConnections['test'];
         }
         $this->cleanupDatabase();
         $db = Mysql::get('test');

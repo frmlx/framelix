@@ -15,13 +15,13 @@ cleanup() {
   echo  "Cleanup done"
 }
 
-if [ $FRAMELIX_UNIT_TESTS -eq 1 ]; then
+if [ "$FRAMELIX_UNIT_TESTS" != "0" ]; then
   cecho r "FRAMELIX_UNIT_TESTS must be 0"
   exit 1
 fi
 
-if [ "$FRAMELIX_PLAYWRIGHT_TESTS" == "1" ]; then
-  cecho r "$FRAMELIX_PLAYWRIGHT_TESTS must be 0"
+if [ "$FRAMELIX_DEVMODE" != "0" ]; then
+  cecho r "FRAMELIX_DEVMODE must be 0"
   exit 1
 fi
 

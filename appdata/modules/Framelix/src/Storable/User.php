@@ -124,6 +124,7 @@ class User extends StorableExtended
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
         parent::setupStorableSchema($selfStorableSchema);
+        $selfStorableSchema->connectionId = FRAMELIX_MODULE;
         $selfStorableSchema->properties['roles']->lazyFetch = true;
         $selfStorableSchema->addIndex('email', 'unique');
     }

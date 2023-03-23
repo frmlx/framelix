@@ -2,10 +2,18 @@
 
 namespace Framelix\FramelixTests;
 
+use Framelix\Framelix\Utils\Shell;
+
 class Console extends \Framelix\Framelix\Console
 {
-    public static function preparePlaywright(): int
+    /**
+     * Called when the application is warmup, during every docker container start
+     * Override this function to provide your own update/upgrade path
+     * @return int Status Code, 0 = success
+     */
+    public static function appWarmup(): int
     {
+        Shell::prepare("mysql -uroot -papp -e 'DROP DATABASE IF EXISTS `unittests`; CREATE DATABASE `unittests`;'")->execute();
         return 0;
     }
 }

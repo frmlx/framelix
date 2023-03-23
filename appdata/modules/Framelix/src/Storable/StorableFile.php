@@ -93,6 +93,7 @@ class StorableFile extends StorableExtended
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
         parent::setupStorableSchema($selfStorableSchema);
+        $selfStorableSchema->connectionId = FRAMELIX_MODULE;
         $selfStorableSchema->properties['filesize']->databaseType = 'bigint';
         $selfStorableSchema->properties['filesize']->unsigned = true;
     }

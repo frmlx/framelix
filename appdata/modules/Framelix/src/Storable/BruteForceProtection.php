@@ -25,6 +25,7 @@ class BruteForceProtection extends Storable
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
         parent::setupStorableSchema($selfStorableSchema);
+        $selfStorableSchema->connectionId = FRAMELIX_MODULE;
         $selfStorableSchema->properties['idHash']->length = 32;
         $selfStorableSchema->addIndex('idHash', 'unique');
     }

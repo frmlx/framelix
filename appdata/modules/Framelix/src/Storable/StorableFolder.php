@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Storable;
 
+use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
 
@@ -12,6 +13,13 @@ use Framelix\Framelix\Utils\ArrayUtils;
  */
 class StorableFolder extends StorableExtended
 {
+
+    protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
+    {
+        parent::setupStorableSchema($selfStorableSchema);
+        $selfStorableSchema->connectionId = FRAMELIX_MODULE;
+    }
+
     public function getMediaBrowserThumbnailHtml(): string
     {
         return '<div class="framelix-mediabrowser-thumbnail"

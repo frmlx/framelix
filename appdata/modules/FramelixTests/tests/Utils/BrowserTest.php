@@ -15,9 +15,6 @@ final class BrowserTest extends TestCase
 
     public function tests(): void
     {
-        // simulate php unit runner by setting the corresponding constant
-        $file = Config::getUserConfigFilePath("01-core", "Framelix");
-        file_put_contents($file, '<?php Framelix\Framelix\Config::$appSetupDone = true;Framelix\Framelix\Config::$salts["default"] = "0";');
         $browser = Browser::create();
         $browser->url = 'https://127.0.0.1:8669/browsertestview';
         $browser->validateSsl = false;
@@ -31,6 +28,5 @@ final class BrowserTest extends TestCase
         $this->assertSame(JsonUtils::decode('{"get":[],"post":[],"body":null}'), $browser->getResponseJson());
         $this->assertSame(200, $browser->getResponseCode());
         $this->assertSame('Basic dGVzdDpmb28=', $browser->responseHeaders['x-auth'] ?? null);
-        unlink($file);
     }
 }

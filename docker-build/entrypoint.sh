@@ -49,7 +49,7 @@ if [ -z "$FRAMELIX_MODULES" ]; then
   exit 1
 fi
 
-if [ !-d "$FRAMELIX_APPDATA/modules" ]; then
+if [ ! -d "$FRAMELIX_APPDATA/modules" ]; then
   cecho r "Missing Framelix core module $FRAMELIX_APPDATA/modules/Framelix. Aborting."
   exit 1
 fi
@@ -73,26 +73,10 @@ fi
 cecho y "# Checking required folder mappings and variables"
 echo ""
 
-CHECKFOLDER=$FRAMELIX_APPDATA
-if [ ! -w "$CHECKFOLDER" ]; then
-  cecho r "Missing $CHECKFOLDER folder (or the folder isn't writable)."
-  echo "This folder must contain your app files. Aborting."
-  exit 1
-fi
-echo "$CHECKFOLDER OK."
-
-CHECKFOLDER=$FRAMELIX_DBDATA
-if [ ! -w "$CHECKFOLDER" ]; then
-  cecho r "Missing $CHECKFOLDER folder mapping (or the folder isn't writable)."
-  echo "This folder must point to a mariadb data folder."
-  echo "For a fresh installation you must use a new empty folder. Aborting."
-  exit 1
-fi
-echo "$CHECKFOLDER OK."
-
 CHECKFOLDER=/framelix/userdata
 if [ ! -w "$CHECKFOLDER" ]; then
   echo "Missing $CHECKFOLDER folder mapping(or the folder isn't writable)."
+  echo "This folder must point to folder on your host (volume isn't recommended)."
   echo "This folder will contain files created by users in your app."
   echo "For a fresh installation you must use a new empty folder. Aborting."
   exit 1
@@ -176,11 +160,8 @@ else
   mysql_upgrade -u root -papp
 fi
 
-mysql -uroot -papp -e "CREATE DATABASE IF NOT EXISTS app;"
-echo ""
-
 # install extras for unit tests
-if [ $FRAMELIX_UNIT_TESTS -eq 1 ]; then
+if [ "$FRAMELIX_UNIT_TESTS" == "1" ]; then
   cecho y "# Unit Tests active - Installing tests dependencies"
   export DEBIAN_FRONTEND=noninteractive
   apt update
@@ -204,25 +185,6 @@ if [ $FRAMELIX_UNIT_TESTS -eq 1 ]; then
   echo ""
 
   cecho y "# Unit Tests specials done"
-  echo ""
-fi
-
-# install extras for playwright tests
-if [ "$FRAMELIX_PLAYWRIGHT_TESTS" == "1" ]; then
-  cecho y "# Playwright Tests active - Installing playwright and deps"
-  echo ""
-  export DEBIAN_FRONTEND=noninteractive
-  mkdir -p $FRAMELIX_USERDATA/playwright
-  chmod 0777 -R $FRAMELIX_USERDATA/playwright
-  cd $FRAMELIX_APPDATA/playwright
-  npm cache clean -force
-  npm install -y
-  # fetching command and removing su root from that command as it will break this installation
-  CMD=$( npx --yes playwright install-deps chromium --dry-run )
-  eval $CMD
-  PLAYWRIGHT_BROWSERS_PATH=$FRAMELIX_USERDATA/playwright/cache npx --yes playwright install chromium
-  echo ""
-  cecho y "# Playwright setup done"
   echo ""
 fi
 
@@ -269,7 +231,7 @@ echo ""
 
 cecho y "# Do app warmup"
 echo ""
-framelix_console appWarmup
+framelix_console '*' appWarmup
 echo ""
 
 cecho y "# Set correct files owners for folder that need to be writable"

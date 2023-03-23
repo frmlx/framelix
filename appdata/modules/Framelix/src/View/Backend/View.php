@@ -117,6 +117,7 @@ abstract class View extends LayoutView
 
     public function showContentWithLayout(): void
     {
+        $appIsSetup = Config::doesUserConfigFileExist();
         $this->includeCompiledFileBundle("Framelix", "scss", "backend");
         $this->includeCompiledFileBundle("Framelix", "scss", "backend-fonts");
         $this->includeCompiledFileBundle("Framelix", "js", "backend");
@@ -151,6 +152,7 @@ abstract class View extends LayoutView
         }
         $pageContent = Buffer::getAll();
         $htmlAttributes = new HtmlAttributes();
+        $htmlAttributes->set('data-appstate', $appIsSetup ? 'ok' : 'setup');
         $htmlAttributes->set('data-user', User::get());
         $htmlAttributes->set('data-view', get_class(self::$activeView));
         $htmlAttributes->set('data-navigation', $mainSidebarClass);
@@ -179,7 +181,7 @@ abstract class View extends LayoutView
             <framelix-button class="framelix-sidebar-toggle" icon="menu" theme="transparent"></framelix-button>
             <h1 class="framelix-page-title"><?= $this->getPageTitle(false) ?></h1>
             <?php
-            if (Config::$appSetupDone) {
+            if ($appIsSetup) {
                 ?>
                 <framelix-button theme="transparent" class="framelix-user-settings"
                                  jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>" target="modal"

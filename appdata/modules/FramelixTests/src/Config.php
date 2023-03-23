@@ -49,9 +49,7 @@ class Config
 
         if (defined('PHPUNIT_TESTS')) {
             // configured so that no setup is needed and tests can assume the app is fully configured
-            \Framelix\Framelix\Config::$appSetupDone = true;
             \Framelix\Framelix\Config::addSalt('jdTbhul2sd3yyaLQPfTFNToE42PcXOCC991SzzKlUrQhS1hhkdTIHufuJ8Sj6XPgd');
-            \Framelix\Framelix\Config::addDbConnection('default', 'localhost', 3306, 'root', 'app', 'app');
             \Framelix\Framelix\Config::addDbConnection('test', 'localhost', 3306, 'root', 'app', 'unittests');
 
             // instantiate db if not yet done, to fix issue when a test is failed prev.

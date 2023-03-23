@@ -9,16 +9,43 @@ if (php_sapi_name() !== 'cli' || !isset($_SERVER['argv'][0])) {
     exit(1);
 }
 
-ini_set("memory_limit", -1);
-ini_set("max_execution_time", -1);
-
 $argv = $_SERVER['argv'];
 unset($argv[0]);
+$moduleName = $argv[1];
+if (!$moduleName) {
+    echo "First parameter must be a module name or * for all modules. Bye.";
+    exit(1);
+}
+unset($argv[1]);
+
+if ($moduleName === "*") {
+    $modules = scandir(__DIR__ . "/../");
+    foreach ($modules as $module) {
+        $moduleEntryPoint = __DIR__ . "/../$module/public/index.php";
+        if (file_exists($moduleEntryPoint) && $module !== 'Framelix') {
+            $exitCode = 0;
+            $cmd = "php -f " . escapeshellarg(__FILE__) . " " . escapeshellarg($module);
+            foreach ($argv as $arg) {
+                $cmd .= " " . escapeshellarg($arg);
+            }
+            passthru($cmd, $exitCode);
+            if ($exitCode) {
+                exit($exitCode);
+            }
+        }
+    }
+    exit(0);
+}
+
+$moduleEntryPoint = __DIR__ . "/../$moduleName/public/index.php";
+
+ini_set("memory_limit", -1);
+ini_set("max_execution_time", -1);
 
 $actions = [];
 
 try {
-    require __DIR__ . "/public/index.php";
+    require $moduleEntryPoint;
 } catch (Throwable $e) {
     echo "ERROR during framelix initialization\n\n";
     echo $e->getMessage() . "\n\n" . $e->getTraceAsString();
@@ -53,15 +80,16 @@ foreach (Framelix::$registeredModules as $module) {
             }
             $actions[$name]['description'] .= $description . "\n";
         }
+        $actions[$name]['name'] = $name;
         $actions[$name]['callables'][$consoleClass] = $consoleClass . "::$name";
     }
 }
 
-$selectedAction = $actions[$argv[1] ?? -1] ?? null;
+$selectedAction = $actions[$argv[2] ?? -1] ?? null;
 if (!$selectedAction) {
     Console::info("# =============================");
     Console::info("# FRAMELIX CONSOLE - 😜  Huhuu!");
-    Console::info("# Call a script with framelix_console {actionName} [optional parameters]");
+    Console::info("# Call a script with framelix_console {moduleName} {actionName} [optional parameters]");
     Console::info("# Availabe action names are:");
     Console::info("# =============================");
     foreach ($actions as $action => $row) {
@@ -93,16 +121,16 @@ if ($cron) {
     echo "Started at " . date("c");
 }
 
-$action = $actions[$argv[1]];
 Console::info("# =============================");
 Console::info("# FRAMELIX CONSOLE RUNNER");
-Console::info("# COMMAND: " . $argv[1]);
-Console::info("# CALLABLES: " . implode(", ", $action['callables']));
+Console::info("# MODULE: " . $moduleName);
+Console::info("# COMMAND: " . $selectedAction['name']);
+Console::info("# CALLABLES: " . implode(", ", $selectedAction['callables']));
 Console::info("# =============================");
 
 $start = microtime(true);
 $exitCode = 999;
-foreach ($action['callables'] as $callable) {
+foreach ($selectedAction['callables'] as $callable) {
     try {
         $exitCode = call_user_func_array($callable, []);
     } catch (Throwable $e) {

@@ -1,26 +1,27 @@
-version: "3.4"
+version: "3"
+
+name: framelix_tests
 
 networks:
   app:
     driver: bridge
 
+
 volumes:
-  vol:
-    external: true
-    name: ${DOCKER_CONTAINER_NAME}_vol
+  framelix_tests_vol:
 
 services:
   app:
     build: ..
     restart: on-failure
     volumes:
+      - framelix_tests_vol:/framelix/dbdata
       - ../appdata:/framelix/appdata
-      - vol:/framelix/dbdata
       - ../userdata:/framelix/userdata
     ports:
       - "${FRAMELIX_PUBLICPORT}:${FRAMELIX_PUBLICPORT}"
     environment:
       - COMPOSE_PROJECT_NAME
-      - FRAMELIX_MODULES=${FRAMELIX_MODULES}
+      - FRAMELIX_MODULES
       - FRAMELIX_UNIT_TESTS
-      - FRAMELIX_PLAYWRIGHT_TESTS
+      - FRAMELIX_DEVMODE

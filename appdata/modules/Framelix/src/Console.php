@@ -32,6 +32,8 @@ use function strtotime;
 use function unlink;
 use function version_compare;
 
+use const FRAMELIX_MODULE;
+
 /**
  * Console runner
  * As this does do very complicated tasks ignore coverage for now
@@ -88,10 +90,12 @@ class Console
      */
     public static function appWarmup(): int
     {
-        self::info("Database upgrade");
-        $builder = new MysqlStorableSchemeBuilder(Mysql::get());
+        Shell::prepare("mysql -u root -papp -e 'CREATE DATABASE IF NOT EXISTS `" . FRAMELIX_MODULE . "`'")->execute();
+        $db = Mysql::get();
+        $builder = new MysqlStorableSchemeBuilder($db);
         $queries = $builder->getSafeQueries();
         if ($queries) {
+            self::info("Database upgrade");
             $builder->executeQueries($queries);
             self::success(count($queries) . " safe queries has been executed");
         } else {

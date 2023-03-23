@@ -10,9 +10,8 @@ ENV FRAMELIX_UNIT_TESTS=0
 # FORMAT: MODULENAME,SSL(1/0)[Default=1,OPTIONAL],PORTNR[Default=443/80,OPTIONAL],PRIVKEY_PATH[DEFAULT=SelfSigned,OPTIONAL],PUBKEY_PATH[DEFAULT=SelfSigned,OPTIONAL]; MODULENAME,...
 ENV FRAMELIX_MODULES=""
 
-RUN mkdir -p $FRAMELIX_APPDATA $FRAMELIX_DBDATA $FRAMELIX_USERDATA $FRAMELIX_SYSTEMDIR
+RUN mkdir -p $FRAMELIX_APPDATA $FRAMELIX_SYSTEMDIR
 VOLUME $FRAMELIX_DBDATA
-VOLUME $FRAMELIX_USERDATA
 
 # add better sources
 RUN export DEBIAN_FRONTEND=noninteractive &&  \
@@ -73,6 +72,6 @@ RUN framelix_composer_install
 RUN chmod +x "$FRAMELIX_SYSTEMDIR/entrypoint.sh"
 
 # health check
-HEALTHCHECK --interval=1m --timeout=3s CMD framelix_console healthCheck -q || exit 1
+HEALTHCHECK --interval=1m --timeout=3s CMD framelix_console '*' healthCheck -q || exit 1
 
 ENTRYPOINT $FRAMELIX_SYSTEMDIR/entrypoint.sh

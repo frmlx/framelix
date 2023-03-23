@@ -102,7 +102,7 @@ class Mysql
      * @param bool $connect If true, then connect instantly
      * @return Mysql
      */
-    public static function get(string $id = "default", bool $connect = true): Mysql
+    public static function get(string $id = FRAMELIX_MODULE, bool $connect = true): Mysql
     {
         if (isset(self::$instances[$id])) {
             return self::$instances[$id];

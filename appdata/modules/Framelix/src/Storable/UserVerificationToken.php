@@ -59,6 +59,7 @@ class UserVerificationToken extends StorableExtended
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
         parent::setupStorableSchema($selfStorableSchema);
+        $selfStorableSchema->connectionId = FRAMELIX_MODULE;
         $selfStorableSchema->addIndex('token', 'unique');
     }
 }

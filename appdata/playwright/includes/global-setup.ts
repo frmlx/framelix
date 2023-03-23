@@ -12,8 +12,8 @@ async function globalSetup () {
   // first init app if already initialized
   await utils.goto('initializeplaywright')
 
-  // second running official setup page so it is also tested as well
-  await utils.goto('/setup')
+  // second running official setup so it is also tested as well
+  await utils.goto('/')
   await page.fill('input[name="email"]', 'test@test.local')
   await page.fill('input[name="password"]', 'test@test.local')
   await page.fill('input[name="password2"]', 'test@test.local')

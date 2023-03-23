@@ -7,6 +7,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@playwright/test": "^1.29.1"
+    "@playwright/test": "^1.32.0"
   }
 }

@@ -13,6 +13,7 @@ use function ceil;
 use function filemtime;
 use function unlink;
 
+use const FRAMELIX_MODULE;
 use const SORT_DESC;
 use const SORT_NUMERIC;
 
@@ -79,7 +80,7 @@ class Cron extends Console
         if ((Config::$automaticDbBackupInterval > 0 && $dayDiffSinceLastBackup >= Config::$automaticDbBackupInterval) || self::getParameter(
                 'forceBackup'
             )) {
-            self::backupAppDatabase("auto_" . date("Y-m-d-H-i-s") . ".sql");
+            self::backupAppDatabase("auto_" . FRAMELIX_MODULE . "_" . date("Y-m-d-H-i-s") . ".sql");
         }
     }
 }

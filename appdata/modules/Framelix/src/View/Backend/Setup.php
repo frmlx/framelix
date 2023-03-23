@@ -5,7 +5,6 @@ namespace Framelix\Framelix\View\Backend;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
-use Framelix\Framelix\Exception\SoftError;
 use Framelix\Framelix\Form\Field\Email;
 use Framelix\Framelix\Form\Field\Html;
 use Framelix\Framelix\Form\Field\Password;
@@ -30,37 +29,23 @@ use function strtolower;
 class Setup extends View
 {
     protected string|bool $accessRole = "*";
-    protected ?string $customUrl = "/setup";
+    protected ?string $customUrl = "~.*~";
+    protected bool $hiddenView = true;
 
     public function onRequest(): void
     {
-        if (Config::$appSetupDone) {
-            if (Request::getGet('setupFinished')) {
-                if (Config::$backendDefaultView) {
-                    \Framelix\Framelix\View::getUrl(Config::$backendDefaultView)->redirect();
-                }
-            }
-            throw new SoftError('This application is already setup');
-        }
+        $userConfigFileCore = Config::getUserConfigFilePath();
+        $userConfigFileUi = Config::getUserConfigFilePath("02-ui");
         $this->hideSidebarInitially = true;
         $this->layout = self::LAYOUT_SMALL_CENTERED;
+
         if (Form::isFormSubmitted('setup')) {
             $form = $this->getForm();
             $form->validate();
             if (Request::getPost('password') !== Request::getPost('password2')) {
                 Response::showFormValidationErrorResponse(['password2' => '__framelix_password_notmatch__']);
             }
-            $userConfigFileCore = Config::getUserConfigFilePath("01-core");
-            $userConfigFileUi = Config::getUserConfigFilePath("02-ui");
             try {
-                Config::addDbConnection(
-                    'default',
-                    'localhost',
-                    null,
-                    'root',
-                    'app',
-                    'app'
-                );
                 $url = Url::create(strtolower(Request::getPost('applicationUrl')));
 
                 Config::$applicationHost = $url->urlData['host'] . (($url->urlData['port'] ?? null) ? ":" . $url->urlData['port'] : '');
@@ -103,16 +88,15 @@ class Setup extends View
                 $db = Mysql::get();
                 $fileContents = [
                     "<?php",
-                    "\\Framelix\\Framelix\\Config::\$appSetupDone = true;",
-                    "\\Framelix\\Framelix\\Config::\$salts['default'] = '" . Config::$salts["default"] . "';",
-                    "\\Framelix\\Framelix\\Config::addDbConnection('{$db->id}', '{$db->connectionConfig["host"]}', " . ($db->connectionConfig["port"] ?: 'null') . ", '{$db->connectionConfig["username"]}', '{$db->connectionConfig["password"]}', '{$db->connectionConfig["database"]}', '{$db->connectionConfig["socket"]}');"
+                    "\\Framelix\\Framelix\\Config::addSalt('" . Config::$salts["default"] . "');",
+                    "\\Framelix\\Framelix\\Config::\$applicationHost = '" . Config::$applicationHost . "';",
+                    "\\Framelix\\Framelix\\Config::\$applicationUrlPrefix = '" . Config::$applicationUrlPrefix . "';"
                 ];
                 file_put_contents($userConfigFileCore, implode("\n", $fileContents));
 
                 $fileContents = [
                     "<?php",
-                    "\\Framelix\\Framelix\\Config::\$applicationHost = '" . Config::$applicationHost . "';",
-                    "\\Framelix\\Framelix\\Config::\$applicationUrlPrefix = '" . Config::$applicationUrlPrefix . "';"
+                    "// this file will be modified with changes in backend UI for system config"
                 ];
                 file_put_contents($userConfigFileUi, implode("\n", $fileContents));
 
@@ -132,8 +116,9 @@ class Setup extends View
                 Response::showFormValidationErrorResponse($e->getMessage() . "\n" . $e->getTraceAsString());
             }
             Toast::success('__framelix_setup_done__');
-            Url::getBrowserUrl()->setParameter('setupFinished', 1)->redirect();
+            Url::getBrowserUrl()->redirect();
         }
+
         $this->showContentBasedOnRequestType();
     }
 

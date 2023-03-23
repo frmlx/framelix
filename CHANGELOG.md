@@ -5,10 +5,16 @@
 
 ### 🎯 Framelix core (backend/frontend) changes
 
+⚠️ **BREAKING CHANGE** ⚠️: Database handling have changed. The previous default DB `app` is not being generated and used anymore. Each module instance have it's own database, named by the module name by default. So `default` database connection also not exist anymore. To migrate, you must rename the `app` database to the module name of your instance.
+
 * ➕ added property to force screen size and color scheme for layout view
+* ➕ added `$hiddenView` property to `View` to allow view to be hidden from public access
 * 🛠️ fixed minor layout glitch in small size mode
+* ✏️ changed database handling so each module instance have it's own separate database, the default `app` database is being dropped
 * ✏️ changed to hidden sidebar by default for some small views (Login, ForgotPassword, etc..)
+* ✏️ changed internals of how app is setup (reduced checks, more streamlined, easier maintenance)
 * ❌ removed old unsupported setup vars
+* removed `Config::$appSetupDone`, so you have to update your `01-core.php` config and remove it there manually
 
 ### 🐳 Docker container changes
 

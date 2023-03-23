@@ -32,6 +32,8 @@ use function substr;
 use function time;
 use function trim;
 
+use const FRAMELIX_APPDATA_FOLDER;
+
 /**
  * URL utilities for frequent tasks
  */
@@ -66,7 +68,7 @@ class Url implements JsonSerializable
             $urlPrefix = "__" . $exp[3];
             unset($exp[0], $exp[1], $exp[2], $exp[3], $exp[4]);
             $relativePath = implode("/", $exp);
-        } elseif (str_starts_with($filePath, "/framelix/appdata")) {
+        } elseif (str_starts_with($filePath,  FRAMELIX_APPDATA_FOLDER)) {
             if (str_contains($filePath, "/lang/") && !str_contains($filePath, "/public/")) {
                 $urlPrefix = "$" . $exp[4];
                 unset($exp[0], $exp[1], $exp[2], $exp[3], $exp[4], $exp[5]);

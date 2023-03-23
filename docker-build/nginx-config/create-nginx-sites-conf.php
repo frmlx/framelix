@@ -22,22 +22,23 @@ server {
 ';
 
 $nginxSitesPath = "/etc/nginx/sites-enabled/framelix-sites.conf";
-
+$envConfigPath = "/framelix/system/environment.json";
 
 $modules = explode(";", $_SERVER['FRAMELIX_MODULES'] ?? '1');
 $validModules = 0;
 $allValid = true;
 
 $contents = [];
+$envConfig = [];
 foreach ($modules as $row) {
     $parts = explode(",", $row);
     $moduleName = $parts[0];
     if (!$moduleName) {
         continue;
     }
-    $modulePath = "/framelix/appdata/modules/" . $moduleName;
+    $modulePath = "/framelix/appdata/modules/" . $moduleName . "/public/index.php";
     if (!file_exists($modulePath)) {
-        echo "Framelix module '$moduleName' not exist at '$modulePath'. Aborting.\n";
+        echo "Framelix module '$moduleName' entry point not exist at '$modulePath'. Aborting.\n";
         $allValid = false;
         continue;
     }
@@ -62,6 +63,13 @@ foreach ($modules as $row) {
         $content = str_replace('{pubKeyPath}', $pubKeyFile ?: '/framelix/system/nginx-ssl.crt', $content);
     }
     $contents[] = $content;
+    $envConfig[$moduleName] = [
+        'moduleAccessPoints' => [
+            'module' => $moduleName,
+            'ssl' => $ssl,
+            'port' => $port
+        ]
+    ];
     $validModules++;
 }
 
@@ -70,5 +78,6 @@ if (!$validModules) {
 } else {
     file_put_contents($nginxSitesPath, implode("\n\n", $contents));
 }
+file_put_contents($envConfigPath, json_encode($envConfig));
 
 exit($allValid && $validModules > 0 ? 0 : 1);

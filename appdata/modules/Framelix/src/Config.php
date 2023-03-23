@@ -15,19 +15,16 @@ use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\CompilerFileBundle;
 use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Utils\FileUtils;
+use Framelix\Framelix\Utils\JsonUtils;
 use JetBrains\PhpStorm\ExpectedValues;
 use SensitiveParameter;
+
+use function file_exists;
 
 use const FRAMELIX_MODULE;
 
 class Config
 {
-    /**
-     * A flag which indicates if the app has been setup properly
-     * @var bool
-     */
-    public static bool $appSetupDone = false;
-
     /**
      * Development mode enables more debugging and generation of required dist and meta files after source changes
      * Enable this with ENV variable FRAMELIX_DEVMODE=1 before starting the docker image
@@ -278,6 +275,12 @@ class Config
     public static ?string $backendLogoFilePath = null;
 
     /**
+     * Environment config about the docker/app environment (ports, modules, etc...)
+     * @var array{moduleAccessPoints:array{module:string, port:int, ssl:bool}}
+     */
+    public static array $environmentConfig;
+
+    /**
      * Called when the module is registered the first time
      * This is used for module defaults
      * @return void
@@ -288,10 +291,13 @@ class Config
         // app requires any salt to be functional, even during setup
         self::addSalt('none');
 
+        self::$environmentConfig = JsonUtils::readFromFile("/framelix/system/environment.json");
+
+        // set default db connection for current module
+        self::addDbConnection(FRAMELIX_MODULE, 'localhost', 3306, 'root', 'app', FRAMELIX_MODULE);
+
         // register the other module
         Framelix::registerModule(FRAMELIX_MODULE);
-
-        self::addDbConnection('default', 'localhost', 3306, 'root', 'app', 'app');
 
         self::addAvailableUserRole('admin', '__framelix_user_role_admin__');
         self::addAvailableUserRole('dev', '__framelix_user_role_dev__');
@@ -375,15 +381,6 @@ class Config
     public static function getEditableConfigForm(): Form
     {
         $form = new Form();
-
-        $field = new Text();
-        $field->name = "applicationHost";
-        $field->required = true;
-        $form->addField($field);
-
-        $field = new Text();
-        $field->name = "applicationUrlPrefix";
-        $form->addField($field);
 
         $field = new Select();
         $field->name = "language";
@@ -644,16 +641,31 @@ class Config
 
     /**
      * Get the file to the modules config file, placed in userdata/$module/private folder
-     * @param string $id An id for the config
+     * @param string $id
      * @param string $module
      * @return string
      */
-    public static function getUserConfigFilePath(string $id, string $module = FRAMELIX_MODULE): string
-    {
+    public static function getUserConfigFilePath(
+        #[ExpectedValues(values: ['01-core', '02-ui', '03-custom'])] string $id = "01-core",
+        string $module = FRAMELIX_MODULE
+    ): string {
         return FileUtils::getUserdataFilepath(
             "config/$id.php",
             false,
             $module
         );
+    }
+
+    /**
+     * Get the file to the modules config file, placed in userdata/$module/private folder
+     * @param string $id
+     * @param string $module
+     * @return bool
+     */
+    public static function doesUserConfigFileExist(
+        #[ExpectedValues(values: ['01-core', '02-ui', '03-custom'])] string $id = "01-core",
+        string $module = FRAMELIX_MODULE
+    ): bool {
+        return file_exists(self::getUserConfigFilePath($id, $module));
     }
 }

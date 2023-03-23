@@ -16,6 +16,8 @@ use function array_values;
 use function is_array;
 use function is_string;
 
+use const FRAMELIX_MODULE;
+
 class MediaBrowserSelection implements StorablePropertyInterface
 {
     public array $selection = [];
@@ -109,7 +111,7 @@ class MediaBrowserSelection implements StorablePropertyInterface
             $this->cache[$cacheKey] = null;
             return $this->cache[$cacheKey];
         }
-        $selectedStorables = Storable::getByCondition('id IN {0}', [$this->selection]);
+        $selectedStorables = Storable::getByCondition('id IN {0}', [$this->selection], connectionId: FRAMELIX_MODULE);
         $files = [];
         $folders = [];
         foreach ($selectedStorables as $selectedStorable) {

@@ -45,7 +45,7 @@ export class FramelixUtils {
   constructor (page: Page) {
     this.page = page
     this.framelixConfig = {
-      rootUrl: 'https://127.0.0.1'
+      rootUrl: 'https://127.0.0.1:8669'
     }
     // stop on any uncaught page error
     this.page.on('pageerror', exception => {
