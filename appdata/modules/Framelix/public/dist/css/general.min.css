@@ -288,7 +288,7 @@ datalist {
   font-size: 80%;
   color: var(--color-input-text);
   padding: 2px 5px;
-  border: hsl(0deg, 0%, 6%);
+  border: hsl(0, 0%, 6%);
   margin-bottom: 1px;
   border-radius: var(--border-radius);
 }

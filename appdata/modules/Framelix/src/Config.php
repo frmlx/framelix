@@ -312,26 +312,26 @@ class Config
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-vendor-native");
         $bundle->compile = false;
-        $bundle->addFolder('vendor/polyfills', true);
-        $bundle->addFile('vendor/cashjs/cash.min.js');
-        $bundle->addFile('vendor/cashjs/cash-improvements.js');
-        $bundle->addFile('vendor/dayjs/dayjs.min.js');
-        $bundle->addFolder('vendor/dayjs', true);
-        $bundle->addFolder('vendor/popperjs', true);
-        $bundle->addFolder('vendor/swiped-events', true);
+        $bundle->addFolder('vendor-frontend/polyfills', true);
+        $bundle->addFile('vendor-frontend/cashjs/cash.min.js');
+        $bundle->addFile('vendor-frontend/cashjs/cash-improvements.js');
+        $bundle->addFile('vendor-frontend/dayjs/dayjs.min.js');
+        $bundle->addFolder('vendor-frontend/dayjs', true);
+        $bundle->addFolder('vendor-frontend/popperjs', true);
+        $bundle->addFolder('vendor-frontend/swiped-events', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "sortablejs");
         $bundle->compile = false;
         $bundle->pageAutoInclude = false;
-        $bundle->addFolder('vendor/sortablejs', true);
+        $bundle->addFolder('vendor-frontend/sortablejs', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "qrcodejs");
         $bundle->compile = false;
         $bundle->pageAutoInclude = false;
-        $bundle->addFolder('vendor/qrcodejs', true);
+        $bundle->addFolder('vendor-frontend/qrcodejs', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-vendor-compiled");
-        $bundle->addFolder('vendor/form-data-json', true);
+        $bundle->addFolder('vendor-frontend/form-data-json', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-early");
         $bundle->pageAutoInclude = false;

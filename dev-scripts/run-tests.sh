@@ -30,14 +30,14 @@ fi
 echo "Running tests on docker container from type '$DOCKERTYPE'"
 
 if [ $TESTTYPE == "phpstan" ]; then
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/phpstan.phar analyze --memory-limit 1G --no-progress"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 
 if [ $TESTTYPE == "phpunit" ]; then
   docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests;'"
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/phpunit.phar --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
 fi
 

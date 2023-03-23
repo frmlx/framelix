@@ -1,12 +1,12 @@
 @media print {
   .framelix-sidebar,
-.framelix-sidebar-toggle,
-.framelix-toast,
-[data-flag-icon="1"],
-button,
-framelix-button,
-.framelix-popup,
-.framelix-top-bar {
+  .framelix-sidebar-toggle,
+  .framelix-toast,
+  [data-flag-icon="1"],
+  button,
+  framelix-button,
+  .framelix-popup,
+  .framelix-top-bar {
     display: none !important;
   }
   table {
