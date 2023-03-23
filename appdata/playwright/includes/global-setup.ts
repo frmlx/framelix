@@ -9,10 +9,7 @@ async function globalSetup () {
   const page = await context.newPage()
   const utils = new FramelixUtils(page)
 
-  // first init app if already initialized
-  await utils.goto('initializeplaywright')
-
-  // second running official setup so it is also tested as well
+  // running framelix setup page
   await utils.goto('/')
   await page.fill('input[name="email"]', 'test@test.local')
   await page.fill('input[name="password"]', 'test@test.local')

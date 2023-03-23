@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|3224348491",
+    "directoryListHash": "3|2483110291",
     "views": {
         "Framelix\\FramelixTests\\View\\BrowserTestView": {
             "accessRole": "*",
@@ -30,16 +30,6 @@
             "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": ""
-        },
-        "Framelix\\FramelixTests\\View\\InitializePlaywright": {
-            "accessRole": "*",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/initializeplaywright"
         },
         "Framelix\\FramelixTests\\View\\ModalWindow": {
             "accessRole": "*",

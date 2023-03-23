@@ -90,7 +90,8 @@ else
   fi
 
   docker run --name $DOCKER_CONTAINER_NAME -d \
-    -p "${FRAMELIX_PUBLICPORT}:${FRAMELIX_PUBLICPORT}" \
+    -p "${FRAMELIX_TEST_PORT}:${FRAMELIX_TEST_PORT}" \
+    -p "${FRAMELIX_DOCS_PORT}:${FRAMELIX_DOCS_PORT}" \
     -v $ROOTDIR/appdata:/framelix/appdata \
     -v "${DOCKER_CONTAINER_NAME}_vol":/framelix/dbdata \
     -v $ROOTDIR/userdata:/framelix/userdata \

@@ -19,7 +19,8 @@ services:
       - ../appdata:/framelix/appdata
       - ../userdata:/framelix/userdata
     ports:
-      - "${FRAMELIX_PUBLICPORT}:${FRAMELIX_PUBLICPORT}"
+      - "${FRAMELIX_TEST_PORT}:${FRAMELIX_TEST_PORT}"
+      - "${FRAMELIX_DOCS_PORT}:${FRAMELIX_DOCS_PORT}"
     environment:
       - COMPOSE_PROJECT_NAME
       - FRAMELIX_MODULES
