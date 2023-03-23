@@ -90,11 +90,11 @@ else
   fi
 
   docker run --name $DOCKER_CONTAINER_NAME -d \
-    -p $PUBLICPORT:443 \
-    -v $ROOTDIR/appdata:/framelix/appdata_volume \
+    -p "${FRAMELIX_PUBLICPORT}:${FRAMELIX_PUBLICPORT}" \
+    -v $ROOTDIR/appdata:/framelix/appdata \
     -v "${DOCKER_CONTAINER_NAME}_vol":/framelix/dbdata \
     -v $ROOTDIR/userdata:/framelix/userdata \
-    -e FRAMELIX_MODULE=$MODULENAME \
+    -e FRAMELIX_MODULES=$FRAMELIX_MODULES \
     -e FRAMELIX_UNIT_TESTS=$FRAMELIX_UNIT_TESTS \
     -e FRAMELIX_PLAYWRIGHT_TESTS=$FRAMELIX_PLAYWRIGHT_TESTS \
     $BUILD_IMAGE_NAME

@@ -107,6 +107,8 @@ class Framelix
             ini_set("memory_limit", "128M");
         }
 
+        Config::$devMode = !!($_SERVER['FRAMELIX_DEVMODE'] ?? null);
+
         // setup required, skip everything and init with minimal data
         $userConfigFile = Config::getUserConfigFilePath("01-core");
         if (!Config::$appSetupDone) {

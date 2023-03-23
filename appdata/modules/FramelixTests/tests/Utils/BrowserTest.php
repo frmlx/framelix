@@ -19,7 +19,7 @@ final class BrowserTest extends TestCase
         $file = Config::getUserConfigFilePath("01-core", "Framelix");
         file_put_contents($file, '<?php Framelix\Framelix\Config::$appSetupDone = true;Framelix\Framelix\Config::$salts["default"] = "0";');
         $browser = Browser::create();
-        $browser->url = 'https://127.0.0.1:443/browsertestview';
+        $browser->url = 'https://127.0.0.1:8669/browsertestview';
         $browser->validateSsl = false;
         $browser->requestBody = "foobar";
         $browser->userPwd = "test:foo";

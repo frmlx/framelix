@@ -1,0 +1,23 @@
+parameters:
+  level: 6
+  paths:
+    - modules/Framelix/src
+  excludePaths:
+    - modules/Framelix/src/View/Backend/Config/Index.php
+  scanDirectories:
+    - modules/Framelix/vendor
+    - vendor/phpstorm-attributes-master
+  bootstrapFiles:
+    - modules/FramelixTests/public/index.php
+  checkMissingIterableValueType: false
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    - '#Unsafe usage of new static#'
+    - '#Argument of an invalid type .* supplied for foreach#'
+    - '#Call to an undefined method ReflectionType::getName#'
+    - '#Offset .*? does not exist on array#'
+    - '#Cannot unset offset .*? on array#'
+    - '#Property .*? is never read, only written#'
+    - '#does not accept default value of type array{}#'
+    - '# should return array\{.*#'
+    - '#should return array<static#'

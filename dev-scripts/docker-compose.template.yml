@@ -14,14 +14,13 @@ services:
     build: ..
     restart: on-failure
     volumes:
-      - ../appdata:/framelix/appdata_volume
+      - ../appdata:/framelix/appdata
       - vol:/framelix/dbdata
       - ../userdata:/framelix/userdata
-      - ./phpstorm-coverage:/opt/phpstorm-coverage
     ports:
-      - "${PUBLICPORT}:443"
+      - "${FRAMELIX_PUBLICPORT}:${FRAMELIX_PUBLICPORT}"
     environment:
       - COMPOSE_PROJECT_NAME
-      - FRAMELIX_MODULE=${MODULENAME}
+      - FRAMELIX_MODULES=${FRAMELIX_MODULES}
       - FRAMELIX_UNIT_TESTS
       - FRAMELIX_PLAYWRIGHT_TESTS

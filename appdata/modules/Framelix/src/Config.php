@@ -30,6 +30,7 @@ class Config
 
     /**
      * Development mode enables more debugging and generation of required dist and meta files after source changes
+     * Enable this with ENV variable FRAMELIX_DEVMODE=1 before starting the docker image
      * @var bool
      */
     public static bool $devMode = false;

@@ -14,14 +14,14 @@ server {
     listen 0.0.0.0:{port} ssl;
     root /framelix/appdata/modules/{module}/public;
 
-    ssl_certificate     /framelix/system/nginx-ssl.crt;
-    ssl_certificate_key /framelix/system/nginx-ssl.key;
+    ssl_certificate     {pubKeyPath};
+    ssl_certificate_key {privKeyPath};
 
     include /etc/nginx/snippets/framelix/vhost.conf;
 }
 ';
 
-$nginxSitesPath = "/framelix/system/nginx-sites.conf";
+$nginxSitesPath = "/etc/nginx/sites-enabled/framelix-sites.conf";
 
 
 $modules = explode(";", $_SERVER['FRAMELIX_MODULES'] ?? '1');
@@ -36,8 +36,8 @@ foreach ($modules as $row) {
         continue;
     }
     $modulePath = "/framelix/appdata/modules/" . $moduleName;
-    if (!file_exists($moduleName)) {
-        echo "Framelix module '$moduleName' not exist. Aborting.\n";
+    if (!file_exists($modulePath)) {
+        echo "Framelix module '$moduleName' not exist at '$modulePath'. Aborting.\n";
         $allValid = false;
         continue;
     }
@@ -55,11 +55,20 @@ foreach ($modules as $row) {
         $allValid = false;
         continue;
     }
+    $content = trim($ssl ? $templateSSL : $templateNonSSL);
+    $content = str_replace(['{port}', '{module}'], [$port, $moduleName], $content);
+    if ($ssl) {
+        $content = str_replace('{privKeyPath}', $privKeyFile ?: '/framelix/system/nginx-ssl.key', $content);
+        $content = str_replace('{pubKeyPath}', $pubKeyFile ?: '/framelix/system/nginx-ssl.crt', $content);
+    }
+    $contents[] = $content;
     $validModules++;
 }
 
 if (!$validModules) {
     echo "No valid Framelix modules given in FRAMELIX_MODULES environment variable. Aborting.";
+} else {
+    file_put_contents($nginxSitesPath, implode("\n\n", $contents));
 }
 
 exit($allValid && $validModules > 0 ? 0 : 1);

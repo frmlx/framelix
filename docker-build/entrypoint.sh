@@ -44,35 +44,30 @@ start_mysql() {
 cecho b "# FRAMELIX DOCKER - 😜  Huhuu!"
 echo ""
 
-
-
 if [ -z "$FRAMELIX_MODULES" ]; then
   cecho r "Env FRAMELIX_MODULES not set. Aborting."
   exit 1
 fi
 
-if [ -d "$FRAMELIX_APPDATA/modules" ]; then
-  cecho y "# Using already integrated appdata folder $FRAMELIX_APPDATA."
-  echo ""
-else
-  cecho y "# Using dynamic appdata mapped volume"
-  ln -f -s $FRAMELIX_APPDATA_VOLUME $FRAMELIX_APPDATA
-  echo ""
+if [ !-d "$FRAMELIX_APPDATA/modules" ]; then
+  cecho r "Missing Framelix core module $FRAMELIX_APPDATA/modules/Framelix. Aborting."
+  exit 1
+fi
 
-  cecho y "# Run npm install"
+if [ "$FRAMELIX_DEVMODE" == "1" ]; then
+  cecho y "# Running npm install and composer install because app is in DEVMODE"
+
   echo ""
   framelix_npm_modules_install
   echo ""
   echo "Done."
   echo ""
 
-  cecho y "# Run composer install"
   echo ""
   framelix_composer_modules_install
   echo ""
   echo "Done."
   echo ""
-
 fi
 
 cecho y "# Checking required folder mappings and variables"
@@ -128,7 +123,22 @@ fi
 mkdir -p /home/$NGINX_USERNAME
 chown $NGINX_USERNAME:$NGINX_GROUPNAME /home/$NGINX_USERNAME
 
-echo "Nginx/PHP run with UID($NGINX_USER)/GID($NGINX_GROUP) based on $FRAMELIX_USERDATA permission"
+echo "Nginx/PHP starting with UID($NGINX_USER)/GID($NGINX_GROUP) based on $FRAMELIX_USERDATA permission"
+echo "Done."
+echo ""
+
+# create nginx config files based on env variables
+cecho y "# Creating nginx config files based on environment variables"
+echo ""
+
+echo "user $NGINX_USERNAME $NGINX_GROUPNAME;" >/etc/nginx/nginx-framelix-dynamic.conf
+
+php -f /framelix/system/create-nginx-sites-conf.php
+
+if [ "$?" != "0" ]; then
+  exit 1
+fi
+
 echo "Done."
 echo ""
 
@@ -168,28 +178,6 @@ fi
 
 mysql -uroot -papp -e "CREATE DATABASE IF NOT EXISTS app;"
 echo ""
-
-cecho y "# Checking appdata"
-echo ""
-if [ ! -d "$FRAMELIX_APPDATA/modules" ]; then
-  cecho r "$FRAMELIX_APPDATA not containing valid app files, aborting."
-  exit 1
-fi
-if [ ! -d "$FRAMELIX_APPDATA/modules/$FRAMELIX_MODULE/public" ]; then
-  cecho r "Appmodule $FRAMELIX_MODULE not installed properly. Aborting."
-  exit 1
-fi
-echo "Done."
-echo ""
-
-# create nginx config files based on env variables
-echo "user $NGINX_USERNAME $NGINX_GROUPNAME;" >/etc/nginx/nginx-framelix-dynamic.conf
-
-php -f /framelix/system/create-nginx-sites-conf.php
-
-if [ "$?" != "0" ]:
-  exit 1
-fi
 
 # install extras for unit tests
 if [ $FRAMELIX_UNIT_TESTS -eq 1 ]; then
