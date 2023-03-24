@@ -1,13 +1,15 @@
 ARG OS_IMAGE=ubuntu:22.04
+
 # CHECK OUT MORE AVAILABLE IMAGES FROM https://hub.docker.com/_/ubuntu
 FROM $OS_IMAGE
+
+ARG FRAMELIX_BUILD_TYPE=dev
 
 ENV FRAMELIX_APPDATA="/framelix/appdata"
 ENV FRAMELIX_DBDATA="/framelix/dbdata"
 ENV FRAMELIX_USERDATA="/framelix/userdata"
 ENV FRAMELIX_SYSTEMDIR="/framelix/system"
 ENV FRAMELIX_UNIT_TESTS=0
-# FORMAT: MODULENAME,SSL(1/0)[Default=1,OPTIONAL],PORTNR[Default=443/80,OPTIONAL],PRIVKEY_PATH[DEFAULT=SelfSigned,OPTIONAL],PUBKEY_PATH[DEFAULT=SelfSigned,OPTIONAL]; MODULENAME,...
 ENV FRAMELIX_MODULES=""
 
 RUN mkdir -p $FRAMELIX_APPDATA $FRAMELIX_SYSTEMDIR
@@ -37,6 +39,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 COPY docker-build/entrypoint.sh $FRAMELIX_SYSTEMDIR/entrypoint.sh
 COPY docker-build/useful-scripts $FRAMELIX_SYSTEMDIR/useful-scripts
 COPY docker-build/misc-conf/cronjobs $FRAMELIX_SYSTEMDIR/cronjobs
+COPY docker-build/misc-conf/build-image.php $FRAMELIX_SYSTEMDIR/build-image.php
+COPY VERSION $FRAMELIX_SYSTEMDIR/VERSION
 
 # imagemagick
 COPY docker-build/misc-conf/imagemagick-policy.xml /etc/ImageMagick-6/policy.xml
@@ -67,6 +71,10 @@ RUN chmod +x $FRAMELIX_SYSTEMDIR/useful-scripts/* && ln -s $FRAMELIX_SYSTEMDIR/u
 
 # install composer
 RUN framelix_composer_install
+
+# some additional build steps (to include appdata) for production builds
+RUN echo $FRAMELIX_BUILD_TYPE
+RUN php -f $FRAMELIX_SYSTEMDIR/build-image.php "$FRAMELIX_BUILD_TYPE"
 
 # let's go
 RUN chmod +x "$FRAMELIX_SYSTEMDIR/entrypoint.sh"

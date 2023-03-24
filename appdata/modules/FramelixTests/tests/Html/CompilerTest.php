@@ -60,7 +60,7 @@ final class CompilerTest extends TestCase
     public function tests(): void
     {
         $distFolder = __DIR__ . "/../../public/dist";
-        $noCompiledFile = $distFolder . "/js/test-nocompile.js";
+        $noCompiledFile = $distFolder . "/js/test-nocompile.min.js";
         $metaFile = __DIR__ . "/../../public/dist/_meta.json";
         Config::$devMode = true;
         Compiler::$cache = [];
@@ -87,7 +87,7 @@ final class CompilerTest extends TestCase
         $this->assertCount(count($distFiles) - 1, FileUtils::getFiles($distFolder, null, true));
 
         $this->assertStringEndsWith(
-            trim(file_get_contents(__DIR__ . "/../../js/framelix-unit-test-jstest.min.js")),
+            trim(file_get_contents($jsFile)),
             trim(file_get_contents($noCompiledFile)),
         );
     }

@@ -6,7 +6,6 @@ use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\View;
-
 use SensitiveParameter;
 
 use function array_search;

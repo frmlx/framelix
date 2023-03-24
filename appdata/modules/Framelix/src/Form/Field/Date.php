@@ -52,7 +52,7 @@ class Date extends Text
             return Lang::get('__framelix_form_validation_mindate__', ['date' => DateTime::anyToFormat($this->minDate)]);
         }
         if ($value && $this->maxDate !== null && \Framelix\Framelix\Date::compare($value, $this->maxDate) === ">") {
-            return Lang::get('__framelix_form_validation_maxdate__', ['date' => DateTime::anyToFormat($this->minDate)]);
+            return Lang::get('__framelix_form_validation_maxdate__', ['date' => DateTime::anyToFormat($this->maxDate)]);
         }
         return true;
     }

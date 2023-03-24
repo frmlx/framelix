@@ -17,6 +17,6 @@ final class QuickCastTest extends TestCase
         $this->assertSame(null, QuickCast::to('', 'array', false, true));
         $this->assertSame(true, QuickCast::to(1, 'bool'));
         $this->assertSame(null, QuickCast::to('', 'bool', false, true));
-        $this->assertSame('0222Array', QuickCast::to($arr, 'string', false));
+        $this->assertSame('0,222,3333', QuickCast::to($arr, 'string', false));
     }
 }

@@ -5,20 +5,26 @@
 
 ### 🎯 Framelix core (backend/frontend) changes
 
-⚠️ **BREAKING CHANGE** ⚠️: Database handling have changed. The previous default DB `app` is not being generated and used anymore. Each module instance have it's own database, named by the module name by default. So `default` database connection also not exist anymore. To migrate, you must rename the `app` database to the module name of your instance.
+⚠️ **BREAKING CHANGE** ⚠️: All changes marked with ⚠️ are breaking changes. Database handling have also changed. The previous default DB `app` is not being generated and used anymore. Each module instance have it's own database, named by the module name by default. So `default` database connection also not exist anymore. To migrate, you must rename the `app` database to the module name of your instance.
 
 * ➕ added property to force screen size and color scheme for layout view
 * ➕ added `$hiddenView` property to `View` to allow view to be hidden from public access
 * 🛠️ fixed minor layout glitch in small size mode
-* ✏️ changed database handling so each module instance have it's own separate database, the default `app` database is being dropped
+* 🛠️ fixed many tests and core code that failed because of now better error detection of new PhpUnit
+* ✏️ ⚠️ renamed `Time` functions `timeStringToHours->toHours, timeStringToSeconds->toSeconds` and make conversion more lazy (accepting more types of values)
+* ✏️ ⚠️ changed database handling so each module instance have it's own separate database, the default `app` database is being dropped
 * ✏️ changed to hidden sidebar by default for some small views (Login, ForgotPassword, etc..)
 * ✏️ changed internals of how app is setup (reduced checks, more streamlined, easier maintenance)
+* ✏️ changed some vendor frontend libraries to package.json instead of manual installation
 * ❌ removed old unsupported setup vars
-* removed `Config::$appSetupDone`, so you have to update your `01-core.php` config and remove it there manually
+* ❌ removed `Config::$appSetupDone`, so you have to update your `01-core.php` config and remove it there manually
+* ️⬆️ upgraded PhpUnit to v10, PhpStan, Playwright, and various other integrated vendor libs
+* ️⬆️ upgraded several other frontend libraries (cashjs, sortablejs, popperjs, etc...)
 
 ### 🐳 Docker container changes
 
 * ➕ added build ARG `OS_IMAGE` to be able to use another base ubuntu image (experimental). So you can install this also on a Raspberry PI for example, which have ARM architecture.
+* ✏️ reworked many internals of how the image works and streamlined build, test and development process - most notable the `.env` file has changed variables so you have update yours according to the templates
 * ⬆️ upgraded mariadb to v10.11.2 (from 10.6.12)
 * ⬆️ upgraded NodeJS to v19.8.1 (from 18.14.0)
 * ⬆️ upgraded PHP to v8.2.4 (from 8.2.2)

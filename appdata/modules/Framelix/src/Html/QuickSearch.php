@@ -4,7 +4,6 @@ namespace Framelix\Framelix\Html;
 
 use Framelix\Framelix\Form\Field;
 use Framelix\Framelix\Network\JsCall;
-use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
 use JsonSerializable;
 

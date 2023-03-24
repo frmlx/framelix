@@ -42,7 +42,7 @@ class Time extends Text
     {
         $value = $this->getSubmittedValue();
         if (is_string($value) && strlen($value)) {
-            return \Framelix\Framelix\Time::timeStringToSeconds($value);
+            return \Framelix\Framelix\Time::toSeconds($value);
         }
         return null;
     }
@@ -64,20 +64,20 @@ class Time extends Text
         $value = $this->getDefaultConvertedSubmittedValue();
         if ($value) {
             if ($this->minTime !== null) {
-                $limit = \Framelix\Framelix\Time::timeStringToHours($this->minTime);
+                $limit = \Framelix\Framelix\Time::toSeconds($this->minTime);
                 if ($value < $limit) {
                     return Lang::get(
                         '__framelix_form_validation_mintime__',
-                        ['time' => \Framelix\Framelix\Time::hoursToTimeString($limit, $this->allowSeconds)]
+                        ['time' => \Framelix\Framelix\Time::secondsToTimeString($limit, $this->allowSeconds)]
                     );
                 }
             }
             if ($this->maxTime !== null) {
-                $limit = \Framelix\Framelix\Time::timeStringToHours($this->maxTime);
+                $limit = \Framelix\Framelix\Time::toSeconds($this->maxTime);
                 if ($value > $limit) {
                     return Lang::get(
                         '__framelix_form_validation_maxtime__',
-                        ['time' => \Framelix\Framelix\Time::hoursToTimeString($limit, $this->allowSeconds)]
+                        ['time' => \Framelix\Framelix\Time::secondsToTimeString($limit, $this->allowSeconds)]
                     );
                 }
             }

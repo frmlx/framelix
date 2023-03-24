@@ -12,7 +12,6 @@ use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\ObjectTransformable;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
-use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\JsonUtils;
 use JsonSerializable;
 use ReflectionClass;

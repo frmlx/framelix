@@ -6,7 +6,7 @@ parameters:
     - modules/Framelix/src/View/Backend/Config/Index.php
   scanDirectories:
     - modules/Framelix/vendor
-    - vendor/phpstorm-attributes-master
+    - vendor
   bootstrapFiles:
     - modules/FramelixTests/public/index.php
   checkMissingIterableValueType: false

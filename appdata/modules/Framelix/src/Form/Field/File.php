@@ -10,7 +10,6 @@ use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableFile;
 
 use function is_array;
-use function var_dump;
 
 /**
  * A file upload field

@@ -37,7 +37,7 @@ class Email extends Text
             return $parentValidation;
         }
         $value = $this->getSubmittedValue();
-        if (strlen($value) && is_string($value)) {
+        if ($value && is_string($value)) {
             $regex = "~^[a-zA-Z0-9"
                 . preg_quote(".!#$%&’*+/=?^_`{|}~-", "~") . "]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-.]{2,}~";
             if (!preg_match($regex, $value)) {

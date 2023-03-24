@@ -4,8 +4,6 @@ namespace Framelix\Framelix\Html;
 
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Url;
-use Framelix\Framelix\Utils\JsonUtils;
-use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\Framelix\View;
 use JsonSerializable;
 

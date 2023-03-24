@@ -37,8 +37,6 @@ use function strlen;
 use function strtolower;
 use function substr;
 
-use function var_dump;
-
 use const FRAMELIX_MODULE;
 use const SORT_DESC;
 
@@ -312,7 +310,7 @@ abstract class View implements JsonSerializable
     /**
      * Add given view as available view
      * @param string $viewClass
-     * @param  bool $skipHiddenViews If true, then ignore views that are set to hidden
+     * @param bool $skipHiddenViews If true, then ignore views that are set to hidden
      */
     public static function addAvailableView(string $viewClass, bool $skipHiddenViews = true): void
     {

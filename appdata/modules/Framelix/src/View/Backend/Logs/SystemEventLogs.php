@@ -5,7 +5,6 @@ namespace Framelix\Framelix\View\Backend\Logs;
 use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Html\Tabs;
 use Framelix\Framelix\Html\Toast;
-use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\SystemEventLog;

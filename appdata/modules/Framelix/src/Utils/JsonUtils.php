@@ -22,11 +22,7 @@ use const JSON_THROW_ON_ERROR;
  */
 class JsonUtils
 {
-    /**
-     * Internal cache
-     * @var array
-     */
-    private static $cache = [];
+    private static array $cache = [];
 
     /**
      * Get package json data

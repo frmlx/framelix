@@ -12,7 +12,6 @@ use Framelix\Framelix\Storable\StorableExtended;
 use Framelix\Framelix\Time;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
-use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\NumberUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\Framelix\Utils\StringUtils;
@@ -532,7 +531,8 @@ class Table implements JsonSerializable
                             $footerSums[$columnName]['value'] += $value;
                         } elseif ($value instanceof Time) {
                             $footerSums[$columnName]['type'] = "time";
-                            $footerSums[$columnName]['value'] += $value->seconds;
+                            $footerSums[$columnName]['value'] = round($footerSums[$columnName]['value'] + Time::toHours($value),
+                                4);
                         }
                     }
                     $sortValue = $rowValues['sortValues'][$columnName] ?? null;
@@ -550,7 +550,7 @@ class Table implements JsonSerializable
             $row = [];
             foreach ($footerSums as $columnName => $rowValues) {
                 if ($rowValues['type'] === 'time') {
-                    $row[$columnName] = Time::secondsToTimeString($rowValues['value']);
+                    $row[$columnName] = Time::hoursToTimeString($rowValues['value']);
                 } else {
                     $row[$columnName] = NumberUtils::format($rowValues['value'], $rowValues['decimals'] ?? 2);
                 }

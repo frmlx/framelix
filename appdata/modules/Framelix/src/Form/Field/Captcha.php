@@ -10,12 +10,8 @@ use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Utils\Browser;
 use Framelix\Framelix\Utils\CryptoUtils;
-use Framelix\Framelix\Utils\JsonUtils;
 
 use function explode;
-use function file_get_contents;
-use function http_build_query;
-use function stream_context_create;
 
 /**
  * A captcha field to provide captcha validation
@@ -102,7 +98,7 @@ class Captcha extends Field
             self::TYPE_RECAPTCHA_V3
         ];
         foreach ($keys as $key) {
-            $data->properties['publicKeys'][$key] = Config::$captchaKeys[$key]['publicKey'];
+            $data->properties['publicKeys'][$key] = Config::$captchaKeys[$key]['publicKey'] ?? null;
         }
         $data->properties['signedUrlVerifyToken'] = JsCall::getUrl(
             Captcha::class,

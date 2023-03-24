@@ -17,24 +17,26 @@ class QuickCast
      * Cast a value to another value
      * @param mixed $value
      * @param string $to
-     * @param bool $recursive If $value is array, then convert array values recursive, otherwise arrays are also casted
+     * @param bool $recursive If $value is array, then convert array values recursive and return original array structure, otherwise arrays are also casted to target type
      * @param bool $emptyToNull Convert empty values (strlen=0) to null
+     * @param string $implodeSeparator When array is casted to string, what separator to us
      * @return mixed
      */
     public static function to(
         mixed $value,
         #[ExpectedValues(values: ['bool', 'int', 'float', 'string', 'array'])] string $to,
         bool $recursive = true,
-        bool $emptyToNull = false
+        bool $emptyToNull = false,
+        string $implodeSeparator = ","
     ): mixed {
-        if (is_array($value) && $recursive) {
+        if (is_array($value)) {
             foreach ($value as $k => $v) {
                 $value[$k] = self::to($v, $to, $recursive);
             }
+            if (!$recursive) {
+                return implode($implodeSeparator, $value);
+            }
             return $value;
-        }
-        if (is_array($value)) {
-            $value = implode($value);
         }
         switch ($to) {
             case 'array':

@@ -16,7 +16,6 @@ use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\View;
-
 use JetBrains\PhpStorm\ExpectedValues;
 
 use function call_user_func_array;

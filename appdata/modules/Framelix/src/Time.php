@@ -7,8 +7,10 @@ use Framelix\Framelix\Db\StorableSchemaProperty;
 
 use function explode;
 use function floor;
-use function is_string;
+use function is_numeric;
+use function str_contains;
 use function str_pad;
+use function str_replace;
 
 use const STR_PAD_LEFT;
 
@@ -43,7 +45,7 @@ class Time implements StorablePropertyInterface
     public static function createFromDbValue(mixed $dbValue): self
     {
         $instance = new self();
-        $instance->seconds = (int)$dbValue;
+        $instance->seconds = is_numeric($dbValue) ? (int)$dbValue : 0;
         return $instance;
     }
 
@@ -65,28 +67,39 @@ class Time implements StorablePropertyInterface
     public static function create(string $timeString): self
     {
         $instance = new self();
-        $instance->seconds = self::timeStringToSeconds($timeString);
+        $instance->seconds = self::toSeconds($timeString);
         return $instance;
     }
 
     /**
-     * Convert a time string to hours
+     * Convert any value that contain a time into hours
      * @param mixed $value
      * @return float
      */
-    public static function timeStringToHours(mixed $value): float
+    public static function toHours(mixed $value): float
     {
-        return round(self::timeStringToSeconds($value) / 3600, 4);
+        return round(self::toSeconds($value) / 3600, 4);
     }
 
     /**
-     * Convert a time string to seconds
+     * Convert any value that contain a time into seconds
      * @param mixed $value
      * @return int
      */
-    public static function timeStringToSeconds(mixed $value): int
+    public static function toSeconds(mixed $value): int
     {
-        if (!is_string($value)) {
+        if ($value instanceof Time) {
+            return $value->seconds;
+        }
+        $value = (string)$value;
+        if (!$value) {
+            return 0;
+        }
+        if (is_numeric($value)) {
+            return (int)$value;
+        }
+        $value = str_replace([",", "."], ":", $value);
+        if (!str_contains($value, ":")) {
             return 0;
         }
         $spl = explode(":", $value);
@@ -113,7 +126,7 @@ class Time implements StorablePropertyInterface
     public static function secondsToTimeString(int $seconds, bool $includeSeconds = false): string
     {
         $hours = floor($seconds / 3600);
-        $minutes = floor($seconds / 60 % 60);
+        $minutes = floor(floor($seconds / 60) % 60);
         $restSeconds = floor($seconds % 60);
         return str_pad((string)$hours, 2, '0', STR_PAD_LEFT)
             . ':'

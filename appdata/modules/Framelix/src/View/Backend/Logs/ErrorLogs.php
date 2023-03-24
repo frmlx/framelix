@@ -4,7 +4,6 @@ namespace Framelix\Framelix\View\Backend\Logs;
 
 use Framelix\Framelix\ErrorHandler;
 use Framelix\Framelix\Html\Toast;
-use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;

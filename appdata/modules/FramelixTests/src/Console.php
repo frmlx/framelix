@@ -14,6 +14,8 @@ class Console extends \Framelix\Framelix\Console
     public static function appWarmup(): int
     {
         Shell::prepare("mysql -uroot -papp -e 'DROP DATABASE IF EXISTS `unittests`; CREATE DATABASE `unittests`;'")->execute();
+        // install dev libs for tests
+        Shell::prepare("cd /framelix/appdata && composer install")->execute();
         return 0;
     }
 }

@@ -26,7 +26,6 @@ use function spl_autoload_register;
 use function str_replace;
 use function str_starts_with;
 use function substr;
-use function trim;
 
 use const E_ALL;
 use const FRAMELIX_MODULE;

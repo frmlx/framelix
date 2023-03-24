@@ -1,0 +1,74 @@
+name: Framelix Unit Tests
+on:
+  push:
+  pull_request:
+
+jobs:
+  framelix-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout framelix repository
+        uses: actions/checkout@v3
+        with:
+          repository: NullixAT/framelix
+
+      - name: Create .env file
+        run: cp dev-scripts/.env_git_tests dev-scripts/.env
+
+      - name: Build and start docker containers
+        run: bash dev-scripts/start-container.sh -b gitworkflow
+
+      - name: Run PhpStan Static Analysis
+        run: bash dev-scripts/run-tests.sh -t phpstan
+
+      - name: Run PHP Unit Tests
+        run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/tmp/clover-coverage.txt)" >> $GITHUB_ENV
+
+      - name: Create PHP Coverage Badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 2e4ba189fbb1a23bff14e73cb893bc3e
+          filename: framelix-unit-tests-coverage-data.json
+          label: CodeCoverage
+          message: ${{ env.COVERAGE }}
+          color: orange
+
+      - name: Run Playwright tests
+        run: bash dev-scripts/run-tests.sh -t playwright && echo "MESSAGE=$(cat userdata/playwright/badge-message.txt)" >> $GITHUB_ENV && echo "COLOR=$(cat userdata/playwright/badge-color.txt)" >> $GITHUB_ENV
+
+      - name: Create Playwright Badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 91cdcb4629cfb14f8c00ab5ea4e485ec
+          filename: framelix-playwright-tests.json
+          label: 'Playwright Tests'
+          message: ${{ env.MESSAGE }}
+          color: ${{ env.COLOR }}
+
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          dest: './logs'
+
+      - name: Upload docker logs to GitHub
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-logs
+          path: ./logs
+          retention-days: 5
+
+      - name: Upload playwright logs to GitHub
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-results
+          path: ./userdata/playwright/results
+          retention-days: 5
+
+      - name: Stop containers
+        if: always()
+        run: bash dev-scripts/stop-container.sh

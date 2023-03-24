@@ -41,7 +41,13 @@ class SystemEventLog extends StorableMeta
                     $params[$key] = htmlentities($value);
                 }
             }
-            if ($category === \Framelix\Framelix\Storable\SystemEventLog::CATEGORY_STORABLE_CREATED || $category === \Framelix\Framelix\Storable\SystemEventLog::CATEGORY_STORABLE_UPDATED) {
+            if (
+                ($params['id'] ?? null) && ($params['connectionId'] ?? null) &&
+                (
+                    $category === \Framelix\Framelix\Storable\SystemEventLog::CATEGORY_STORABLE_CREATED ||
+                    $category === \Framelix\Framelix\Storable\SystemEventLog::CATEGORY_STORABLE_UPDATED
+                )
+            ) {
                 $object = Storable::getById($params['id'], $params['connectionId']);
                 if ($object && $object->getDetailsUrl()) {
                     $params['id'] = '<a href="' . $object->getDetailsUrl() . '" target="_blank">' . $object . '</a>';

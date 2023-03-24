@@ -4,22 +4,26 @@
 class FramelixTimeUtils {
 
   /**
-   * Convert a time string to hours
+   * Convert any value that contain a time into hours
    * @param {*} value
    * @return {number}
    */
-  static timeStringToHours (value) {
-    const number = FramelixTimeUtils.timeStringToSeconds(value)
+  static toHours (value) {
+    const number = FramelixTimeUtils.toSeconds(value)
     return FramelixNumberUtils.round(number / 3600, 4)
   }
 
   /**
-   * Convert a time string to seconds
+   * Convert any value that contain a time into seconds
    * @param {*} value
    * @return {number}
    */
-  static timeStringToSeconds (value) {
+  static toSeconds (value) {
+    if (typeof value === 'number') return parseInt(value.toString())
     if (typeof value !== 'string' || !value.length) return 0
+    if (!value.includes(':')) {
+      return parseInt(value)
+    }
     const spl = value.split(':')
     return (parseInt(spl[0]) * 3600) + (parseInt(spl[1]) * 60) + (parseInt(spl[2] || '0'))
   }

@@ -6,6 +6,8 @@ use Framelix\Framelix\Form\Field\Time;
 use Framelix\Framelix\Lang;
 use Framelix\FramelixTests\TestCase;
 
+use function var_dump;
+
 final class TimeTest extends TestCase
 {
     public function tests(): void
@@ -26,6 +28,7 @@ final class TimeTest extends TestCase
         // validators
         $field->name .= "1";
         $field->minTime = \Framelix\Framelix\Time::create("12:00");
+        $field->maxTime = null;
         $this->setSimulatedPostData([$field->name => "11:59"]);
         $this->assertIsString($field->validate());
 
