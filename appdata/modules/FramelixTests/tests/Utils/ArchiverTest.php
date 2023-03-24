@@ -14,7 +14,7 @@ final class ArchiverTest extends TestCase
 
     public function testExtract(): void
     {
-        $tarFile = __DIR__ . "/../../tmp/test.tar";
+        $tarFile = __DIR__ . "/../../tmp/test.zip";
         $tmpFolder = __DIR__ . "/../../tmp/tartest";
         FileUtils::deleteDirectory($tmpFolder);
         mkdir($tmpFolder);
@@ -33,7 +33,6 @@ final class ArchiverTest extends TestCase
 
         Archiver::extractTo($tarFile, $tmpFolder, true);
         $this->assertFilelist([
-            'modules/FramelixTests/tmp/tartest/fileutils-test/.gitignore',
             'modules/FramelixTests/tmp/tartest/fileutils-test/sub/test1',
             'modules/FramelixTests/tmp/tartest/fileutils-test/sub/test1.txt',
             'modules/FramelixTests/tmp/tartest/fileutils-test/test1',
@@ -41,7 +40,7 @@ final class ArchiverTest extends TestCase
         ], $tmpFolder);
         $list = Archiver::listFiles($tarFile);
         $this->assertSame(
-            '["fileutils-test","fileutils-test\/.gitignore","fileutils-test\/sub","fileutils-test\/sub\/test1","fileutils-test\/sub\/test1.txt","fileutils-test\/test1","fileutils-test\/test1.txt"]',
+            '["fileutils-test","fileutils-test\/sub","fileutils-test\/sub\/test1","fileutils-test\/sub\/test1.txt","fileutils-test\/test1","fileutils-test\/test1.txt"]',
             json_encode(ArrayUtils::map($list, 'Path'))
         );
 

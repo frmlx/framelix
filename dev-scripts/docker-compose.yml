@@ -1,7 +1,5 @@
 version: "3"
 
-name: framelix_tests
-
 networks:
   app:
     driver: bridge
@@ -12,7 +10,7 @@ volumes:
 
 services:
   app:
-    image: framelix_tests
+    image: nullixat/framelix:local
     restart: on-failure
     volumes:
       - framelix_tests_vol:/framelix/dbdata
@@ -24,5 +22,4 @@ services:
     environment:
       - COMPOSE_PROJECT_NAME
       - FRAMELIX_MODULES
-      - FRAMELIX_UNIT_TESTS
       - FRAMELIX_DEVMODE

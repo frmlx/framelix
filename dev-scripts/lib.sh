@@ -6,7 +6,6 @@ ROOTDIR="$BASEDIR/.."
 
 source $BASEDIR/.env
 
-DOCKER_CONTAINER_NAME=framelix_tests
 MODULENAME_LOWER="${MODULENAME,,}"
 VERSION=$(cat "$ROOTDIR/VERSION")
 MAJOR_VERSION=$(echo $VERSION| cut -d'.' -f 1)

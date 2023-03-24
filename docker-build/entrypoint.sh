@@ -160,34 +160,6 @@ else
   mysql_upgrade -u root -papp
 fi
 
-# install extras for unit tests
-if [ "$FRAMELIX_UNIT_TESTS" == "1" ]; then
-  cecho y "# Unit Tests active - Installing tests dependencies"
-  export DEBIAN_FRONTEND=noninteractive
-  apt update
-  apt install php8.2-xdebug -y
-  cp $FRAMELIX_SYSTEMDIR/php-xdebug.ini /etc/php/8.2/cli/conf.d/21-xdebug.ini
-  rm /etc/php/8.2/fpm/conf.d/20-xdebug.ini
-  echo "Done."
-  echo ""
-
-  cecho y "# Create required test folders and files"
-  echo ""
-  mkdir -p /opt/phpstorm-coverage
-  chmod 0777 /opt/phpstorm-coverage
-  echo "Done."
-  echo ""
-
-  cecho y "# Recreate unittests database"
-  mysql -u root -papp -e "DROP DATABASE IF EXISTS unittests; CREATE DATABASE  unittests;"
-  echo ""
-  echo "Done."
-  echo ""
-
-  cecho y "# Unit Tests specials done"
-  echo ""
-fi
-
 cecho y "# Starting php fpm service"
 echo ""
 

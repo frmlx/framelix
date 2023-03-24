@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+
+if [[ $(apt list php8.2-xdebug --installed) != *"[installed]"* ]]; then
+  echo "# Installing xdebug"
+  export DEBIAN_FRONTEND=noninteractive
+  apt install php8.2-xdebug -y
+  cp $FRAMELIX_SYSTEMDIR/php-xdebug.ini /etc/php/8.2/cli/conf.d/21-xdebug.ini
+  rm /etc/php/8.2/fpm/conf.d/20-xdebug.ini
+  echo "Done."
+  echo ""
+fi
+
+echo "# Create required test folders and files"
+echo ""
+mkdir -p /opt/phpstorm-coverage
+chmod 0777 /opt/phpstorm-coverage
+echo "Done."
+echo ""
+
+echo "# Unit Test requirements installed"
+echo ""

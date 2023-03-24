@@ -18,26 +18,27 @@ if [ ! -z "$(docker ps --filter 'name=framelix_tests-app' --filter 'status=runni
 else
   if [ ! -z "$(docker ps --filter 'name=framelix_tests' --filter 'status=running' --no-trunc -q)" ]; then
     DOCKERTYPE=docker
-    DOCKER_EXECPARAMS=" exec -t $DOCKER_CONTAINER_NAME bash -c "
+    DOCKER_EXECPARAMS=" exec -t $COMPOSE_PROJECT_NAME bash -c "
   fi
 fi
 
 if [ "$DOCKERTYPE" == "0" ]; then
-  echo "No framelix_tests container is running"
+  echo "No $COMPOSE_PROJECT_NAME container is running"
   exit 1
 fi
 
 echo "Running tests on docker container from type '$DOCKERTYPE'"
 
 if [ $TESTTYPE == "phpstan" ]; then
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 
 if [ $TESTTYPE == "phpunit" ]; then
+  docker $DOCKER_EXECPARAMS "framelix_install_unittest_requirements"
   docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests;'"
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
 fi
 
