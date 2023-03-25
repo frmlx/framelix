@@ -171,6 +171,11 @@ group = $NGINX_GROUPNAME
 listen.owner = $NGINX_USERNAME
 listen.group = $NGINX_GROUPNAME" >>/etc/php/8.2/fpm/pool.d/www.conf
 php-fpm8.2 -R -y /etc/php/8.2/fpm/php-fpm.conf
+if [ "$?" != "0" ]; then
+  cecho r "Error starting php-fpm8.2 Aborting."
+  exit 1
+fi
+
 echo "Done."
 echo ""
 
