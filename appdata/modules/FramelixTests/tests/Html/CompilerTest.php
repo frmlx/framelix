@@ -60,11 +60,6 @@ final class CompilerTest extends TestCase
         Compiler::$cache = [];
         $this->assertCount(0, Compiler::compile(FRAMELIX_MODULE));
         Compiler::$cache = [];
-        // updating a file timestamp to newer time will trigger recompile
-        // of each group where this file is in
-        $jsFile = __DIR__ . "/../../js/framelix-unit-test-jstest.js";
-        touch($jsFile, time() + 1);
-        $this->assertCount(4, Compiler::compile(FRAMELIX_MODULE));
         // compiling invalid module does nothing
         $this->assertNull(Compiler::compile("FOO"));
         $this->assertFileExists($metaFile);

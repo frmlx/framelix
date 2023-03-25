@@ -37,7 +37,6 @@ fi
 if [ $TESTTYPE == "phpunit" ]; then
   docker $DOCKER_EXECPARAMS "framelix_install_unittest_requirements"
   docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests;'"
-  docker $DOCKER_EXECPARAMS "chmod 0777 /framelix/appdata/modules/FramelixTests/js/framelix-unit-test-jstest.js"
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
   docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
