@@ -47,7 +47,17 @@ if [ $TESTTYPE == "playwright" ]; then
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
   CMD="export PLAYWRIGHT_BROWSERS_PATH=/framelix/userdata/playwright/cache && rm -f /framelix/userdata/*/private/config/01-core.php && rm -f /framelix/userdata/*/private/config/02-ui.php && mkdir -p /framelix/userdata/playwright && chmod 0777 -R /framelix/userdata/playwright && rm -Rf /framelix/userdata/playwright/results && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium && npx playwright test"
   docker $DOCKER_EXECPARAMS -- "$CMD"
-  exit $?
+
+  RESULT=$?
+  if [ "$RESULT" == "0" ]; then
+    echo -n "Passed" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
+    echo -n "#00FF59" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
+  else
+    echo -n "Error" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
+    echo -n "#FF2100" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
+  fi
+
+  exit $RESULT
 fi
 
 cecho b "Framelix Testrunner"
