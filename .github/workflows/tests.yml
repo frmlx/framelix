@@ -24,21 +24,11 @@ jobs:
       - name: Run PhpStan Static Analysis
         run: bash dev-scripts/run-tests.sh -t phpstan
 
-      - name: Run PHP Unit Tests
-        run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/tmp/clover-coverage.txt)" >> $GITHUB_ENV
-
-      - name: Create PHP Coverage Badge
-        uses: schneegans/dynamic-badges-action@v1.6.0
-        with:
-          auth: ${{ secrets.GIST_SECRET }}
-          gistID: 2e4ba189fbb1a23bff14e73cb893bc3e
-          filename: framelix-unit-tests-coverage-data.json
-          label: CodeCoverage
-          message: ${{ env.COVERAGE }}
-          color: orange
-
       - name: Run Playwright tests
         run: bash dev-scripts/run-tests.sh -t playwright && echo "MESSAGE=$(cat userdata/playwright/badge-message.txt)" >> $GITHUB_ENV && echo "COLOR=$(cat userdata/playwright/badge-color.txt)" >> $GITHUB_ENV
+
+      - name: Run PHP Unit Tests
+        run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/tmp/clover-coverage.txt)" >> $GITHUB_ENV
 
       - name: Create Playwright Badge
         uses: schneegans/dynamic-badges-action@v1.6.0
@@ -49,6 +39,16 @@ jobs:
           label: 'Playwright Tests'
           message: ${{ env.MESSAGE }}
           color: ${{ env.COLOR }}
+
+      - name: Create PHP Coverage Badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 2e4ba189fbb1a23bff14e73cb893bc3e
+          filename: framelix-unit-tests-coverage-data.json
+          label: CodeCoverage
+          message: ${{ env.COVERAGE }}
+          color: orange
 
       - name: Dump docker logs
         if: always()
