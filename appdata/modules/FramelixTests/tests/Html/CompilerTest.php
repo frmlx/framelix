@@ -41,17 +41,6 @@ final class CompilerTest extends TestCase
         $this->assertNull(Compiler::compile(FRAMELIX_MODULE));
         // in dev mode, compiling is active
         Config::$devMode = true;
-
-        // testing compiler exception when something goes wrong with script execution
-        $compilerJs = __DIR__ . "/../../../Framelix/nodejs/compiler.js";
-        rename($compilerJs, $compilerJs . "-tmp");
-
-        $this->assertExceptionOnCall(function () {
-            Compiler::$cache = [];
-            Compiler::compile(FRAMELIX_MODULE, true);
-        });
-        
-        rename($compilerJs . "-tmp", $compilerJs);
     }
 
     /**

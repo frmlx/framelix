@@ -1,5 +1,7 @@
 # Framelix - A dockerized Full-Stack PHP Framework
 
+> We are currently setting up this repository for version 4. So it's not ready to use right now. Check back later.
+
 Framelix is a full-stack PHP framework in a nicely packed, ready to go, docker environment. It's main focus is to
 provide features for fast and agile development
 of data management applications. It contains a full-featured responsive backend with a big set of features for your

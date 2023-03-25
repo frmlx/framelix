@@ -214,7 +214,7 @@ echo ""
 cecho y "# Set correct files owners for folder that need to be writable"
 mkdir -p $FRAMELIX_USERDATA/tmp
 chown -L "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_USERDATA $FRAMELIX_USERDATA/tmp
-chown -L -R "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_APPDATA/modules/*/public/dist $FRAMELIX_APPDATA/modules/*/tmp
+chown -L -R "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_APPDATA/modules/*/public/dist $FRAMELIX_APPDATA/modules/*/_meta $FRAMELIX_APPDATA/modules/*/tmp
 echo ""
 echo "Done."
 echo ""
