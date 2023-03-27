@@ -38,31 +38,22 @@ echo "Running tests on docker container from type '$DOCKERTYPE'"
 
 
 if [ $TESTTYPE == "phpstan" ]; then
-  if [ $UPDATE == 1 ]; then
-    docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update"
-  fi
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 
 if [ $TESTTYPE == "phpunit" ]; then
-  if [ $UPDATE == 1 ]; then
-    docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update"
-  fi
   docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests;'"
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
 fi
 
 if [ $TESTTYPE == "playwright" ]; then
-  if [ $UPDATE == 1 ]; then
-    docker $DOCKER_EXECPARAMS "&& cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium"
-  fi
+  $PLAYWRIGHT_CACHE=/framelix/system/playwright/cache
   docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS FramelixTests;'"
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
-  CMD="rm -f /framelix/userdata/*/private/config/01-core.php && rm -f /framelix/userdata/*/private/config/02-ui.php && mkdir -p /framelix/userdata/playwright && chmod 0777 -R /framelix/userdata/playwright && rm -Rf /framelix/userdata/playwright/results && cd /framelix/appdata/playwright && npx playwright test"
-  docker $DOCKER_EXECPARAMS -- "$CMD"
+  docker $DOCKER_EXECPARAMS "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE && rm -f /framelix/userdata/*/private/config/01-core.php && rm -f /framelix/userdata/*/private/config/02-ui.php && mkdir -p /framelix/userdata/playwright && chmod 0777 -R /framelix/userdata/playwright && rm -Rf /framelix/userdata/playwright/results && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium && npx playwright test"
 
   RESULT=$?
   if [ "$RESULT" == "0" ]; then
