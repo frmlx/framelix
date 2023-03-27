@@ -40,7 +40,7 @@ else
     -v $ROOTDIR/userdata:/framelix/userdata \
     -e FRAMELIX_MODULES=$FRAMELIX_MODULES \
     -e FRAMELIX_DEVMODE=$FRAMELIX_DEVMODE \
-    nullixat/framelix:local
+    $USE_IMAGE_NAME
 
   docker exec -t $COMPOSE_PROJECT_NAME "framelix_wait_for_ready"
 
