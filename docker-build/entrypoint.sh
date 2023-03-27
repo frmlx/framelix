@@ -222,13 +222,13 @@ echo ""
 cecho y "# Server software versions now used"
 echo ""
 output=`nginx -v 2>&1`
-echo "Nginx: $output"
+echo "* Nginx: $output"
 output=`mysql --version 2>&1`
-echo "MariaDB: $output"
+echo "* MariaDB: $output"
 output=`php -r 'echo PHP_VERSION;'`
-echo "PHP: $output"
+echo "* PHP: $output"
 output=`node -v`
-echo "NodeJS: $output"
+echo "* NodeJS: $output"
 echo ""
 echo ""
 

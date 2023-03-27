@@ -3,10 +3,17 @@
 SCRIPTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source $SCRIPTDIR/lib.sh
 
+cecho b "Running tests"
+echo "Available command line flags:"
+echo "-t : Type of test: phpstan, phpunit, playwright"
+echo "-u : Update dependencies (composer and playwright deps)"
+
 TESTTYPE=0
-while getopts "t:" opt; do
+UPDATE=0
+while getopts "ut:" opt; do
   case $opt in
   t) TESTTYPE=$OPTARG ;;
+  u) UPDATE=1 ;;
   esac
 done
 
@@ -29,23 +36,32 @@ fi
 
 echo "Running tests on docker container from type '$DOCKERTYPE'"
 
+
 if [ $TESTTYPE == "phpstan" ]; then
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
+  if [ $UPDATE == 1 ]; then
+    docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update"
+  fi
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 
 if [ $TESTTYPE == "phpunit" ]; then
-  docker $DOCKER_EXECPARAMS "framelix_install_unittest_requirements"
+  if [ $UPDATE == 1 ]; then
+    docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update"
+  fi
   docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests;'"
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
 fi
 
 if [ $TESTTYPE == "playwright" ]; then
+  if [ $UPDATE == 1 ]; then
+    docker $DOCKER_EXECPARAMS "&& cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium"
+  fi
   docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS FramelixTests;'"
   docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
-  CMD="export PLAYWRIGHT_BROWSERS_PATH=/framelix/userdata/playwright/cache && rm -f /framelix/userdata/*/private/config/01-core.php && rm -f /framelix/userdata/*/private/config/02-ui.php && mkdir -p /framelix/userdata/playwright && chmod 0777 -R /framelix/userdata/playwright && rm -Rf /framelix/userdata/playwright/results && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium && npx playwright test"
+  CMD="rm -f /framelix/userdata/*/private/config/01-core.php && rm -f /framelix/userdata/*/private/config/02-ui.php && mkdir -p /framelix/userdata/playwright && chmod 0777 -R /framelix/userdata/playwright && rm -Rf /framelix/userdata/playwright/results && cd /framelix/appdata/playwright && npx playwright test"
   docker $DOCKER_EXECPARAMS -- "$CMD"
 
   RESULT=$?

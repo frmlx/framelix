@@ -6,6 +6,9 @@ ROOTDIR="$BASEDIR/.."
 
 source $BASEDIR/.env
 
+GITHUB_REPO=nullixat/framelix
+DOCKER_REPO=nullixat/framelix
+DOCKER_TAGNAME_LOCAL=$DOCKER_REPO:local
 MODULENAME_LOWER="${MODULENAME,,}"
 VERSION=$(cat "$ROOTDIR/VERSION")
 MAJOR_VERSION=$(echo $VERSION| cut -d'.' -f 1)

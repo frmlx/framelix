@@ -5,11 +5,9 @@ source $SCRIPTDIR/lib.sh
 
 cecho b "Build Docker Image"
 echo "Available command line flags:"
-echo "-t : Type of build: dev, docker-hub"
+echo "-t : Type of build: dev, prod"
 
 BUILD_TYPE=0
-GITHUB_REPO=nullixat/framelix
-DOCKER_REPO=nullixat/framelix
 while getopts "t:" opt; do
   case $opt in
   t) BUILD_TYPE=$OPTARG ;;
@@ -17,22 +15,51 @@ while getopts "t:" opt; do
 done
 
 
-if [ "$BUILD_TYPE" != "docker-hub" ] && [ "$BUILD_TYPE" != "dev" ]; then
+if [ "$BUILD_TYPE" != "dev" ] && [ "$BUILD_TYPE" != "prod" ]; then
   echo "Please specify build type 'dev' or 'prod'"
   exit 1
-#  curl_response=$(curl -s https://api.github.com/repos/$GITHUB_REPO/tags)
-#  if [ $(echo $curl_response | grep -c '"name": "'$VERSION'"') != "1" ]; then
-#    cecho r "Github Repository Tag '$VERSION' does not exist in repository '$GITHUB_REPO'"
-#    exit 1
-#  fi
-#  docker pull $DOCKER_REPO:$VERSION > /dev/null
-#  if [ "$?" == "0" ]; then
-#    cecho r "Docker Image Tag '$VERSION' already exist in docker hub. Use a new version number."
-#    exit 1
-#  fi
 fi
 
 source $SCRIPTDIR/stop-container.sh
-docker image rm $DOCKER_REPO:local
+docker image rm $DOCKER_TAGNAME_LOCAL
+
+TMPFOLDER=$SCRIPTDIR/../tmp/appdata_dev
+rm -Rf $TMPFOLDER
+
+if [ "$BUILD_TYPE" == "dev" ]; then
+  cecho y "# Copy required appdata dev to integrate into build test libraries before starting the container"
+  SRCFOLDER=$SCRIPTDIR/../appdata
+  mkdir -p $TMPFOLDER
+  cp  $SRCFOLDER/* $TMPFOLDER > /dev/null 2>&1
+  cp -R $SRCFOLDER/playwright $TMPFOLDER/playwright
+fi
+
 docker build -t $COMPOSE_PROJECT_NAME --build-arg "FRAMELIX_BUILD_TYPE=$BUILD_TYPE" $SCRIPTDIR/..
-docker tag $COMPOSE_PROJECT_NAME $DOCKER_REPO:local
+
+docker tag $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
+
+if [ "$BUILD_TYPE" == "t" ]; then
+  cecho y "# Installing dev dependencies in the container"
+  source $SCRIPTDIR/start-container.sh
+
+  # phpunit
+  docker exec -t $COMPOSE_PROJECT_NAME bash -c "export DEBIAN_FRONTEND=noninteractive && apt install php8.2-xdebug -y && cp /framelix/system/php-xdebug.ini /etc/php/8.2/cli/conf.d/21-xdebug.ini && rm /etc/php/8.2/fpm/conf.d/20-xdebug.ini && mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage"
+
+  # phpstan
+  docker exec -t $COMPOSE_PROJECT_NAME bash -c "cd /framelix/appdata && composer update"
+
+  # playwright
+  docker exec -t $COMPOSE_PROJECT_NAME bash -c "cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium"
+
+  # commiting changes to container (instead of tagging)
+  docker commit $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
+  source $SCRIPTDIR/stop-container.sh
+  echo ""
+  echo "Done."
+  echo ""
+fi
+
+if [ "$BUILD_TYPE" == "t" ]; then
+  docker tag $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
+fi
+

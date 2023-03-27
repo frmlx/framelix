@@ -9,7 +9,7 @@ echo "-c : Does run with docker compose instead of docker (Usefull for developme
 echo "-d : Does delete and recreate the existing database volume (start with a new database)"
 echo ""
 
-while getopts "cd:" opt; do
+while getopts "cd" opt; do
   case $opt in
   c) COMPOSE=1 ;;
   d) DEL_VOL=1 ;;
@@ -40,7 +40,7 @@ else
     -v $ROOTDIR/userdata:/framelix/userdata \
     -e FRAMELIX_MODULES=$FRAMELIX_MODULES \
     -e FRAMELIX_DEVMODE=$FRAMELIX_DEVMODE \
-    $COMPOSE_PROJECT_NAME
+    nullixat/framelix:local
 
   docker exec -t $COMPOSE_PROJECT_NAME "framelix_wait_for_ready"
 
