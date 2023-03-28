@@ -4,6 +4,38 @@
 
 .framelix-content-inner {
   font-size: 1.2rem;
+  gap: 10px;
+
+  .docs-page{
+    position: relative;
+  }
+
+  .docs-content {
+    max-width: 900px;
+  }
+
+  .docs-right-nav {
+    position: fixed;
+    max-height: 80vh;
+    overflow: auto;
+    top: 70px;
+    left:calc(var(--sidebar-width) + 950px);
+    padding: 10px;
+    max-width: 250px;
+    min-width: 250px;
+    border-left: 2px solid var(--color-page-bg-stencil);
+
+    a:any-link {
+      display: block;
+      font-size: 1rem;
+      color: var(--color-page-text);
+      text-decoration: none;
+      margin-bottom: 3px;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
 
   framelix-alert {
     font-size: 1.2rem;
@@ -57,19 +89,21 @@
     background-color: var(--color-page-bg-stencil);
     display: block;
     padding: 10px;
-    max-width: 100%;
-    overflow: auto;
-    white-space: pre;
+    border-radius: var(--border-radius);
 
-    .buttons{
+    .buttons {
       display: flex;
       margin-bottom: 10px;
       gap: 10px;
     }
+
     code {
       display: block;
       padding: 0;
       background: none;
+      max-width: 100%;
+      overflow: auto;
+      white-space: pre;
       color: var(--color-page-text);
     }
   }
@@ -80,4 +114,14 @@
 }
 
 
+@media (max-width: 1500px) {
+  .framelix-content-inner {
+    .docs-content {
+      width: auto;
+    }
 
+    .docs-right-nav {
+      display: none;
+    }
+  }
+}

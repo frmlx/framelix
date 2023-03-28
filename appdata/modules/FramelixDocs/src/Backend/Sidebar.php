@@ -11,7 +11,7 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 {
     public function showContent(): void
     {
-        $this->startGroup('Get started');
+        $this->startGroup('Basics');
         $this->addLink(Index::class, "Welcome");
         $this->addLink(Setup::class);
         $this->addLink(SetupCoreDev::class);
