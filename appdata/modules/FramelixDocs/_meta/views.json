@@ -1,0 +1,35 @@
+{
+    "directoryListHash": "3|612394369",
+    "views": {
+        "Framelix\\FramelixDocs\\View\\Index": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Framelix - A rich featured, Docker ready, Full-Stack PHP Framework",
+            "url": ""
+        },
+        "Framelix\\FramelixDocs\\View\\Setup": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Setup for module development",
+            "url": "\/setup"
+        },
+        "Framelix\\FramelixDocs\\View\\SetupCoreDev": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Setup for core development",
+            "url": "\/setupcoredev"
+        }
+    }
+}

@@ -10,6 +10,7 @@ use Framelix\Framelix\Form\Field\Html;
 use Framelix\Framelix\Form\Field\Password;
 use Framelix\Framelix\Form\Field\Text;
 use Framelix\Framelix\Form\Form;
+use Framelix\Framelix\Framelix;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
@@ -25,6 +26,8 @@ use function file_put_contents;
 use function implode;
 use function sleep;
 use function strtolower;
+
+use const FRAMELIX_MODULE;
 
 class Setup extends View
 {
@@ -85,20 +88,10 @@ class Setup extends View
                 Config::$applicationUrlPrefix = $url->urlData['path'];
                 Config::$salts['default'] = RandomGenerator::getRandomString(64, 70);
 
+                // just calling db to make sure db is running before finalizing setup
                 $db = Mysql::get();
-                $fileContents = [
-                    "<?php",
-                    "\\Framelix\\Framelix\\Config::addSalt('" . Config::$salts["default"] . "');",
-                    "\\Framelix\\Framelix\\Config::\$applicationHost = '" . Config::$applicationHost . "';",
-                    "\\Framelix\\Framelix\\Config::\$applicationUrlPrefix = '" . Config::$applicationUrlPrefix . "';"
-                ];
-                file_put_contents($userConfigFileCore, implode("\n", $fileContents));
 
-                $fileContents = [
-                    "<?php",
-                    "// this file will be modified with changes in backend UI for system config"
-                ];
-                file_put_contents($userConfigFileUi, implode("\n", $fileContents));
+                Framelix::createInitialUserConfig(FRAMELIX_MODULE, Config::$salts["default"], Config::$applicationHost, Config::$applicationUrlPrefix);
 
                 // include now, so we can deal with errors in the catch handler, just in case
                 require $userConfigFileCore;

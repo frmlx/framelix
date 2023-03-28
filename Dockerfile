@@ -71,7 +71,7 @@ RUN framelix_composer_install
 COPY VERSION tmp/appdata_dev $FRAMELIX_APPDATA
 RUN rm $FRAMELIX_APPDATA/VERSION
 
-# some additional build steps (to include appdata) for dev/production builds
+# some additional build steps (to include appdata, etc...) for dev/production builds
 RUN php -f $FRAMELIX_SYSTEMDIR/build-image.php "$FRAMELIX_BUILD_TYPE"
 
 # let's go

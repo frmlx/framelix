@@ -24,7 +24,7 @@ server {
 $nginxSitesPath = "/etc/nginx/sites-enabled/framelix-sites.conf";
 $envConfigPath = "/framelix/system/environment.json";
 
-$modules = explode(";", $_SERVER['FRAMELIX_MODULES'] ?? '1');
+$modules = explode(";", trim($_SERVER['FRAMELIX_MODULES'] ?? '1', " \"'"));
 $validModules = 0;
 $allValid = true;
 

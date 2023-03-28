@@ -29,11 +29,4 @@ Coming soon.
 
 ## Development in Framelix core itself
 
-* Fork this repository
-* Checkout your forked repository (On windows in WSL)
-* Change to checked out directory
-* Copy .env file:  `cp dev-scripts/.env_template dev-scripts/.env` (and maybe modify to your needs)
-* Run `bash dev-scripts/start-container.sh`
-  * Open `https://localhost:8669` to see the test frontend
-  * Or open `https://localhost:8670` to see the interactive docs/playground frontend
-  * Or run `bash dev-scripts/run-tests.sh` for running available test suites (code analysis, unit tests, end-to-end tests)
+Coming soon.

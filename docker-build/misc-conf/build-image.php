@@ -24,16 +24,17 @@ if ($buildType === 'dev') {
     runCmd("mkdir -p $cacheFolder && chmod 0777 $cacheFolder && export PLAYWRIGHT_BROWSERS_PATH=$cacheFolder && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium");
     echo "Done.\n\n";
 
-    // reset appdata folder, dev build always map a appdata volume
-    // we had it only to install all deps at the time of building to save time in the future in github actions
-    runCmd('rm -rf /framelix/appdata && mkdir -p /framelix/appdata');
+    echo "# Running npm install and composer install for modules\n";
+    runCmd("framelix_npm_modules_install");
+    runCmd("framelix_composer_modules_install");
+    echo "Done.\n\n";
 
     echo "Dev build process completed.\n\n";
 }
 
 if ($buildType === 'prod') {
     $tmpFolder = "/tmp/framelix-tag-$version";
-    $targetFolder = "/framelix/appdata/modules/Framelix";
+    $modulesFolder = "/framelix/appdata/modules";
     echo "## Running build requirements for Docker HUB build\n\n";
     echo "# Download framelix for current version $version from Github\n";
     runCmd("rm -rf $tmpFolder");
@@ -42,16 +43,18 @@ if ($buildType === 'prod') {
         "curl https://github.com/NullixAT/framelix/archive/refs/tags/$version.zip -L --output $tmpFolder/package.zip"
     );
     echo "Done.\n\n";
-    echo "# Extracting package and move to appdata\n";
-    runCmd("mkdir -p /framelix/appdata/modules");
+    echo "# Extracting packages and move to appdata\n";
+    runCmd("mkdir -p $modulesFolder");
     runCmd("7zz x $tmpFolder/package.zip -spf -y -o$tmpFolder");
-    runCmd("mv $tmpFolder/*/appdata/modules/Framelix $targetFolder");
+    runCmd("mv $tmpFolder/*/appdata/modules/Framelix $modulesFolder/Framelix");
+    runCmd("mv $tmpFolder/*/appdata/modules/FramelixStarter $modulesFolder/FramelixStarter");
     runCmd("rm -rf $tmpFolder");
     echo "Done.\n\n";
 
-    echo "# Running npm install and composer install for docker build\n";
+    echo "# Running npm install and composer install for modules\n";
     runCmd("framelix_npm_modules_install");
     runCmd("framelix_composer_modules_install");
     echo "Done.\n\n";
+
     echo "Docker hub build process completed.\n\n";
 }

@@ -1171,18 +1171,6 @@
         "Datenbank jetzt aktualisieren",
         "65805"
     ],
-    "__framelix_view_backend_dev_upgradeinfo__": [
-        "Update ist verf\u00fcgbar",
-        "217b4"
-    ],
-    "__framelix_view_backend_dev_upgradeinfo_info__": [
-        "Es gibt eine Version dieser App. Logge dich in deine Kommandozeile ein und f\u00fchre die folgenden Befehle f\u00fcr ein Upgrade aus. Dieser Prozess ben\u00f6tigt das l\u00f6schen des alten Containers (Was nat\u00fcrlich keine Userdaten oder Datenbankdaten l\u00f6scht) und das herunterladen und starten des neuen.\nStelle trotzdem immer sicher, dass du ein Backup deiner Daten hast, bevor du upgradest.\nDie neueste verf\u00fcgbare Version ist:",
-        "e4532"
-    ],
-    "__framelix_view_backend_dev_upgradeinfo_version__": [
-        "Deine aktuelle Version ist:",
-        "1344b"
-    ],
     "__framelix_view_backend_forgotpassword__": [
         "Passwort vergessen",
         "98f13"

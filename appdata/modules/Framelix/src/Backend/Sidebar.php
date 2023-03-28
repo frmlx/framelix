@@ -15,11 +15,8 @@ use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\FileUtils;
-use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\View;
 
-use function file_exists;
-use function file_get_contents;
 use function get_class;
 use function implode;
 use function is_string;
@@ -187,11 +184,6 @@ abstract class Sidebar
         $this->addLink(View\Backend\Logs\SystemEventLogs::class);
         $this->showHtmlForLinkData(order: 503);
 
-        if (file_exists(Framelix::VERSION_UPGRADE_FILE)) {
-            $this->addLink(View\Backend\Dev\UpgradeInfo::class, icon: 'system_update', badgeText: "1");
-            $this->showHtmlForLinkData(order: 504);
-        }
-
         $this->startGroup("__framelix_developer_options__", "developer_mode");
         $this->addLink(View\Backend\Dev\Update::class, null, "system_update");
         $this->addLink(View\Backend\Dev\LangEditor::class, null, "g_translate");
@@ -214,22 +206,12 @@ abstract class Sidebar
         $this->showHtmlForLinkData(order: 507);
 
         $versionInfo = [];
-        if (file_exists(Framelix::VERSION_FILE)) {
-            $versionData = JsonUtils::readFromFile(Framelix::VERSION_FILE);
-            if ($versionData['tag'] ?? null) {
-                $versionInfo[] = 'App: ' . $versionData['tag'];
-            }
-        }
-        if (file_exists(__DIR__ . "/../../VERSION")) {
-            $version = file_get_contents(__DIR__ . "/../../VERSION");
-            $versionInfo[] = 'Core: ' . $version;
-        }
-        if ($versionInfo) {
-            echo '<div style="order:99999;font-size: 9px; opacity:0.5; padding-top: 10px; text-align: center">' . implode(
-                    " | ",
-                    $versionInfo
-                ) . '</div>';
-        }
+        $versionInfo[] = 'Framelix: ' . Framelix::$version;
+
+        echo '<div style="order:99999;font-size: 9px; opacity:0.5; padding-top: 10px; text-align: center">' . implode(
+                " | ",
+                $versionInfo
+            ) . '</div>';
 
         echo '</div>';
     }

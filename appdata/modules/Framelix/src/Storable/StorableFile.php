@@ -45,19 +45,19 @@ use const FRAMELIX_MODULE;
 class StorableFile extends StorableExtended
 {
     /**
-     * Extensions that can generate thumbnails
+     * Extensions for that we can generate thumbnails
      * @var string[]
      */
     public const THUMBNAIL_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
 
     /**
-     * Extensions that can be viewed safely in browser in todays browsers
+     * Extensions that can be viewed safely in todays browsers
      * @var string[]
      */
     public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'apng', 'png', 'webp', 'bmp', 'svg'];
 
     /**
-     * Extensions that can be viewed safely in browser in todays browsers
+     * Extensions that can be viewed safely in todays browsers
      * @var string[]
      */
     public const VIDEO_EXTENSIONS = ['mp4', 'webm'];

@@ -34,25 +34,41 @@ if [ "$DOCKERTYPE" == "0" ]; then
   exit 1
 fi
 
-echo "Running tests on docker container from type '$DOCKERTYPE'"
-
+cecho y "[i] Running tests on docker container from type '$DOCKERTYPE'"
 
 if [ $TESTTYPE == "phpstan" ]; then
+  cecho b "# Php Stan Static Code Analysizer"
   docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 
+cecho b "# Removing all userdata files and databases to start clean with each full test run"
+docker $DOCKER_EXECPARAMS "rm -Rfv /framelix/userdata/*"
+echo ""
+echo "Done."
+echo ""
+
+cecho b "# Drop databases"
+docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests; DROP DATABASE IF EXISTS FramelixDocs; DROP DATABASE IF EXISTS FramelixStarter;'"
+echo ""
+echo "Done."
+echo ""
+
+cecho b "# Run appWarmup"
+docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
+echo ""
+echo "Done."
+echo ""
+
 if [ $TESTTYPE == "phpunit" ]; then
-  docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests;'"
-  docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
+  cecho b "# Php Unit Tests"
   docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
 fi
 
 if [ $TESTTYPE == "playwright" ]; then
+  cecho b "# Playwright End-to-End Tests"
   PLAYWRIGHT_CACHE=/framelix/system/playwright/cache
-  docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS FramelixTests;'"
-  docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
   docker $DOCKER_EXECPARAMS "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE && rm -f /framelix/userdata/*/private/config/01-core.php && rm -f /framelix/userdata/*/private/config/02-ui.php && mkdir -p /framelix/userdata/playwright && chmod 0777 -R /framelix/userdata/playwright && rm -Rf /framelix/userdata/playwright/results && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium && npx playwright test"
 
   RESULT=$?

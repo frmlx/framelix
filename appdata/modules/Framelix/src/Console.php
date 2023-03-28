@@ -131,45 +131,6 @@ class Console
     }
 
     /**
-     * Check for app updates
-     * @return int Status Code, 0 = success
-     */
-    public static function checkAppUpdate(): int
-    {
-        if (file_exists(Framelix::VERSION_UPGRADE_FILE)) {
-            unlink(Framelix::VERSION_UPGRADE_FILE);
-        }
-        $versionData = file_exists(Framelix::VERSION_FILE) ? JsonUtils::readFromFile(Framelix::VERSION_FILE) : null;
-        if (($versionData['dockerRepo'] ?? null) && preg_match("~^[0-9]+\.[0-9]+\.[0-9]+$~", $versionData['tag'])) {
-            $spl = explode("/", $versionData['dockerRepo']);
-            $hubApiUrl = 'https://hub.docker.com/v2/namespaces/' . $spl[0] . '/repositories/' . $spl[1] . '/tags';
-            $browser = Browser::create();
-            $browser->url = $hubApiUrl;
-            $browser->sendRequest();
-            $apiData = $browser->getResponseJson()['results'] ?? null;
-            if ($apiData) {
-                $updatedVersion = null;
-                foreach ($apiData as $row) {
-                    if ($row['tag_status'] === 'active' && preg_match("~^[0-9]+\.[0-9]+\.[0-9]+$~", $row['name'])) {
-                        if (version_compare($row['name'], $versionData['tag'], '>')) {
-                            if (!$updatedVersion || strtotime($row['tag_last_pushed']) > strtotime(
-                                    $updatedVersion['tag_last_pushed']
-                                )) {
-                                $updatedVersion = $row;
-                            }
-                        }
-                    }
-                }
-                if ($updatedVersion) {
-                    $updatedVersion['dockerRepo'] = $versionData['dockerRepo'];
-                    JsonUtils::writeToFile(Framelix::VERSION_UPGRADE_FILE, $updatedVersion);
-                }
-            }
-        }
-        return 0;
-    }
-
-    /**
      * The cron tasks, runs automatically in 5 minutes intervall
      * @return int Status Code, 0 = success
      */

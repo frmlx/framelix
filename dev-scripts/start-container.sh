@@ -28,20 +28,23 @@ docker volume create $VOLUME_NAME
 
 if [ "$COMPOSE" == "1" ]; then
   docker compose -f $SCRIPTDIR/docker-compose.yml up -d
-  docker compose -f $SCRIPTDIR/docker-compose.yml exec -t app bash "framelix_wait_for_ready"
+  DOCKER_EXECPARAMS="compose -f $SCRIPTDIR/docker-compose.yml exec -t app bash -c"
 else
+  DOCKER_EXECPARAMS="exec -t $COMPOSE_PROJECT_NAME bash -c"
   docker rm $COMPOSE_PROJECT_NAME
 
   docker run --name $COMPOSE_PROJECT_NAME -d \
     -p "${FRAMELIX_TEST_PORT}:${FRAMELIX_TEST_PORT}" \
     -p "${FRAMELIX_DOCS_PORT}:${FRAMELIX_DOCS_PORT}" \
+    -p "${FRAMELIX_STARTER_PORT}:${FRAMELIX_STARTER_PORT}" \
     -v $ROOTDIR/appdata:/framelix/appdata \
     -v "${VOLUME_NAME}":/framelix/dbdata \
     -v $ROOTDIR/userdata:/framelix/userdata \
-    -e FRAMELIX_MODULES=$FRAMELIX_MODULES \
-    -e FRAMELIX_DEVMODE=$FRAMELIX_DEVMODE \
+    --env-file $SCRIPTDIR/.env  \
     $USE_IMAGE_NAME
-
-  docker exec -t $COMPOSE_PROJECT_NAME "framelix_wait_for_ready"
-
 fi
+docker $DOCKER_EXECPARAMS "framelix_wait_for_ready"
+docker $DOCKER_EXECPARAMS "echo -n $FRAMELIX_TEST_PORT > /framelix/system/port_FramelixTests"
+docker $DOCKER_EXECPARAMS "echo -n $FRAMELIX_DOCS_PORT > /framelix/system/port_FramelixDocs"
+docker $DOCKER_EXECPARAMS "echo -n $FRAMELIX_STARTER_PORT > /framelix/system/port_FramelixStarter"
+

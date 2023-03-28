@@ -27,11 +27,13 @@ TMPFOLDER=$SCRIPTDIR/../tmp/appdata_dev
 rm -Rf $TMPFOLDER
 
 if [ "$BUILD_TYPE" == "dev" ]; then
-  cecho y "# Copy required appdata dev to integrate into build test libraries before starting the container"
+  cecho b "# Copy required appdata dev which the build process integrates into the container"
   SRCFOLDER=$SCRIPTDIR/../appdata
-  mkdir -p $TMPFOLDER
+  mkdir -p $TMPFOLDER/modules
   cp  $SRCFOLDER/* $TMPFOLDER > /dev/null 2>&1
   cp -R $SRCFOLDER/playwright $TMPFOLDER/playwright
+  cp -R $SRCFOLDER/modules/Framelix $TMPFOLDER/modules/Framelix
+  cp -R $SRCFOLDER/modules/FramelixStarter $TMPFOLDER/modules/FramelixStarter
 fi
 
 docker build -t $COMPOSE_PROJECT_NAME --build-arg "FRAMELIX_BUILD_TYPE=$BUILD_TYPE" $SCRIPTDIR/..

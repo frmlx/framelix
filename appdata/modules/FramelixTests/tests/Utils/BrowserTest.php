@@ -2,13 +2,11 @@
 
 namespace Utils;
 
-use Framelix\Framelix\Config;
 use Framelix\Framelix\Utils\Browser;
 use Framelix\Framelix\Utils\JsonUtils;
+use Framelix\Framelix\View;
+use Framelix\FramelixTests\View\BrowserTestView;
 use PHPUnit\Framework\TestCase;
-
-use function file_put_contents;
-use function unlink;
 
 final class BrowserTest extends TestCase
 {
@@ -16,7 +14,7 @@ final class BrowserTest extends TestCase
     public function tests(): void
     {
         $browser = Browser::create();
-        $browser->url = 'https://127.0.0.1:8669/browsertestview';
+        $browser->url = View::getUrl(BrowserTestView::class)->getUrlAsString();
         $browser->validateSsl = false;
         $browser->requestBody = "foobar";
         $browser->userPwd = "test:foo";

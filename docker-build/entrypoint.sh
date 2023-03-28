@@ -41,8 +41,12 @@ start_mysql() {
   echo "Mysql Server started"
 }
 
+# in case the ready file already exist, delete it
+rm -f /framelix/system/READY
+
 cecho b "# FRAMELIX DOCKER - 😜  Huhuu!"
 echo ""
+
 
 if [ -z "$FRAMELIX_MODULES" ]; then
   cecho r "Env FRAMELIX_MODULES not set. Aborting."

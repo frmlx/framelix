@@ -1,4 +1,5 @@
 import { Page, Response } from '@playwright/test'
+import * as fs from 'fs'
 
 type FramelixConfig = { rootUrl: string; }
 
@@ -45,7 +46,7 @@ export class FramelixUtils {
   constructor (page: Page) {
     this.page = page
     this.framelixConfig = {
-      rootUrl: 'https://127.0.0.1:8669'
+      rootUrl: 'https://127.0.0.1:' + fs.readFileSync('/framelix/system/port_FramelixTests').toString()
     }
     // stop on any uncaught page error
     this.page.on('pageerror', exception => {

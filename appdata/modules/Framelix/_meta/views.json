@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|2003947756",
+    "directoryListHash": "3|2654729727",
     "views": {
         "Framelix\\Framelix\\View\\Api": {
             "accessRole": "*",
@@ -70,16 +70,6 @@
             "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/dev\/updatedatabase"
-        },
-        "Framelix\\Framelix\\View\\Backend\\Dev\\UpgradeInfo": {
-            "accessRole": "admin",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/dev\/upgradeinfo"
         },
         "Framelix\\Framelix\\View\\Backend\\ForgotPassword": {
             "accessRole": "*",

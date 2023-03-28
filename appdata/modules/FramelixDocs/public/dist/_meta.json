@@ -1,0 +1,1 @@
+{"FramelixDocs-scss-docs":{"pageAutoInclude":true,"compile":true,"jsStrict":true,"entries":[{"type":"file","path":"scss\/docs.scss"}],"module":"FramelixDocs","type":"scss","bundleId":"docs"},"FramelixDocs-js-docs":{"pageAutoInclude":true,"compile":true,"jsStrict":true,"entries":[{"type":"file","path":"js\/docs.js"}],"module":"FramelixDocs","type":"js","bundleId":"docs"}}

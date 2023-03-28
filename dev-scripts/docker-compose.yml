@@ -19,6 +19,7 @@ services:
     ports:
       - "${FRAMELIX_TEST_PORT}:${FRAMELIX_TEST_PORT}"
       - "${FRAMELIX_DOCS_PORT}:${FRAMELIX_DOCS_PORT}"
+      - "${FRAMELIX_STARTER_PORT}:${FRAMELIX_STARTER_PORT}"
     environment:
       - COMPOSE_PROJECT_NAME
       - FRAMELIX_MODULES

@@ -21,15 +21,11 @@ class Cron extends Console
 {
     public static function runCron(): void
     {
-        if (self::getParameter('forceUpdateCheck')) {
-            self::checkAppUpdate();
-        }
         if (self::getParameter('forceBackup')) {
             self::automaticAppDbBackup();
         }
         if (!Mutex::isLocked('framelix-hourly-cron', 3600)) {
             Mutex::create('framelix-hourly-cron');
-            self::checkAppUpdate();
             if ((int)date("H") === 3) {
                 self::automaticAppDbBackup();
             }

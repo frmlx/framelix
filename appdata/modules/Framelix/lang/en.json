@@ -870,9 +870,6 @@
     "__framelix_view_backend_dev_updatedatabase_updatenow__": [
         "Update database now"
     ],
-    "__framelix_view_backend_dev_upgradeinfo__": "Update available",
-    "__framelix_view_backend_dev_upgradeinfo_info__": "There is a new app update available. Login to your command line and run the following commands to upgrade. This process requires to stop the application and removing the old container (Which does not delete any userdata or database data).\nAlways make sure to have a backup of your data before upgrading.\nNewest available version is:",
-    "__framelix_view_backend_dev_upgradeinfo_version__": "Your current docker image is:",
     "__framelix_view_backend_forgotpassword__": [
         "Forgot password"
     ],

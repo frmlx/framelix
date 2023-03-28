@@ -12,6 +12,9 @@ use function filesize;
 use function in_array;
 use function unlink;
 
+/**
+ * This view does generate thumbnails of storable files dynamically on-demand
+ */
 class StorableFileThumbnail extends View
 {
     protected string|bool $accessRole = "*";
@@ -35,7 +38,7 @@ class StorableFileThumbnail extends View
         }
         $originalPath = $file->getPath();
         ImageUtils::resize($originalPath, $thumbPath, $thumbSize, $thumbSize);
-        // if thumb is the same as original, or filesize is bigger after resize, just symlink original
+        // if thumb is the same as original, or filesize is bigger after resize, just symlink to original
         $imageDataOriginal = ImageUtils::getImageData($originalPath);
         $imageDataThumb = ImageUtils::getImageData($thumbPath);
         if ($imageDataOriginal === $imageDataThumb || filesize($thumbPath) >= filesize($originalPath)) {

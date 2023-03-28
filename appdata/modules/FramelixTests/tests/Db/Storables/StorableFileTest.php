@@ -16,7 +16,7 @@ final class StorableFileTest extends TestCase
     {
         $storableFile = new TestStorableFile();
         FileUtils::deleteDirectory("/framelix/userdata/" . $storableFile->relativePathOnDisk);
-        mkdir("/framelix/userdata/" . $storableFile->relativePathOnDisk);
+        mkdir("/framelix/userdata/" . $storableFile->relativePathOnDisk, recursive: true);
 
         $this->setupDatabase();
         $this->addSimulatedFile("test.txt", "foobar", false);
