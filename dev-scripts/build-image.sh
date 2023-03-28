@@ -39,9 +39,14 @@ fi
 
 docker build -t $COMPOSE_PROJECT_NAME --build-arg "FRAMELIX_BUILD_TYPE=$BUILD_TYPE" $SCRIPTDIR/..
 
+if [ "$?" != "0" ]; then
+  cecho r "Build failed"
+  exit 1
+fi
+
 docker tag $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
 
-if [ "$BUILD_TYPE" == "t" ]; then
+if [ "$BUILD_TYPE" == "dev" ]; then
   cecho y "# Installing dev dependencies in the container"
   source $SCRIPTDIR/start-container.sh
 
@@ -60,9 +65,7 @@ if [ "$BUILD_TYPE" == "t" ]; then
   echo ""
   echo "Done."
   echo ""
-fi
-
-if [ "$BUILD_TYPE" == "t" ]; then
+elif [ "$BUILD_TYPE" == "dev" ]; then
   docker tag $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
 fi
 

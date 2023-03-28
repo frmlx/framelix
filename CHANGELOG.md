@@ -1,4 +1,4 @@
-# [4.0.0 - TBA - UNRELEASED]
+# [4.0.0-alpha.1 - 2023-03-28]
 
 ⚠️ **BREAKING CHANGE** ⚠️: Combined 3 repositories (tests, core, docker) to one, called `framelix`. This make maintenance, further development and end-user usage a lot easier. The way you must setup your docker installation have changed. However, a working installation of v3.x can be upgraded with a bit of effort.
 
