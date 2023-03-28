@@ -25,6 +25,7 @@ docker image rm $DOCKER_TAGNAME_LOCAL
 
 TMPFOLDER=$SCRIPTDIR/../tmp/appdata_dev
 rm -Rf $TMPFOLDER
+mkdir -p $TMPFOLDER
 
 if [ "$BUILD_TYPE" == "dev" ]; then
   cecho b "# Copy required appdata dev which the build process integrates into the container"
@@ -65,7 +66,7 @@ if [ "$BUILD_TYPE" == "dev" ]; then
   echo ""
   echo "Done."
   echo ""
-elif [ "$BUILD_TYPE" == "dev" ]; then
+elif [ "$BUILD_TYPE" == "prod" ]; then
   docker tag $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
 fi
 

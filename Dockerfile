@@ -66,10 +66,7 @@ RUN chmod +x $FRAMELIX_SYSTEMDIR/useful-scripts/* && ln -s $FRAMELIX_SYSTEMDIR/u
 RUN framelix_composer_install
 
 # copy some appdata files directly into the image in order to install required deps upon build
-# VERSION is only copied so it no throw error when tmp/appdata_dev not exists
-# tmp/appdata_dev only exist when build-image.sh -t dev is called, not in production
-COPY VERSION tmp/appdata_dev $FRAMELIX_APPDATA
-RUN rm $FRAMELIX_APPDATA/VERSION
+COPY tmp/appdata_dev $FRAMELIX_APPDATA
 
 # some additional build steps (to include appdata, etc...) for dev/production builds
 RUN php -f $FRAMELIX_SYSTEMDIR/build-image.php "$FRAMELIX_BUILD_TYPE"
