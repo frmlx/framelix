@@ -6,14 +6,11 @@ source $SCRIPTDIR/lib.sh
 cecho b "Running tests"
 echo "Available command line flags:"
 echo "-t : Type of test: phpstan, phpunit, playwright"
-echo "-u : Update dependencies (composer and playwright deps)"
 
 TESTTYPE=0
-UPDATE=0
-while getopts "ut:" opt; do
+while getopts "t:" opt; do
   case $opt in
   t) TESTTYPE=$OPTARG ;;
-  u) UPDATE=1 ;;
   esac
 done
 

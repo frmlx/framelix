@@ -19,13 +19,13 @@ jobs:
         run: bash dev-scripts/start-container.sh
 
       - name: Run PhpStan Static Analysis
-        run: bash dev-scripts/run-tests.sh -t phpstan -u
+        run: bash dev-scripts/run-tests.sh -t phpstan
 
       - name: Run Playwright tests
-        run: bash dev-scripts/run-tests.sh -t playwright -u && echo "MESSAGE=$(cat userdata/playwright/badge-message.txt)" >> $GITHUB_ENV && echo "COLOR=$(cat userdata/playwright/badge-color.txt)" >> $GITHUB_ENV
+        run: bash dev-scripts/run-tests.sh -t playwright && echo "MESSAGE=$(cat userdata/playwright/badge-message.txt)" >> $GITHUB_ENV && echo "COLOR=$(cat userdata/playwright/badge-color.txt)" >> $GITHUB_ENV
 
       - name: Run PHP Unit Tests
-        run: bash dev-scripts/run-tests.sh -t phpunit -u && echo "COVERAGE=$(cat userdata/tmp/clover-coverage.txt)" >> $GITHUB_ENV
+        run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/tmp/clover-coverage.txt)" >> $GITHUB_ENV
 
       - name: Create Playwright Badge
         uses: schneegans/dynamic-badges-action@v1.6.0

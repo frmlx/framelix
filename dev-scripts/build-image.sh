@@ -33,6 +33,7 @@ if [ "$BUILD_TYPE" == "dev" ]; then
   cp  $SRCFOLDER/* $TMPFOLDER > /dev/null 2>&1
   cp -R $SRCFOLDER/playwright $TMPFOLDER/playwright
   cp -R $SRCFOLDER/modules/Framelix $TMPFOLDER/modules/Framelix
+  cp -R $SRCFOLDER/modules/FramelixDocs $TMPFOLDER/modules/FramelixDocs
   cp -R $SRCFOLDER/modules/FramelixStarter $TMPFOLDER/modules/FramelixStarter
 fi
 

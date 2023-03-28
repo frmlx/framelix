@@ -13,15 +13,18 @@ echo "Available command line flags:"
 echo "-y : Run this script"
 echo "-t : Type of build: dev, prod"
 echo "-p : Push to docker hub (If not set, it only build and tests the image, a dry run, so to speak)"
+echo "-s : Skip rebuild (Does take the current existing $DOCKER_TAGNAME_LOCAL image)"
 echo ""
 
 BUILD_TYPE=0
 PUSH=0
 RUN=0
-while getopts "pyt:" opt; do
+SKIP_REBUILD=0
+while getopts "spyt:" opt; do
   case $opt in
   t) BUILD_TYPE=$OPTARG ;;
   p) PUSH=1 ;;
+  s) SKIP_REBUILD=1 ;;
   y) RUN=1 ;;
   esac
 done
@@ -36,18 +39,18 @@ if [ "$BUILD_TYPE" == "0" ]; then
   exit 1
 fi
 
-# remove all images of framelix locally
-docker rmi $(docker images | grep "$DOCKER_REPO") > /dev/null 2>&1
+if [ "$SKIP_REBUILD" != "1" ]; then
+  # remove all images of framelix locally
+  docker rmi $(docker images | grep "$DOCKER_REPO") > /dev/null 2>&1
 
-bash $SCRIPTDIR/build-image.sh -t $BUILD_TYPE
-if [ "$?" != "0" ]; then
-  cecho r "Build failed"
-  exit 1
+  bash $SCRIPTDIR/build-image.sh -t $BUILD_TYPE
+  if [ "$?" != "0" ]; then
+    cecho r "Build failed"
+    exit 1
+  fi
 fi
 
-rm -Rf $SCRIPTDIR/userdata/*/*
-
-bash $SCRIPTDIR/start-container.sh -d
+bash $SCRIPTDIR/start-container.sh
 if [ "$?" != "0" ]; then
   cecho r "Container start failed"
   exit 1
@@ -83,13 +86,6 @@ elif [ "$BUILD_TYPE" == "prod" ] ; then
 fi
 
 if [ "$PUSH" == "1" ] ; then
-  if [ "$BUILD_TYPE" == "prod" ]; then
-    docker pull $DOCKER_REPO:$VERSION > /dev/null
-    if [ "$?" == "0" ]; then
-      cecho r "Docker Image Tag '$VERSION' already exist in docker hub. Use a new version number."
-      exit 1
-    fi
-  fi
   if [ "$BUILD_TYPE" == "dev" ]; then
     docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:dev
     docker push  $DOCKER_REPO:dev
