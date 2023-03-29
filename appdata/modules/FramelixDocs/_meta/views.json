@@ -1,6 +1,16 @@
 {
-    "directoryListHash": "3|612394369",
+    "directoryListHash": "3|1764875489",
     "views": {
+        "Framelix\\FramelixDocs\\View\\CoreDev\\Docker": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Docker build development",
+            "url": "\/coredev\/docker"
+        },
         "Framelix\\FramelixDocs\\View\\Index": {
             "accessRole": "*",
             "customUrl": null,

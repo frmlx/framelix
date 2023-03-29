@@ -34,7 +34,7 @@ fi
 cecho y "[i] Running tests on docker container from type '$DOCKERTYPE'"
 
 if [ $TESTTYPE == "phpstan" ]; then
-  cecho b "# Php Stan Static Code Analysizer"
+  cecho b "# Php Stan Static Code Analyzer"
   docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
@@ -58,8 +58,13 @@ echo "Done."
 echo ""
 
 if [ $TESTTYPE == "phpunit" ]; then
+  # phpunit with process isolation have a bug with enabling xdebug on the fly with -d ini parameters
+  # so, modifying the php config globally for the time this test is running
+  INI_PATH=/etc/php/8.2/cli/conf.d/99-phpunit.ini
   cecho b "# Php Unit Tests"
-  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
+  docker $DOCKER_EXECPARAMS "printf 'zend_extension=xdebug.so\nxdebug.mode=coverage\nmemory_limit=-1' > $INI_PATH"
+  docker $DOCKER_EXECPARAMS "cd /framelix/appdata && composer update && framelix_php vendor/bin/phpunit --coverage-clover /framelix/userdata/tmp/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration  modules/FramelixTests/tests/_phpunit.xml -d zend_extension=xdebug.so -d xdebug.mode=coverage -d memory_limit=-1 && framelix_php hooks/after-phpunit.php && rm -f /etc/php/*/*/conf.d/*-phpunit.ini"
+  docker $DOCKER_EXECPARAMS "rm -f $INI_PATH"
   exit $?
 fi
 

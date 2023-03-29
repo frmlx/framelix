@@ -3,7 +3,7 @@
 SCRIPTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 source $SCRIPTDIR/lib.sh
 
-cecho b "Build Docker Image"
+cecho b "Build Docker Image for $DOCKER_TAGNAME_LOCAL"
 echo "Available command line flags:"
 echo "-t : Type of build: dev, prod"
 
@@ -38,35 +38,9 @@ if [ "$BUILD_TYPE" == "dev" ]; then
   cp -R $SRCFOLDER/modules/FramelixStarter $TMPFOLDER/modules/FramelixStarter
 fi
 
-docker build -t $COMPOSE_PROJECT_NAME --build-arg "FRAMELIX_BUILD_TYPE=$BUILD_TYPE" $SCRIPTDIR/..
+docker build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_TYPE=$BUILD_TYPE" $SCRIPTDIR/..
 
 if [ "$?" != "0" ]; then
   cecho r "Build failed"
   exit 1
 fi
-
-docker tag $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
-
-if [ "$BUILD_TYPE" == "dev" ]; then
-  cecho y "# Installing dev dependencies in the container"
-  source $SCRIPTDIR/start-container.sh
-
-  # phpunit
-  docker exec -t $COMPOSE_PROJECT_NAME bash -c "export DEBIAN_FRONTEND=noninteractive && apt install php8.2-xdebug -y && cp /framelix/system/php-xdebug.ini /etc/php/8.2/cli/conf.d/21-xdebug.ini && rm /etc/php/8.2/fpm/conf.d/20-xdebug.ini && mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage"
-
-  # phpstan
-  docker exec -t $COMPOSE_PROJECT_NAME bash -c "cd /framelix/appdata && composer update"
-
-  # playwright
-  docker exec -t $COMPOSE_PROJECT_NAME bash -c "cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium"
-
-  # commiting changes to container (instead of tagging)
-  docker commit $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
-  source $SCRIPTDIR/stop-container.sh
-  echo ""
-  echo "Done."
-  echo ""
-elif [ "$BUILD_TYPE" == "prod" ]; then
-  docker tag $COMPOSE_PROJECT_NAME $DOCKER_TAGNAME_LOCAL
-fi
-
