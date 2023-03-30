@@ -6,7 +6,7 @@
   font-size: 1.2rem;
   gap: 10px;
 
-  .docs-page{
+  .docs-page {
     position: relative;
   }
 
@@ -19,7 +19,7 @@
     max-height: 80vh;
     overflow: auto;
     top: 70px;
-    left:calc(var(--sidebar-width) + 950px);
+    left: calc(var(--sidebar-width) + 950px);
     padding: 10px;
     max-width: 250px;
     min-width: 250px;
@@ -31,7 +31,8 @@
       color: var(--color-page-text);
       text-decoration: none;
       margin-bottom: 3px;
-      &:hover{
+
+      &:hover {
         text-decoration: underline;
       }
     }
@@ -84,12 +85,17 @@
     font-size: 1rem;
   }
 
+  pre {
+    margin: 0;
+  }
+
   .code-block {
     color: var(--color-page-text);
     background-color: var(--color-page-bg-stencil);
     display: block;
     padding: 10px;
     border-radius: var(--border-radius);
+    margin-bottom: 20px;
 
     .buttons {
       display: flex;
@@ -98,13 +104,14 @@
     }
 
     code {
+      border-radius: var(--border-radius);
       display: block;
-      padding: 0;
-      background: none;
+      padding: 10px;
       max-width: 100%;
       overflow: auto;
       white-space: pre;
-      color: var(--color-page-text);
+      color: #adbac7;
+      background: #22272e;
     }
   }
 
@@ -113,6 +120,15 @@
   }
 }
 
+.hljs-ln-line.hljs-ln-numbers {
+  min-width: 30px;
+  border-right: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.hljs-ln-line.hljs-ln-code{
+  padding-left: 10px;
+
+}
 
 @media (max-width: 1500px) {
   .framelix-content-inner {

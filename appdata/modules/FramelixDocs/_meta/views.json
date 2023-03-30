@@ -1,6 +1,16 @@
 {
-    "directoryListHash": "3|1764875489",
+    "directoryListHash": "3|4088014810",
     "views": {
+        "Framelix\\FramelixDocs\\View\\Basics\\Database": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Database Basics",
+            "url": "\/basics\/database"
+        },
         "Framelix\\FramelixDocs\\View\\CoreDev\\Docker": {
             "accessRole": "*",
             "customUrl": null,
@@ -10,6 +20,26 @@
             "hiddenView": false,
             "pageTitle": "Docker build development",
             "url": "\/coredev\/docker"
+        },
+        "Framelix\\FramelixDocs\\View\\CoreDev\\Framelix": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Framelix development",
+            "url": "\/coredev\/framelix"
+        },
+        "Framelix\\FramelixDocs\\View\\Database\\Storables": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Storables - The way you store data in Framelix",
+            "url": "\/database\/storables"
         },
         "Framelix\\FramelixDocs\\View\\Index": {
             "accessRole": "*",

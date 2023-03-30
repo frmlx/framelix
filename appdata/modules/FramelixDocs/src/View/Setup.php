@@ -12,7 +12,8 @@ class Setup extends View
     {
         ?>
         <p>
-            Development in Framelix is basically split into <code>modules</code>. One application as just one module, by default.
+            Development in Framelix is basically split into <code>modules</code>. One application as just one module, by
+            default.
             So, here we are showing you how you setup for your first application module in Framelix.
             Framelix has a docker image that is ready to kickstart and what contains everything you need to begin
             developing.
@@ -21,8 +22,10 @@ class Setup extends View
         <p>
             You need <?= $this->getLinkToExternalPage('https://www.docker.com/', 'Docker installed') ?>.<br/>
             On Windows you need to run
-            everything <?= $this->getLinkToExternalPage('https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview',
-                'inside WSL') ?>. It is recommended to use the Ubuntu image for WSL with Docker Desktop installed.
+            everything <?= $this->getLinkToExternalPage(
+                'https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview',
+                'inside WSL'
+            ) ?>. It is recommended to use the Ubuntu image for WSL with Docker Desktop installed.
         </p>
         <?= $this->getAnchoredTitle('setup', 'Setup') ?>
         <p>
@@ -42,7 +45,8 @@ class Setup extends View
         $imageName = 'framelix_starter';
         $volumeName = $imageName . '_db';
         $port = 6456;
-        echo $this->getCodeBlock('
+        echo $this->getCodeBlock(
+            '
         SCRIPTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
         docker pull ' . $repoName . '
         mkdir -p $SCRIPTDIR/appdata/modules/Framelix $SCRIPTDIR/appdata/modules/FramelixStarter userdata
@@ -60,7 +64,9 @@ class Setup extends View
             -v ' . $volumeName . ':/framelix/dbdata \
             ' . $repoName . '         
         echo "Now open https://127.0.0.1:' . $port . ' in your browser and follow setup in the web interface"
-        ', "framelix-starter-install.sh");
+        ',
+            downloadFilename: "framelix-starter-install.sh"
+        );
         ?>
 
         <?= $this->getAnchoredTitle('recommendations', 'Recommendations') ?>

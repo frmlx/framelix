@@ -35,7 +35,7 @@ class SetupCoreDev extends View
         bash dev-scripts/run-tests -t phpstan # PHP Stan Static Code Analysis 
         bash dev-scripts/run-tests -t playwright # Playwright End-to-End tests
         bash dev-scripts/run-tests -t phpunit # PHP Unit Tests
-        ', "framelix-coredev-install.sh");
+        ', downloadFilename: "framelix-coredev-install.sh");
         ?>
         <p>
             This will create 3 available apps/ports on your host.

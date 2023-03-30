@@ -10,18 +10,15 @@ class Docker extends View
 
     public function showContent(): void
     {
-        echo $this->getAnchoredTitle('welcome', 'Docker Base Image (nullixat/framelix_base)');
+        echo $this->getAnchoredTitle('welcome', 'Docker Image (nullixat/framelix)');
         ?>
         <p>
-            Framelix has 2 docker images on the Docker Hub. They are split into server only services and Framelix
-            specific app stuff and config.
-            This way was choosen, as the base image does not change that often (Only when ubuntu, nginx, mariadb, nodejs
-            or php updates) but is relatively huge in size (about 1G for the base image).<br/><br/>
-            So, to not need to push a new huge image everytime some Framelix codes changes, this split strategy was
-            choosen.
+            Framelix has docker images on the Docker Hub. There are different production tags for major, minor and latest versions.
+            And there is a special <code>dev</code> image, which is used only for tests on GitHub actions.
+            The dev image contains more dependencies and stuff packed right in for unit and playwright tests, which are not required for any production builds.
         </p>
         <p>
-            The base image as based on Ubuntu and is only responsible for the server services like
+            The image as based on Ubuntu and contains everything, starting from all services and the Framelix code itself. The main services used for Framelix are:
         </p>
         <ul>
             <li>Nginx - The webserver hosting the app and serving PHP and all other files</li>
@@ -30,17 +27,21 @@ class Docker extends View
             <li>PHP - The programming language Framelix is based on</li>
         </ul>
         <p>
-            So, the base image only should be updated when any of this services have gotten updates. This process of
-            checking and updating is done manually and from time to time or when security vulnerabilities have been
-            discovered. It is not required, to update everytime a minor bugfix release is found in the services or OS,
-            especially when the bugfix is in a part of the service that Framelix don't use.
+            From time to time, the services are validated by hand for upgrades and security updates and if any update occurs, the image will be rebuilt and uploaded to docker.
         </p>
         <?php
-        echo $this->getAnchoredTitle('welcome', 'Core Image (nullixat/framelix)');
+        echo $this->getAnchoredTitle('building', 'Building in general');
         ?>
         <p>
-            The core image, is the image that receives updates much more frequently, as it contains all configuration and source code of Framelix.
-            It is relatively small in size
+            Images are built only locally and pushed from local to Docker hub by hand. There is no fully automated workflow for that right now.
+        </p>
+        <p>
+            The script to build an image locally is <code>bash dev-scripts/build-image.sh</code>. It accepts a parameter to define which version you are building.
+            If you do development, you go with the <code>dev</code> version.
+        </p>
+        <p>
+            The script to push a container is <code>bash dev-scripts/docker-hub.sh</code>. It has various parameters which are shown when you call the script without any of that parameters.
+            The docker hub push logic requires and forces a rebuild of the image locally, running all tests on that image and only if everything is successfull, pushes the image to docker.
         </p>
         <?php
     }
