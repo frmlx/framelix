@@ -265,7 +265,7 @@ class Config
      * Must be in a public folder (module or userdata)
      * @var string|null
      */
-    public static ?string $backendFaviconFilePath = __DIR__ . "/../public/img/favicon.ico";
+    public static ?string $backendFaviconFilePath = __DIR__ . "/../public/img/logo.png";
 
     /**
      * A file path pointing to the backend logo

@@ -39,10 +39,9 @@ abstract class Sidebar
 
     public static function onJsCall(JsCall $jsCall): void
     {
-        switch ($jsCall->action) {
-            case 'change-cookie':
-                Cookie::set(Request::getGet('cookieName'), $jsCall->parameters['cookieValue'] ?? '', true, 86400);
-                Url::getBrowserUrl()->redirect();
+        if ($jsCall->action === 'change-cookie') {
+            Cookie::set(Request::getGet('cookieName'), $jsCall->parameters['cookieValue'] ?? '', true, 86400);
+            Url::getBrowserUrl()->redirect();
         }
     }
 
@@ -51,15 +50,21 @@ abstract class Sidebar
      * @param string $label
      * @param string $icon The icon
      * @param string|null $badgeText Optional red badge text
+     * @param bool $forceOpened The group cannot be closed if this is true
      */
-    public function startGroup(string $label, string $icon = "menu", ?string $badgeText = null): void
-    {
+    public function startGroup(
+        string $label,
+        string $icon = "menu",
+        ?string $badgeText = null,
+        bool $forceOpened = false
+    ): void {
         $this->linkData = [
             "type" => "group",
             "label" => $label,
             "links" => [],
             "icon" => $icon,
-            "badgeText" => $badgeText
+            "badgeText" => $badgeText,
+            "forceOpened" => $forceOpened
         ];
     }
 
@@ -194,7 +199,8 @@ abstract class Sidebar
                 View\Backend\UserProfile\Index::class,
                 '<div>' . Lang::get(
                     '__framelix_view_backend_userprofile_index__'
-                ) . '</div><div class="framelix-sidebar-label-nowrap framelix-sidebar-label-small">' . User::get()->email . '</div>',
+                ) . '</div><div class="framelix-sidebar-label-nowrap framelix-sidebar-label-small">' . User::get(
+                )->email . '</div>',
                 "person"
             );
             $this->showHtmlForLinkData(order: 506);
@@ -276,7 +282,7 @@ abstract class Sidebar
         $sidebarEntryStart = '<div class="framelix-sidebar-entry" data-type="' . $type . '" style="order:' . $order . '">';
         if ($type === 'group') {
             echo $sidebarEntryStart;
-            echo '<div class="framelix-sidebar-collapsable ' . ($activeKey !== null ? 'framelix-sidebar-collapsable-active' : '') . '">';
+            echo '<div class="framelix-sidebar-collapsable ' . ($activeKey !== null ? 'framelix-sidebar-collapsable-active' : '') . '" data-force-opened="' . (int)$linkData['forceOpened'] . '">';
             ?>
             <framelix-button raw class="framelix-sidebar-collapsable-title framelix-activate-toggle-handler">
                 <span class="framelix-sidebar-main-icon"><span
