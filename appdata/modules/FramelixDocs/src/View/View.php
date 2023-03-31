@@ -4,21 +4,26 @@ namespace Framelix\FramelixDocs\View;
 
 
 use Framelix\Framelix\Html\Tabs;
+use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Utils\Buffer;
+use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\JsonUtils;
+use Framelix\Framelix\Utils\RandomGenerator;
 
 use function array_filter;
 use function array_pop;
 use function array_values;
 use function base64_encode;
 use function basename;
+use function class_exists;
 use function debug_backtrace;
 use function explode;
 use function file_get_contents;
 use function implode;
 use function preg_match;
 use function rtrim;
+use function str_starts_with;
 use function strlen;
 use function strrpos;
 use function substr;
@@ -27,14 +32,19 @@ use const DEBUG_BACKTRACE_IGNORE_ARGS;
 
 abstract class View extends \Framelix\Framelix\View\Backend\View
 {
+    public ?string $clientId = null;
     protected string|bool $accessRole = "*";
-
     private array $titles = [];
-
     private ?int $startCodeLineNumber = null;
 
     public function onRequest(): void
     {
+        $this->clientId = Cookie::get('unique-client-id');
+        if (!$this->clientId) {
+            $this->clientId = RandomGenerator::getRandomString(10, 20);
+            Cookie::set('unique-client-id', $this->clientId);
+        }
+
         $this->contentCallable = function () {
             Buffer::start();
             $this->showContent();
@@ -66,6 +76,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $tabs = new Tabs();
         }
         foreach ($files as $key => $file) {
+            if (str_starts_with($file, "Framelix") && class_exists($file)) {
+                $file = ClassUtils::getFilePathForClassName($file);
+            }
             $codeLanguage = substr($file, strrpos($file, ".") + 1);
             if ($tabs) {
                 Buffer::start();
@@ -153,7 +166,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $lines[$key] = mb_substr(rtrim($line), $indent);
         }
         $newCode = rtrim(implode("\n", $lines));
-        $html = '<div class="code-block" data-originalcode="'. base64_encode($newCode).'"><div class="buttons">';
+        $html = '<div class="code-block" data-originalcode="' . base64_encode($newCode) . '"><div class="buttons">';
         $html .= '<framelix-button small theme="transparent" icon="content_paste_go" onclick="FramelixDocs.codeBlockAction(this, \'clipboard\')">Copy to clipboard</framelix-button>';
         if ($downloadFilename) {
             $html .= '<framelix-button small theme="transparent" icon="download" onclick=\'FramelixDocs.codeBlockAction(this, "download", ' . JsonUtils::encode(

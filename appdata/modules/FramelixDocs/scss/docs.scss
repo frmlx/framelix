@@ -95,7 +95,7 @@
     display: block;
     padding: 10px;
     border-radius: var(--border-radius);
-    margin-bottom: 20px;
+    margin: 20px 0;
 
     .buttons {
       display: flex;
@@ -117,6 +117,10 @@
 
   h1, h2 {
     border-bottom: 2px solid var(--color-page-bg-stencil);
+
+    &:not(:first-child) {
+      margin-top: 30px;
+    }
   }
 }
 
@@ -125,7 +129,7 @@
   border-right: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.hljs-ln-line.hljs-ln-code{
+.hljs-ln-line.hljs-ln-code {
   padding-left: 10px;
 
 }

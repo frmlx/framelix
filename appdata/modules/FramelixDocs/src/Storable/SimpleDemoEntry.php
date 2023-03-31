@@ -7,16 +7,19 @@ use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Storable\Storable;
 
 /**
- * Simple Demo Storable
- * @property string $clientId
+ * Simple Demo Entry Storable
+ * @property string|null $clientId
  * @property string $email
  * @property string|null $name
  * @property string|null $muchoMachoText
  * @property int|null $logins
  * @property DateTime|null $lastLogin
  * @property bool $flagActive
+ * @property mixed|null $anyJsonData
+ * @property SimpleDemoEntry|null $referenceEntry
+ * @property SimpleDemoEntry[]|null $arrayOfReferences
  */
-class SimpleDemo extends Storable
+class SimpleDemoEntry extends Storable
 {
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
