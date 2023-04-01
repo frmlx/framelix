@@ -29,8 +29,6 @@ use function strlen;
 use function strrpos;
 use function substr;
 
-use function var_dump;
-
 use const DEBUG_BACKTRACE_IGNORE_ARGS;
 
 abstract class View extends \Framelix\Framelix\View\Backend\View
@@ -39,7 +37,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     protected string|bool $accessRole = "*";
     private array $titles = [];
     private ?int $startCodeLineNumber = null;
-    protected mixed $maxPageWidth = "1400px";
+    protected mixed $contentMaxWidth = "1400px";
 
     public function onRequest(): void
     {

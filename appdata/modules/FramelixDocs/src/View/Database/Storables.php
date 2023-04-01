@@ -104,7 +104,8 @@ class Storables extends View
         echo $this->getAnchoredTitle('override', "Override of functionality and defination with setupStorableSchema");
         ?>
         The line <code>protected static function setupStorableSchema(StorableSchema
-        $selfStorableSchema)</code> in the <code>SimpleDemoEntry</code> is optional, but you can use it to provide a lot more details to the behaviour in the database. As you can see here, we have used it to override a properties db column type and added an index to a column.
+        $selfStorableSchema)</code> in the
+        <code>SimpleDemoEntry</code> is optional, but you can use it to provide a lot more details to the behaviour in the database. As you can see here, we have used it to override a properties db column type and added an index to a column.
         To find out which options you have, just use the auto-completion feature of your IDE, it gives you all the information you need for coding.
         <?php
         echo $this->getAnchoredTitle('create', "Your first entry - Store, Update, Delete");
@@ -208,5 +209,19 @@ class Storables extends View
             $entry = Storable::getById(23);
         });
         $this->showRecordedCode('php');
+
+
+        echo $this->getAnchoredTitle('cache', "Storable Caching");
+        ?>
+        <p>
+            Framelix make use of a clever caching mechanism, to try you to save a lot of queries to the database.
+            Basically, whenever you use <code>getById</code> fetch, the framework will check if the Storable already
+            have been fetched in the past and return the same instance that already exist.<br/>
+            This procedure is internaly used as often as possible. For example when fetching property references.<br/>
+            Let's say you have 100 Storables, each have the same <code>createUser</code> attached. You can call <code>->createUser</code>
+            on each of this 100 storable individually, but there is only one query for the database. All other 99 calls
+            make use of the internal framework Storable cache. Pretty cool, right?
+        </p>
+        <?php
     }
 }
