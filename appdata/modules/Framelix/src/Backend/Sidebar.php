@@ -214,12 +214,9 @@ abstract class Sidebar
         $versionInfo = [];
         $versionInfo[] = 'Framelix: ' . Framelix::$version;
 
-        echo '<div style="order:99999;font-size: 9px; opacity:0.5; padding-top: 10px; text-align: center">' . implode(
-                " | ",
-                $versionInfo
-            ) . '</div>';
-
-        echo '</div>';
+        echo '<div style="order:99999;font-size: 9px; opacity:0.5; padding-top: 10px; text-align: center">'
+            . implode(" | ", $versionInfo)
+            . '</div>';
     }
 
     /**

@@ -3,10 +3,11 @@
 namespace Framelix\Framelix\Dev;
 
 use Framelix\Framelix\Framelix;
-use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
 
+use function htmlentities;
 use function is_bool;
+use function print_r;
 use function var_dump;
 
 /**
@@ -25,10 +26,8 @@ class Debug
             var_dump($data);
             return;
         }
-        $id = RandomGenerator::getRandomHtmlId();
-        echo '<div id="' . $id . '" class="framelix-debug-data" style="background: #f5f5f5; color:#333; font-family: monospace; font-size: 14px; line-height: 1.2; padding:10px; border:1px solid #aaa;box-shadow: rgba(0,0,0,0.2); margin: 3px; white-space: pre; overflow: auto; max-width: 100vw; box-sizing: border-box"></div>';
-        echo '<script>(function (){let data = ' . JsonUtils::encode(
-                $data
-            ) . '; console.log(data); document.getElementById("' . $id . '").innerHTML = JSON.stringify(data,null, 2)})()</script>';
+        echo '<div class="framelix-debug-data" style="background: #f5f5f5; color:#333; font-family: monospace; font-size: 14px; line-height: 1.2; padding:10px; border:1px solid #aaa;box-shadow: rgba(0,0,0,0.2); margin: 3px; white-space: pre; overflow: auto; max-width: 100vw; box-sizing: border-box">' . htmlentities(
+                print_r($data, true)
+            ) . '</div>';
     }
 }

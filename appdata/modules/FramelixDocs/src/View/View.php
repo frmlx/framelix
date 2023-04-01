@@ -36,6 +36,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     protected string|bool $accessRole = "*";
     private array $titles = [];
     private ?int $startCodeLineNumber = null;
+    protected mixed $maxPageWidth = "1400px";
 
     public function onRequest(): void
     {
@@ -166,7 +167,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $lines[$key] = mb_substr(rtrim($line), $indent);
         }
         $newCode = rtrim(implode("\n", $lines));
-        $html = '<div class="code-block" data-originalcode="' . base64_encode($newCode) . '"><div class="buttons">';
+        $html = '<div class="code-block"><div class="buttons">';
         $html .= '<framelix-button small theme="transparent" icon="content_paste_go" onclick="FramelixDocs.codeBlockAction(this, \'clipboard\')">Copy to clipboard</framelix-button>';
         if ($downloadFilename) {
             $html .= '<framelix-button small theme="transparent" icon="download" onclick=\'FramelixDocs.codeBlockAction(this, "download", ' . JsonUtils::encode(
@@ -174,9 +175,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 ) . ')\'>Download as file</framelix-button>';
         }
 
-        $html .= '</div><pre><code class="' . ($codeLanguage ? 'language-' . $codeLanguage : '') . (!$showLineNumbers ? ' nohljsln' : '') . '">' . HtmlUtils::escape(
-                $newCode
-            ) . '</code></pre></div>';
+        $html .= '</div><pre><code class="' . ($codeLanguage ? 'language-' . $codeLanguage : '') . (!$showLineNumbers ? ' nohljsln' : '') . '"></code></pre></div><script type="application/json">'.JsonUtils::encode($newCode).'</script>';
         return $html;
     }
 }

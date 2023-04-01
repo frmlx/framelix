@@ -7,20 +7,16 @@
   gap: 10px;
 
   .docs-page {
-    position: relative;
-  }
-
-  .docs-content {
-    max-width: 900px;
+    display: flex;
+    gap: 20px;
   }
 
   .docs-right-nav {
-    position: fixed;
     max-height: 80vh;
     overflow: auto;
-    top: 70px;
-    left: calc(var(--sidebar-width) + 950px);
-    padding: 10px;
+    position: sticky;
+    top: 0;
+    padding: 20px;
     max-width: 250px;
     min-width: 250px;
     border-left: 2px solid var(--color-page-bg-stencil);
@@ -93,23 +89,23 @@
     color: var(--color-page-text);
     background-color: var(--color-page-bg-stencil);
     display: block;
-    padding: 10px;
     border-radius: var(--border-radius);
     margin: 20px 0;
+    max-width: calc(100vw - var(--sidebar-width) - 40px);
 
     .buttons {
       display: flex;
-      margin-bottom: 10px;
       gap: 10px;
+      padding: 10px;
     }
 
     code {
       border-radius: var(--border-radius);
       display: block;
       padding: 10px;
-      max-width: 100%;
       overflow: auto;
-      white-space: pre;
+      white-space: break-spaces;
+      word-break: break-all;
       color: #adbac7;
       background: #22272e;
     }
@@ -127,21 +123,15 @@
 .hljs-ln-line.hljs-ln-numbers {
   min-width: 30px;
   border-right: 2px solid rgba(255, 255, 255, 0.1);
+  vertical-align: top;
 }
 
 .hljs-ln-line.hljs-ln-code {
   padding-left: 10px;
-
 }
 
-@media (max-width: 1500px) {
-  .framelix-content-inner {
-    .docs-content {
-      width: auto;
-    }
-
-    .docs-right-nav {
-      display: none;
-    }
+@media (max-width: 1100px) {
+  .docs-right-nav {
+    display: none;
   }
 }

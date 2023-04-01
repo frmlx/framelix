@@ -16,6 +16,7 @@ use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\View\LayoutView;
+use JetBrains\PhpStorm\ExpectedValues;
 
 use function call_user_func_array;
 use function class_exists;
@@ -47,71 +48,77 @@ abstract class View extends LayoutView
      * The layout to use
      * @var int
      */
+    #[ExpectedValues(valuesFromClass: self::class)]
     protected int $layout = self::LAYOUT_DEFAULT;
+
+    /**
+     * How much width the whole layout should take
+     * If smaller than 100%, then it is centered to the screen
+     * @var mixed|string
+     */
+    protected mixed $maxPageWidth = "100%";
 
     protected string|bool $accessRole = true;
 
     public static function onJsCall(JsCall $jsCall): void
     {
-        switch ($jsCall->action) {
-            case 'settings':
-                $form = new Form();
-                $form->id = "framelix_user_settings";
-                if (count(Config::$languagesAvailable) > 1) {
-                    $field = new Select();
-                    $field->name = "languageSelect";
-                    $field->label = "__framelix_configuration_module_language_pagetitle__";
-                    foreach (Config::$languagesAvailable as $supportedLanguage) {
-                        $url = Url::getBrowserUrl();
-                        $url->replaceLanguage($supportedLanguage);
-                        $field->addOption(
-                            $url->getUrlAsString(),
-                            Lang::ISO_LANG_CODES[$supportedLanguage] ?? $supportedLanguage
-                        );
-                    }
-                    $field->defaultValue = Url::getBrowserUrl()->getUrlAsString();
-                    $form->addField($field);
+        if ($jsCall->action === 'settings') {
+            $form = new Form();
+            $form->id = "framelix_user_settings";
+            if (count(Config::$languagesAvailable) > 1) {
+                $field = new Select();
+                $field->name = "languageSelect";
+                $field->label = "__framelix_configuration_module_language_pagetitle__";
+                foreach (Config::$languagesAvailable as $supportedLanguage) {
+                    $url = Url::getBrowserUrl();
+                    $url->replaceLanguage($supportedLanguage);
+                    $field->addOption(
+                        $url->getUrlAsString(),
+                        Lang::ISO_LANG_CODES[$supportedLanguage] ?? $supportedLanguage
+                    );
                 }
-
-                $field = new Toggle();
-                $field->name = "darkMode";
-                $field->label = Lang::get('__framelix_darkmode__') . ' <span class="material-icons">dark_mode</span>';
+                $field->defaultValue = Url::getBrowserUrl()->getUrlAsString();
                 $form->addField($field);
+            }
 
-                $field = new Html();
-                $field->name = "resetAlerts";
-                $field->defaultValue = '<framelix-button class="framelix_reset_alerts">__framelix_reset_alerts__</framelix-button>';
-                $form->addField($field);
+            $field = new Toggle();
+            $field->name = "darkMode";
+            $field->label = Lang::get('__framelix_darkmode__') . ' <span class="material-icons">dark_mode</span>';
+            $form->addField($field);
 
-                $form->show();
-                ?>
-                <script>
-                  (async function () {
-                    const form = FramelixForm.getById('framelix_user_settings')
-                    await form.rendered
-                    const languageSelect = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'languageSelect')
-                    if (languageSelect) {
-                      languageSelect.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
-                        const v = languageSelect.getValue()
-                        if (v) window.location.href = v
-                      })
-                    }
-                    const darkModeToggle = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'darkMode')
-                    if (darkModeToggle) {
-                      darkModeToggle.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
-                        FramelixLocalStorage.set('framelix-darkmode', darkModeToggle.getValue() === '1')
-                        FramelixDeviceDetection.updateAttributes()
-                      })
-                      darkModeToggle.setValue(FramelixLocalStorage.get('framelix-darkmode'))
-                    }
-                    form.container.on('click', '.framelix_reset_alerts', function () {
-                      FramelixCustomElementAlert.resetAllAlerts()
-                      FramelixToast.success('__framelix_reset_alerts_done__')
-                    })
-                  })()
-                </script>
-                <?php
-                break;
+            $field = new Html();
+            $field->name = "resetAlerts";
+            $field->defaultValue = '<framelix-button class="framelix_reset_alerts">__framelix_reset_alerts__</framelix-button>';
+            $form->addField($field);
+
+            $form->show();
+            ?>
+            <script>
+              (async function () {
+                const form = FramelixForm.getById('framelix_user_settings')
+                await form.rendered
+                const languageSelect = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'languageSelect')
+                if (languageSelect) {
+                  languageSelect.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
+                    const v = languageSelect.getValue()
+                    if (v) window.location.href = v
+                  })
+                }
+                const darkModeToggle = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'darkMode')
+                if (darkModeToggle) {
+                  darkModeToggle.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
+                    FramelixLocalStorage.set('framelix-darkmode', darkModeToggle.getValue() === '1')
+                    FramelixDeviceDetection.updateAttributes()
+                  })
+                  darkModeToggle.setValue(FramelixLocalStorage.get('framelix-darkmode'))
+                }
+                form.container.on('click', '.framelix_reset_alerts', function () {
+                  FramelixCustomElementAlert.resetAllAlerts()
+                  FramelixToast.success('__framelix_reset_alerts_done__')
+                })
+              })()
+            </script>
+            <?php
         }
     }
 
@@ -175,32 +182,36 @@ abstract class View extends LayoutView
         echo '<html lang="' . Config::$language . '" ' . $htmlAttributes . '>';
         $this->showDefaultPageStartHtml();
         echo '<body>';
-        echo '<div class="framelix-page">';
+        echo '<div class="framelix-page" style="--max-page-width:' . $this->maxPageWidth . '">';
         ?>
-        <header class="framelix-top-bar" data-color-scheme='dark'>
-            <framelix-button class="framelix-sidebar-toggle" icon="menu" theme="transparent"></framelix-button>
-            <h1 class="framelix-page-title"><?= $this->getPageTitle(false) ?></h1>
-            <?php
-            if ($appIsSetup) {
-                ?>
-                <framelix-button theme="transparent" class="framelix-user-settings"
-                                 jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>" target="modal"
-                                 icon="people"
-                                 title="__framelix_backend_user_settings__"></framelix-button>
-                <?php
-            }
-            ?>
-        </header>
-        <nav class="framelix-sidebar" data-color-scheme='dark'>
+        <div class="framelix-page-spacer-left"></div>
+        <nav class="framelix-sidebar">
             <div class="framelix-sidebar-inner">
                 <?= $sidebarContent ?>
             </div>
         </nav>
         <div class="framelix-content">
+            <header class="framelix-top-bar">
+                <framelix-button class="framelix-sidebar-toggle" icon="menu" theme="transparent"></framelix-button>
+                <h1 class="framelix-page-title"><?= $this->getPageTitle(false) ?></h1>
+                <?php
+                if ($appIsSetup) {
+                    ?>
+                    <framelix-button theme="transparent" class="framelix-user-settings"
+                                     jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>" target="modal"
+                                     icon="people"
+                                     title="__framelix_backend_user_settings__"></framelix-button>
+                    <?php
+                }
+                ?>
+            </header>
             <div class="framelix-content-inner">
-                <?= $pageContent ?>
+                <div class="framelix-content-inner-inner">
+                    <?= $pageContent ?>
+                </div>
             </div>
         </div>
+        <div class="framelix-page-spacer-right"></div>
         <script>
           Framelix.initLate()
         </script>
