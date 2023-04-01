@@ -61,12 +61,12 @@ jobs:
           path: ./logs
           retention-days: 5
 
-      - name: Upload playwright logs to GitHub
+      - name: Upload userdata to GitHub
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: playwright-results
-          path: ./userdata/playwright/results
+          path: ./userdata
           retention-days: 5
 
       - name: Stop containers
