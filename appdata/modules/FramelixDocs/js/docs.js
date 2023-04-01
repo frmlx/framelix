@@ -21,7 +21,7 @@ class FramelixDocs {
       })
     }
     if (action === 'download') {
-      Framelix.downloadBlobAsFile(contents, filename)
+      Framelix.downloadBlobAsFile(new Blob([contents]), filename)
     }
   }
 }

@@ -152,7 +152,7 @@ class Login extends View
                 Response::showFormValidationErrorResponse('__framelix_login_invalid_user__');
             }
         }
-        $this->hideSidebarInitially = true;
+        $this->sidebarClosedInitially = true;
         $this->layout = self::LAYOUT_SMALL_CENTERED;
         $this->showContentBasedOnRequestType();
     }

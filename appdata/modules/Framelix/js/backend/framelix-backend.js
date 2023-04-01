@@ -35,7 +35,7 @@ class FramelixBackend {
     if (activeLink.length) {
       FramelixIntersectionObserver.isIntersecting(activeLink).then(function (isIntersecting) {
         if (!isIntersecting) {
-          Framelix.scrollTo(activeLink, sidebar, 100, 0)
+          Framelix.scrollTo(activeLink, sidebar.children('.framelix-sidebar-inner'), 100, 0)
         }
       })
     }

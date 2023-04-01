@@ -39,12 +39,6 @@ abstract class View extends LayoutView
     public const LAYOUT_SMALL_CENTERED = 2;
 
     /**
-     * Initial sidebar status
-     * @var bool
-     */
-    protected bool $hideSidebarInitially = false;
-
-    /**
      * The layout to use
      * @var int
      */
@@ -57,6 +51,25 @@ abstract class View extends LayoutView
      * @var mixed|string
      */
     protected mixed $maxPageWidth = "100%";
+
+    /**
+     * Initial sidebar is closed instead of opened on large screens
+     * @var bool
+     */
+    protected bool $sidebarClosedInitially = false;
+
+    /**
+     * Is sidebar enabled
+     * @var bool
+     */
+    protected bool $showSidebar = true;
+
+    /**
+     * Is top bar enabled
+     * Notice: Without topBar, the sidebar cannot be toggled
+     * @var bool
+     */
+    protected bool $showTopBar = true;
 
     protected string|bool $accessRole = true;
 
@@ -131,7 +144,7 @@ abstract class View extends LayoutView
         $this->includeDefaultCompilerFileBundles(FRAMELIX_MODULE);
         $mainSidebarClass = "Framelix\\" . FRAMELIX_MODULE . "\\Backend\\Sidebar";
         $sidebarContent = null;
-        if (class_exists($mainSidebarClass)) {
+        if ($this->showSidebar && class_exists($mainSidebarClass)) {
             /** @var Sidebar $sidebarView */
             /** @phpstan-ignore-next-line */
             $sidebarView = new $mainSidebarClass();
@@ -161,10 +174,12 @@ abstract class View extends LayoutView
         $htmlAttributes = new HtmlAttributes();
         $htmlAttributes->set('data-appstate', $appIsSetup ? 'ok' : 'setup');
         $htmlAttributes->set('data-user', User::get());
+        $htmlAttributes->set('data-show-sidebar', (int)$this->showSidebar);
+        $htmlAttributes->set('data-show-topbar', (int)$this->showTopBar);
         $htmlAttributes->set('data-view', get_class(self::$activeView));
         $htmlAttributes->set('data-navigation', $mainSidebarClass);
         $htmlAttributes->set('data-layout', $this->layout);
-        $htmlAttributes->set('data-sidebar-status-initial-hidden', $this->hideSidebarInitially ? '1' : '0');
+        $htmlAttributes->set('data-sidebar-status-initial-hidden', $this->sidebarClosedInitially ? '1' : '0');
         if ($this->forceColorScheme) {
             $htmlAttributes->set('data-color-scheme-force', $this->forceColorScheme);
         }
@@ -191,20 +206,33 @@ abstract class View extends LayoutView
             </div>
         </nav>
         <div class="framelix-content">
-            <header class="framelix-top-bar">
-                <framelix-button class="framelix-sidebar-toggle" icon="menu" theme="transparent"></framelix-button>
-                <h1 class="framelix-page-title"><?= $this->getPageTitle(false) ?></h1>
-                <?php
-                if ($appIsSetup) {
-                    ?>
-                    <framelix-button theme="transparent" class="framelix-user-settings"
-                                     jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>" target="modal"
-                                     icon="people"
-                                     title="__framelix_backend_user_settings__"></framelix-button>
-                    <?php
-                }
+            <?php
+            if ($this->showTopBar) {
                 ?>
-            </header>
+                <header class="framelix-top-bar">
+                    <?php
+                    if ($this->showSidebar) {
+                        ?>
+                        <framelix-button class="framelix-sidebar-toggle" icon="menu"
+                                         theme="transparent"></framelix-button>
+                        <?php
+                    }
+                    ?>
+                    <h1 class="framelix-page-title"><?= $this->getPageTitle(false) ?></h1>
+                    <?php
+                    if ($appIsSetup) {
+                        ?>
+                        <framelix-button theme="transparent" class="framelix-user-settings"
+                                         jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>" target="modal"
+                                         icon="people"
+                                         title="__framelix_backend_user_settings__"></framelix-button>
+                        <?php
+                    }
+                    ?>
+                </header>
+                <?php
+            }
+            ?>
             <div class="framelix-content-inner">
                 <div class="framelix-content-inner-inner">
                     <?= $pageContent ?>

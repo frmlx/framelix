@@ -39,7 +39,7 @@ class Setup extends View
     {
         $userConfigFileCore = Config::getUserConfigFilePath();
         $userConfigFileUi = Config::getUserConfigFilePath("02-ui");
-        $this->hideSidebarInitially = true;
+        $this->sidebarClosedInitially = true;
         $this->layout = self::LAYOUT_SMALL_CENTERED;
 
         if (Form::isFormSubmitted('setup')) {

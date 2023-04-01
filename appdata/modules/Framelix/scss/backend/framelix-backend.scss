@@ -61,7 +61,8 @@ html:not([data-layout='2']) {
   }
 }
 
-html[data-sidebar-status='closed'] {
+html[data-sidebar-status='closed'],
+html[data-show-sidebar='0']{
   --sidebar-width: 0px;
 }
 
@@ -234,10 +235,6 @@ html[data-sidebar-status='opened'] {
     }
   }
 
-  &[data-force-opened='1'] .framelix-sidebar-collapsable-title {
-
-  }
-
   .framelix-sidebar-collapsable-container {
     display: none;
     font-size: 90%;
@@ -295,7 +292,6 @@ html[data-sidebar-status='opened'] {
 .framelix-top-bar {
   display: flex;
   background: var(--sidebar-bg);
-  gap: 10px;
   transition: .2s;
 
   framelix-button {
@@ -309,8 +305,10 @@ html[data-sidebar-status='opened'] {
     flex: 1 1 auto;
     font-size: inherit;
     padding: 5px 20px;
-    align-self: center;
     white-space: break-spaces;
+    border-left: 2px solid var(--color-page-bg-stencil-strong);
+    display: flex;
+    align-items: center;
   }
 }
 

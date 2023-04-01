@@ -77,7 +77,8 @@ html:not([data-layout="2"]) .framelix-page-spacer-right {
   background: var(--sidebar-bg);
 }
 
-html[data-sidebar-status=closed] {
+html[data-sidebar-status=closed],
+html[data-show-sidebar="0"] {
   --sidebar-width: 0px;
 }
 
@@ -453,7 +454,6 @@ html[data-sidebar-status=opened] .framelix-sidebar-toggle .icon {
 .framelix-top-bar {
   display: flex;
   background: var(--sidebar-bg);
-  gap: 10px;
   transition: 0.2s;
 }
 .framelix-top-bar framelix-button {
@@ -466,8 +466,10 @@ html[data-sidebar-status=opened] .framelix-sidebar-toggle .icon {
   flex: 1 1 auto;
   font-size: inherit;
   padding: 5px 20px;
-  align-self: center;
   white-space: break-spaces;
+  border-left: 2px solid var(--color-page-bg-stencil-strong);
+  display: flex;
+  align-items: center;
 }
 
 hr {

@@ -65,7 +65,7 @@ class Login2FA extends View
             (Request::getGet('redirect') ? Url::create(Request::getGet('redirect')) : Url::getApplicationUrl())->redirect();
         }
 
-        $this->hideSidebarInitially = true;
+        $this->sidebarClosedInitially = true;
         $this->layout = self::LAYOUT_SMALL_CENTERED;
         $this->showContentBasedOnRequestType();
     }

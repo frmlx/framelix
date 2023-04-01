@@ -75,7 +75,7 @@ class ForgotPassword extends View
             Toast::success(Lang::get('__framelix_view_backend_forgotpassword_sentmail__', [$email]));
             Url::getBrowserUrl()->redirect();
         }
-        $this->hideSidebarInitially = true;
+        $this->sidebarClosedInitially = true;
         $this->layout = self::LAYOUT_SMALL_CENTERED;
         $this->showContentBasedOnRequestType();
     }
