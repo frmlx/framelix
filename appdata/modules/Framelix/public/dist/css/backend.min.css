@@ -492,15 +492,21 @@ hr {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-html:not([data-layout="2"]) .framelix-content {
-  max-width: var(--max-page-width);
+html:not([data-layout="2"]) .framelix-content-spacer-left,
+html:not([data-layout="2"]) .framelix-content-spacer-right {
+  flex: 1 1 auto;
+}
+html:not([data-layout="2"]) .framelix-content-inner-inner {
+  max-width: var(--max-content-width);
 }
 
 .framelix-content-inner {
   flex: 1 1 auto;
   overflow: auto;
+  display: flex;
 }
 
 html[data-screen-size=s][data-sidebar-status=opened] .framelix-content-inner {

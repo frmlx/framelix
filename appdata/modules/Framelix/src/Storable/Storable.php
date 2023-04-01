@@ -475,7 +475,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
     }
 
     /**
-     * Get mysql table name to this storable
+     * Get the database table name to this storable
      * @param string|Storable $storable
      * @return string
      */
@@ -989,6 +989,10 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         return $this->isEditable();
     }
 
+    /**
+     * Returns the url that is used in tables and other functions, to link to a details page (Usually where the storable can be edited)
+     * @return Url|null
+     */
     public function getDetailsUrl(): ?Url
     {
         return null;
@@ -1008,6 +1012,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
 
     /**
      * This function is called when the database has been updated after a store() or delete() call
+     * You can hook into that by override this method
      */
     protected function onDatabaseUpdated(): void
     {

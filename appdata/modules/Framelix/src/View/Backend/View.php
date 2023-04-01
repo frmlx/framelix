@@ -46,11 +46,11 @@ abstract class View extends LayoutView
     protected int $layout = self::LAYOUT_DEFAULT;
 
     /**
-     * How much width the whole layout should take
-     * If smaller than 100%, then it is centered to the screen
+     * How much width the content of the layout can take at max
+     * If less than 100%, then the content is centered to the screen
      * @var mixed|string
      */
-    protected mixed $maxPageWidth = "100%";
+    protected mixed $contentMaxWidth = "100%";
 
     /**
      * Initial sidebar is closed instead of opened on large screens
@@ -197,7 +197,7 @@ abstract class View extends LayoutView
         echo '<html lang="' . Config::$language . '" ' . $htmlAttributes . '>';
         $this->showDefaultPageStartHtml();
         echo '<body>';
-        echo '<div class="framelix-page" style="--max-page-width:' . $this->maxPageWidth . '">';
+        echo '<div class="framelix-page" style="--max-content-width:' . $this->contentMaxWidth . '">';
         ?>
         <div class="framelix-page-spacer-left"></div>
         <nav class="framelix-sidebar">
@@ -234,9 +234,11 @@ abstract class View extends LayoutView
             }
             ?>
             <div class="framelix-content-inner">
+                <div class="framelix-content-spacer-left"></div>
                 <div class="framelix-content-inner-inner">
                     <?= $pageContent ?>
                 </div>
+                <div class="framelix-content-spacer-right"></div>
             </div>
         </div>
         <div class="framelix-page-spacer-right"></div>
