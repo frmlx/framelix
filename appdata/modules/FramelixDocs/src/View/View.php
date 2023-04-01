@@ -14,19 +14,22 @@ use Framelix\Framelix\Utils\RandomGenerator;
 use function array_filter;
 use function array_pop;
 use function array_values;
-use function base64_encode;
 use function basename;
 use function class_exists;
 use function debug_backtrace;
 use function explode;
 use function file_get_contents;
 use function implode;
+use function interface_exists;
+use function is_array;
 use function preg_match;
 use function rtrim;
 use function str_starts_with;
 use function strlen;
 use function strrpos;
 use function substr;
+
+use function var_dump;
 
 use const DEBUG_BACKTRACE_IGNORE_ARGS;
 
@@ -67,17 +70,20 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
 
     /**
      * Show the source code of the given files
-     * @param array $files
+     * @param mixed $files
      * @return void
      */
-    public function showSourceFiles(array $files): void
+    public function showSourceFiles(mixed $files): void
     {
         $tabs = null;
+        if (!is_array($files)) {
+            $files = [$files];
+        }
         if (count($files) > 1) {
             $tabs = new Tabs();
         }
         foreach ($files as $key => $file) {
-            if (str_starts_with($file, "Framelix") && class_exists($file)) {
+            if (str_starts_with($file, "Framelix") && (class_exists($file) || interface_exists($file))) {
                 $file = ClassUtils::getFilePathForClassName($file);
             }
             $codeLanguage = substr($file, strrpos($file, ".") + 1);
@@ -175,7 +181,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 ) . ')\'>Download as file</framelix-button>';
         }
 
-        $html .= '</div><pre><code class="' . ($codeLanguage ? 'language-' . $codeLanguage : '') . (!$showLineNumbers ? ' nohljsln' : '') . '"></code></pre></div><script type="application/json">'.JsonUtils::encode($newCode).'</script>';
+        $html .= '</div><pre><code class="' . ($codeLanguage ? 'language-' . $codeLanguage : '') . (!$showLineNumbers ? ' nohljsln' : '') . '"></code></pre></div><script type="application/json">' . JsonUtils::encode(
+                $newCode
+            ) . '</script>';
         return $html;
     }
 }

@@ -1,6 +1,36 @@
 {
-    "directoryListHash": "3|4088014810",
+    "directoryListHash": "3|735698463",
     "views": {
+        "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "The coding standards we follow",
+            "url": "\/background\/codingstandards"
+        },
+        "Framelix\\FramelixDocs\\View\\Background\\Idea": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Idea, motivation and philosophy of Framelix",
+            "url": "\/background\/idea"
+        },
+        "Framelix\\FramelixDocs\\View\\Background\\Terminology": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Terminology \/ How things are named in Framelix",
+            "url": "\/background\/terminology"
+        },
         "Framelix\\FramelixDocs\\View\\Basics\\Database": {
             "accessRole": "*",
             "customUrl": null,
@@ -30,6 +60,16 @@
             "hiddenView": false,
             "pageTitle": "Framelix development",
             "url": "\/coredev\/framelix"
+        },
+        "Framelix\\FramelixDocs\\View\\Database\\SchemeGenerator": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "DB Scheme",
+            "url": "\/database\/schemegenerator"
         },
         "Framelix\\FramelixDocs\\View\\Database\\Storables": {
             "accessRole": "*",
