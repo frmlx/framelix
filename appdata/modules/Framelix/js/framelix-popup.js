@@ -335,10 +335,14 @@ class FramelixPopup {
     for (let key in this.resolvers) await this.resolvers[key]()
     this.resolvers = null
     delete FramelixPopup.instances[this.id]
-    this.popperEl.remove()
-    this.popperInstance.destroy()
-    this.popperEl = null
-    this.popperInstance = null
+    if (this.popperEl) {
+      this.popperEl.remove()
+      this.popperEl = null
+    }
+    if (this.popperInstance) {
+      this.popperInstance.destroy()
+      this.popperInstance = null
+    }
   }
 }
 

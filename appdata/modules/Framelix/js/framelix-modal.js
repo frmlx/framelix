@@ -368,13 +368,15 @@ class FramelixModal {
 
 FramelixInit.late.push(FramelixModal.init)
 
+// docs-id-start: FramelixModalShowOptions
 /**
  * @typedef {Object} FramelixModalShowOptions
- * @property {string|Cash} bodyContent The body content
- * @property {string|Cash|null=} headerContent The fixed header content
- * @property {string|Cash|null=} footerContent The fixed footer content
+ * @property {string|Cash|FramelixRequest} bodyContent The body content
+ * @property {string|Cash|FramelixRequest|null=} headerContent The fixed header content
+ * @property {string|Cash|FramelixRequest|null=} footerContent The fixed footer content
  * @property {number|string=} maxWidth Max width
  * @property {string=} color The modal color, success, warning, error, primary
  * @property {FramelixModal=} instance Reuse the given instance instead of creating a new
  * @property {Object=} data Any data to pass to the instance for later reference
  */
+// docs-id-end: FramelixModalShowOptions

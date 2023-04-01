@@ -4,6 +4,12 @@
 class FramelixTabs {
 
   /**
+   * Triggered when a tabs content have been rendered
+   * @type {string}
+   */
+  static EVENT_TAB_CONTENT_RENDERED = 'framelix-tabs-rendered'
+
+  /**
    * All instances
    * @type {FramelixTabs[]}
    */
@@ -133,6 +139,7 @@ class FramelixTabs {
     if (this.activeTab === tabId) {
       this.setActiveTab(tabId)
     }
+    $(document).trigger(FramelixTabs.EVENT_TAB_CONTENT_RENDERED, [this, row])
   }
 
   /**
