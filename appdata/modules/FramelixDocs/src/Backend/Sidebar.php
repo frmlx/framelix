@@ -11,6 +11,7 @@ use Framelix\FramelixDocs\View\CoreDev\Docker;
 use Framelix\FramelixDocs\View\CoreDev\Framelix;
 use Framelix\FramelixDocs\View\Database\SchemeGenerator;
 use Framelix\FramelixDocs\View\Database\Storables;
+use Framelix\FramelixDocs\View\Features\ModalWindow;
 use Framelix\FramelixDocs\View\Index;
 use Framelix\FramelixDocs\View\Setup;
 use Framelix\FramelixDocs\View\SetupCoreDev;
@@ -34,12 +35,16 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(SchemeGenerator::class);
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Core Development', 'hub');
+        $this->startGroup('Features', 'motion_blur', forceOpened: true);
+        $this->addLink(ModalWindow::class);
+        $this->showHtmlForLinkData();
+
+        $this->startGroup('Core Development', 'hub', forceOpened: true);
         $this->addLink(Docker::class, "Docker Image");
         $this->addLink(Framelix::class, "Framelix");
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Framelix Background', 'background_replace');
+        $this->startGroup('Framelix Background', 'background_replace', forceOpened: true);
         $this->addLink(Idea::class);
         $this->addLink(Terminology::class);
         $this->addLink(CodingStandards::class);

@@ -2,16 +2,28 @@ class FramelixDocs {
   static codeBlockMap = new Map()
 
   static init () {
-    $('.code-block').each(function () {
-      const contents = JSON.parse($(this).next().html())
-      FramelixDocs.codeBlockMap.set(this, contents)
-      $(this).find('code')[0].innerHTML = contents.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    })
-    hljs.highlightAll()
-    hljs.initLineNumbersOnLoad()
+    FramelixDocs.renderCodeBlocks()
+    $(document).on(FramelixTabs.EVENT_TAB_CONTENT_RENDERED, FramelixDocs.renderCodeBlocks)
   }
 
-  static async codeBlockAction (el, action, filename, fileContents) {
+  static runJsCode (el) {
+    const codeBlock = $(el).closest('.code-block')
+    const contents = FramelixDocs.codeBlockMap.get(codeBlock[0])
+    eval('(async function(){'+contents+'})()')
+  }
+
+  static renderCodeBlocks () {
+    $('.code-block').not('[data-rendered]').each(function () {
+      const contents = JSON.parse($(this).next().html())
+      FramelixDocs.codeBlockMap.set(this, contents)
+      const code = $(this).find('code')
+      code[0].innerHTML = contents.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      hljs.highlightElement(code[0])
+      hljs.lineNumbersBlock(code[0])
+    }).attr('data-rendered', '1')
+  }
+
+  static async codeBlockAction (el, action, filename) {
     const codeBlock = $(el).closest('.code-block')
     const contents = FramelixDocs.codeBlockMap.get(codeBlock[0])
     if (action === 'clipboard') {

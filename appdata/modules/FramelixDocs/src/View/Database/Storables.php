@@ -27,7 +27,8 @@ class Storables extends View
             Let's see a very basic Storable here, our SimpleDemo storable.
         </p>
         <?php
-        $this->showSourceFiles([SimpleDemoEntry::class]);
+        $this->addSourceFile(SimpleDemoEntry::class);
+        $this->showSourceFiles();
         echo $this->getAnchoredTitle('breakdown', "Let's break it down - The class doc comments");
         ?>
         <p>
@@ -100,7 +101,8 @@ class Storables extends View
             database. It's similar to the process of serialize and unserialize.
         </p>
         <?php
-        $this->showSourceFiles(StorablePropertyInterface::class);
+        $this->addSourceFile(StorablePropertyInterface::class);
+        $this->showSourceFiles();
         echo $this->getAnchoredTitle('override', "Override of functionality and defination with setupStorableSchema");
         ?>
         The line <code>protected static function setupStorableSchema(StorableSchema

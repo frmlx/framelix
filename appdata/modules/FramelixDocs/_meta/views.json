@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|735698463",
+    "directoryListHash": "3|2474792562",
     "views": {
         "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
             "accessRole": "*",
@@ -80,6 +80,16 @@
             "hiddenView": false,
             "pageTitle": "Storables - The way you store data in Framelix",
             "url": "\/database\/storables"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\ModalWindow": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Modal\/Dialog Window",
+            "url": "\/features\/modalwindow"
         },
         "Framelix\\FramelixDocs\\View\\Index": {
             "accessRole": "*",

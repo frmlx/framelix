@@ -16,13 +16,14 @@ use function array_pop;
 use function array_values;
 use function basename;
 use function class_exists;
+use function count;
 use function debug_backtrace;
 use function explode;
 use function file_get_contents;
 use function implode;
 use function interface_exists;
-use function is_array;
 use function preg_match;
+use function preg_quote;
 use function rtrim;
 use function str_starts_with;
 use function strlen;
@@ -35,9 +36,11 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
 {
     public ?string $clientId = null;
     protected string|bool $accessRole = "*";
+    protected mixed $contentMaxWidth = "1400px";
     private array $titles = [];
     private ?int $startCodeLineNumber = null;
-    protected mixed $contentMaxWidth = "1400px";
+    private array $jsCodeSnippets = [];
+    private array $sourceFiles = [];
 
     public function onRequest(): void
     {
@@ -67,35 +70,101 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     }
 
     /**
-     * Show the source code of the given files
-     * @param mixed $files
+     * @param string $filePathOrClass
+     * @param string|null $docsId If set, only parses the lines between // docs-id-start: $docsId and  docs-id-end: $docsId
      * @return void
      */
-    public function showSourceFiles(mixed $files): void
+    public function addSourceFile(string $filePathOrClass, ?string $docsId = null): void
+    {
+        $this->sourceFiles[] = [
+            'filePathOrClass' => $filePathOrClass,
+            'docsId' => $docsId
+        ];
+    }
+
+    /**
+     * Show the source files previously added with addSourceFile
+     * @return void
+     */
+    public function showSourceFiles(): void
     {
         $tabs = null;
-        if (!is_array($files)) {
-            $files = [$files];
-        }
-        if (count($files) > 1) {
+        if (count($this->sourceFiles) > 1) {
             $tabs = new Tabs();
         }
-        foreach ($files as $key => $file) {
+        foreach ($this->sourceFiles as $key => $row) {
+            $file = $row['filePathOrClass'];
             if (str_starts_with($file, "Framelix") && (class_exists($file) || interface_exists($file))) {
                 $file = ClassUtils::getFilePathForClassName($file);
             }
+            $fileData = file_get_contents($file);
+            if ($row['docsId']) {
+                $id = preg_quote($row['docsId'], "~");
+                preg_match("~\/\/\s*docs-id-start:\s*\b$id\n*(.*?)\/\/\s*docs-id-end:\s*\b$id~is", $fileData, $match);
+                if ($match) {
+                    $fileData = $match[1];
+                }
+            }
             $codeLanguage = substr($file, strrpos($file, ".") + 1);
+            Buffer::start();
+            echo $this->getCodeBlock($fileData, $codeLanguage);
+            $contents = Buffer::get();
             if ($tabs) {
-                Buffer::start();
-                echo $this->getCodeBlock(file_get_contents($file), $codeLanguage);
-                $tabs->addTab($key, basename($file), Buffer::get());
+                $tabs->addTab($key, basename($file), $contents);
             } else {
-                echo $this->getCodeBlock(file_get_contents($file), $codeLanguage);
+                echo $contents;
             }
         }
         $tabs?->show();
     }
 
+    /**
+     * Add a JS code snippet that can be executed by the user in the docs
+     * @param string $scriptLabel
+     * @param string $description
+     * @param string $code
+     * @return void
+     */
+    public function addJsExecutableSnippet(
+        string $scriptLabel,
+        string $description,
+        string $code
+    ): void {
+        $this->jsCodeSnippets[] = [
+            'scriptLabel' => $scriptLabel,
+            'description' => $description,
+            'code' => $code
+        ];
+    }
+
+    /**
+     * Show the snippets that have been previously collected with ->addJsExecutableSnippet
+     * @return void
+     */
+    public function showJsExecutableSnippetsCodeBlock(): void
+    {
+        $tabs = null;
+        if (count($this->jsCodeSnippets) > 1) {
+            $tabs = new Tabs();
+        }
+        foreach ($this->jsCodeSnippets as $key => $row) {
+            $codeLanguage = "js";
+            $buttonsHtml = '<framelix-button theme="primary" icon="touch_app" onclick="FramelixDocs.runJsCode(this)">Run the code bellow</framelix-button>';
+            Buffer::start();
+            if ($row['description']) {
+                echo '<p>' . $row['description'] . '</p>';
+            }
+            echo $this->getCodeBlock($row['code'], $codeLanguage, additionalButtonsHtml: $buttonsHtml);
+            $contents = Buffer::get();
+            if ($tabs) {
+                $tabs->addTab($key, $row['scriptLabel'], $contents);
+            } else {
+                echo $contents;
+            }
+        }
+        $tabs?->show();
+        $this->jsCodeSnippets = [];
+    }
 
     /**
      * Show all code inside this callable without executing it
@@ -153,8 +222,8 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     public function getCodeBlock(
         string $code,
         ?string $codeLanguage = null,
-        bool $showLineNumbers = true,
-        ?string $downloadFilename = null
+        ?string $downloadFilename = null,
+        ?string $additionalButtonsHtml = null
     ): string {
         $lines = explode("\n", $code);
         $firstLine = null;
@@ -171,7 +240,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $lines[$key] = mb_substr(rtrim($line), $indent);
         }
         $newCode = rtrim(implode("\n", $lines));
-        $html = '<div class="code-block"><div class="buttons">';
+        $html = '<div class="code-block"><div class="buttons">' . $additionalButtonsHtml;
         $html .= '<framelix-button small theme="transparent" icon="content_paste_go" onclick="FramelixDocs.codeBlockAction(this, \'clipboard\')">Copy to clipboard</framelix-button>';
         if ($downloadFilename) {
             $html .= '<framelix-button small theme="transparent" icon="download" onclick=\'FramelixDocs.codeBlockAction(this, "download", ' . JsonUtils::encode(
@@ -179,7 +248,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 ) . ')\'>Download as file</framelix-button>';
         }
 
-        $html .= '</div><pre><code class="' . ($codeLanguage ? 'language-' . $codeLanguage : '') . (!$showLineNumbers ? ' nohljsln' : '') . '"></code></pre></div><script type="application/json">' . JsonUtils::encode(
+        $html .= '</div><pre><code class="' . ($codeLanguage ? 'language-' . $codeLanguage : '') . '"></code></pre></div><script type="application/json">' . JsonUtils::encode(
                 $newCode
             ) . '</script>';
         return $html;

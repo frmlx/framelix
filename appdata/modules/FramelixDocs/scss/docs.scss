@@ -99,14 +99,18 @@
     }
 
     code {
-      border-radius: var(--border-radius);
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
       display: block;
       padding: 10px;
       overflow: auto;
       white-space: break-spaces;
       word-break: break-all;
       color: #adbac7;
-      background: #22272e;
+      background: hsl(220, 7%, 8%);
+
+      html[data-color-scheme='light'] & {
+        background: hsla(220, 7%, 20%);
+      }
     }
   }
 
