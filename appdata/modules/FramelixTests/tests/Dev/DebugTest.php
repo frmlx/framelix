@@ -22,6 +22,6 @@ final class DebugTest extends TestCase
         $this->assertSame($expected, $actual);
         Buffer::start();
         Debug::dump('foo', true);
-        $this->assertMatchesRegularExpression('~console\.log~', Buffer::get());
+        $this->assertStringContainsString('framelix-debug-data', Buffer::get());
     }
 }
