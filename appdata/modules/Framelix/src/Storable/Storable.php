@@ -133,7 +133,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
     /**
      * Get a single storable by id
      * @param string|int|null $id
-     * @param string|null $connectionId Database connection id to use
+     * @param string|null $connectionId Override database connection id to use
      * @param bool|null $withChilds See self::getByCondition
      * @param bool|null $readable If set, only fetch id that match this readable status
      * @return static|null
@@ -154,7 +154,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
     /**
      * Get storables by given array of ids
      * @param array|null $ids
-     * @param string|null $connectionId Database connection id to use
+     * @param string|null $connectionId Override database connection id to use
      * @param bool|null $withChilds See self::getByCondition
      * @param bool|null $readable If set, only fetch id that match this readable status
      * @return static[]
@@ -221,11 +221,11 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
 
     /**
      * Get a single storable by a condition
-     * @param string|null $condition
-     * @param array|null $parameters
-     * @param array|string|null $sort
-     * @param int|null $offset $offset
-     * @param string|null $connectionId Database connection id to use
+     * @param string|null $condition Basically the WHERE condition
+     * @param array|null $parameters Parameters to replace in $condition
+     * @param array|string|null $sort Single or multiple database properties to sort by, +propName will sort ASC, -propName will sort DESC
+     * @param int|null $offset Offset (see SQL docs) from result, Limit (see SQL docs) here is automatically 1
+     * @param string|null $connectionId Override database connection id to use
      * @param bool|null $withChilds See self::getByCondition
      * @param bool|null $readable If set, only fetch id that match this readable status
      * @return static|null
@@ -258,12 +258,12 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
 
     /**
      * Get array of storables by a condition
-     * @param string|null $condition
-     * @param array|null $parameters
-     * @param array|string|null $sort
-     * @param int|null $limit
-     * @param int|null $offset
-     * @param string|null $connectionId Database connection id to use
+     * @param string|null $condition Basically the WHERE condition
+     * @param array|null $parameters Parameters to replace in $condition
+     * @param array|string|null $sort Single or multiple database properties to sort by, +propName will sort ASC, -propName will sort DESC
+     * @param int|null $limit Limit (see SQL docs) from result
+     * @param int|null $offset Offset (see SQL docs) from result
+     * @param string|null $connectionId Override database connection id to use
      * @param bool|null $withChilds Include all storables the inherited from called class, otherwise only the called class will be fetched
      *  If null is given, the system will automatically detect abstract class calls as true
      *  If bool is given, no automatic detection is enabled

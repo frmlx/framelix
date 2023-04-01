@@ -32,6 +32,7 @@
 
 html body {
   overflow: hidden;
+  --color-page-bg: var(--color-page-bg-stencil-weak);
 }
 
 html[data-layout="2"] .framelix-page {
@@ -351,6 +352,7 @@ html[data-sidebar-status=opened] {
   flex: 1 1 auto;
   line-height: 1.2;
   align-self: center;
+  padding: 2px 0;
 }
 
 .framelix-sidebar-label-nowrap {
@@ -456,18 +458,24 @@ html[data-sidebar-status=opened] .framelix-sidebar-toggle .icon {
   background: var(--sidebar-bg);
   transition: 0.2s;
 }
+html[data-layout="2"] .framelix-top-bar {
+  background: transparent;
+  color: white;
+}
 .framelix-top-bar framelix-button {
   font-size: 24px;
   min-width: 45px;
   border-radius: 0;
 }
 .framelix-top-bar .framelix-page-title {
+  --light-color: calc(255 * var(--is-dark-mode));
   margin: 0;
   flex: 1 1 auto;
   font-size: inherit;
   padding: 5px 20px;
   white-space: break-spaces;
-  border-left: 2px solid var(--color-page-bg-stencil-strong);
+  border-left: 2px solid rgba(var(--light-color), var(--light-color), var(--light-color), 0.07);
+  border-bottom: 2px solid rgba(var(--light-color), var(--light-color), var(--light-color), 0.07);
   display: flex;
   align-items: center;
 }

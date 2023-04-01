@@ -10,7 +10,7 @@ use Framelix\Framelix\ObjectTransformable;
 interface StorablePropertyInterface extends ObjectTransformable
 {
     /**
-     * Setup the property database schema definition to this storable property itself
+     * Set up the property database schema definition to this storable property itself
      * This defines how the column will be created in the database
      * @param StorableSchemaProperty $storableSchemaProperty
      */

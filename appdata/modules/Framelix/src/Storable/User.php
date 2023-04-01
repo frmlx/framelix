@@ -24,13 +24,10 @@ use function strlen;
  * @property mixed|null $roles
  * @property string|null $twoFactorSecret
  * @property mixed|null $twoFactorBackupCodes
+ * @property mixed|null $settings
  */
 class User extends StorableExtended
 {
-    /**
-     * Internal cache
-     * @var array
-     */
     private static array $cache = [];
 
     /**
@@ -106,9 +103,9 @@ class User extends StorableExtended
     }
 
     /**
-     * Get by email
+     * Get a user by given email
      * @param string $email
-     * @param bool $ignoreLocked
+     * @param bool $ignoreLocked If true, return even if user is locked
      * @return self|null
      */
     public static function getByEmail(string $email, bool $ignoreLocked = false): ?self
@@ -125,6 +122,7 @@ class User extends StorableExtended
         parent::setupStorableSchema($selfStorableSchema);
         $selfStorableSchema->connectionId = FRAMELIX_MODULE;
         $selfStorableSchema->properties['roles']->lazyFetch = true;
+        $selfStorableSchema->properties['settings']->lazyFetch = true;
         $selfStorableSchema->addIndex('email', 'unique');
     }
 
@@ -133,10 +131,6 @@ class User extends StorableExtended
         return View::getUrl(View\Backend\User\Index::class)->setParameter('id', $this);
     }
 
-    /**
-     * Add a role
-     * @param string $role
-     */
     public function addRole(string $role): void
     {
         $roles = $this->roles ?? [];
@@ -146,10 +140,6 @@ class User extends StorableExtended
         }
     }
 
-    /**
-     * Add a role
-     * @param string $role
-     */
     public function removeRole(string $role): void
     {
         $roles = $this->roles ?? [];
@@ -160,20 +150,11 @@ class User extends StorableExtended
         }
     }
 
-    /**
-     * Set password
-     * @param string $password
-     */
-    public function setPassword(#[SensitiveParameter] string $password): void
+    public function setPassword(#[SensitiveParameter] string $plainPassword): void
     {
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
+        $this->password = password_hash($plainPassword, PASSWORD_DEFAULT);
     }
 
-    /**
-     * Verify given password
-     * @param string $password
-     * @return bool
-     */
     public function passwordVerify(#[SensitiveParameter] string $password): bool
     {
         return password_verify($password, $this->password);
