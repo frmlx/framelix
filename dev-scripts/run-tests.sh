@@ -71,7 +71,7 @@ fi
 if [ $TESTTYPE == "playwright" ]; then
   cecho b "# Playwright End-to-End Tests"
   PLAYWRIGHT_CACHE=/framelix/system/playwright/cache
-  docker $DOCKER_EXECPARAMS "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE && rm -f /framelix/userdata/*/private/config/01-core.php && rm -f /framelix/userdata/*/private/config/02-ui.php && mkdir -p /framelix/userdata/playwright && chmod 0777 -R /framelix/userdata/playwright && rm -Rf /framelix/userdata/playwright/results && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium && npx playwright test"
+  docker $DOCKER_EXECPARAMS "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE && mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium && npx playwright test"
 
   RESULT=$?
   if [ "$RESULT" == "0" ]; then
