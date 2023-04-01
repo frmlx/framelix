@@ -145,9 +145,13 @@ class Mysql
             }
             return "(" . implode(" || ", $condition) . ")";
         }
-        return 'JSON_CONTAINS(' . self::getConditionJsonGetValue($propertyName,
-                $keyPath) . ', ' . $this->escapeValue($value,
-                $fixedCast) . ') = 1';
+        return 'JSON_CONTAINS(' . self::getConditionJsonGetValue(
+                $propertyName,
+                $keyPath
+            ) . ', ' . $this->escapeValue(
+                $value,
+                $fixedCast
+            ) . ') = 1';
     }
 
     /**

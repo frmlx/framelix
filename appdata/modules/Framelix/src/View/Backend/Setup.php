@@ -22,8 +22,6 @@ use Framelix\Framelix\Utils\RandomGenerator;
 use Throwable;
 
 use function file_exists;
-use function file_put_contents;
-use function implode;
 use function sleep;
 use function strtolower;
 
@@ -91,7 +89,12 @@ class Setup extends View
                 // just calling db to make sure db is running before finalizing setup
                 $db = Mysql::get();
 
-                Framelix::createInitialUserConfig(FRAMELIX_MODULE, Config::$salts["default"], Config::$applicationHost, Config::$applicationUrlPrefix);
+                Framelix::createInitialUserConfig(
+                    FRAMELIX_MODULE,
+                    Config::$salts["default"],
+                    Config::$applicationHost,
+                    Config::$applicationUrlPrefix
+                );
 
                 // include now, so we can deal with errors in the catch handler, just in case
                 require $userConfigFileCore;

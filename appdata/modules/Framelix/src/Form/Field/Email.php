@@ -7,7 +7,6 @@ use Framelix\Framelix\Lang;
 use function is_string;
 use function preg_match;
 use function preg_quote;
-use function strlen;
 
 /**
  * A email field with email format validation

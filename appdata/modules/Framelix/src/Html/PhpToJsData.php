@@ -30,7 +30,9 @@ class PhpToJsData implements JsonSerializable
           (function () {
             const instance = FramelixObjectUtils.phpJsonToJs(<?=$jsonData?>)
             /** @type {FramelixHtmlAttributes|null} containerAttr */
-            const containerAttr = FramelixObjectUtils.phpJsonToJs(<?=JsonUtils::encode($additionalContainerAttributes)?>)
+            const containerAttr = FramelixObjectUtils.phpJsonToJs(<?=JsonUtils::encode(
+                $additionalContainerAttributes
+            )?>)
             instance.container.addClass('framelix-form-field-single')
             FramelixInit.initialized.then(function () {
               instance.render()

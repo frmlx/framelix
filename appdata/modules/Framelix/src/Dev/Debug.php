@@ -3,7 +3,6 @@
 namespace Framelix\Framelix\Dev;
 
 use Framelix\Framelix\Framelix;
-use Framelix\Framelix\Utils\RandomGenerator;
 
 use function htmlentities;
 use function is_bool;

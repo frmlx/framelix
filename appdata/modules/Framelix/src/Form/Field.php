@@ -159,8 +159,10 @@ abstract class Field implements JsonSerializable
      */
     final public function show(): void
     {
-        PhpToJsData::renderToHtml($this->jsonSerialize(),
-            HtmlAttributes::create(classes: ["framelix-form-field-single"]));
+        PhpToJsData::renderToHtml(
+            $this->jsonSerialize(),
+            HtmlAttributes::create(classes: ["framelix-form-field-single"])
+        );
     }
 
     /**

@@ -105,8 +105,10 @@ class StorableMetaProperty
         }
         $field = new Field\Text();
         if ($storableSchemaProperty->storableClass || $storableSchemaProperty->arrayStorableClass) {
-            $storableClass = $storableSchemaProperty->storableClass ? new $storableSchemaProperty->storableClass() : null;
-            $arrayStorableClass = $storableSchemaProperty->arrayStorableClass ? new $storableSchemaProperty->arrayStorableClass() : null;
+            $storableClass = $storableSchemaProperty->storableClass ? new $storableSchemaProperty->storableClass(
+            ) : null;
+            $arrayStorableClass = $storableSchemaProperty->arrayStorableClass ? new $storableSchemaProperty->arrayStorableClass(
+            ) : null;
             if ($storableClass instanceof SystemValue || $arrayStorableClass instanceof SystemValue) {
                 if ($storableClass) {
                     $entries = $storableClass::getEntries($this->getValue());

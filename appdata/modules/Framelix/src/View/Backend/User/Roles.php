@@ -36,8 +36,13 @@ class Roles extends View
                 }
             }
             // check if at least one admin exist
-            $admins = User::getByCondition(Mysql::get()->getConditionJsonContainsArrayValue('roles', '$',
-                    'admin') . " && id != " . $this->storable);
+            $admins = User::getByCondition(
+                Mysql::get()->getConditionJsonContainsArrayValue(
+                    'roles',
+                    '$',
+                    'admin'
+                ) . " && id != " . $this->storable
+            );
             if (!$admins && !User::hasRole("admin", $this->storable)) {
                 Response::showFormValidationErrorResponse('__framelix_user_edituser_validation_adminrequired__');
             }

@@ -531,8 +531,10 @@ class Table implements JsonSerializable
                             $footerSums[$columnName]['value'] += $value;
                         } elseif ($value instanceof Time) {
                             $footerSums[$columnName]['type'] = "time";
-                            $footerSums[$columnName]['value'] = round($footerSums[$columnName]['value'] + Time::toHours($value),
-                                4);
+                            $footerSums[$columnName]['value'] = round(
+                                $footerSums[$columnName]['value'] + Time::toHours($value),
+                                4
+                            );
                         }
                     }
                     $sortValue = $rowValues['sortValues'][$columnName] ?? null;
