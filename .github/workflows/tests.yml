@@ -24,8 +24,22 @@ jobs:
       - name: Run Playwright tests
         run: bash dev-scripts/run-tests.sh -t playwright && echo "MESSAGE=$(cat userdata/playwright/badge-message.txt)" >> $GITHUB_ENV && echo "COLOR=$(cat userdata/playwright/badge-color.txt)" >> $GITHUB_ENV
 
+      - name: Upload userdata after playwright tests to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: userdata-after-playwright
+          path: ./userdata
+          retention-days: 5
+
       - name: Run PHP Unit Tests
         run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/tmp/clover-coverage.txt)" >> $GITHUB_ENV
+
+      - name: Upload userdata after phpunit tests to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: userdata-after-phpunit
+          path: ./userdata
+          retention-days: 5
 
       - name: Create Playwright Badge
         uses: schneegans/dynamic-badges-action@v1.6.0
@@ -65,7 +79,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: playwright-results
+          name: userdata
           path: ./userdata
           retention-days: 5
 
