@@ -524,14 +524,16 @@ class FramelixTable {
         }
         if (this.checkboxColumn) {
           let cellAttributes = new FramelixHtmlAttributes()
-          cellAttributes.setStyle('width', '0%')
           cellAttributes.set('data-column-name', '_checkbox')
           cellAttributes.set('data-flag-ignoresort', '1')
           cellAttributes.set('data-flag-ignoreurl', '1')
-          let cellValue = '<label class="framelix-form-field"><input type="checkbox" name="_checkbox" value="' + i + '"></label>'
+          cellAttributes.set('data-flag-icon', '1')
+
+          let cellValue = '<framelix-button theme="transparent"><input type="checkbox" name="_checkbox" value="' + i + '"></framelix-button>'
           if (rowGroup === 'thead') cellValue = `<div class="framelix-table-cell-header">${cellValue}</div>`
+          if(rowGroup === 'thead' && i !== 0) cellValue = ''
           tableHtml += '<' + cellType + ' ' + cellAttributes.toString() + '>'
-          tableHtml += '<label class="framelix-form-field"><input type="checkbox" name="_checkbox" value="' + i + '"></label>'
+          tableHtml += cellValue
           tableHtml += '</' + cellType + '>'
         }
         for (let j = 0; j < this.columnOrder.length; j++) {

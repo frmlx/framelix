@@ -188,7 +188,7 @@ class TwoFactor extends View
             }
         } elseif (Form::isFormSubmitted('pw-verify-2fa')) {
             if (!$this->storable->passwordVerify(Request::getPost('password'))) {
-                Response::showFormValidationErrorResponse(['password' => '__framelix_password_incorrect__']);
+                Response::stopWithFormValidationResponse(['password' => '__framelix_password_incorrect__']);
             }
             Session::set(__CLASS__ . "-pw-verified", true);
             Url::getBrowserUrl()->redirect();

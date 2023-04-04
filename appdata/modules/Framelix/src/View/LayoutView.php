@@ -201,6 +201,10 @@ abstract class LayoutView extends View
               )?>;
               FramelixConfig.compiledFileUrls = <?=JsonUtils::encode($distUrls)?>;
               FramelixConfig.modules = <?=JsonUtils::encode(Framelix::$registeredModules)?>;
+              FramelixConfig.dateFormatJs = <?=JsonUtils::encode(Config::$dateFormatJs)?>;
+              FramelixConfig.dateFormatPhp = <?=JsonUtils::encode(Config::$dateFormatPhp)?>;
+              FramelixConfig.dateTimeFormatJs = <?=JsonUtils::encode(Config::$dateTimeFormatJs)?>;
+              FramelixConfig.dateTimeFormatPhp = <?=JsonUtils::encode(Config::$dateTimeFormatPhp)?>;
               FramelixLang.lang = <?=JsonUtils::encode(Config::$language)?>;
               FramelixLang.langFallback = <?=JsonUtils::encode(Config::$languageFallback)?>;
               FramelixLang.languagesAvailable = <?=JsonUtils::encode(Config::$languagesAvailable)?>;

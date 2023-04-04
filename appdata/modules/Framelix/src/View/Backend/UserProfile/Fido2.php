@@ -109,7 +109,7 @@ class Fido2 extends View
             }
         } elseif (Form::isFormSubmitted('pw-verify-fido')) {
             if (!$this->storable->user->passwordVerify(Request::getPost('password'))) {
-                Response::showFormValidationErrorResponse(['password' => '__framelix_password_incorrect__']);
+                Response::stopWithFormValidationResponse(['password' => '__framelix_password_incorrect__']);
             }
             Session::set(__CLASS__ . "-pw-verified", true);
             Url::getBrowserUrl()->redirect();

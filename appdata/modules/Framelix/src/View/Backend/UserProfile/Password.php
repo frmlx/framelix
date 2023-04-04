@@ -22,10 +22,10 @@ class Password extends View
             $form = $this->getForm();
             $form->validate();
             if (!$this->storable->passwordVerify(Request::getPost('passwordNow'))) {
-                Response::showFormValidationErrorResponse('__framelix_password_notcorrect__');
+                Response::stopWithFormValidationResponse('__framelix_password_notcorrect__');
             }
             if (Request::getPost('passwordNew') !== Request::getPost('password2')) {
-                Response::showFormValidationErrorResponse('__framelix_password_notmatch__');
+                Response::stopWithFormValidationResponse('__framelix_password_notmatch__');
             }
             $this->storable->setPassword(Request::getPost('passwordNew'));
             $this->storable->store();

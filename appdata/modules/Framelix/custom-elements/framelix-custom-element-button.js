@@ -21,7 +21,7 @@ class FramelixCustomElementButton extends FramelixCustomElement {
       let html = ''
       if (icon) html += '<div class="icon"><div class="material-icons">' + icon + '</div></div>'
       const text = await FramelixLang.get(this.originalHtml.trim())
-      if (text.length) html += '<div class="label">' + text + '</div>'
+      if (text.length) html += '<label class="label">' + text + '</label>'
       this.innerHTML = html
     }
     if (bgcolor) {

@@ -61,6 +61,7 @@ class Date implements StorablePropertyInterface
         if (!$dateTime) {
             return null;
         }
+        $dateTime->setTime(0, 0);
         $instance = new self();
         $instance->dateTime = $dateTime;
         return $instance;
@@ -181,8 +182,7 @@ class Date implements StorablePropertyInterface
     }
 
     /**
-     * Get the database value that is to be stored in database when calling store()
-     * This is always the actual value that represent to current database value of the property
+     * Database time is always UTC time, no matter of timezone setting
      * @return string
      */
     public function getDbValue(): string
@@ -191,12 +191,13 @@ class Date implements StorablePropertyInterface
     }
 
     /**
-     * Get a human-readable html representation of this instace
+     * Get a human-readable html representation of this instance
+     * This uses the <framelix-time> tag which display date
      * @return string
      */
     public function getHtmlString(): string
     {
-        return $this->dateTime->format("d.m.Y");
+        return '<framelix-time datetime="' . $this->dateTime->format('c') . '" format="'.Config::$dateFormatJs.'"></framelix-time>';
     }
 
     /**
@@ -214,7 +215,7 @@ class Date implements StorablePropertyInterface
      */
     public function getRawTextString(): string
     {
-        return $this->dateTime->format("d.m.Y");
+        return $this->dateTime->format(Config::$dateFormatPhp);
     }
 
     /**

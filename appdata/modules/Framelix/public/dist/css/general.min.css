@@ -696,33 +696,6 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
 .framelix-table > table > tfoot > tr > td[data-flag-smallfont="1"] {
   font-size: 80%;
 }
-.framelix-table > table > tbody > tr > td[data-flag-icon="1"],
-.framelix-table > table > thead > tr > td[data-flag-icon="1"],
-.framelix-table > table > tfoot > tr > td[data-flag-icon="1"] {
-  white-space: nowrap;
-  width: 1%;
-  min-width: 30px;
-  vertical-align: middle;
-  padding: 0;
-  height: 100%;
-}
-html[data-touch="1"] .framelix-table > table > tbody > tr > td[data-flag-icon="1"],
-html[data-touch="1"] .framelix-table > table > thead > tr > td[data-flag-icon="1"],
-html[data-touch="1"] .framelix-table > table > tfoot > tr > td[data-flag-icon="1"] {
-  min-height: 30px;
-}
-.framelix-table > table > tbody > tr > td[data-flag-icon="1"] framelix-button,
-.framelix-table > table > thead > tr > td[data-flag-icon="1"] framelix-button,
-.framelix-table > table > tfoot > tr > td[data-flag-icon="1"] framelix-button {
-  height: 100%;
-  border-radius: 0;
-  font-size: 16px;
-}
-html[data-touch="1"] .framelix-table > table > tbody > tr > td[data-flag-icon="1"] framelix-button,
-html[data-touch="1"] .framelix-table > table > thead > tr > td[data-flag-icon="1"] framelix-button,
-html[data-touch="1"] .framelix-table > table > tfoot > tr > td[data-flag-icon="1"] framelix-button {
-  font-size: 24px;
-}
 .framelix-table > table > tbody > tr > td,
 .framelix-table > table > tbody > tr > th,
 .framelix-table > table > thead > tr > td,
@@ -735,19 +708,44 @@ html[data-touch="1"] .framelix-table > table > tfoot > tr > td[data-flag-icon="1
   vertical-align: middle;
   box-sizing: border-box;
 }
-.framelix-table > table > tbody > tr > [data-column-name=_checkbox],
-.framelix-table > table > thead > tr > [data-column-name=_checkbox],
-.framelix-table > table > tfoot > tr > [data-column-name=_checkbox] {
-  text-align: center;
+.framelix-table > table > tbody > tr > td[data-flag-icon="1"],
+.framelix-table > table > tbody > tr > th[data-flag-icon="1"],
+.framelix-table > table > thead > tr > td[data-flag-icon="1"],
+.framelix-table > table > thead > tr > th[data-flag-icon="1"],
+.framelix-table > table > tfoot > tr > td[data-flag-icon="1"],
+.framelix-table > table > tfoot > tr > th[data-flag-icon="1"] {
+  white-space: nowrap;
+  width: 1%;
+  min-width: 30px;
+  vertical-align: middle;
   padding: 0;
+  height: 100%;
 }
-.framelix-table > table > tbody > tr > [data-column-name=_checkbox] label,
-.framelix-table > table > thead > tr > [data-column-name=_checkbox] label,
-.framelix-table > table > tfoot > tr > [data-column-name=_checkbox] label {
-  padding: 0;
-  width: 100%;
-  display: block;
-  cursor: pointer;
+html[data-touch="1"] .framelix-table > table > tbody > tr > td[data-flag-icon="1"],
+html[data-touch="1"] .framelix-table > table > tbody > tr > th[data-flag-icon="1"],
+html[data-touch="1"] .framelix-table > table > thead > tr > td[data-flag-icon="1"],
+html[data-touch="1"] .framelix-table > table > thead > tr > th[data-flag-icon="1"],
+html[data-touch="1"] .framelix-table > table > tfoot > tr > td[data-flag-icon="1"],
+html[data-touch="1"] .framelix-table > table > tfoot > tr > th[data-flag-icon="1"] {
+  min-height: 30px;
+}
+.framelix-table > table > tbody > tr > td[data-flag-icon="1"] framelix-button,
+.framelix-table > table > tbody > tr > th[data-flag-icon="1"] framelix-button,
+.framelix-table > table > thead > tr > td[data-flag-icon="1"] framelix-button,
+.framelix-table > table > thead > tr > th[data-flag-icon="1"] framelix-button,
+.framelix-table > table > tfoot > tr > td[data-flag-icon="1"] framelix-button,
+.framelix-table > table > tfoot > tr > th[data-flag-icon="1"] framelix-button {
+  height: 100%;
+  border-radius: 0;
+  font-size: 16px;
+}
+html[data-touch="1"] .framelix-table > table > tbody > tr > td[data-flag-icon="1"] framelix-button,
+html[data-touch="1"] .framelix-table > table > tbody > tr > th[data-flag-icon="1"] framelix-button,
+html[data-touch="1"] .framelix-table > table > thead > tr > td[data-flag-icon="1"] framelix-button,
+html[data-touch="1"] .framelix-table > table > thead > tr > th[data-flag-icon="1"] framelix-button,
+html[data-touch="1"] .framelix-table > table > tfoot > tr > td[data-flag-icon="1"] framelix-button,
+html[data-touch="1"] .framelix-table > table > tfoot > tr > th[data-flag-icon="1"] framelix-button {
+  font-size: 24px;
 }
 .framelix-table > table > tbody > tr.framelix-table-row-highlight,
 .framelix-table > table > thead > tr.framelix-table-row-highlight,
@@ -1095,6 +1093,7 @@ framelix-button:not([haslabel]) .icon {
   background: transparent;
 }
 framelix-button .label {
+  cursor: pointer;
   flex: 1 1 auto;
   padding: var(--padding);
   justify-content: center;
@@ -1108,6 +1107,9 @@ framelix-button:active {
 framelix-button[small] {
   font-size: 0.8rem;
   --padding: 4px 6px;
+}
+framelix-button[disabled] {
+  cursor: default !important;
 }
 framelix-button[block] {
   display: flex;

@@ -5,8 +5,8 @@ namespace Framelix\Framelix\Network;
 use Framelix\Framelix\Exception\SoftError;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Storable\StorableFile;
+use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\JsonUtils;
-use Framelix\Framelix\Utils\StringUtils;
 
 use function basename;
 use function call_user_func_array;
@@ -91,33 +91,19 @@ class Response
     }
 
     /**
-     * Show a form async submit response, used after successfully async submit when no redirect is required
-     * If Toast messages where issued, then the messages will be displayed as well
-     * @param string|null $modalMessage If set, then display this message in a modal window
-     * @param bool $reloadTab If the form was submitted inside a tab view, then just reload the tab
+     * Stop script execution and output a json response to use in frontend
+     * If toast messages where issued, then the messages will be displayed as well
+     * @param array|string|null $errorMessages If null, form validation is considered successfull
      * @return never
      */
-    public static function showFormAsyncSubmitResponse(?string $modalMessage = null, bool $reloadTab = false): never
+    public static function stopWithFormValidationResponse(array|string|null $errorMessages = null): never
     {
         http_response_code(200);
-        self::header('x-form-async-response: 1');
         JsonUtils::output([
-            'modalMessage' => $modalMessage,
-            'reloadTab' => $reloadTab,
-            'toastMessages' => Toast::getQueueMessages(true)
+            'toastMessages' => Toast::getQueueMessages(true),
+            'errorMessages' => $errorMessages,
+            'buffer' => Buffer::getAll()
         ]);
-        throw new SoftError();
-    }
-
-    /**
-     * Show a form validation error response, used for async form validation
-     * @param array|string|null $messages If an array, then keys are form field names, if field is not found, it will throw the error bellow the form button
-     * @return never
-     */
-    public static function showFormValidationErrorResponse(array|string|null $messages): never
-    {
-        http_response_code(406);
-        JsonUtils::output(StringUtils::stringify($messages));
         throw new SoftError();
     }
 }

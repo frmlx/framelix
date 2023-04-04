@@ -28,7 +28,7 @@ class Email extends View
             $form->validate();
             $emailNew = strtolower(Request::getPost('emailnew'));
             if ($emailNew === strtolower($this->storable->email)) {
-                Response::showFormValidationErrorResponse('__framelix_view_backend_userprofile_email_equal__');
+                Response::stopWithFormValidationResponse('__framelix_view_backend_userprofile_email_equal__');
             }
             if (\Framelix\Framelix\Utils\Email::isAvailable()) {
                 $token1 = UserVerificationToken::create(

@@ -83,8 +83,8 @@ class FramelixToast {
   }
 
   /**
-   * Show info toast (gray)
-   * @param {string|Cash} message
+   * Show info toast
+   * @param {string|Cash|FramelixRequest} message
    * @param {number|string=} delaySeconds
    */
   static info (message, delaySeconds = 'auto') {
@@ -93,8 +93,8 @@ class FramelixToast {
   }
 
   /**
-   * Show success toast (gray)
-   * @param {string|Cash} message
+   * Show success toast
+   * @param {string|Cash|FramelixRequest} message
    * @param {number|string=} delaySeconds
    */
   static success (message, delaySeconds = 'auto') {
@@ -103,8 +103,8 @@ class FramelixToast {
   }
 
   /**
-   * Show warning toast (gray)
-   * @param {string|Cash} message
+   * Show warning toast
+   * @param {string|Cash|FramelixRequest} message
    * @param {number|string=} delaySeconds
    */
   static warning (message, delaySeconds = 'auto') {
@@ -113,8 +113,8 @@ class FramelixToast {
   }
 
   /**
-   * Show error toast (gray)
-   * @param {string|Cash} message
+   * Show error toast
+   * @param {string|Cash|FramelixRequest} message
    * @param {number|string=} delaySeconds
    */
   static error (message, delaySeconds = 'auto') {
@@ -144,12 +144,20 @@ class FramelixToast {
     if (row.type === 'info') colorClass = ''
 
     let delay = typeof row.delay === 'number' && row.delay > 0 ? row.delay * 1000 : 1000 * 300
-    const message = await FramelixLang.get(row.message) ?? ''
+    let messagePromise
+    if (row.message instanceof FramelixRequest) {
+      FramelixToast.messageContainer.html('<div class="framelix-loading"></div>')
+      messagePromise = row.message.getResponseData()
+    } else {
+      messagePromise = FramelixLang.get(row.message)
+      if (!messagePromise) {
+        messagePromise = new Promise(function (resolve) {
+          resolve('')
+        })
+      }
+    }
     if (row.delay === 'auto') {
       delay = 5000
-      if (message.length > 50) delay += 3000
-      if (message.length > 100) delay += 3000
-      if (message.length > 150) delay += 3000
     }
     FramelixToast.loaderContainer.css({
       'width': '0',
@@ -167,7 +175,9 @@ class FramelixToast {
     }, 10)
     FramelixToast.container.attr('role', row.type === 'error' ? 'alert' : 'status').attr('aria-live', row.type === 'error' ? 'assertive' : 'polite')
     FramelixToast.innerContainer.attr('class', 'framelix-toast-inner ' + colorClass)
-    FramelixToast.messageContainer.html(message)
+    messagePromise.then(function (message) {
+      FramelixToast.messageContainer.html(message)
+    })
     FramelixToast.updateQueueCount()
     FramelixToast.showNextTo = setTimeout(function () {
       FramelixToast.showNextTo = null

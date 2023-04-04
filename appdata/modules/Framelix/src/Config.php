@@ -281,6 +281,30 @@ class Config
     public static array $environmentConfig;
 
     /**
+     * The human-readable default dateTime format in PHP
+     * @var string
+     */
+    public static string $dateTimeFormatPhp = "d.m.Y H:i:s";
+
+    /**
+     * The human-readable default date format in PHP
+     * @var string
+     */
+    public static string $dateFormatPhp = "d.m.Y";
+
+    /**
+     * The human-readable default dateTime format in javascript
+     * @var string
+     */
+    public static string $dateTimeFormatJs = "DD.MM.YYYY HH:mm:ss";
+
+    /**
+     * The human-readable default date format in javascript
+     * @var string
+     */
+    public static string $dateFormatJs = "DD.MM.YYYY";
+
+    /**
      * Called when the module is registered the first time
      * This is used for module defaults
      * @return void

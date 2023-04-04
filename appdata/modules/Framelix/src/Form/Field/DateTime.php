@@ -61,13 +61,13 @@ class DateTime extends Text
             if ($this->minDateTime !== null && $valueMin < $this->minDateTime) {
                 return Lang::get(
                     '__framelix_form_validation_mindate__',
-                    ['date' => $this->minDateTime->getRawTextString()]
+                    ['date' => $this->minDateTime->getHtmlString()]
                 );
             }
             if ($this->maxDateTime !== null & $valueMax > $this->maxDateTime) {
                 return Lang::get(
                     '__framelix_form_validation_maxdate__',
-                    ['date' => $this->maxDateTime->getRawTextString()]
+                    ['date' => $this->maxDateTime->getHtmlString()]
                 );
             }
         }

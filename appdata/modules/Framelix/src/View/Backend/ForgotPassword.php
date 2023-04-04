@@ -40,7 +40,7 @@ class ForgotPassword extends View
             $form = $this->getFormNewPassword();
             $form->validate();
             if (Request::getPost('password') !== Request::getPost('password2')) {
-                Response::showFormValidationErrorResponse('__framelix_password_notmatch__');
+                Response::stopWithFormValidationResponse('__framelix_password_notmatch__');
             }
             $this->token->user->setPassword(Request::getPost('password'));
             $this->token->user->store();

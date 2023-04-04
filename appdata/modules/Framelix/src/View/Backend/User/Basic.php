@@ -25,7 +25,7 @@ class Basic extends View
             $form->validate();
             $form->setStorableValues($this->storable);
             if (User::hasRole("admin") && $this->storable->flagLocked) {
-                Response::showFormValidationErrorResponse('__framelix_user_edituser_validation_adminrequired__');
+                Response::stopWithFormValidationResponse('__framelix_user_edituser_validation_adminrequired__');
             }
             $this->storable->store();
             Toast::success('__framelix_saved__');

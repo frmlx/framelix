@@ -29,7 +29,7 @@ class FramelixDateUtils {
    * @see Format see https://day.js.org/docs/en/parse/string-format
    * @return {string|null} Null of value is no valid date/time
    */
-  static anyToFormat (value, outputFormat = 'DD.MM.YYYY', expectedInputFormats = 'DD.MM.YYYY,YYYY-MM-DD') {
+  static anyToFormat (value, outputFormat = FramelixConfig.dateFormatJs, expectedInputFormats = FramelixConfig.dateFormatJs + ',YYYY-MM-DD') {
     const instance = FramelixDateUtils.anyToDayJs(value, expectedInputFormats)
     if (instance === null) return null
     return instance.format(outputFormat)
@@ -42,7 +42,7 @@ class FramelixDateUtils {
    * @see Format see https://day.js.org/docs/en/parse/string-format
    * @return {dayjs|null} Null of value is no valid date/time
    */
-  static anyToDayJs (value, expectedInputFormats = 'DD.MM.YYYY,YYYY-MM-DD') {
+  static anyToDayJs (value, expectedInputFormats = FramelixConfig.dateFormatJs + ',YYYY-MM-DD') {
     if (value === null || value === undefined) return null
     // number is considered a unix timestamp
     if (typeof value === 'number') {
@@ -62,7 +62,7 @@ class FramelixDateUtils {
    * @see Format see https://day.js.org/docs/en/parse/string-format
    * @return {number|null} Null of value is no valid date/time
    */
-  static anyToUnixtime (value, expectedInputFormats = 'DD.MM.YYYY,YYYY-MM-DD') {
+  static anyToUnixtime (value, expectedInputFormats = FramelixConfig.dateFormatJs + ',YYYY-MM-DD') {
     const instance = FramelixDateUtils.anyToDayJs(value, expectedInputFormats)
     if (instance === null) return null
     return instance.unix()

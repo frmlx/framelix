@@ -44,7 +44,7 @@ class Setup extends View
             $form = $this->getForm();
             $form->validate();
             if (Request::getPost('password') !== Request::getPost('password2')) {
-                Response::showFormValidationErrorResponse(['password2' => '__framelix_password_notmatch__']);
+                Response::stopWithFormValidationResponse(['password2' => '__framelix_password_notmatch__']);
             }
             try {
                 $url = Url::create(strtolower(Request::getPost('applicationUrl')));
@@ -109,7 +109,7 @@ class Setup extends View
                 if (file_exists($userConfigFileUi)) {
                     unlink($userConfigFileUi);
                 }
-                Response::showFormValidationErrorResponse($e->getMessage() . "\n" . $e->getTraceAsString());
+                Response::stopWithFormValidationResponse($e->getMessage() . "\n" . $e->getTraceAsString());
             }
             Toast::success('__framelix_setup_done__');
             Url::getBrowserUrl()->redirect();

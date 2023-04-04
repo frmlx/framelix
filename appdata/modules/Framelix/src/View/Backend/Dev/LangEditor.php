@@ -102,7 +102,7 @@ class LangEditor extends View
                 }
             }
             Toast::success('__framelix_saved__');
-            Response::showFormAsyncSubmitResponse();
+            Response::stopWithFormValidationResponse();
         }
         $this->showContentBasedOnRequestType();
     }

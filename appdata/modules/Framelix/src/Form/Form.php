@@ -59,10 +59,10 @@ class Form implements JsonSerializable
     public array $buttons = [];
 
     /**
-     * Submit method
-     * post or get
+     * Submit method (only for non async submits, async is always post)
      * @var string
      */
+    #[ExpectedValues(values: ["post", "get"])]
     public string $submitMethod = 'post';
 
     /**
@@ -73,13 +73,25 @@ class Form implements JsonSerializable
     public Url|View|string|null $submitUrl = null;
 
     /**
-     * The target to submit to
-     * Only required when submitAsync = false
-     * currentwindow = Same browser window
-     * newwindow = New browser window (tab)
+     * The target to render the submit response to
+     *
+     * auto = if form is inside
+     *   - a framelix tab: it behaves like "currenttab"
+     *   - a framelix modal: it behaves like "currentmodal"
+     *   - else: it behaves like "pagecontent"
+     *
+     * Non-Async behaviour:
+     * _blank = Open a new browser window (only when submitAsync = false)
+     *
+     * Async behaviour (Rendering only happens when response contains buffered output data):
+     * newmodal = Render to a new modal
+     * currentmodal =  Render to a current modal (fallback to newmodal if form is not inside a modal)
+     * currenttab = Render to a current tab (fallback to newmodal if form is not inside a modal)
+     * pagecontent = Render to the whole page content container (overrides everything else)
+     * selector: = If it starts with "selector:", everything after : will be considered a CSS selector to render to
+     * none = Even if there is output data, do nothing with it
      */
-    #[ExpectedValues(values: ["currentwindow", "newwindow"])]
-    public string $submitTarget = 'currentwindow';
+    public string $submitResponseRenderTarget = 'auto';
 
     /**
      * Submit the form async
@@ -100,8 +112,7 @@ class Form implements JsonSerializable
      * Execute the javascript code after form submit
      * @var string|null
      */
-    public ?string $executeAfterAsyncSubmit = /*language=js*/
-        null;
+    public ?string $executeAfterAsyncSubmit = null;
 
     /**
      * Validation message to show in the frontend
@@ -413,7 +424,7 @@ class Form implements JsonSerializable
             }
         }
         if (!$success && $asyncValidation && Request::isAsync()) {
-            Response::showFormValidationErrorResponse($messages);
+            Response::stopWithFormValidationResponse($messages);
         }
         return $success;
     }

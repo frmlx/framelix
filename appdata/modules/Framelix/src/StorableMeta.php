@@ -269,8 +269,7 @@ abstract class StorableMeta implements JsonSerializable
         if (!($this->storable instanceof StorableExtended)) {
             return null;
         }
-        $this->tableDefault->addColumnFlag('timestamp', Table::COLUMNFLAG_SMALLFONT);
-        $this->tableDefault->addColumnFlag('timestamp', Table::COLUMNFLAG_SMALLWIDTH);
+        $this->tableDefault->addColumnFlag('timestamp', Table::COLUMNFLAG_SMALLFONT, Table::COLUMNFLAG_SMALLWIDTH);
         $property = $this->createProperty("timestamp");
         $property->setLabel("__framelix_modified_timestamp__");
         $property->setVisibility(null, false);
@@ -471,8 +470,7 @@ abstract class StorableMeta implements JsonSerializable
      */
     protected function addDefaultPropertiesAtStart(): void
     {
-        $this->tableDefault->addColumnFlag('id', Table::COLUMNFLAG_SMALLWIDTH);
-        $this->tableDefault->addColumnFlag('id', Table::COLUMNFLAG_SMALLFONT);
+        $this->tableDefault->addColumnFlag('id', Table::COLUMNFLAG_SMALLWIDTH, Table::COLUMNFLAG_SMALLFONT);
         $property = $this->createProperty("id");
         $property->setLabel("ID");
     }

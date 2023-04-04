@@ -23,11 +23,12 @@ class DateTime extends \DateTime implements StorablePropertyInterface
     /**
      * Convert any value to given date format
      * @param mixed $value
-     * @param string $format
+     * @param string|null $format To override default format
      * @return string|null Null if value cannot be converted
      */
-    public static function anyToFormat(mixed $value, string $format = "d.m.Y"): ?string
+    public static function anyToFormat(mixed $value, ?string $format = null): ?string
     {
+        $format = $format ?? Config::$dateFormatPhp;
         $value = self::anyToUnixtime($value);
         if ($value === false) {
             return null;
@@ -366,7 +367,7 @@ class DateTime extends \DateTime implements StorablePropertyInterface
      * It returns the highest unit when it has reached 1 and round up to next integer
      * So if diff is 30 seconds, it returns 30 seconds
      * So if diff is 62 seconds, it returns 2 minute
-     * So if diff is 3602 seconds, it returns 2 hour
+     * So if diff is 3602 seconds, it returns 2 hours
      * @param DateTime $otherTime
      * @param string|null $lang
      * @return string
@@ -384,8 +385,7 @@ class DateTime extends \DateTime implements StorablePropertyInterface
     }
 
     /**
-     * Get the database value that is to be stored in database when calling store()
-     * This is always the actual value that represent to current database value of the property
+     * Database time is always UTC time, no matter of timezone setting
      * @return string
      */
     public function getDbValue(): string
@@ -394,12 +394,13 @@ class DateTime extends \DateTime implements StorablePropertyInterface
     }
 
     /**
-     * Get a human-readable html representation of this instace
+     * Get a human-readable html representation of this instance
+     * This uses the <framelix-time> tag which display datetime
      * @return string
      */
     public function getHtmlString(): string
     {
-        return $this->format("d.m.Y H:i:s");
+        return '<framelix-time datetime="' . $this->format('c') . '" format="' . Config::$dateTimeFormatJs . '"></framelix-time>';
     }
 
     /**
@@ -417,7 +418,7 @@ class DateTime extends \DateTime implements StorablePropertyInterface
      */
     public function getRawTextString(): string
     {
-        return $this->format("d.m.Y H:i:s");
+        return $this->format(Config::$dateTimeFormatPhp);
     }
 
     /**

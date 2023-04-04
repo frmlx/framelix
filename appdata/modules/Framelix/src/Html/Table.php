@@ -31,6 +31,7 @@ use function is_string;
 use function mb_strtolower;
 use function reset;
 use function trim;
+use function var_dump;
 
 /**
  * Table
@@ -44,13 +45,13 @@ class Table implements JsonSerializable
     public const COLUMNFLAG_DEFAULT = 'default';
 
     /**
-     * An icon column
+     * An icon column which takes the complete space of a column and display a clickable button with that icon
      * @var string
      */
     public const COLUMNFLAG_ICON = 'icon';
 
     /**
-     * Use smallest width possible
+     * Use smallest width possible, depending on the content
      * @var string
      */
     public const COLUMNFLAG_SMALLWIDTH = 'smallwidth';
@@ -68,7 +69,7 @@ class Table implements JsonSerializable
     public const COLUMNFLAG_IGNORESORT = 'ignoresort';
 
     /**
-     * Ignore editurl click on this column
+     * Ignore click and link to url on this column
      * @var string
      */
     public const COLUMNFLAG_IGNOREURL = 'ignoreurl';
@@ -78,6 +79,7 @@ class Table implements JsonSerializable
      * @var string
      */
     public const COLUMNFLAG_REMOVE_IF_EMPTY = 'removeifempty';
+
     /**
      * Id for the table
      * Default is random generated in constructor
@@ -197,34 +199,31 @@ class Table implements JsonSerializable
 
     public static function onJsCall(JsCall $jsCall): void
     {
-        switch ($jsCall->action) {
-            case 'storableSort':
-                $data = $jsCall->parameters['data'] ?? null;
-                if (!is_array($data) || !$data) {
-                    return;
+        if ($jsCall->action == 'storableSort') {
+            $data = $jsCall->parameters['data'] ?? null;
+            if (!is_array($data) || !$data) {
+                return;
+            }
+            $firstRow = reset($data);
+            $objects = Storable::getByIds(
+                ArrayUtils::map($data, "0"),
+                $firstRow[1] ?? null
+            );
+            $sort = 0;
+            foreach ($objects as $object) {
+                if (!Storable::getStorableSchemaProperty($object, "sort")) {
+                    throw new FatalError(
+                        'Missing "sort" property on ' . get_class($object)
+                    );
                 }
-                $firstRow = reset($data);
-                // todo: fix db connection
-                $objects = Storable::getByIds(
-                    ArrayUtils::map($data, "0"),
-                    $firstRow[1] ?? null
-                );
-                $sort = 0;
-                foreach ($objects as $object) {
-                    if (!Storable::getStorableSchemaProperty($object, "sort")) {
-                        throw new FatalError(
-                            'Missing "sort" property on ' . get_class($object)
-                        );
-                    }
-                    /** @phpstan-ignore-next-line */
-                    $object->{"sort"} = $sort++;
-                    if ($object instanceof StorableExtended) {
-                        $object->preserveUpdateUserAndTime();
-                    }
-                    $object->store();
+                /** @phpstan-ignore-next-line */
+                $object->{"sort"} = $sort++;
+                if ($object instanceof StorableExtended) {
+                    $object->preserveUpdateUserAndTime();
                 }
-                $jsCall->result = true;
-                break;
+                $object->store();
+            }
+            $jsCall->result = true;
         }
     }
 
@@ -395,10 +394,7 @@ class Table implements JsonSerializable
             $this->rows[$group][$rowKey]['rowKeyInitial'] = $rowKey;
         }
         if ($value instanceof TableCell && $value->button) {
-            $this->addColumnFlag($columnName, self::COLUMNFLAG_ICON);
-            $this->addColumnFlag($columnName, self::COLUMNFLAG_IGNORESORT);
-            $this->addColumnFlag($columnName, self::COLUMNFLAG_IGNOREURL);
-            $this->addColumnFlag($columnName, self::COLUMNFLAG_REMOVE_IF_EMPTY);
+            $this->addColumnFlag($columnName, self::COLUMNFLAG_ICON, self::COLUMNFLAG_IGNORESORT, self::COLUMNFLAG_IGNOREURL, self::COLUMNFLAG_REMOVE_IF_EMPTY);
             if ($sortValue === null) {
                 $sortValue = $value->sortValue;
             }
@@ -441,15 +437,19 @@ class Table implements JsonSerializable
     /**
      * Add a column flag
      * @param string $columnName
-     * @param string $columnFlag COLUMNFLAG_*
+     * @param string ...$columnFlags COLUMNFLAG_*
      */
-    public function addColumnFlag(string $columnName, string $columnFlag): void
-    {
+    public function addColumnFlag(
+        string $columnName,
+        #[ExpectedValues(valuesFromClass: self::class)] string ...$columnFlags
+    ): void {
         if (!isset($this->columnFlags[$columnName])) {
             $this->columnFlags[$columnName] = [];
         }
-        if (!in_array($columnFlag, $this->columnFlags[$columnName])) {
-            $this->columnFlags[$columnName][] = $columnFlag;
+        foreach ($columnFlags as $columnFlag) {
+            if (!in_array($columnFlag, $this->columnFlags[$columnName])) {
+                $this->columnFlags[$columnName][] = $columnFlag;
+            }
         }
     }
 
@@ -496,7 +496,10 @@ class Table implements JsonSerializable
                 }
             }
             if ($value instanceof ObjectTransformable) {
-                $value = $value->getHtmlTableValue();
+                $tableCell = new TableCell();
+                $tableCell->sortValue = $value->getSortableValue();
+                $tableCell->stringValue = $value->getHtmlTableValue();
+                $value = $tableCell;
             }
             if (!$value instanceof TableCell) {
                 $value = trim(StringUtils::stringify($value, "<br/>"));

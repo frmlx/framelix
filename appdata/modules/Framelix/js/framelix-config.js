@@ -27,4 +27,28 @@ class FramelixConfig {
    */
   static compiledFileUrls = {}
 
+  /**
+   * The human-readable default dateTime format in PHP
+   * @type {string}
+   */
+  static dateTimeFormatPhp
+
+  /**
+   * The human-readable default date format in PHP
+   * @type {string}
+   */
+  static dateFormatPhp
+
+  /**
+   * The human-readable default dateTime format in javascript
+   * @type {string}
+   */
+  static dateTimeFormatJs
+
+  /**
+   * The human-readable default date format in javascript
+   * @type {string}
+   */
+  static dateFormatJs
+
 }

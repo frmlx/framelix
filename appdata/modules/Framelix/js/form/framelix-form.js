@@ -90,13 +90,25 @@ class FramelixForm {
   submitUrl = null
 
   /**
-   * The target to submit to
-   * Only required when submitAsync = false
-   * currentwindow = Same browser window
-   * newwindow = New browser window (tab)
-   * @type {string}
+   * The target to render the submit response to
+   *
+   * auto = if form is inside
+   *   - a framelix tab: it behaves like "currenttab"
+   *   - a framelix modal: it behaves like "currentmodal"
+   *   - else: it behaves like "pagecontent"
+   *
+   * Non-Async behaviour:
+   * _blank = Open a new browser window (only when submitAsync = false)
+   *
+   * Async behaviour (Rendering only happens when response contains buffered output data):
+   * newmodal = Render to a new modal
+   * currentmodal =  Render to a current modal (fallback to newmodal if form is not inside a modal)
+   * currenttab = Render to a current tab (fallback to newmodal if form is not inside a modal)
+   * pagecontent = Render to the whole page content container (overrides everything else)
+   * selector: = If it starts with "selector:", everything after : will be considered a CSS selector to render to
+   * none = Even if there is output data, do nothing with it
    */
-  submitTarget = 'currentwindow'
+  submitResponseRenderTarget = 'auto'
 
   /**
    * Submit the form async
@@ -742,7 +754,7 @@ class FramelixForm {
       this.setSubmitStatus(true)
       this.form.removeAttr('onsubmit')
       this.form.attr('method', this.submitMethod)
-      this.form.attr('target', this.submitTarget === 'newwindow' ? '_blank' : '_self')
+      this.form.attr('target', this.submitResponseRenderTarget === '_blank' ? '_blank' : '_self')
       this.form.attr('action', this.submitUrl || window.location.href)
       this.form[0].submit()
       this.form.attr('onsubmit', 'return false')
@@ -794,55 +806,97 @@ class FramelixForm {
     await request.finished
     self.setSubmitStatus(false)
     self.form.trigger(FramelixForm.EVENT_SUBMITTED, { 'submitButtonName': submitButtonName })
-    // validation errors
-    if (request.submitRequest.status === 406) {
-      let validationData = await request.getJson()
-      if (validationData) {
-        if (typeof validationData === 'string') {
-          this.showValidationMessage(validationData)
-          return false
-        }
-        for (let fieldName in self.fields) {
-          const field = self.fields[fieldName] || this
-          if (validationData[fieldName] === true || validationData[fieldName] === undefined) {
-            field.hideValidationMessage()
-          } else {
-            field.showValidationMessage(validationData[fieldName])
-          }
-        }
-      }
-      return false
-    }
+
     for (let fieldName in self.fields) {
       const field = self.fields[fieldName]
       field.hideValidationMessage()
     }
     self.hideValidationMessage()
+
+    // if request does handle anything itself, do not proceed handling the request
+    const responseCheckHeadersStatus = await request.checkHeaders()
+    if (responseCheckHeadersStatus !== 0) return true
+
+    // got no response data, just end here
+    const responseData = await request.getJson()
+    if (!responseData) return true
+
+    // got error messages, display them
+    if (responseData.errorMessages) {
+      if (typeof responseData.errorMessages === 'string') {
+        // form error message
+        this.showValidationMessage(responseData.errorMessages)
+      } else {
+        // field specific errors
+        for (let fieldName in self.fields) {
+          const field = self.fields[fieldName] || this
+          if (typeof responseData.errorMessages[fieldName] === 'string') {
+            field.showValidationMessage(responseData.errorMessages[fieldName])
+          }
+        }
+      }
+    }
+    // toast messages
+    if (responseData.toastMessages) {
+      for (let i = 0; i < responseData.toastMessages.length; i++) {
+        FramelixToast.queue.push(responseData.toastMessages[i])
+      }
+      FramelixToast.showNext()
+    }
+
+    if (responseData.buffer.length) {
+      const tabContent = this.container.closest('.framelix-tab-content')
+      const modalBody = this.container.closest('.framelix-modal-body')
+      let selectorContainer = null
+
+      let target = this.submitResponseRenderTarget
+
+      if (target.startsWith('selector:')) {
+        selectorContainer = $(target.substring(9))
+        if (selectorContainer.length) {
+          target = 'selector'
+        } else {
+          target = 'auto'
+        }
+      }
+
+      if (target === 'auto') {
+        if (tabContent.length) {
+          target = 'currenttab'
+        } else if (modalBody.length) {
+          target = 'currentmodal'
+        }
+      }
+
+      if (target === 'currentmodal' && !modalBody.length) {
+        target = 'newmodal'
+      }
+      if (target === 'currenttab' && !tabContent.length) {
+        target = 'pagecontent'
+      }
+
+
+      if (target === 'newmodal') {
+        FramelixModal.show({ bodyContent: responseData.buffer })
+      }
+      if (target === 'currentmodal') {
+        modalBody.html(responseData.buffer)
+      }
+      if (target === 'currenttab') {
+        tabContent.html(responseData.buffer)
+      }
+      if (target === 'pagecontent') {
+        $('.framelix-content-inner-inner').html(responseData.buffer)
+      }
+      if (target === 'selector') {
+        selectorContainer.html(responseData.buffer)
+      }
+    }
+
     if (this.executeAfterAsyncSubmit) {
       await new Promise(function (resolve) {
         eval('(async function(){' + self.executeAfterAsyncSubmit + '; resolve();})()')
       })
-    }
-    if (await request.checkHeaders() === 0 && await request.getHeader('x-form-async-response')) {
-      const responseJson = await request.getJson()
-      if (responseJson.modalMessage) {
-        FramelixModal.show({ bodyContent: responseJson.modalMessage })
-      }
-      if (responseJson.reloadTab) {
-        const tabContent = this.container.closest('.framelix-tab-content')
-        if (tabContent.length) {
-          const tabInstance = FramelixTabs.instances[tabContent.closest('.framelix-tabs').attr('data-instance-id')]
-          if (tabInstance) {
-            tabInstance.reloadTab(tabContent.attr('data-id'))
-          }
-        }
-      }
-      if (responseJson.toastMessages) {
-        for (let i = 0; i < responseJson.toastMessages.length; i++) {
-          FramelixToast.queue.push(responseJson.toastMessages[i])
-        }
-        FramelixToast.showNext()
-      }
     }
     return true
   }

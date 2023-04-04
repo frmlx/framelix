@@ -134,6 +134,7 @@ class FramelixPopup {
     })
   }
 
+  // docs-id-start: FramelixPopupShowOptions
   /**
    * @typedef {Object} FramelixPopupShowOptions
    * @property {string} [placement='top'] Where to place the popup beside the target, https://popper.js.org/docs/v2/constructors/#options
@@ -158,6 +159,8 @@ class FramelixPopup {
    * @property {string|Cash=} [appendTo='body'] Where this popup should be appended to
    * @property {Object=} data Any data to pass to the instance for later reference
    */
+
+  // docs-id-end: FramelixPopupShowOptions
 
   /**
    * Show a popup on given element
@@ -207,6 +210,12 @@ class FramelixPopup {
         padding: 10,
         altAxis: true,
         tether: !options.stickInViewport
+      },
+    })
+    popperOptions.modifiers.push({
+      name: 'arrow',
+      options: {
+        padding: 5,
       },
     })
     if (!target.popperInstances) target.popperInstances = {}

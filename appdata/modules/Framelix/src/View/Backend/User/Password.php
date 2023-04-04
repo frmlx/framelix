@@ -25,7 +25,7 @@ class Password extends View
             $form = $this->getForm();
             $form->validate();
             if (Request::getPost('password') !== Request::getPost('password2')) {
-                Response::showFormValidationErrorResponse('__framelix_password_notmatch__');
+                Response::stopWithFormValidationResponse('__framelix_password_notmatch__');
             }
             $this->storable->setPassword(Request::getPost('password'));
             $this->storable->store();

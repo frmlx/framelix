@@ -303,6 +303,103 @@
             "file": "../custom-elements/framelix-custom-element-alert.js",
             "offset": 0
           }
+        },
+         {
+          "name": "framelix-image",
+          "description": "Display a responsive image tag that uses optimized thumbnails and lazy load.",
+          "attributes": [
+            {
+              "name": "minwidth",
+              "description": "Minimal width of image in pixel",
+              "required": false,
+              "value": {
+                "type": "number"
+              }
+            },
+            {
+              "name": "maxwidth",
+              "description": "Maximal width of image in pixel",
+              "required": false,
+              "value": {
+                "type": "number"
+              }
+            },
+            {
+              "name": "src",
+              "description": "Default image url",
+              "required": true,
+              "value": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "nolazy",
+              "description": "Disable lazy loading and display immediately",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "setparent",
+              "description": "Set the image url into the parents css background-image instead of an explicit image tag",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "recalculate",
+              "description": "The image is placed in a resizable container. Automatically recalculate matched thumbnail size after resize.",
+              "required": false,
+              "value": {
+                "kind": "no-value"
+              }
+            },
+            {
+              "name": "size-*",
+              "description": "Specific image urls provided for a max size of given width",
+              "pattern": {
+                "template": [
+                  "size-",
+                  {
+                    "regex": "[0-9]+"
+                  }
+                ]
+              }
+            }
+          ],
+          "source": {
+            "file": "../custom-elements/framelix-custom-element-image.js",
+            "offset": 0
+          }
+        },
+        {
+          "name": "framelix-time",
+          "description": "Display any date/time in a given format in local user time.",
+          "attributes": [
+            {
+              "name": "datetime",
+              "description": "The datetime in machine parsable format. ISO for example.",
+              "required": true,
+              "value": {
+                "type": "string"
+              }
+            },
+
+            {
+              "name": "format",
+              "description": "The displayed string format. For all available placeholder see https://day.js.org/docs/en/display/format.",
+              "required": true,
+              "value": {
+                "type": "string"
+              }
+            }
+          ],
+          "source": {
+            "file": "../custom-elements/framelix-custom-element-time.js",
+            "offset": 0
+          }
         }
       ]
     }

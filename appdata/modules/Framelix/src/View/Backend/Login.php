@@ -149,7 +149,7 @@ class Login extends View
                 if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
                     SystemEventLog::create($logCategory, null, ['email' => $email]);
                 }
-                Response::showFormValidationErrorResponse('__framelix_login_invalid_user__');
+                Response::stopWithFormValidationResponse('__framelix_login_invalid_user__');
             }
         }
         $this->sidebarClosedInitially = true;
