@@ -8,15 +8,16 @@ final class DateTest extends TestCase
     public function tests(): void
     {
         $this->callStorableInterfaceMethods(Date::class);
+        $objDt = \Framelix\Framelix\DateTime::create('2000-01-01 12:00:00');
         $obj = Date::create('2000-01-01 12:00:00');
         $obj2 = Date::create('2000-02-01 13:00:00');
         $obj3 = Date::create('2000-01-01 20:00:00');
-        $this->assertSame(gmdate('Y-m-d', $obj->dateTime->getTimestamp()), $obj->getDbValue());
-        $this->assertSame(gmdate('Y-m-d', $obj->dateTime->getTimestamp()), (string)$obj);
-        $this->assertSame(gmdate('"Y-m-d"', $obj->dateTime->getTimestamp()), json_encode($obj));
+        $this->assertSame(gmdate('Y-m-d', $objDt->getTimestamp()), $obj->getDbValue());
+        $this->assertSame(gmdate('Y-m-d', $objDt->getTimestamp()), (string)$obj);
+        $this->assertSame(gmdate('"Y-m-d"', $objDt->getTimestamp()), json_encode($obj));
         $this->assertSame(20000101, $obj->getSortableValue());
-        $this->assertSame('01.01.2000', $obj->getHtmlString());
-        $this->assertSame('01.01.2000 12:00:00', $obj->cloneToDateTime()->getHtmlString());
+        $this->assertSame('<framelix-time datetime="2000-01-01T00:00:00+01:00" format="DD.MM.YYYY"></framelix-time>', $obj->getHtmlString());
+        $this->assertSame('<framelix-time datetime="2000-01-01T00:00:00+01:00" format="DD.MM.YYYY HH:mm:ss"></framelix-time>', $obj->cloneToDateTime()->getHtmlString());
         $this->assertSame('01.01.2000', $obj->getRawTextString());
         $this->assertSame($obj2, Date::max($obj, $obj2));
         $this->assertSame($obj, Date::min($obj, $obj2));

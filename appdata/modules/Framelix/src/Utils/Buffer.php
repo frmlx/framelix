@@ -49,14 +49,17 @@ class Buffer
     }
 
     /**
-     * Get last started output buffer as string and empty the output buffer after that
+     * Get last started output buffer as a string and empty the output buffer after that if requested
+     * @param bool $clearBufferAfterRead
      * @return string
      */
-    public static function get(): string
+    public static function get(bool $clearBufferAfterRead = true): string
     {
         if (ob_get_level() > self::$startBufferIndex) {
             $outputBuffer = ob_get_contents();
-            ob_end_clean();
+            if ($clearBufferAfterRead) {
+                ob_end_clean();
+            }
             return $outputBuffer;
         }
         return '';
@@ -64,14 +67,14 @@ class Buffer
 
     /**
      * Get all output buffers as string and empty the output buffer after that
+     * @param bool $clearBufferAfterRead
      * @return string
      */
-    public static function getAll(): string
+    public static function getAll(bool $clearBufferAfterRead = true): string
     {
         $outputBuffer = "";
         while (ob_get_level() > self::$startBufferIndex) {
-            $outputBuffer .= ob_get_contents();
-            ob_end_clean();
+            $outputBuffer .= Buffer::get($clearBufferAfterRead);
         }
         return $outputBuffer;
     }

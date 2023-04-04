@@ -44,7 +44,4 @@ else
     $USE_IMAGE_NAME
 fi
 docker $DOCKER_EXECPARAMS "framelix_wait_for_ready"
-docker $DOCKER_EXECPARAMS "echo -n $FRAMELIX_TEST_PORT > /framelix/system/port_FramelixTests"
-docker $DOCKER_EXECPARAMS "echo -n $FRAMELIX_DOCS_PORT > /framelix/system/port_FramelixDocs"
-docker $DOCKER_EXECPARAMS "echo -n $FRAMELIX_STARTER_PORT > /framelix/system/port_FramelixStarter"
 

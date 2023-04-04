@@ -6,12 +6,13 @@ use Framelix\Framelix\Exception\SoftError;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\FileUtils;
-use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\FramelixTests\Storable\TestStorableFile;
 use Framelix\FramelixTests\TestCase;
 
 use function file_get_contents;
 use function file_put_contents;
+use function http_response_code;
+use function ob_get_level;
 use function unlink;
 
 final class ResponseTest extends TestCase
@@ -30,54 +31,45 @@ final class ResponseTest extends TestCase
             $this->assertSame("filecontent", Buffer::get());
         }
         Buffer::start();
-        try {
+        $this->assertExceptionOnCall(function () {
             Response::download(__FILE__, "foo", null, function () {
             });
-        } catch (SoftError) {
-            $this->assertSame(file_get_contents(__FILE__), Buffer::get());
-        }
+        }, [], SoftError::class);
+        $this->assertSame(file_get_contents(__FILE__), Buffer::get());
+
         $file = new TestStorableFile();
         $file->relativePathOnDisk = "test.txt";
         $filePath = $file->getPath(false);
+
+        // not exist test
         Buffer::start();
-        try {
+        $this->assertExceptionOnCall(function () use ($filePath) {
             file_put_contents($filePath, "foobar");
-            Response::download($file);
-        } catch (SoftError) {
-            $this->assertSame("foobar", Buffer::get());
-        }
-        unlink($file->getPath(true));
+            Response::download($filePath);
+        }, [], SoftError::class);
+        $this->assertSame("foobar", Buffer::get());
+        unlink($file->getPath());
 
         // not exist test
-        Buffer::start();
-        try {
+        $this->assertExceptionOnCall(function () {
             Response::download(__FILE__ . "NotExist");
-        } catch (SoftError) {
-            $this->assertSame("", Buffer::get());
-        }
+        }, [], SoftError::class);
 
         // not exist test
-        Buffer::start();
-        try {
+        $this->assertExceptionOnCall(function () use ($file) {
             Response::download($file);
-        } catch (SoftError) {
-            $this->assertSame("", Buffer::get());
-        }
+        }, [], SoftError::class);
 
+        // test form validation response
+        http_response_code(200);
+        $oldIndex = Buffer::$startBufferIndex;
         Buffer::start();
-        try {
-            Response::stopWithFormValidationResponse();
-        } catch (SoftError) {
-            $this->assertSame(200, http_response_code());
-            $this->assertTrue(true);
-            $this->assertSame('{"modalMessage":null,"reloadTab":false,"toastMessages":[]}', Buffer::get());
-        }
-
-        Buffer::start();
-        try {
-            Response::stopWithFormValidationResponse('foobar');
-        } catch (SoftError) {
-            $this->assertSame(JsonUtils::encode("foobar"), Buffer::get());
-        }
+        Buffer::$startBufferIndex = ob_get_level();
+        $this->assertExceptionOnCall(function () {
+            Response::stopWithFormValidationResponse(['test' => 'Error']);
+        }, [], SoftError::class);
+        Buffer::$startBufferIndex = $oldIndex;
+        $this->assertSame(200, http_response_code());
+        $this->assertSame('{"toastMessages":[],"errorMessages":{"test":"Error"},"buffer":""}', Buffer::get());
     }
 }

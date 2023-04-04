@@ -98,7 +98,6 @@ class Response
      */
     public static function stopWithFormValidationResponse(array|string|null $errorMessages = null): never
     {
-        http_response_code(200);
         JsonUtils::output([
             'toastMessages' => Toast::getQueueMessages(true),
             'errorMessages' => $errorMessages,

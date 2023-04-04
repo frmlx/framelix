@@ -46,7 +46,7 @@ export class FramelixUtils {
   constructor (page: Page) {
     this.page = page
     this.framelixConfig = {
-      rootUrl: 'https://127.0.0.1:' + fs.readFileSync('/framelix/system/port_FramelixDocs').toString()
+      rootUrl: 'https://127.0.0.1:' + JSON.parse(fs.readFileSync('/framelix/system/environment.json').toString())['FramelixDocs'].port
     }
     // stop on any uncaught page error
     this.page.on('pageerror', exception => {
