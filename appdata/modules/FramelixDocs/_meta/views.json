@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|2474792562",
+    "directoryListHash": "3|2550596116",
     "views": {
         "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
             "accessRole": "*",
@@ -81,6 +81,26 @@
             "pageTitle": "Storables - The way you store data in Framelix",
             "url": "\/database\/storables"
         },
+        "Framelix\\FramelixDocs\\View\\Features\\Forms": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Form Generation",
+            "url": "\/features\/forms"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\InlinePopup": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Inline Popup \/ Dropdown",
+            "url": "\/features\/inlinepopup"
+        },
         "Framelix\\FramelixDocs\\View\\Features\\ModalWindow": {
             "accessRole": "*",
             "customUrl": null,
@@ -91,6 +111,46 @@
             "pageTitle": "Modal\/Dialog Window",
             "url": "\/features\/modalwindow"
         },
+        "Framelix\\FramelixDocs\\View\\Features\\Tables": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Tables",
+            "url": "\/features\/tables"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\Toasts": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Toasts\/Notifications",
+            "url": "\/features\/toasts"
+        },
+        "Framelix\\FramelixDocs\\View\\GetStarted\\Setup": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Setup for module development",
+            "url": "\/getstarted\/setup"
+        },
+        "Framelix\\FramelixDocs\\View\\GetStarted\\SetupCoreDev": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Setup for core development",
+            "url": "\/getstarted\/setupcoredev"
+        },
         "Framelix\\FramelixDocs\\View\\Index": {
             "accessRole": "*",
             "customUrl": null,
@@ -100,26 +160,6 @@
             "hiddenView": false,
             "pageTitle": "Framelix - A rich featured, Docker ready, Full-Stack PHP Framework",
             "url": ""
-        },
-        "Framelix\\FramelixDocs\\View\\Setup": {
-            "accessRole": "*",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "Setup for module development",
-            "url": "\/setup"
-        },
-        "Framelix\\FramelixDocs\\View\\SetupCoreDev": {
-            "accessRole": "*",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "Setup for core development",
-            "url": "\/setupcoredev"
         }
     }
 }

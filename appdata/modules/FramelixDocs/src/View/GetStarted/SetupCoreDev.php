@@ -1,6 +1,8 @@
 <?php
 
-namespace Framelix\FramelixDocs\View;
+namespace Framelix\FramelixDocs\View\GetStarted;
+
+use Framelix\FramelixDocs\View\View;
 
 class SetupCoreDev extends View
 {
@@ -28,10 +30,10 @@ class SetupCoreDev extends View
             <li>Change to that directory and run the following commands</li>
         </ol>
         <?php
-        echo $this->getCodeBlock('
+        $this->showCodeBlock('
         cp dev-scripts/.env_template dev-scripts/.env
         bash dev-scripts/build-image.sh -t dev
-        bash dev-scripts/start-container.sh        
+        bash dev-scripts/start-container.sh -c
         bash dev-scripts/run-tests -t phpstan # PHP Stan Static Code Analysis 
         bash dev-scripts/run-tests -t playwright # Playwright End-to-End tests
         bash dev-scripts/run-tests -t phpunit # PHP Unit Tests
@@ -64,5 +66,20 @@ class SetupCoreDev extends View
             It is best, to just generally always <?=$this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions', 'ask')?> when you're stuck. This is kind of a new Framework. A general rule of thumb is not established yet. Just come over and discuss with us.
         </p>
         <?php
+        echo $this->getAnchoredTitle('phpstorm', 'PhpStorm Setup for tests');
+        ?>
+        <p>
+            We use PhpStorm IDE a lot, as it have cool features that make development faster and easier. One thing of it is, you can run Php Unit tests directly from contextmenu in PhpStorm, including CodeCoverage reports, which is super handy.
+        </p>
+        <p>
+            To make this work, you need to set the following settings. Than you can right-click->Run on any PhpUnit test (or a whole folder) inside <code>FramelixTests/tests</code>.
+        </p>
+        <?php
+
+        echo $this->getPublicResourceHtmlTag("images/phpstorm-cli-interpreter-docker-compose.png");
+        echo $this->getPublicResourceHtmlTag("images/phpstorm-test-frameworks.png");
+        echo $this->getPublicResourceHtmlTag("images/phpstorm-runtest.png");
+
+
     }
 }

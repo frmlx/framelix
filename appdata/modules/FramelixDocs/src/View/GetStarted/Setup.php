@@ -1,8 +1,9 @@
 <?php
 
-namespace Framelix\FramelixDocs\View;
+namespace Framelix\FramelixDocs\View\GetStarted;
 
 use Framelix\Framelix\Framelix;
+use Framelix\FramelixDocs\View\View;
 
 class Setup extends View
 {
@@ -45,7 +46,7 @@ class Setup extends View
         $imageName = 'framelix_starter';
         $volumeName = $imageName . '_db';
         $port = 6456;
-        echo $this->getCodeBlock(
+        $this->showCodeBlock(
             '
         SCRIPTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
         docker pull ' . $repoName . '

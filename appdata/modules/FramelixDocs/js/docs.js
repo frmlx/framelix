@@ -4,10 +4,11 @@ class FramelixDocs {
   static init () {
     FramelixDocs.renderCodeBlocks()
     $(document).on(FramelixTabs.EVENT_TAB_CONTENT_RENDERED, FramelixDocs.renderCodeBlocks)
+    $(document).on('click', '.run-js-code', FramelixDocs.runJsCode)
   }
 
-  static runJsCode (el) {
-    const codeBlock = $(el).closest('.code-block')
+  static runJsCode (ev) {
+    const codeBlock = $(ev.target).closest('.code-block')
     const contents = FramelixDocs.codeBlockMap.get(codeBlock[0])
     eval('(async function(){'+contents+'})()')
   }

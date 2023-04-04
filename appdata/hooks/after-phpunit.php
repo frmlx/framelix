@@ -1,8 +1,8 @@
 <?php
 
 $coverage = "Failed";
-$cloverXmlPath = "/framelix/userdata/tmp/clover.xml";
-$cloverCoveragePath = "/framelix/userdata/tmp/clover-coverage.txt";
+$cloverXmlPath = "/framelix/userdata/clover.xml";
+$cloverCoveragePath = "/framelix/userdata/clover-coverage.txt";
 if (file_exists($cloverXmlPath)) {
     $xml = new SimpleXMLElement($cloverXmlPath, 0, true);
     $reportMetrics = $xml->xpath('project/metrics')[0] ?? null;

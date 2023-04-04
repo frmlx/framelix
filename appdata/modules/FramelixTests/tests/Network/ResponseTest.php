@@ -66,7 +66,7 @@ final class ResponseTest extends TestCase
 
         Buffer::start();
         try {
-            Response::showFormAsyncSubmitResponse();
+            Response::stopWithFormValidationResponse();
         } catch (SoftError) {
             $this->assertSame(200, http_response_code());
             $this->assertTrue(true);
@@ -75,9 +75,8 @@ final class ResponseTest extends TestCase
 
         Buffer::start();
         try {
-            Response::showFormValidationErrorResponse('foobar');
+            Response::stopWithFormValidationResponse('foobar');
         } catch (SoftError) {
-            $this->assertSame(406, http_response_code());
             $this->assertSame(JsonUtils::encode("foobar"), Buffer::get());
         }
     }

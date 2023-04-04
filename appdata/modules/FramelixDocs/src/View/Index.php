@@ -2,6 +2,8 @@
 
 namespace Framelix\FramelixDocs\View;
 
+use Framelix\FramelixDocs\View\GetStarted\Setup;
+
 class Index extends View
 {
     protected string $pageTitle = 'Framelix - A rich featured, Docker ready, Full-Stack PHP Framework';

@@ -32,7 +32,7 @@ jobs:
           retention-days: 5
 
       - name: Run PHP Unit Tests
-        run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/tmp/clover-coverage.txt)" >> $GITHUB_ENV
+        run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/clover-coverage.txt)" >> $GITHUB_ENV
 
       - name: Upload userdata after phpunit tests to GitHub
         uses: actions/upload-artifact@v3

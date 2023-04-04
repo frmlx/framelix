@@ -93,7 +93,7 @@ class ModalWindow extends View
         $this->showSourceFiles();
         ?>
         <p>
-            The complete source including other functions can be found in the Framelix module at <code>js/framelix-modal.js</code>
+            The complete source including other functions can be found at <?=$this->getShowSourceFileLinkTag(['Framelix/js/framelix-modal.js'])?>
         </p>
         <?php
     }

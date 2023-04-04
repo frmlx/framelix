@@ -11,10 +11,14 @@ use Framelix\FramelixDocs\View\CoreDev\Docker;
 use Framelix\FramelixDocs\View\CoreDev\Framelix;
 use Framelix\FramelixDocs\View\Database\SchemeGenerator;
 use Framelix\FramelixDocs\View\Database\Storables;
+use Framelix\FramelixDocs\View\Features\Forms;
+use Framelix\FramelixDocs\View\Features\InlinePopup;
 use Framelix\FramelixDocs\View\Features\ModalWindow;
+use Framelix\FramelixDocs\View\Features\Tables;
+use Framelix\FramelixDocs\View\Features\Toasts;
+use Framelix\FramelixDocs\View\GetStarted\Setup;
+use Framelix\FramelixDocs\View\GetStarted\SetupCoreDev;
 use Framelix\FramelixDocs\View\Index;
-use Framelix\FramelixDocs\View\Setup;
-use Framelix\FramelixDocs\View\SetupCoreDev;
 
 class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 {
@@ -37,6 +41,10 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 
         $this->startGroup('Features', 'motion_blur', forceOpened: true);
         $this->addLink(ModalWindow::class);
+        $this->addLink(InlinePopup::class);
+        $this->addLink(Toasts::class);
+        $this->addLink(Tables::class);
+        $this->addLink(Forms::class);
         $this->showHtmlForLinkData();
 
         $this->startGroup('Core Development', 'hub', forceOpened: true);

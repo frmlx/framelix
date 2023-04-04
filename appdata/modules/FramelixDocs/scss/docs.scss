@@ -123,6 +123,23 @@
   }
 }
 
+.docs-image {
+  border-radius: var(--border-radius);
+  box-shadow: rgba(0, 0, 0, 0.6) 5px 5px 20px;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  background: hsl(220, 7%, 8%);
+
+  img {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 60vh;
+    width: auto;
+    height: auto;
+  }
+}
+
 .hljs-ln-line.hljs-ln-numbers {
   min-width: 30px;
   border-right: 2px solid rgba(255, 255, 255, 0.1);
