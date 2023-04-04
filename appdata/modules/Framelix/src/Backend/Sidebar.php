@@ -134,8 +134,8 @@ abstract class Sidebar
                 <a href="<?= Config::$backendDefaultView ? View::getUrl(
                     Config::$backendDefaultView
                 ) : Url::getApplicationUrl() ?>"><img
-                            src="<?= Url::getUrlToPublicFile(Config::$backendLogoFilePath) ?>" alt="App Logo"
-                            title="__framelix_backend_startpage__"></a>
+                        src="<?= Url::getUrlToPublicFile(Config::$backendLogoFilePath) ?>" alt="App Logo"
+                        title="__framelix_backend_startpage__"></a>
             </div>
             <?php
             echo '<div class="framelix-sidebar-entries">';
@@ -283,8 +283,9 @@ abstract class Sidebar
             ?>
             <framelix-button raw class="framelix-sidebar-collapsable-title framelix-activate-toggle-handler">
                 <span class="framelix-sidebar-main-icon"><span
-                            class="material-icons"><?= $linkData['icon'] ?></span></span>
-                <span class="framelix-sidebar-label"><?= $linkData['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $linkData['badgeText'] . '</span>' : '' ?><?= Lang::get(
+                        class="material-icons"><?= $linkData['icon'] ?></span></span>
+                <span
+                    class="framelix-sidebar-label"><?= $linkData['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $linkData['badgeText'] . '</span>' : '' ?><?= Lang::get(
                         $linkData['label']
                     ) ?></span>
             </framelix-button>
@@ -311,7 +312,8 @@ abstract class Sidebar
             <a href="<?= $url ?>" target="<?= $row['target'] ?>"
                class="framelix-sidebar-link <?= $activeKey === $key ? 'framelix-sidebar-link-active' : '' ?>">
                 <span class="framelix-sidebar-main-icon"><span class="material-icons"><?= $row['icon'] ?></span></span>
-                <div class="framelix-sidebar-label"><?= $row['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $row['badgeText'] . '</span>' : '' ?><?= $row['label'] ?></div>
+                <div
+                    class="framelix-sidebar-label"><?= $row['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $row['badgeText'] . '</span>' : '' ?><?= $row['label'] ?></div>
             </a>
             <?php
             if ($type !== 'group') {

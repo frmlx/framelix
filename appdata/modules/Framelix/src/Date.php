@@ -197,7 +197,9 @@ class Date implements StorablePropertyInterface
      */
     public function getHtmlString(): string
     {
-        return '<framelix-time datetime="' . $this->dateTime->format('c') . '" format="'.Config::$dateFormatJs.'"></framelix-time>';
+        return '<framelix-time datetime="' . $this->dateTime->format(
+                'c'
+            ) . '" format="' . Config::$dateFormatJs . '"></framelix-time>';
     }
 
     /**

@@ -31,7 +31,6 @@ use function is_string;
 use function mb_strtolower;
 use function reset;
 use function trim;
-use function var_dump;
 
 /**
  * Table
@@ -394,7 +393,13 @@ class Table implements JsonSerializable
             $this->rows[$group][$rowKey]['rowKeyInitial'] = $rowKey;
         }
         if ($value instanceof TableCell && $value->button) {
-            $this->addColumnFlag($columnName, self::COLUMNFLAG_ICON, self::COLUMNFLAG_IGNORESORT, self::COLUMNFLAG_IGNOREURL, self::COLUMNFLAG_REMOVE_IF_EMPTY);
+            $this->addColumnFlag(
+                $columnName,
+                self::COLUMNFLAG_ICON,
+                self::COLUMNFLAG_IGNORESORT,
+                self::COLUMNFLAG_IGNOREURL,
+                self::COLUMNFLAG_REMOVE_IF_EMPTY
+            );
             if ($sortValue === null) {
                 $sortValue = $value->sortValue;
             }
