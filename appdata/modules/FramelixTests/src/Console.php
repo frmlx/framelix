@@ -2,6 +2,7 @@
 
 namespace Framelix\FramelixTests;
 
+use Framelix\Framelix\Framelix;
 use Framelix\Framelix\Utils\Shell;
 
 use function file_exists;
@@ -20,10 +21,10 @@ class Console extends \Framelix\Framelix\Console
         Shell::prepare("mysql -u root -papp -e 'CREATE DATABASE IF NOT EXISTS unittests'")->execute();
         $userConfigFile = \Framelix\Framelix\Config::getUserConfigFilePath();
         if (!file_exists($userConfigFile)) {
-            \Framelix\Framelix\Framelix::createInitialUserConfig(
+            Framelix::createInitialUserConfig(
                 FRAMELIX_MODULE,
                 'test',
-                '127.0.0.1:' . \Framelix\Framelix\Config::$environmentConfig[FRAMELIX_MODULE]['port'],
+                '127.0.0.1:' . \Framelix\Framelix\Config::$environmentConfig["moduleAccessPoints"][FRAMELIX_MODULE]['port'],
                 ''
             );
         }

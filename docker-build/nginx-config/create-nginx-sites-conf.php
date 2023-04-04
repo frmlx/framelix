@@ -63,12 +63,10 @@ foreach ($modules as $row) {
         $content = str_replace('{pubKeyPath}', $pubKeyFile ?: '/framelix/system/nginx-ssl.crt', $content);
     }
     $contents[] = $content;
-    $envConfig[$moduleName] = [
-        'moduleAccessPoints' => [
-            'module' => $moduleName,
-            'ssl' => $ssl,
-            'port' => $port
-        ]
+    $envConfig['moduleAccessPoints'][$moduleName] = [
+        'module' => $moduleName,
+        'ssl' => $ssl,
+        'port' => $port
     ];
     $validModules++;
 }

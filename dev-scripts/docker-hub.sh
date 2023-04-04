@@ -10,7 +10,6 @@ echo "  * Deletes all local userdata and db volume"
 echo "  * Runs all tests"
 echo "  * If all success, be able to push to docker"
 echo "Available command line flags:"
-echo "-y : Run this script"
 echo "-t : Type of build: dev, prod"
 echo "-p : Push to docker hub (If not set, it only build and tests the image, a dry run, so to speak)"
 echo "-s : Skip rebuild (Does take the current existing $DOCKER_TAGNAME_LOCAL image)"
@@ -18,21 +17,14 @@ echo ""
 
 BUILD_TYPE=0
 PUSH=0
-RUN=0
 SKIP_REBUILD=0
-while getopts "spyt:" opt; do
+while getopts "spt:" opt; do
   case $opt in
   t) BUILD_TYPE=$OPTARG ;;
   p) PUSH=1 ;;
   s) SKIP_REBUILD=1 ;;
-  y) RUN=1 ;;
   esac
 done
-
-if [ "$RUN" != "1" ]; then
-  cecho r "-y parameter is required"
-  exit 1
-fi
 
 if [ "$BUILD_TYPE" == "0" ]; then
   cecho r "-t parameter is required"
