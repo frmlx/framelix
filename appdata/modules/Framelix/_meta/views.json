@@ -261,6 +261,16 @@
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/twofactor"
         },
+        "Framelix\\Framelix\\View\\MPdfBase": {
+            "accessRole": true,
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/mpdfbase"
+        },
         "Framelix\\Framelix\\View\\StorableFileThumbnail": {
             "accessRole": "*",
             "customUrl": "~\/storablefilethumbnail\/(?<id>[0-9]+)-(?<thumbSize>[0-9]+)\\.(?<extension>[a-z]+)$~",

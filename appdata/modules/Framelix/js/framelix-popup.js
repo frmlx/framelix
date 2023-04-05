@@ -227,7 +227,16 @@ class FramelixPopup {
     const contentEl = popperEl.children('.framelix-popup-inner')
     const writePromises = []
     if (content instanceof FramelixRequest) {
-      writePromises.push(content.writeToContainer(contentEl))
+      writePromises.push(new Promise(async function (resolve) {
+          contentEl.html(`<div class="framelix-loading"></div>`)
+          // on any response handling other then default response, destroy the popup as it will hang in a undefined state without any proper returning response
+          if (await content.checkHeaders() > 0) {
+            instance.destroy()
+            return
+          }
+          await content.writeToContainer(contentEl)
+          resolve()
+        }))
     } else {
       contentEl.html(content)
     }

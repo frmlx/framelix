@@ -319,7 +319,16 @@ class FramelixModal {
       }
       instance[containerName].removeClass('hidden')
       if (content instanceof FramelixRequest) {
-        writePromises.push(content.writeToContainer(instance[containerName]))
+        writePromises.push(new Promise(async function (resolve) {
+          instance[containerName].html(`<div class="framelix-loading"></div>`)
+          // on any response handling other then default response, destroy the modal as it will hang in a undefined state without any proper returning response
+          if (await content.checkHeaders() > 0) {
+            instance.destroy()
+            return
+          }
+          await content.writeToContainer(instance[containerName])
+          resolve()
+        }))
       } else {
         instance[containerName].html(content)
       }

@@ -4,7 +4,9 @@ namespace Framelix\Framelix\View;
 
 use Framelix\Framelix\Exception\SoftError;
 use Framelix\Framelix\Form\Form;
+use Framelix\Framelix\MPdfWrapper;
 use Framelix\Framelix\Network\Response;
+use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\View\Backend\View;
 use JetBrains\PhpStorm\ExpectedValues;
 use Mpdf\Config\ConfigVariables;
@@ -14,11 +16,8 @@ use Mpdf\QrCode\QrCode;
 
 use function is_dir;
 use function mkdir;
-use function ob_end_clean;
-use function ob_get_contents;
-use function ob_start;
 
-abstract class MPdfBase extends View
+class MPdfBase extends View
 {
     /**
      * The x position where the address must start in case of a windowed post cuvert
@@ -68,7 +67,7 @@ abstract class MPdfBase extends View
         if (!is_dir($tmpDir)) {
             mkdir($tmpDir, recursive: true);
         }
-        $this->pdf = new Mpdf([
+        $this->pdf = new MPdfWrapper([
             'tempDir' => $tmpDir,
             'fontDir' => array_merge($fontDirs, [
                 __DIR__ . "/../../vendor/mpdf/mpdf/data/font",
@@ -82,21 +81,20 @@ abstract class MPdfBase extends View
             'format' => $format,
             'adjustFontDescLineheight' => 1.1,
         ]);
-        ob_start();
-        $this->showHeaderHtml();
-        $html = ob_get_contents();
-        ob_end_clean();
-        if ($html) {
-            $this->pdf->SetHTMLHeader($html);
-        }
 
-        ob_start();
-        $this->showFooterHtml();
-        $html = ob_get_contents();
-        ob_end_clean();
-        if ($html) {
-            $this->pdf->SetHTMLFooter($html);
-        }
+        $this->pdf->onBeforeAddPage(function () {
+            Buffer::start();
+            $this->pdf->SetHTMLHeader('');
+            if ($this->showHeaderHtml()) {
+                $this->pdf->SetHTMLHeader(Buffer::get());
+            }
+
+            Buffer::start();
+            $this->pdf->SetHTMLFooter('');
+            if ($this->showFooterHtml()) {
+                $this->pdf->SetHTMLFooter(Buffer::get());
+            }
+        });
     }
 
     public function onRequest(): void
@@ -140,7 +138,7 @@ abstract class MPdfBase extends View
      */
     public function startHtml(): void
     {
-        ob_start();
+        Buffer::start();
     }
 
     /**
@@ -149,9 +147,7 @@ abstract class MPdfBase extends View
      */
     public function stopHtmlAndWrite(): void
     {
-        $out = ob_get_contents();
-        ob_end_clean();
-        $this->pdf->WriteHTML($out);
+        $this->pdf->WriteHTML(Buffer::get());
     }
 
     /**
@@ -206,17 +202,21 @@ abstract class MPdfBase extends View
     /**
      * Show header html
      * Available placeholders in html text: {PAGENO} (Current Page), $this->pdf->aliasNbPg (Number of total pages), $this->pdf->aliasNbPgGp
+     * @return bool Return true when the header should be drawn, false to skip the header for the current page
      */
-    public function showHeaderHtml(): void
+    public function showHeaderHtml(): bool
     {
+        return false;
     }
 
     /**
      * Show footer html
      * Available placeholders in html text: {PAGENO} (Current Page), $this->pdf->aliasNbPg (Number of total pages), $this->pdf->aliasNbPgGp
+     * @return bool Return true when the footer should be drawn, false to skip the footer for the current page
      */
-    public function showFooterHtml(): void
+    public function showFooterHtml(): bool
     {
+        return false;
     }
 
     /**

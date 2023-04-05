@@ -3,7 +3,9 @@
 namespace Framelix\Framelix\Form\Field;
 
 use Framelix\Framelix\Form\Field;
+use Framelix\Framelix\Html\PhpToJsData;
 use Framelix\Framelix\Lang;
+use Framelix\Framelix\Url;
 
 use function is_string;
 use function strlen;
@@ -13,7 +15,7 @@ use function strlen;
  */
 class Editor extends Field
 {
-    public const TINYMCE_PATH = __DIR__ . "/../../../public/vendor/tinymce-6.2.0/js/tinymce/tinymce.min.js";
+    public const TINYMCE_PATH = __DIR__ . "/../../../public/vendor/tinymce-6.4.1/js/tinymce/tinymce.min.js";
 
     /**
      * The min height for the editor in pixel
@@ -81,5 +83,12 @@ class Editor extends Field
             return Lang::get('__framelix_form_validation_maxlength__', ['number' => $this->maxLength]);
         }
         return true;
+    }
+
+    public function jsonSerialize(): PhpToJsData
+    {
+        $data = parent::jsonSerialize();
+        $data->properties['tinymcePath'] = Url::getUrlToPublicFile(self::TINYMCE_PATH, false);
+        return $data;
     }
 }

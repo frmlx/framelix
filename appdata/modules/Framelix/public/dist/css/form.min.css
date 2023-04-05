@@ -135,6 +135,15 @@ html[data-color-scheme=dark] .framelix-form-field-datetime ::-webkit-calendar-pi
   filter: invert(90%);
 }
 
+.framelix-form-field-editor textarea {
+  height: 10px;
+  opacity: 0.1;
+}
+.framelix-form-field-editor .tox-tinymce {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-input-border);
+}
+
 .framelix-form-field-file {
   transition: 0.2s;
 }

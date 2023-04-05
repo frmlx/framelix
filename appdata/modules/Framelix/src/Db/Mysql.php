@@ -2,8 +2,6 @@
 
 namespace Framelix\Framelix\Db;
 
-use Cstp\Ouced\Db;
-use Cstp\Ouced\Exception\Error;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Exception\FatalError;
@@ -15,9 +13,6 @@ use JetBrains\PhpStorm\ExpectedValues;
 use mysqli;
 use mysqli_result;
 use mysqli_sql_exception;
-use Ouced_Type;
-use Ouced_Util_Date;
-use Ouced_Util_DateAndTime;
 use Throwable;
 
 use function count;

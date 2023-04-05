@@ -1,8 +1,10 @@
 /**
  * Editor field (TinyMCE)
- * Not yet finally implemented
  */
 class FramelixFormFieldEditor extends FramelixFormField {
+
+  static tinymceIncluded = false
+
   /**
    * The textarea element
    * @type {Cash}
@@ -40,6 +42,18 @@ class FramelixFormFieldEditor extends FramelixFormField {
   maxLength = null
 
   /**
+   * The editor instance
+   * @type {Object}
+   */
+  editor
+
+  /**
+   * The path to the tinymce script file
+   * @type {string}
+   */
+  tinymcePath
+
+  /**
    * Set value for this field
    * @param {*} value
    * @param {boolean} isUserChange Indicates if this change was done because of an user input
@@ -49,6 +63,7 @@ class FramelixFormFieldEditor extends FramelixFormField {
       return
     }
     this.textarea.val(value)
+    this._editor?.setContent(value)
     this.triggerChange(this.textarea, isUserChange)
   }
 
@@ -58,6 +73,69 @@ class FramelixFormFieldEditor extends FramelixFormField {
    */
   getValue () {
     return this.textarea.val()
+  }
+
+  /**
+   * Initialize tinymce editor on given textarea element
+   * @param {Cash} element
+   * @param {number=} height If set then use fixed height instead of autoresize
+   * @return {Promise<void>}
+   */
+  async initializeTinymce (element, height) {
+    const self = this
+    return new Promise(async function (resolve) {
+      if (!FramelixFormFieldEditor.tinymceIncluded) {
+        FramelixFormFieldEditor.tinymceIncluded = true
+        await FramelixDom.includeResource(self.tinymcePath, 'tinymce')
+      }
+      let plugins = [
+        'advlist', 'autolink', 'lists', 'image', 'link',
+        'searchreplace', 'visualblocks', 'code',
+        'table', 'code'
+      ]
+      const darkMode = $('html').attr('data-color-scheme') === 'dark'
+      if (!height) plugins.push('autoresize')
+      tinymce.init({
+        target: element[0],
+        language: FramelixLang.lang,
+        browser_spellcheck: self.spellcheck,
+        'height': height,
+        menubar: 'edit insert view format table tools',
+        statusbar: false,
+        readonly: self.disabled,
+        pagebreak_separator: '<div class="framelix-form-field-editor-pagebreak" pagebreak="true"></div>',
+        pagebreak_split_block: true,
+        'plugins': plugins,
+        contextmenu: 'copy | paste | link image inserttable | cell row column deletetable',
+        toolbar: 'insert | undo redo | fontsizeselect | bold italic underline forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | placeholders textconditions pagebreak',
+        content_css: darkMode ? 'dark' : 'default',
+        skin: darkMode ? 'oxide-dark' : 'oxide',
+        autoresize_bottom_margin: 10,
+        paste_as_text: true,
+        paste_block_drop: true,
+        relative_urls: false,
+        remove_script_host: false,
+        promotion: false,
+        min_height: self.minHeight,
+        max_height: self.maxHeight,
+        init_instance_callback: function (editor) {
+          tinymce.triggerSave()
+          editor.on('change', function () {
+            editor.save()
+          })
+          self.editor = editor
+          // move last aux helper to dialog, if field is in a dialog
+          const dialogContainer = editor.editorContainer.closest('dialog')
+          if (dialogContainer) {
+            const auxElements = document.querySelectorAll('body > .tox-tinymce-aux')
+            if (auxElements.length) dialogContainer.append(auxElements[auxElements.length - 1])
+          }
+          resolve(editor)
+        },
+        setup: function (editor) {
+        }
+      })
+    })
   }
 
   /**
@@ -98,6 +176,7 @@ class FramelixFormFieldEditor extends FramelixFormField {
     this.field.html(this.textarea)
     this.textarea.attr('name', this.name)
     this.textarea.val(this.defaultValue || '')
+    await this.initializeTinymce(this.textarea)
   }
 }
 

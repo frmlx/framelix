@@ -143,10 +143,16 @@ class FramelixToast {
     let colorClass = ' framelix-toast-' + row.type
     if (row.type === 'info') colorClass = ''
 
-    let delay = typeof row.delay === 'number' && row.delay > 0 ? row.delay * 1000 : 1000 * 300
+    let nextMessageDelay = typeof row.delay === 'number' && row.delay > 0 ? row.delay * 1000 : 1000 * 300
     let messagePromise
     if (row.message instanceof FramelixRequest) {
       FramelixToast.messageContainer.html('<div class="framelix-loading"></div>')
+      // on any response handling other then default response, skip the toast as it will hang in a undefined state without any proper returning response
+      if (await row.message.checkHeaders() > 0) {
+        FramelixToast.showNextTo = null
+        FramelixToast.showNext()
+        return
+      }
       messagePromise = row.message.getResponseData()
     } else {
       messagePromise = FramelixLang.get(row.message)
@@ -157,7 +163,7 @@ class FramelixToast {
       }
     }
     if (row.delay === 'auto') {
-      delay = 5000
+      nextMessageDelay = 5000
     }
     FramelixToast.loaderContainer.css({
       'width': '0',
@@ -166,7 +172,7 @@ class FramelixToast {
     setTimeout(function () {
       FramelixToast.container.removeClass('hidden')
       FramelixToast.loaderContainer.css({
-        'transition': delay + 'ms linear'
+        'transition': nextMessageDelay + 'ms linear'
       })
       setTimeout(function () {
         FramelixToast.container.addClass('framelix-toast-visible')
@@ -184,7 +190,7 @@ class FramelixToast {
       // only when document is currently active then show next
       // otherwise the user must manually close the message
       if (document.visibilityState === 'visible') FramelixToast.showNext()
-    }, delay)
+    }, nextMessageDelay)
   }
 
   /**

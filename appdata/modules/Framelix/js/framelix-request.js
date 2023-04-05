@@ -183,7 +183,7 @@ class FramelixRequest {
    * @param {Cash} container
    * @param {boolean} showLoadingBar
    * @param {boolean} checkHeaders If true checkHeaders returns any other than 0, this promise never resolves
-   * @return {Promise<string|*>} Resolved when data is written to container
+   * @return {Promise<void>}
    */
   async writeToContainer (container, showLoadingBar = true, checkHeaders = true) {
     if (showLoadingBar) {
@@ -191,7 +191,6 @@ class FramelixRequest {
     }
     const responseData = await this.getResponseData(checkHeaders)
     container.html(responseData)
-    return responseData
   }
 
   /**

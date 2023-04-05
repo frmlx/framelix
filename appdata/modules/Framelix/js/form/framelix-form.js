@@ -830,21 +830,24 @@ class FramelixForm {
         // field specific errors
         for (let fieldName in self.fields) {
           const field = self.fields[fieldName] || this
-          if (typeof responseData.errorMessages[fieldName] === 'string') {
+          if (!responseData.errorMessages[fieldName]) continue
+          if (field) {
             field.showValidationMessage(responseData.errorMessages[fieldName])
+          } else {
+            this.showValidationMessage(responseData.errorMessages[fieldName])
           }
         }
       }
     }
     // toast messages
-    if (responseData.toastMessages) {
+    if (FramelixObjectUtils.hasKeys(responseData.toastMessages)) {
       for (let i = 0; i < responseData.toastMessages.length; i++) {
         FramelixToast.queue.push(responseData.toastMessages[i])
       }
       FramelixToast.showNext()
     }
 
-    if (responseData.buffer.length) {
+    if (typeof responseData.buffer === 'string' && responseData.buffer.length) {
       const tabContent = this.container.closest('.framelix-tab-content')
       const modalBody = this.container.closest('.framelix-modal-body')
       let selectorContainer = null
@@ -874,7 +877,6 @@ class FramelixForm {
       if (target === 'currenttab' && !tabContent.length) {
         target = 'pagecontent'
       }
-
 
       if (target === 'newmodal') {
         FramelixModal.show({ bodyContent: responseData.buffer })
