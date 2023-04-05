@@ -34,9 +34,11 @@ class Idea extends View
                 auto-completion support that eliminate the need for just knowing things and strings, intuitive naming
                 stuff (One char aliases and variable names are a no-no here)
             </li>
-            <li>Keep it fast and slim - Not pack it full of things that almost nobody ever need - The core isn't big and won't ever be big - This requires thinking about features twice - Better split into a separate module that don't clutter the core</li>
+            <li>Keep it fast and slim - Not pack it full of things that almost nobody ever need - The core isn't big and
+                won't ever be big - This requires thinking about features twice - Better split into a separate module
+                that don't clutter the core
+            </li>
         </ul>
-
 
 
         I've seen and used many frameworks in my career and i picked ideas of many of them and tried to combine them in a new framework.

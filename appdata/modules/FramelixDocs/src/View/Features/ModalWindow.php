@@ -3,7 +3,6 @@
 namespace Framelix\FramelixDocs\View\Features;
 
 use Framelix\Framelix\DateTime;
-use Framelix\Framelix\Db\StorablePropertyInterface;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\FramelixDocs\View\View;
 
@@ -35,7 +34,7 @@ class ModalWindow extends View
         <?php
         $this->addJsExecutableSnippet(
             'Alert',
-            'Open a alert box',
+            'Open a alert box.',
             /** @lang JavaScript */
             "FramelixModal.alert('A simple alert box')"
         );
@@ -74,9 +73,9 @@ class ModalWindow extends View
             "
               FramelixModal.show({
                   bodyContent: FramelixRequest.jsCall('" . JsCall::getUrl(
-                    __CLASS__,
-                    'modalContentTest'
-                ) . "')
+                __CLASS__,
+                'modalContentTest'
+            ) . "')
               })
             "
         );
@@ -85,15 +84,18 @@ class ModalWindow extends View
         echo $this->getAnchoredTitle('options', 'FramelixModal options');
         ?>
         <p>
-            There are many options for the <code>FramelixModal.show</code> call. To modify, size, width, behaviour, style, buttons, contents, listen for events and many more. Here are the corresponding doc
+            There are many options for the <code>FramelixModal.show</code> call. To modify, size, width, behaviour,
+            style, buttons, contents, listen for events and many more. Here are the corresponding doc
             comments for that.
         </p>
         <?php
-        $this->addSourceFile(FRAMELIX_APPDATA_FOLDER."/modules/Framelix/js/framelix-modal.js", 'FramelixModalShowOptions');
+        $this->addSourceFile(FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/js/framelix-modal.js",
+            'FramelixModalShowOptions');
         $this->showSourceFiles();
         ?>
         <p>
-            The complete source including other functions can be found at <?=$this->getShowSourceFileLinkTag(['Framelix/js/framelix-modal.js'])?>
+            The complete source including other functions can be found
+            at <?= $this->getShowSourceFileLinkTag(['Framelix/js/framelix-modal.js']) ?>
         </p>
         <?php
     }

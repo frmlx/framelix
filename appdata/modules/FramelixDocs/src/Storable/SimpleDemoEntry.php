@@ -4,7 +4,6 @@ namespace Framelix\FramelixDocs\Storable;
 
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\StorableSchema;
-use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableExtended;
 
 /**

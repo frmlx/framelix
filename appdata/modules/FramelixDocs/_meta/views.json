@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|2550596116",
+    "directoryListHash": "3|3911132359",
     "views": {
         "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
             "accessRole": "*",
@@ -81,6 +81,26 @@
             "pageTitle": "Storables - The way you store data in Framelix",
             "url": "\/database\/storables"
         },
+        "Framelix\\FramelixDocs\\View\\Features\\Cronjobs": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Cronjobs - Scheduled code execution",
+            "url": "\/features\/cronjobs"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\ExcelSpreadsheet": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Spreadsheet\/Excel",
+            "url": "\/features\/excelspreadsheet"
+        },
         "Framelix\\FramelixDocs\\View\\Features\\Forms": {
             "accessRole": "*",
             "customUrl": null,
@@ -110,6 +130,36 @@
             "hiddenView": false,
             "pageTitle": "Modal\/Dialog Window",
             "url": "\/features\/modalwindow"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\Pdf": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "PDF with MPDF",
+            "url": "\/features\/pdf"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\PdfExampleExtend": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/features\/pdfexampleextend"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\StorableMeta": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Storable Meta - The companion to Storables",
+            "url": "\/features\/storablemeta"
         },
         "Framelix\\FramelixDocs\\View\\Features\\Tables": {
             "accessRole": "*",

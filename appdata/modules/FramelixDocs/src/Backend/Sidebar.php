@@ -11,9 +11,13 @@ use Framelix\FramelixDocs\View\CoreDev\Docker;
 use Framelix\FramelixDocs\View\CoreDev\Framelix;
 use Framelix\FramelixDocs\View\Database\SchemeGenerator;
 use Framelix\FramelixDocs\View\Database\Storables;
+use Framelix\FramelixDocs\View\Features\Cronjobs;
+use Framelix\FramelixDocs\View\Features\ExcelSpreadsheet;
 use Framelix\FramelixDocs\View\Features\Forms;
 use Framelix\FramelixDocs\View\Features\InlinePopup;
 use Framelix\FramelixDocs\View\Features\ModalWindow;
+use Framelix\FramelixDocs\View\Features\Pdf;
+use Framelix\FramelixDocs\View\Features\StorableMeta;
 use Framelix\FramelixDocs\View\Features\Tables;
 use Framelix\FramelixDocs\View\Features\Toasts;
 use Framelix\FramelixDocs\View\GetStarted\Setup;
@@ -45,6 +49,10 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(Toasts::class);
         $this->addLink(Tables::class);
         $this->addLink(Forms::class);
+        $this->addLink(ExcelSpreadsheet::class);
+        $this->addLink(Pdf::class);
+        $this->addLink(Cronjobs::class);
+        $this->addLink(StorableMeta::class);
         $this->showHtmlForLinkData();
 
         $this->startGroup('Core Development', 'hub', forceOpened: true);

@@ -26,8 +26,10 @@ class Tables extends View
             ]);
         }
         $table->initialSort = ["+id"];
-        $table->addColumnFlag('id', Table::COLUMNFLAG_SMALLFONT, Table::COLUMNFLAG_SMALLWIDTH); // to make the column smaller font
-        $table->addColumnFlag('timestamp', Table::COLUMNFLAG_SMALLFONT, Table::COLUMNFLAG_SMALLWIDTH); // to make the column smaller font
+        $table->addColumnFlag('id', Table::COLUMNFLAG_SMALLFONT,
+            Table::COLUMNFLAG_SMALLWIDTH); // to make the column smaller font
+        $table->addColumnFlag('timestamp', Table::COLUMNFLAG_SMALLFONT,
+            Table::COLUMNFLAG_SMALLWIDTH); // to make the column smaller font
         $table->show();
     }
 
@@ -53,10 +55,10 @@ class Tables extends View
         <script>
           (function () {
             const table = FramelixTable.getById('<?=$table->id?>')
-            table.container.on(FramelixTable.EVENT_COLUMNSORT_SORT_CHANGED, function (){
+            table.container.on(FramelixTable.EVENT_COLUMNSORT_SORT_CHANGED, function () {
               FramelixToast.success('Sort with header sort changed')
             })
-            table.container.on(FramelixTable.EVENT_DRAGSORT_SORT_CHANGED, function (){
+            table.container.on(FramelixTable.EVENT_DRAGSORT_SORT_CHANGED, function () {
               FramelixToast.success('Sort with mouse drag&drop changed')
             })
           })()
@@ -101,7 +103,9 @@ class Tables extends View
             Let's see some examples.
         </p>
         <p>
-            Tables are even more powerful in combination with <code>StorableMeta</code> and <code>Storables</code>, as they can be auto-generated, with all properties that are available from the database, with a few lines of code.
+            Tables are even more powerful in combination with <code>StorableMeta</code> and <code>Storables</code>, as
+            they can be auto-generated, with all properties that are available from the database, with a few lines of
+            code.
         </p>
         <?php
         $this->addPhpExecutableMethod([__CLASS__, "basicTable"], "Basic Table",
@@ -109,11 +113,12 @@ class Tables extends View
         $this->addPhpExecutableMethod([__CLASS__, "dragSort"], "Drag & Drop Sort",
             "Use your mouse to drag and drop rows. In javascript you can listen to that events and do something after sort have changed.");
         $this->addPhpExecutableMethod([__CLASS__, "checkboxes"], "Selectable checkboxes",
-            "Adds checkboxes to the rows, so an user can select rows. ");
+            "Adds checkboxes to the rows, so an user can select rows.");
         $this->showPhpExecutableMethodsCodeBlock();
         ?>
         <p>
-            You can read out more features, flags and functions directly from source at <?=$this->getShowSourceFileLinkTag(['Framelix/js/framelix-table.js', 'Framelix/src/Html/Table.php'])?>.
+            You can read out more features, flags and functions directly from source
+            at <?= $this->getShowSourceFileLinkTag(['Framelix/js/framelix-table.js', 'Framelix/src/Html/Table.php']) ?>.
         </p>
         <?php
     }

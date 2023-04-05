@@ -40,6 +40,7 @@ use function substr;
 
 use const DEBUG_BACKTRACE_IGNORE_ARGS;
 use const FILE_IGNORE_NEW_LINES;
+use const FRAMELIX_APPDATA_FOLDER;
 
 abstract class View extends \Framelix\Framelix\View\Backend\View
 {
@@ -294,12 +295,15 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             ) . '</a></span>';
     }
 
-    public function getLinkToInternalPage(string $class, ?string $overridePageTitle = null): string
-    {
+    public function getLinkToInternalPage(
+        string $class,
+        ?string $overridePageTitle = null,
+        bool $blankWindow = false
+    ): string {
         $meta = \Framelix\Framelix\View::getMetadataForView($class);
         return '<a href="' . \Framelix\Framelix\View::getUrl(
                 $class
-            ) . '" >' . ($overridePageTitle ?? $meta['pageTitle']) . '</a>';
+            ) . '" ' . ($blankWindow ? 'target="_blank"' : '') . '>' . ($overridePageTitle ?? $meta['pageTitle']) . '</a>';
     }
 
     /**
@@ -330,6 +334,11 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     {
         $tags = [];
         foreach ($files as $relativePath) {
+            if (str_starts_with($relativePath,
+                    "Framelix") && (class_exists($relativePath) || interface_exists($relativePath))) {
+                $relativePath = substr(ClassUtils::getFilePathForClassName($relativePath),
+                    strlen(FRAMELIX_APPDATA_FOLDER . "/modules/"));
+            }
             $tags[] = '<framelix-button small icon="visibility" theme="transparent" jscall-url="' . JsCall::getUrl(View::class,
                     'show-source',
                     ['path' => $relativePath]) . '" title="Click to show complete source" target="modal">' . $relativePath . '</framelix-button>';

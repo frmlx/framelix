@@ -39,7 +39,8 @@ class Terminology extends View
             loads itself.
         </p>
         <p>
-            A module is most likely to be a complete application. But you can develop a shared module, which itself only contains code the is reused from other modules.
+            A module is most likely to be a complete application. But you can develop a shared module, which itself only
+            contains code the is reused from other modules.
         </p>
         <?php
     }

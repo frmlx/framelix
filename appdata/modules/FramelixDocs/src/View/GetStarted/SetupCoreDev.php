@@ -57,29 +57,37 @@ class SetupCoreDev extends View
         echo $this->getAnchoredTitle('development', 'What and how to develop?');
         ?>
         <p>
-            First and foremost, when you want to create new features, please first consider <?=$this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions', 'creating a discussion on Github')?>. Maybe someone else is already working on similar things.
+            First and foremost, when you want to create new features, please first
+            consider <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions',
+                'creating a discussion on Github') ?>. Maybe someone else is already working on similar things.
         </p>
         <p>
-            As Framelix is a Full-Stack container, there are many things where you can develop. Improving the docker container itself. Improving the Framelix module core. Just working on some frontend stuff inside the core, etc... Pick the thing you like, you don't need to know everything to help us out.
+            As Framelix is a Full-Stack container, there are many things where you can develop. Improving the docker
+            container itself. Improving the Framelix module core. Just working on some frontend stuff inside the core,
+            etc... Pick the thing you like, you don't need to know everything to help us out.
         </p>
         <p>
-            It is best, to just generally always <?=$this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions', 'ask')?> when you're stuck. This is kind of a new Framework. A general rule of thumb is not established yet. Just come over and discuss with us.
+            It is best, to just generally
+            always <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions', 'ask') ?> when
+            you're stuck. This is kind of a new Framework. A general rule of thumb is not established yet. Just come
+            over and discuss with us.
         </p>
         <?php
         echo $this->getAnchoredTitle('phpstorm', 'PhpStorm Setup for tests');
         ?>
         <p>
-            We use PhpStorm IDE a lot, as it have cool features that make development faster and easier. One thing of it is, you can run Php Unit tests directly from contextmenu in PhpStorm, including CodeCoverage reports, which is super handy.
+            We use PhpStorm IDE a lot, as it have cool features that make development faster and easier. One thing of it
+            is, you can run Php Unit tests directly from contextmenu in PhpStorm, including CodeCoverage reports, which
+            is super handy.
         </p>
         <p>
-            To make this work, you need to set the following settings. Than you can right-click->Run on any PhpUnit test (or a whole folder) inside <code>FramelixTests/tests</code>.
+            To make this work, you need to set the following settings. Than you can right-click->Run on any PhpUnit test
+            (or a whole folder) inside <code>FramelixTests/tests</code>.
         </p>
         <?php
 
         echo $this->getPublicResourceHtmlTag("images/phpstorm-cli-interpreter-docker-compose.png");
         echo $this->getPublicResourceHtmlTag("images/phpstorm-test-frameworks.png");
         echo $this->getPublicResourceHtmlTag("images/phpstorm-runtest.png");
-
-
     }
 }

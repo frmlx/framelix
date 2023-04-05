@@ -47,6 +47,7 @@ class SchemeGenerator extends View
             Also there are console commands in the docker container to update from the command line.
         </p>
         <?php
-        $this->showCodeBlock("framelix_console '*' updateDatabaseSafe\nframelix_console '*' updateDatabaseUnsafe", codeLanguage: 'bash');
+        $this->showCodeBlock("framelix_console '*' updateDatabaseSafe\nframelix_console '*' updateDatabaseUnsafe",
+            codeLanguage: 'bash');
     }
 }

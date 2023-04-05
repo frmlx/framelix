@@ -12,7 +12,8 @@ class Framelix extends View
     {
         ?>
         <p>
-            The development in the core consists of many parts that are working together. Here is a list of what sections Framelix is internally split into.
+            The development in the core consists of many parts that are working together. Here is a list of what
+            sections Framelix is internally split into.
         </p>
         <?php
         echo $this->getAnchoredTitle('modules', 'Development modules');
@@ -21,10 +22,18 @@ class Framelix extends View
             This repository have 4 modules, 3 of them have separate ports and entry points.
         </p>
         <ul>
-            <li>Framelix - This is the core which is just the Framelix Framework itself. Everything you modify here, is used by every other module.</li>
-            <li>FramelixDocs - This module contains the docs you are currently reading. So when you do changes in Framelix, you also should update the docs according to your changes.</li>
-            <li>FramelixStarter - A small biolerplate module that a user of the Framelix framework just can unpack and use as a starting point for development.</li>
-            <li>FramelixTests - This contains all tests. Unit tests and playwright end-to-end tests. Every change in the Framelix framework should have all new logic tested. 90%+ is the goal for code coverage.</li>
+            <li>Framelix - This is the core which is just the Framelix Framework itself. Everything you modify here, is
+                used by every other module.
+            </li>
+            <li>FramelixDocs - This module contains the docs you are currently reading. So when you do changes in
+                Framelix, you also should update the docs according to your changes.
+            </li>
+            <li>FramelixStarter - A small biolerplate module that a user of the Framelix framework just can unpack and
+                use as a starting point for development.
+            </li>
+            <li>FramelixTests - This contains all tests. Unit tests and playwright end-to-end tests. Every change in the
+                Framelix framework should have all new logic tested. 90%+ is the goal for code coverage.
+            </li>
         </ul>
         <?php
     }
