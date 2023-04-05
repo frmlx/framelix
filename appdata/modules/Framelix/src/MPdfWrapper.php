@@ -33,6 +33,7 @@ class MPdfWrapper extends Mpdf
         $this->onAfterAddPage = $callable;
     }
 
+    /** @phpstan-ignore-next-line */
     public function AddPage(
         $orientation = '',
         $condition = '',
@@ -55,13 +56,34 @@ class MPdfWrapper extends Mpdf
         $efvalue = 0,
         $pagesel = '',
         $newformat = ''
-    ) {
+    )
+    {
         if ($this->onBeforeAddPage) {
             call_user_func_array($this->onBeforeAddPage, []);
         }
-        $result = parent::AddPage($orientation, $condition, $resetpagenum, $pagenumstyle, $suppress, $mgl, $mgr, $mgt,
-            $mgb, $mgh, $mgf, $ohname, $ehname, $ofname, $efname, $ohvalue, $ehvalue, $ofvalue, $efvalue, $pagesel,
-            $newformat);
+        $result = parent::AddPage(
+            $orientation,
+            $condition,
+            $resetpagenum,
+            $pagenumstyle,
+            $suppress,
+            $mgl,
+            $mgr,
+            $mgt,
+            $mgb,
+            $mgh,
+            $mgf,
+            $ohname,
+            $ehname,
+            $ofname,
+            $efname,
+            $ohvalue,
+            $ehvalue,
+            $ofvalue,
+            $efvalue,
+            $pagesel,
+            $newformat
+        );
 
         if ($this->onAfterAddPage) {
             call_user_func_array($this->onAfterAddPage, []);

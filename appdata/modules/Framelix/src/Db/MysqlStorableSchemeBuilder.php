@@ -98,7 +98,9 @@ class MysqlStorableSchemeBuilder
     public function getExistingTables(): array
     {
         $existingTables = [];
-        $fetch = $this->db->fetchAssoc("SHOW TABLE STATUS FROM `{$this->db->connectionConfig['database']}`");
+        $fetch = $this->db->fetchAssoc(
+            "SHOW TABLE STATUS FROM " . $this->db->quoteIdentifier($this->db->database)
+        );
         foreach ($fetch as $row) {
             $tableName = strtolower($row['Name']);
             $existingTables[$tableName] = $tableName;
@@ -122,7 +124,7 @@ class MysqlStorableSchemeBuilder
         foreach ($existingTables as $existingTable) {
             $storableSchema = new StorableSchema($existingTable);
             $existingStorableSchemas[$existingTable] = $storableSchema;
-            $rows = $this->db->fetchAssoc("SHOW FULL FIELDS FROM `$existingTable`");
+            $rows = $this->db->fetchAssoc("SHOW FULL FIELDS FROM " . $this->db->quoteIdentifier($existingTable));
             foreach ($rows as $row) {
                 $storableSchemaProperty = $storableSchema->createProperty($row['Field']);
                 $type = $row["Type"];
@@ -147,7 +149,7 @@ class MysqlStorableSchemeBuilder
                 $storableSchemaProperty->autoIncrement = str_contains($row["Extra"], "auto_increment");
                 $storableSchemaProperty->dbComment = $row['Comment'] ?: null;
             }
-            $rows = $this->db->fetchAssoc("SHOW INDEXES FROM `$existingTable`");
+            $rows = $this->db->fetchAssoc("SHOW INDEXES FROM " . $this->db->quoteIdentifier($existingTable));
             foreach ($rows as $row) {
                 // just store that we have an index with this name, doesn't matter which because we skip if index already exist
                 $storableSchema->addIndex($row["Key_name"], 'index');
@@ -207,11 +209,15 @@ class MysqlStorableSchemeBuilder
             if (isset($existingTables[$tableName])) {
                 continue;
             }
-            $query = "CREATE TABLE `$storableSchema->tableName` (`id` BIGINT UNSIGNED NOT NULL";
+            $query = "CREATE TABLE " . $this->db->quoteIdentifier(
+                    $storableSchema->tableName
+                ) . " (" . $this->db->quoteIdentifier("id") . " BIGINT UNSIGNED NOT NULL";
             if ($storableSchema->properties['id']->autoIncrement) {
                 $query .= " AUTO_INCREMENT";
             }
-            $query .= ", PRIMARY KEY (`id`) USING BTREE) COLLATE='" . self::DEFAULT_COLLATION . "' ENGINE=" . self::DEFAULT_ENGINE;
+            $query .= ", PRIMARY KEY (" . $this->db->quoteIdentifier(
+                    "id"
+                ) . ") USING BTREE) COLLATE='" . self::DEFAULT_COLLATION . "' ENGINE=" . self::DEFAULT_ENGINE;
             $queries[] = [
                 "type" => 'create-table',
                 "query" => $query
@@ -236,7 +242,7 @@ class MysqlStorableSchemeBuilder
                 }
                 $queryPartNew = self::getQueryForAlterTableColumn($storableSchemaProperty, !$existingProperty);
                 if ($queryPartExisting !== $queryPartNew) {
-                    $query = "ALTER TABLE `$tableName` " . $queryPartNew;
+                    $query = "ALTER TABLE " . $this->db->quoteIdentifier($tableName) . " " . $queryPartNew;
                     $queries[] = [
                         "type" => $queryPartExisting ? 'alter-column' : 'create-column',
                         "query" => $query
@@ -249,7 +255,8 @@ class MysqlStorableSchemeBuilder
                     if (isset($existingStorableSchema->indexes[$indexName])) {
                         continue;
                     }
-                    $query = "ALTER TABLE `$tableName` " . self::getQueryForAddTableIndex(
+                    $query = "ALTER TABLE " . $this->db->quoteIdentifier($tableName) . " " .
+                        self::getQueryForAddTableIndex(
                             $indexName,
                             $indexOptions
                         );
@@ -289,7 +296,7 @@ class MysqlStorableSchemeBuilder
             if (!isset($requiredStorableSchemas[$existingTable])) {
                 $queries[] = [
                     "type" => 'drop-table',
-                    "query" => "DROP TABLE `$existingTable`"
+                    "query" => "DROP TABLE " . $this->db->quoteIdentifier($existingTable)
                 ];
             }
         }
@@ -309,7 +316,9 @@ class MysqlStorableSchemeBuilder
                 if (!isset($requiredStorableSchemas[$tableName]->properties[$propertyName])) {
                     $queries[] = [
                         "type" => 'drop-column',
-                        "query" => "ALTER TABLE `$tableName` DROP COLUMN `$propertyName`",
+                        "query" => "ALTER TABLE " . $this->db->quoteIdentifier(
+                                $tableName
+                            ) . " DROP COLUMN " . $this->db->quoteIdentifier($propertyName),
                         "ignoreErrors" => true,
                     ];
                 }
@@ -322,7 +331,9 @@ class MysqlStorableSchemeBuilder
                 if (!isset($requiredStorableSchemas[$tableName]->indexes[$indexName])) {
                     $queries[] = [
                         "type" => 'drop-index',
-                        "query" => "ALTER TABLE `$tableName` DROP INDEX `$indexName`",
+                        "query" => "ALTER TABLE " . $this->db->quoteIdentifier(
+                                $tableName
+                            ) . " DROP INDEX " . $this->db->quoteIdentifier($indexName),
                         "ignoreErrors" => true
                     ];
                 }
@@ -343,9 +354,9 @@ class MysqlStorableSchemeBuilder
     ): string {
         $queryColumnParts = [];
         $queryColumnParts[] = !$isNewColumn ? 'CHANGE COLUMN' : 'ADD';
-        $queryColumnParts[] = "`$storableSchemaProperty->name`";
+        $queryColumnParts[] = $this->db->quoteIdentifier($storableSchemaProperty->name);
         if (!$isNewColumn) {
-            $queryColumnParts[] = "`$storableSchemaProperty->name`";
+            $queryColumnParts[] = $this->db->quoteIdentifier($storableSchemaProperty->name);
         }
         $databaseType = strtoupper($storableSchemaProperty->databaseType);
         $queryColumnParts[] = strtoupper($storableSchemaProperty->databaseType);
@@ -374,7 +385,7 @@ class MysqlStorableSchemeBuilder
             $queryColumnParts[] = "COMMENT " . $this->db->escapeValue($storableSchemaProperty->dbComment);
         }
         if ($storableSchemaProperty->after) {
-            $queryColumnParts[] = "AFTER `{$storableSchemaProperty->after->name}`";
+            $queryColumnParts[] = "AFTER " . $this->db->quoteIdentifier($storableSchemaProperty->after->name);
         }
         return implode(" ", $queryColumnParts);
     }
@@ -397,10 +408,10 @@ class MysqlStorableSchemeBuilder
         }
         $columnNames = [];
         foreach ($options['properties'] as $columnName) {
-            $columnNames[] = "`$columnName`";
+            $columnNames[] = $this->db->quoteIdentifier($columnName);
         }
         if ($options['type'] !== 'primary') {
-            $queryIndexParts[] = "`$indexName`";
+            $queryIndexParts[] = $this->db->quoteIdentifier($indexName);
         }
         $queryIndexParts[] = "(" . implode(", ", $columnNames) . ")";
         return implode(" ", $queryIndexParts);

@@ -8,6 +8,7 @@ use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Form\Field;
@@ -216,12 +217,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     public function setupDatabase(bool $simulateDefaultConnection = false): void
     {
         // close opened connections to be clean when starting
-        foreach (Mysql::$instances as $instance) {
-            $instance->mysqli?->close();
+        foreach (Sql::$instances as $instance) {
+            $instance->disconnect();
         }
-        Mysql::$instances = [];
+        Sql::$instances = [];
         if ($simulateDefaultConnection) {
-            Config::$dbConnections[FRAMELIX_MODULE] = Config::$dbConnections['test'];
+            Config::$sqlConnections[FRAMELIX_MODULE] = Config::$sqlConnections['test'];
         }
         $this->cleanupDatabase();
         $db = Mysql::get('test');
@@ -240,9 +241,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     public function cleanupDatabase(): void
     {
         $db = Mysql::get('test');
-        $db->query("DROP DATABASE `{$db->connectionConfig['database']}`");
-        $db->query("CREATE DATABASE `{$db->connectionConfig['database']}`");
-        $db->query("USE `{$db->connectionConfig['database']}`");
+        $dbQuoted = $db->quoteIdentifier($db->database);
+        $db->query("DROP DATABASE $dbQuoted");
+        $db->query("CREATE DATABASE $dbQuoted");
+        $db->query("USE $dbQuoted");
     }
 
     /**

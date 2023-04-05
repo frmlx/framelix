@@ -10,9 +10,6 @@ use Framelix\FramelixTests\TestCase;
 
 use function file_get_contents;
 use function file_put_contents;
-use function rename;
-use function time;
-use function touch;
 use function unlink;
 
 use const FRAMELIX_MODULE;

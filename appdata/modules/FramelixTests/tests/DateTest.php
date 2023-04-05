@@ -16,8 +16,14 @@ final class DateTest extends TestCase
         $this->assertSame(gmdate('Y-m-d', $objDt->getTimestamp()), (string)$obj);
         $this->assertSame(gmdate('"Y-m-d"', $objDt->getTimestamp()), json_encode($obj));
         $this->assertSame(20000101, $obj->getSortableValue());
-        $this->assertSame('<framelix-time datetime="2000-01-01T00:00:00+01:00" format="DD.MM.YYYY"></framelix-time>', $obj->getHtmlString());
-        $this->assertSame('<framelix-time datetime="2000-01-01T00:00:00+01:00" format="DD.MM.YYYY HH:mm:ss"></framelix-time>', $obj->cloneToDateTime()->getHtmlString());
+        $this->assertSame(
+            '<framelix-time datetime="2000-01-01T00:00:00+01:00" format="DD.MM.YYYY"></framelix-time>',
+            $obj->getHtmlString()
+        );
+        $this->assertSame(
+            '<framelix-time datetime="2000-01-01T00:00:00+01:00" format="DD.MM.YYYY HH:mm:ss"></framelix-time>',
+            $obj->cloneToDateTime()->getHtmlString()
+        );
         $this->assertSame('01.01.2000', $obj->getRawTextString());
         $this->assertSame($obj2, Date::max($obj, $obj2));
         $this->assertSame($obj, Date::min($obj, $obj2));

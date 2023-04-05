@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" bootstrap="_bootstrap.php" executionOrder="depends,defects" beStrictAboutOutputDuringTests="true" beStrictAboutChangesToGlobalState="true" processIsolation="true" failOnRisky="true" failOnWarning="true" cacheDirectory=".phpunit.cache" beStrictAboutCoverageMetadata="true">
-  <testsuites>
-    <testsuite name="default">
-      <directory>..</directory>
-    </testsuite>
-  </testsuites>
-  <coverage includeUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">../../Framelix/src</directory>
-    </include>
-    <!-- This directories will be covered by end2end tests, sometime... -->
-    <exclude>
-      <directory suffix=".php">../../Framelix/src/Backend</directory>
-      <directory suffix=".php">../../Framelix/src/View</directory>
-    </exclude>
-  </coverage>
-  <php>
-    <const name="PHPUNIT_TESTS" value="true"/>
-  </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" bootstrap="_bootstrap.php"
+         executionOrder="depends,defects" beStrictAboutOutputDuringTests="true" beStrictAboutChangesToGlobalState="true"
+         processIsolation="true" failOnRisky="true" failOnWarning="true" cacheDirectory=".phpunit.cache"
+         beStrictAboutCoverageMetadata="true">
+    <testsuites>
+        <testsuite name="default">
+            <directory>..</directory>
+        </testsuite>
+    </testsuites>
+    <coverage includeUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">../../Framelix/src</directory>
+        </include>
+        <!-- This directories will be covered by end2end tests, sometime... -->
+        <exclude>
+            <directory suffix=".php">../../Framelix/src/Backend</directory>
+            <directory suffix=".php">../../Framelix/src/View</directory>
+        </exclude>
+    </coverage>
+    <php>
+        <const name="PHPUNIT_TESTS" value="true"/>
+    </php>
 </phpunit>

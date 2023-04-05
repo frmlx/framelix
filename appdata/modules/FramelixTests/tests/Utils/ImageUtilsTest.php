@@ -14,12 +14,25 @@ final class ImageUtilsTest extends TestCase
 
     public function testCompare(): void
     {
-        $this->assertTrue(ImageUtils::compareImages(self::TESTFILES_ROOT . "/imageutils/same-1.png",
-            self::TESTFILES_ROOT . "/imageutils/same-2.png"));
-        $this->assertFalse(ImageUtils::compareImages(self::TESTFILES_ROOT . "/imageutils/same-1.png",
-            self::TESTFILES_ROOT . "/imageutils/diff.png"));
-        $this->assertTrue(ImageUtils::compareImages(self::TESTFILES_ROOT . "/imageutils/same-1.png",
-            self::TESTFILES_ROOT . "/imageutils/diff.png", 0.1));
+        $this->assertTrue(
+            ImageUtils::compareImages(
+                self::TESTFILES_ROOT . "/imageutils/same-1.png",
+                self::TESTFILES_ROOT . "/imageutils/same-2.png"
+            )
+        );
+        $this->assertFalse(
+            ImageUtils::compareImages(
+                self::TESTFILES_ROOT . "/imageutils/same-1.png",
+                self::TESTFILES_ROOT . "/imageutils/diff.png"
+            )
+        );
+        $this->assertTrue(
+            ImageUtils::compareImages(
+                self::TESTFILES_ROOT . "/imageutils/same-1.png",
+                self::TESTFILES_ROOT . "/imageutils/diff.png",
+                0.1
+            )
+        );
     }
 
     public function testImageData(): void
@@ -33,7 +46,7 @@ final class ImageUtilsTest extends TestCase
 
     public function testResize(): void
     {
-        $testImage =self::TESTFILES_ROOT . "/imageutils/test-image.jpg";
+        $testImage = self::TESTFILES_ROOT . "/imageutils/test-image.jpg";
         $testResizedImage = self::TESTFILES_ROOT . "/imageutils/test-image-resized.jpg";
         ImageUtils::resize($testImage, $testResizedImage, 100, 100);
         $this->assertEquals(['type' => 'jpeg', 'width' => 100, 'height' => 67],

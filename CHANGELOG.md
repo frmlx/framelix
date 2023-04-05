@@ -1,4 +1,4 @@
-# [4.0.0-alpha.1 - 2023-03-28]
+# [4.0.0 - TBA]
 
 ⚠️ **BREAKING CHANGE** ⚠️: Combined 3 repositories (tests, core, docker) to one, called `framelix`. This make maintenance, further development and end-user usage a lot easier. The way you must setup your docker installation have changed. However, a working installation of v3.x can be upgraded with a bit of effort.
 
@@ -13,6 +13,7 @@
 * 🛠️ fixed many tests and core code that failed because of now better error detection of new PhpUnit
 * ✏️ ⚠️ renamed `Time` functions `timeStringToHours->toHours, timeStringToSeconds->toSeconds` and make conversion more lazy (accepting more types of values)
 * ✏️ ⚠️ changed database handling so each module instance have it's own separate database, the default `app` database is being dropped
+* ✏️ ⚠️ changed database handling to abstract SQL and make place for other types like mssql, sqlite, postgreesql
 * ✏️ changed to hidden sidebar by default for some small views (Login, ForgotPassword, etc..)
 * ✏️ changed internals of how app is set up (reduced checks, more streamlined, easier maintenance)
 * ✏️ changed some vendor frontend libraries to package.json instead of manual installation

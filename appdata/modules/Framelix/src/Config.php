@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix;
 
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Form\Field\Captcha;
 use Framelix\Framelix\Form\Field\Email;
 use Framelix\Framelix\Form\Field\Html;
@@ -254,13 +255,6 @@ class Config
     public static ?string $backendDefaultView = null;
 
     /**
-     * All available database connections
-     * Add new by self::addDbConnection()
-     * @var array
-     */
-    public static array $dbConnections = [];
-
-    /**
      * A file path pointing to the backend favicon
      * Must be in a public folder (module or userdata)
      * @var string|null
@@ -305,20 +299,26 @@ class Config
     public static string $dateFormatJs = "DD.MM.YYYY";
 
     /**
+     * Array of all available added sql connections
+     * @var array
+     */
+    public static array $sqlConnections = [];
+
+    /**
      * Called when the module is registered the first time
      * This is used for module defaults
      * @return void
      */
     public static function onRegister(): void
     {
-        // add a default salt, after application is setup, this default salt must be replaced
+        // add a default salt, after application is set up, this default salt must be replaced
         // app requires any salt to be functional, even during setup
         self::addSalt('none');
 
         self::$environmentConfig = JsonUtils::readFromFile("/framelix/system/environment.json");
 
         // set default mysql db connection for current module
-        self::addDbConnection(FRAMELIX_MODULE, 'localhost', 3306, 'root', 'app', FRAMELIX_MODULE);
+        self::addMysqlConnection(FRAMELIX_MODULE, FRAMELIX_MODULE, 'localhost', 'root', 'app');
 
         // register the other module
         Framelix::registerModule(FRAMELIX_MODULE);
@@ -555,26 +555,27 @@ class Config
     }
 
     /**
-     * Add a database connection
+     * Add a mysql database connection
      * @param string $id
-     * @param string $host
-     * @param int|null $port Default is 3306
-     * @param string $username
-     * @param string $password
      * @param string $database
+     * @param string $host
+     * @param string|null $username
+     * @param string|null $password
+     * @param int|null $port
      * @param string|null $socket
      * @return void
      */
-    public static function addDbConnection(
+    public static function addMysqlConnection(
         string $id,
-        string $host,
-        int|null $port,
-        string $username,
-        #[SensitiveParameter] string $password,
         string $database,
+        string $host,
+        string|null $username = null,
+        #[SensitiveParameter] string|null $password = null,
+        int|null $port = null,
         string|null $socket = null
     ): void {
-        self::$dbConnections[$id] = [
+        Config::$sqlConnections[$id] = [
+            'type' => Sql::TYPE_MYSQL,
             'id' => $id,
             'host' => $host,
             'port' => $port,

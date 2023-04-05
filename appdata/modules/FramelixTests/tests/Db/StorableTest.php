@@ -7,6 +7,7 @@ use Framelix\Framelix\Config;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Exception\Redirect;
 use Framelix\Framelix\Html\TableCell;
 use Framelix\Framelix\Network\JsCall;
@@ -738,7 +739,7 @@ final class StorableTest extends TestCase
      */
     private function startRecordExecutedQueries(): void
     {
-        Mysql::$logExecutedQueries = true;
+        Sql::$logExecutedQueries = true;
         $db = Mysql::get('test');
         $db->executedQueries = [];
         $this->executedQueries = $db->executedQueriesCount;
@@ -757,7 +758,7 @@ final class StorableTest extends TestCase
             echo implode("\n", $db->executedQueries);
         }
         $db->executedQueries = [];
-        Mysql::$logExecutedQueries = false;
+        Sql::$logExecutedQueries = false;
         $this->assertSame(
             $queries,
             $now

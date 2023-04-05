@@ -6,6 +6,7 @@ use Framelix\Framelix\Config;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Sql;
 use Framelix\FramelixTests\Storable\TestStorable2;
 use Framelix\FramelixTests\TestCase;
 use ReflectionClass;
@@ -183,10 +184,11 @@ final class MysqlTest extends TestCase
     public function testExceptionConnectError()
     {
         $this->assertExceptionOnCall(function () {
+            $db = Mysql::get('test', false);
+            $db->disconnect();
             // connect error simulate with wrong password
-            Config::$dbConnections['test']['passwordOld'] = Config::$dbConnections['test']['password'];
-            Config::$dbConnections['test']['password'] = "=!'§$%&%&(&/(/&(";
-            Mysql::get('test');
+            $db->password = "=!'§$%&%&(&/(/&(";
+            $db->connect();
         });
     }
 
@@ -195,7 +197,7 @@ final class MysqlTest extends TestCase
      */
     public function testQueries(): void
     {
-        Mysql::$logExecutedQueries = true;
+        Sql::$logExecutedQueries = true;
         $db = Mysql::get('test');
 
         // connect does nothing when already connected
@@ -239,7 +241,6 @@ final class MysqlTest extends TestCase
 
         // check different select fetch formats
         $this->assertEquals(1, $db->getLastInsertId());
-        $this->assertEquals(1, $db->getAffectedRows());
         $this->assertEquals($testText, $db->fetchOne("SELECT text FROM dev"));
         $this->assertEquals([$testText], $db->fetchColumn("SELECT text FROM dev"));
         $this->assertEquals([$testText => $testText], $db->fetchColumn("SELECT text, text FROM dev"));

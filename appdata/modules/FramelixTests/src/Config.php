@@ -4,6 +4,7 @@ namespace Framelix\FramelixTests;
 
 use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Storable\User;
 
 class Config
@@ -50,7 +51,13 @@ class Config
         if (defined('PHPUNIT_TESTS')) {
             // configured so that no setup is needed and tests can assume the app is fully configured
             \Framelix\Framelix\Config::addSalt('jdTbhul2sd3yyaLQPfTFNToE42PcXOCC991SzzKlUrQhS1hhkdTIHufuJ8Sj6XPgd');
-            \Framelix\Framelix\Config::addDbConnection('test', 'localhost', 3306, 'root', 'app', 'unittests');
+            \Framelix\Framelix\Config::addMysqlConnection(
+                'test',
+                'unittests',
+                'localhost',
+                'root',
+                'app'
+            );
 
             // instantiate db if not yet done, to fix issue when a test is failed prev.
             $gen = new MysqlStorableSchemeBuilder(Mysql::get());
