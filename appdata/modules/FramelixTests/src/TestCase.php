@@ -7,8 +7,8 @@ use Framelix\Framelix\Config;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
 use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Form\Field;
@@ -225,8 +225,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             Config::$sqlConnections[FRAMELIX_MODULE] = Config::$sqlConnections['test'];
         }
         $this->cleanupDatabase();
-        $db = Mysql::get('test');
-        $builder = new MysqlStorableSchemeBuilder($db);
+        $db = Sql::get('test');
+        $builder = new SqlStorableSchemeBuilder($db);
         $queries = $builder->getQueries();
         foreach ($queries as $queryData) {
             $db->query($queryData['query']);

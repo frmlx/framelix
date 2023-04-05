@@ -2,8 +2,8 @@
 
 namespace Db;
 
-use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
+use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\FramelixTests\Storable\TestStorable2;
 use Framelix\FramelixTests\StorableException\TestStorableNoType;
@@ -14,17 +14,17 @@ use function count;
 
 final class StorableSchemeBuilderTest extends TestCase
 {
-    private MysqlStorableSchemeBuilder $builder;
+    private SqlStorableSchemeBuilder $builder;
 
     public function testBuilderQueries(): void
     {
         $this->setupDatabase();
         $this->cleanupDatabase();
-        $db = Mysql::get('test');
+        $db = Sql::get('test');
         $schema = Storable::getStorableSchema(TestStorable2::class);
         // assert exact same schema (cached already)
         $this->assertSame($schema, Storable::getStorableSchema(TestStorable2::class));
-        $this->builder = new MysqlStorableSchemeBuilder($db);
+        $this->builder = new SqlStorableSchemeBuilder($db);
         // first create all things
         $queries = $this->builder->getQueries();
         // all new queries that do not modify anything are considered safe
@@ -36,7 +36,7 @@ final class StorableSchemeBuilderTest extends TestCase
         // calling the builder immediately after should not need to change anything
         $queries = $this->builder->getQueries();
         $this->assertQueryCount(0, $queries, true);
-        // deleting a column and than the builder should recreate this including the index
+        // deleting a column and then the builder should recreate this including the index
         // 3 queries because 1x adding, 1x reordering columns and 1x creating an index
         $db->query("ALTER TABLE framelix_framelixtests_storable_teststorable2 DROP COLUMN `createUser`");
         $queries = $this->builder->getQueries();

@@ -25,19 +25,15 @@ use function substr;
 use function trim;
 
 /**
- * Mysql scheme builder for storables
+ * Sql scheme builder for storables
  * Automatically updates/create/modifies table schema in the database
  */
-class MysqlStorableSchemeBuilder
+class SqlStorableSchemeBuilder
 {
-    public const DEFAULT_COLLATION = 'utf8mb4_unicode_ci';
-    public const DEFAULT_ENGINE = 'InnoDB';
+    public const MYSQL_DEFAULT_COLLATION = 'utf8mb4_unicode_ci';
+    public const MYSQL_DEFAULT_ENGINE = 'InnoDB';
 
-    /**
-     * Constructor
-     * @param Mysql $db
-     */
-    public function __construct(public Mysql $db)
+    public function __construct(public Sql $db)
     {
     }
 
@@ -92,23 +88,6 @@ class MysqlStorableSchemeBuilder
     }
 
     /**
-     * Get existing tables in lower case
-     * @return string[]
-     */
-    public function getExistingTables(): array
-    {
-        $existingTables = [];
-        $fetch = $this->db->fetchAssoc(
-            "SHOW TABLE STATUS FROM " . $this->db->quoteIdentifier($this->db->database)
-        );
-        foreach ($fetch as $row) {
-            $tableName = strtolower($row['Name']);
-            $existingTables[$tableName] = $tableName;
-        }
-        return $existingTables;
-    }
-
-    /**
      * Get all queries that are required to update the database
      * @return array
      */
@@ -116,7 +95,7 @@ class MysqlStorableSchemeBuilder
     {
         $requiredStorableSchemas = [];
         $queries = [];
-        $existingTables = $this->getExistingTables();
+        $existingTables = $this->db->getExistingTables(true);
         /** @var StorableSchema[] $existingStorableSchemas */
         $existingStorableSchemas = [];
 
@@ -217,7 +196,7 @@ class MysqlStorableSchemeBuilder
             }
             $query .= ", PRIMARY KEY (" . $this->db->quoteIdentifier(
                     "id"
-                ) . ") USING BTREE) COLLATE='" . self::DEFAULT_COLLATION . "' ENGINE=" . self::DEFAULT_ENGINE;
+                ) . ") USING BTREE) COLLATE='" . self::MYSQL_DEFAULT_COLLATION . "' ENGINE=" . self::MYSQL_DEFAULT_ENGINE;
             $queries[] = [
                 "type" => 'create-table',
                 "query" => $query

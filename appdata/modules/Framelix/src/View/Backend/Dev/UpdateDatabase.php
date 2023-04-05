@@ -3,8 +3,8 @@
 namespace Framelix\Framelix\View\Backend\Dev;
 
 use Framelix\Framelix\Console;
-use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
+use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Form\Field\Html;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Form;
@@ -54,7 +54,7 @@ class UpdateDatabase extends View
         $form = new Form();
         $form->id = "update-database";
 
-        $builder = new MysqlStorableSchemeBuilder(Mysql::get());
+        $builder = new SqlStorableSchemeBuilder(Sql::get());
         $unsafeQueries = $builder->getUnsafeQueries();
         $safeQueries = $builder->getSafeQueries();
 

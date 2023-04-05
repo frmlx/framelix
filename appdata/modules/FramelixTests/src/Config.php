@@ -3,8 +3,7 @@
 namespace Framelix\FramelixTests;
 
 use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
-use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Storable\User;
 
 class Config
@@ -60,8 +59,8 @@ class Config
             );
 
             // instantiate db if not yet done, to fix issue when a test is failed prev.
-            $gen = new MysqlStorableSchemeBuilder(Mysql::get());
-            if (!$gen->getExistingTables()) {
+            $gen = new SqlStorableSchemeBuilder(Mysql::get());
+            if (!$gen->db->getExistingTables()) {
                 $gen->executeQueries($gen->getSafeQueries());
             }
 

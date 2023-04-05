@@ -13,7 +13,6 @@ use JetBrains\PhpStorm\ExpectedValues;
 use mysqli_result;
 
 use function count;
-use function get_class;
 use function implode;
 use function is_array;
 use function is_bool;
@@ -75,10 +74,16 @@ abstract class Sql
     public bool $connected = false;
 
     /**
-     * The start and end controls characters to escape fields in the database
+     * The start and end control characters to escape fields in the database
      * @var string
      */
     public string $quoteChars = "``";
+
+    /**
+     * Internal cache for some getters
+     * @var array
+     */
+    protected array $cache = [];
 
     /**
      * Get instance for given id
@@ -99,11 +104,6 @@ abstract class Sql
         /** @var static $instance */
         $instance = new self::$typeMap[$config['type']]['class']();
         $instance->id = $id;
-        if (get_class($instance) !== static::class) {
-            throw new FatalError(
-                'Sql connection is from type "' . get_class($instance) . '" but is called from ' . static::class
-            );
-        }
         self::$instances[$id] = $instance;
         $instance->setConfig($config);
         if ($connect) {
@@ -123,11 +123,6 @@ abstract class Sql
     abstract public function connect(): void;
 
     /**
-     * Disconnect from database
-     */
-    abstract public function disconnect(): void;
-
-    /**
      * Execute the raw query without any framework modification
      * @param string $query
      * @return bool|mysqli_result
@@ -139,6 +134,22 @@ abstract class Sql
      * @return int
      */
     abstract public function getLastInsertId(): int;
+
+    /**
+     * Get all existing database tables in lower case
+     * @param bool $flushCache If false the result is cached by default if already called previously
+     * @return string[]
+     */
+    abstract public function getExistingTables(bool $flushCache = false): array;
+
+    /**
+     * Disconnect from database
+     */
+    public function disconnect(): void
+    {
+        $this->cache = [];
+        $this->connected = false;
+    }
 
     /**
      * Get a condition that checks if a given value is in given stored array

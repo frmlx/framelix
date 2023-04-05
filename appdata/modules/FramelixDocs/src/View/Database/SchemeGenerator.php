@@ -2,8 +2,8 @@
 
 namespace Framelix\FramelixDocs\View\Database;
 
-use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
+use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\FramelixDocs\View\View;
 
 class SchemeGenerator extends View
@@ -34,8 +34,8 @@ class SchemeGenerator extends View
         </p>
         <?php
         $this->startCodeRecording(function () {
-            $db = Mysql::get();
-            $builder = new MysqlStorableSchemeBuilder($db);
+            $db = Sql::get();
+            $builder = new SqlStorableSchemeBuilder($db);
             $safeQueries = $builder->getSafeQueries(); // only queries that do not need to modify existing columns/data
             $unsafeQueries = $builder->getUnsafeQueries(); // queries that will need to modify existing columns/data
             $builder->executeQueries($safeQueries);
@@ -47,7 +47,9 @@ class SchemeGenerator extends View
             Also there are console commands in the docker container to update from the command line.
         </p>
         <?php
-        $this->showCodeBlock("framelix_console '*' updateDatabaseSafe\nframelix_console '*' updateDatabaseUnsafe",
-            codeLanguage: 'bash');
+        $this->showCodeBlock(
+            "framelix_console '*' updateDatabaseSafe\nframelix_console '*' updateDatabaseUnsafe",
+            codeLanguage: 'bash'
+        );
     }
 }

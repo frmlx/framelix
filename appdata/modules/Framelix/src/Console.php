@@ -2,8 +2,8 @@
 
 namespace Framelix\Framelix;
 
-use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
+use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Exception\SoftError;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Utils\Shell;
@@ -83,8 +83,8 @@ class Console
     public static function appWarmup(): int
     {
         Shell::prepare("mysql -u root -papp -e 'CREATE DATABASE IF NOT EXISTS `" . FRAMELIX_MODULE . "`'")->execute();
-        $db = Mysql::get();
-        $builder = new MysqlStorableSchemeBuilder($db);
+        $db = Sql::get();
+        $builder = new SqlStorableSchemeBuilder($db);
         $queries = $builder->getSafeQueries();
         if ($queries) {
             self::info("Database upgrade");
@@ -102,7 +102,7 @@ class Console
      */
     public static function updateDatabaseSafe(): int
     {
-        $builder = new MysqlStorableSchemeBuilder(Mysql::get());
+        $builder = new SqlStorableSchemeBuilder(Sql::get());
         $queries = $builder->getSafeQueries();
         $builder->executeQueries($queries);
         self::success(count($queries) . " safe queries has been executed");
@@ -115,7 +115,7 @@ class Console
      */
     public static function updateDatabaseUnsafe(): int
     {
-        $builder = new MysqlStorableSchemeBuilder(Mysql::get());
+        $builder = new SqlStorableSchemeBuilder(Sql::get());
         $queries = $builder->getUnsafeQueries();
         $builder->executeQueries($queries);
         self::success(count($queries) . " unsafe queries has been executed");

@@ -30,11 +30,40 @@ class Mysql extends Sql
      */
     public bool|mysqli_result $lastResult = false;
 
+    /**
+     * The hostname for the connection
+     * @var string
+     */
     public string $host;
+
+    /**
+     * The username for the connection
+     * @var string
+     */
     public string $username;
+
+    /**
+     * The password for the connection
+     * @var string|null
+     */
     public string|null $password;
-    public int|null $port;
+
+    /**
+     * The database for the connection
+     * @var string
+     */
     public string $database;
+
+    /**
+     * The port for the connection
+     * @var int|null
+     */
+    public int|null $port;
+
+    /**
+     * The socket path for the connection
+     * @var string|null
+     */
     public string|null $socket;
 
     public function setConfig(array $configValues): void
@@ -74,7 +103,7 @@ class Mysql extends Sql
         if (!$this->connected) {
             return;
         }
-        $this->connected = false;
+        parent::disconnect();
         $this->mysqli?->close();
         $this->mysqli = null;
     }
@@ -123,5 +152,28 @@ class Mysql extends Sql
     public function escapeString(string $value): string
     {
         return '"' . mysqli_real_escape_string($this->mysqli, $value) . '"';
+    }
+
+    /**
+     * Get existing database tables in lower case
+     * @param bool $flushCache If false the result is cached by default if already called previously
+     * @return string[]
+     */
+    public function getExistingTables(bool $flushCache = false): array
+    {
+        $cacheKey = __METHOD__;
+        if (!$flushCache && isset($this->cache[$cacheKey])) {
+            return $this->cache[$cacheKey];
+        }
+        $existingTables = [];
+        $fetch = $this->fetchAssoc(
+            "SHOW TABLE STATUS FROM " . $this->quoteIdentifier($this->database)
+        );
+        foreach ($fetch as $row) {
+            $tableName = mb_strtolower($row['Name']);
+            $existingTables[$tableName] = $tableName;
+        }
+        $this->cache[$cacheKey] = $existingTables;
+        return $existingTables;
     }
 }

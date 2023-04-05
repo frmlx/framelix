@@ -4,7 +4,8 @@ namespace Framelix\Framelix\View\Backend;
 
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\MysqlStorableSchemeBuilder;
+use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Form\Field\Email;
 use Framelix\Framelix\Form\Field\Html;
 use Framelix\Framelix\Form\Field\Password;
@@ -59,7 +60,7 @@ class Setup extends View
                 )"
                 );
                 Mysql::get()->query("DROP TABLE `__framelix_test__`");
-                $builder = new MysqlStorableSchemeBuilder(Mysql::get());
+                $builder = new SqlStorableSchemeBuilder(Sql::get());
                 $queries = $builder->getQueries();
                 foreach ($queries as $row) {
                     $builder->db->query($row['query']);

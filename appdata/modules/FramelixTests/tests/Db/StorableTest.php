@@ -49,9 +49,6 @@ final class StorableTest extends TestCase
      */
     private array $dummyValues = [];
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testStoreAndDelete(): void
     {
         // enable system logs
