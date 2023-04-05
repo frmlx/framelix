@@ -49,7 +49,7 @@ html[data-layout="2"] .framelix-page {
   background: conic-gradient(from var(--b) at var(--xy), var(--c0) var(--a), var(--c1) 20% 50%, var(--c2) 20% calc(180deg + var(--a)), var(--c3) 20%);
 }
 
-html[data-color-scheme=dark][data-layout="2"] body {
+html[data-color-scheme=dark][data-layout="2"] .framelix-page {
   --light: 20%;
   --sat: 10%;
 }
