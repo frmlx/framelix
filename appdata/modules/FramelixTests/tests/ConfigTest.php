@@ -19,7 +19,7 @@ final class ConfigTest extends TestCase
         $this->assertSame($originalSalt, Config::$salts['default']);
 
         $this->assertSame(
-            '/framelix/userdata/FramelixTests/private/config/03-custom.php',
+            FRAMELIX_USERDATA_FOLDER . '/FramelixTests/private/config/03-custom.php',
             Config::getUserConfigFilePath('03-custom')
         );
 

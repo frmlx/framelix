@@ -12,7 +12,6 @@ use Framelix\Framelix\Utils\QuickCast;
 use JetBrains\PhpStorm\ExpectedValues;
 use mysqli_result;
 
-use function count;
 use function implode;
 use function is_array;
 use function is_bool;
@@ -27,14 +26,14 @@ use function reset;
 use function str_replace;
 use function str_starts_with;
 
-use const MYSQLI_NUM;
-
 abstract class Sql
 {
     public const TYPE_MYSQL = 1;
+    public const TYPE_SQLITE = 2;
 
     public static array $typeMap = [
-        self::TYPE_MYSQL => ['class' => Mysql::class]
+        self::TYPE_MYSQL => ['class' => Mysql::class],
+        self::TYPE_SQLITE => ['class' => Sqlite::class]
     ];
 
     /**
@@ -140,7 +139,51 @@ abstract class Sql
      * @param bool $flushCache If false the result is cached by default if already called previously
      * @return string[]
      */
-    abstract public function getExistingTables(bool $flushCache = false): array;
+    abstract public function getTables(bool $flushCache = false): array;
+
+    /**
+     * Get all existing table columns with all possible meta information
+     * Key of array is column name, value is array of metadata to that column
+     * @param bool $flushCache If false the result is cached by default if already called previously
+     * @return array Data depends on db type
+     */
+    abstract public function getTableColumns(string $table, bool $flushCache = false): array;
+
+    /**
+     * Get all existing table indexes with all possible meta information
+     * Key of array is index name, value is array of metadata to that index
+     * @param bool $flushCache If false the result is cached by default if already called previously
+     * @return array Data depends on db type
+     */
+    abstract public function getTableIndexes(string $table, bool $flushCache = false): array;
+
+    /**
+     * Fetch the complete result of a select as bare array (numeric indexes)
+     * @param string $query
+     * @param array|null $parameters
+     * @param int|null $limit If set, then stop when the given limit is reached
+     * @return array[]
+     */
+    abstract public function fetchArray(
+        string $query,
+        ?array $parameters = null,
+        ?int $limit = null
+    ): array;
+
+    /**
+     * Fetch the complete result of a select as an array with column names as keys
+     * @param string $query
+     * @param array|null $parameters
+     * @param string|null $valueAsArrayIndex Use the value if the given key as array index (instead of numeric index)
+     * @param int|null $limit If set, then stop when the given limit is reached
+     * @return array[]
+     */
+    abstract public function fetchAssoc(
+        string $query,
+        ?array $parameters = null,
+        ?string $valueAsArrayIndex = null,
+        ?int $limit = null
+    ): array;
 
     /**
      * Disconnect from database
@@ -177,7 +220,7 @@ abstract class Sql
             foreach ($value as $v) {
                 $condition[] = self::getConditionJsonContainsArrayValue($propertyName, $keyPath, $v, false, $fixedCast);
             }
-            return "(" . implode(" || ", $condition) . ")";
+            return "(" . implode(" OR ", $condition) . ")";
         }
         return 'JSON_CONTAINS(' . self::getConditionJsonGetValue(
                 $propertyName,
@@ -196,6 +239,7 @@ abstract class Sql
      * $.users[0] fetches the first value of the "users" property, which is an array => 100
      *
      * Data for the examples: [100, 200, 300]
+     * $ fetches the complete array
      * $[0] fetches the key 0 from array => 100
      * $[2] fetches the key 2 from array => 300
      *
@@ -223,9 +267,9 @@ abstract class Sql
         string $dbField,
         bool $truthyFalsy
     ): string {
-        $condition = "($dbField IS NOT NULL && TRIM($dbField) != '' && $dbField != '0')";
+        $condition = "($dbField IS NOT NULL AND TRIM($dbField) != '' AND $dbField != '0')";
         if (!$truthyFalsy) {
-            $condition = "!" . $condition;
+            $condition = "NOT " . $condition;
         }
         return $condition;
     }
@@ -250,7 +294,7 @@ abstract class Sql
         $dateEnd = !($dateEnd instanceof DateTime) ? DateTime::create($dateEnd) : $dateEnd;
         $sqlDateStart = $dateStart ? $dateStart->format('Y-m-d') : '0000-01-01';
         $sqlDateEnd = $dateEnd ? $dateEnd->format('Y-m-d') : '9999-12-31';
-        return "('$sqlDateStart' <= DATE(IFNULL($dbFieldEnd, '9999-12-31')) && DATE(IFNULL($dbFieldStart, '0000-01-01')) <= '$sqlDateEnd')";
+        return "('$sqlDateStart' <= DATE(IFNULL($dbFieldEnd, '9999-12-31')) AND DATE(IFNULL($dbFieldStart, '0000-01-01')) <= '$sqlDateEnd')";
     }
 
     /**
@@ -272,9 +316,17 @@ abstract class Sql
     ): string {
         $dbField = "DATE($dbField)";
         if ($compareMethod === "month") {
-            $dbField = "CAST(DATE_FORMAT($dbField, '%Y%m') as UNSIGNED INTEGER)";
+            if ($this instanceof Sqlite) {
+                $dbField = "CAST(STRFTIME('%Y%m', $dbField) as UNSIGNED INTEGER)";
+            } else {
+                $dbField = "CAST(DATE_FORMAT($dbField, '%Y%m') as UNSIGNED INTEGER)";
+            }
         } elseif ($compareMethod === "year") {
-            $dbField = "YEAR($dbField)";
+            if ($this instanceof Sqlite) {
+                $dbField = "CAST(STRFTIME('%Y', $dbField) as UNSIGNED INTEGER)";
+            } else {
+                $dbField = "YEAR($dbField)";
+            }
         }
         $condition = [];
         if ($rangeStart) {
@@ -304,7 +356,7 @@ abstract class Sql
             }
         }
         if ($condition) {
-            return "(" . implode(" && ", $condition) . ")";
+            return "(" . implode(" AND ", $condition) . ")";
         } else {
             return "($conditionOnEmptyDates)";
         }
@@ -330,13 +382,23 @@ abstract class Sql
         $compareValue = DateTime::create($date);
         switch ($compareMethod) {
             case 'month':
-                $dbFieldStart = "CAST(DATE_FORMAT($dbFieldStart, '%Y%m') as UNSIGNED INTEGER)";
-                $dbFieldEnd = "CAST(DATE_FORMAT($dbFieldEnd, '%Y%m') as UNSIGNED INTEGER)";
+                if ($this instanceof Sqlite) {
+                    $dbFieldStart = "CAST(STRFTIME('%Y%m', $dbFieldStart) as UNSIGNED INTEGER)";
+                    $dbFieldEnd = "CAST(STRFTIME('%Y%m', $dbFieldEnd) as UNSIGNED INTEGER)";
+                } else {
+                    $dbFieldStart = "CAST(DATE_FORMAT($dbFieldStart, '%Y%m') as UNSIGNED INTEGER)";
+                    $dbFieldEnd = "CAST(DATE_FORMAT($dbFieldEnd, '%Y%m') as UNSIGNED INTEGER)";
+                }
                 $compareValue = (int)$compareValue->format("Ym");
                 break;
             case 'year':
-                $dbFieldStart = "YEAR($dbFieldStart)";
-                $dbFieldEnd = "YEAR($dbFieldEnd)";
+                if ($this instanceof Sqlite) {
+                    $dbFieldStart = "CAST(STRFTIME('%Y', $dbFieldStart) as UNSIGNED INTEGER)";
+                    $dbFieldEnd = "CAST(STRFTIME('%Y', $dbFieldEnd) as UNSIGNED INTEGER)";
+                } else {
+                    $dbFieldStart = "YEAR($dbFieldStart)";
+                    $dbFieldEnd = "YEAR($dbFieldEnd)";
+                }
                 $compareValue = (int)$compareValue->format("Y");
                 break;
             default:
@@ -417,12 +479,15 @@ abstract class Sql
      * Execute an insert query
      * @param string $table
      * @param array $values
-     * @param string $insertMethod Could be INSERT or REPLACE
-     * @return bool
+     * @param string $insertMethod
+     * @return mixed The sql result
      */
-    public function insert(string $table, array $values, string $insertMethod = "INSERT"): bool
-    {
-        $query = $insertMethod . " " . $this->quoteIdentifier($table) . " (";
+    public function insert(
+        string $table,
+        array $values,
+        #[ExpectedValues(values: ['INSERT', 'REPLACE'])] string $insertMethod = "INSERT"
+    ): mixed {
+        $query = $insertMethod . " INTO " . $this->quoteIdentifier($table) . " (";
         foreach ($values as $key => $value) {
             $query .= $this->quoteIdentifier($key) . ", ";
         }
@@ -439,9 +504,9 @@ abstract class Sql
      * @param string $table
      * @param string $condition The WHERE condition, need to be set, set to 1 if you want all rows affected
      * @param array|null $conditionParameters
-     * @return bool
+     * @return mixed The sql result
      */
-    public function delete(string $table, string $condition, ?array $conditionParameters = null): bool
+    public function delete(string $table, string $condition, ?array $conditionParameters = null): mixed
     {
         $condition = $this->replaceParameters($condition, $conditionParameters);
         $query = "DELETE FROM " . $this->quoteIdentifier($table) . " WHERE $condition";
@@ -454,9 +519,9 @@ abstract class Sql
      * @param array $values
      * @param string $condition The WHERE condition, need to be set, set to 1 if you want all rows affected
      * @param array|null $conditionParameters
-     * @return bool
+     * @return mixed The sql result
      */
-    public function update(string $table, array $values, string $condition, ?array $conditionParameters = null): bool
+    public function update(string $table, array $values, string $condition, ?array $conditionParameters = null): mixed
     {
         $condition = $this->replaceParameters($condition, $conditionParameters);
         $query = "UPDATE " . $this->quoteIdentifier($table) . " SET ";
@@ -471,9 +536,9 @@ abstract class Sql
      * Execute the query
      * @param string $query
      * @param array|null $parameters
-     * @return bool|mysqli_result
+     * @return mixed The sql result
      */
-    public function query(string $query, ?array $parameters = null): bool|mysqli_result
+    public function query(string $query, ?array $parameters = null): mixed
     {
         // replace php class names to real table names
         preg_match_all(
@@ -523,63 +588,6 @@ abstract class Sql
             return ArrayUtils::map($fetch, '0', '1');
         }
         return ArrayUtils::map($fetch, '0');
-    }
-
-    /**
-     * Fetch the complete result of a select as bare array (numeric indexes)
-     * @param string $query
-     * @param array|null $parameters
-     * @param int|null $limit If set, then stop when the given limit is reached
-     * @return array[]
-     */
-    public function fetchArray(
-        string $query,
-        ?array $parameters = null,
-        ?int $limit = null
-    ): array {
-        $fetch = [];
-        $result = $this->query($query, $parameters);
-        while ($row = $result->fetch_array(MYSQLI_NUM)) {
-            $fetch[] = $row;
-            if (is_int($limit) && $limit <= count($fetch)) {
-                break;
-            }
-        }
-        return $fetch;
-    }
-
-    /**
-     * Fetch the complete result of a select as an array with column names as keys
-     * @param string $query
-     * @param array|null $parameters
-     * @param string|null $valueAsArrayIndex Use the value if the given key as array index (instead of numeric index)
-     * @param int|null $limit If set, then stop when the given limit is reached
-     * @return array[]
-     */
-    public function fetchAssoc(
-        string $query,
-        ?array $parameters = null,
-        ?string $valueAsArrayIndex = null,
-        ?int $limit = null
-    ): array {
-        $fetch = [];
-        $result = $this->query($query, $parameters);
-        while ($row = $result->fetch_assoc()) {
-            if (is_string($valueAsArrayIndex)) {
-                if (!isset($row[$valueAsArrayIndex])) {
-                    throw new FatalError(
-                        "Field '$valueAsArrayIndex' does not exist in SQL Result or is null"
-                    );
-                }
-                $fetch[$row[$valueAsArrayIndex]] = $row;
-            } else {
-                $fetch[] = $row;
-            }
-            if (is_int($limit) && $limit <= count($fetch)) {
-                break;
-            }
-        }
-        return $fetch;
     }
 
     /**

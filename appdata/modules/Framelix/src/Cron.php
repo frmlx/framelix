@@ -14,6 +14,7 @@ use function filemtime;
 use function unlink;
 
 use const FRAMELIX_MODULE;
+use const FRAMELIX_USERDATA_FOLDER;
 use const SORT_DESC;
 use const SORT_NUMERIC;
 
@@ -49,7 +50,7 @@ class Cron extends Console
 
     private static function automaticAppDbBackup(): void
     {
-        $backupFiles = FileUtils::getFiles("/framelix/userdata/backups", "~/auto_.*\.sql$~");
+        $backupFiles = FileUtils::getFiles(FRAMELIX_USERDATA_FOLDER . "/backups", "~/auto_.*\.sql$~");
         $dayDiffSinceLastBackup = 999;
         if ($backupFiles) {
             $arr = [];

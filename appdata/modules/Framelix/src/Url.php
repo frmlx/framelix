@@ -64,7 +64,7 @@ class Url implements JsonSerializable
             return null;
         }
         $exp = explode("/", $filePath);
-        if (str_starts_with($filePath, "/framelix/userdata")) {
+        if (str_starts_with($filePath, FRAMELIX_USERDATA_FOLDER)) {
             $urlPrefix = "__" . $exp[3];
             unset($exp[0], $exp[1], $exp[2], $exp[3], $exp[4]);
             $relativePath = implode("/", $exp);

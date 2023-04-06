@@ -66,6 +66,9 @@ class Mysql extends Sql
      */
     public string|null $socket;
 
+    /**
+     * @inheritDoc
+     */
     public function setConfig(array $configValues): void
     {
         $this->host = $configValues['host'];
@@ -76,6 +79,9 @@ class Mysql extends Sql
         $this->socket = $configValues['socket'] ?? null;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function connect(): void
     {
         if ($this->connected) {
@@ -98,6 +104,9 @@ class Mysql extends Sql
         $this->mysqli->set_charset('utf8mb4');
     }
 
+    /**
+     * @inheritDoc
+     */
     public function disconnect(): void
     {
         if (!$this->connected) {
@@ -109,9 +118,7 @@ class Mysql extends Sql
     }
 
     /**
-     * Execute the raw query without any framework modification
-     * @param string $query
-     * @return bool|mysqli_result
+     * @inheritDoc
      */
     public function queryRaw(string $query): bool|mysqli_result
     {
@@ -123,7 +130,7 @@ class Mysql extends Sql
             // maybe it's a legacy behaviour of some mysql drivers
             // @codeCoverageIgnoreStart
             if (!$this->lastResult) {
-                throw new FatalError("No Mysql Result");
+                throw new FatalError("No Mysql Result: " . $this->mysqli->error);
             }
             // @codeCoverageIgnoreEnd
         } catch (Throwable $e) {
@@ -155,11 +162,57 @@ class Mysql extends Sql
     }
 
     /**
-     * Get existing database tables in lower case
-     * @param bool $flushCache If false the result is cached by default if already called previously
-     * @return string[]
+     * @inheritDoc
      */
-    public function getExistingTables(bool $flushCache = false): array
+    public function fetchArray(
+        string $query,
+        ?array $parameters = null,
+        ?int $limit = null
+    ): array {
+        $fetch = [];
+        $result = $this->query($query, $parameters);
+        while ($row = $result->fetch_array(MYSQLI_NUM)) {
+            $fetch[] = $row;
+            if (is_int($limit) && $limit <= count($fetch)) {
+                break;
+            }
+        }
+        return $fetch;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchAssoc(
+        string $query,
+        ?array $parameters = null,
+        ?string $valueAsArrayIndex = null,
+        ?int $limit = null
+    ): array {
+        $fetch = [];
+        $result = $this->query($query, $parameters);
+        while ($row = $result->fetch_assoc()) {
+            if (is_string($valueAsArrayIndex)) {
+                if (!isset($row[$valueAsArrayIndex])) {
+                    throw new FatalError(
+                        "Field '$valueAsArrayIndex' does not exist in SQL Result or is null"
+                    );
+                }
+                $fetch[$row[$valueAsArrayIndex]] = $row;
+            } else {
+                $fetch[] = $row;
+            }
+            if (is_int($limit) && $limit <= count($fetch)) {
+                break;
+            }
+        }
+        return $fetch;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTables(bool $flushCache = false): array
     {
         $cacheKey = __METHOD__;
         if (!$flushCache && isset($this->cache[$cacheKey])) {
@@ -175,5 +228,38 @@ class Mysql extends Sql
         }
         $this->cache[$cacheKey] = $existingTables;
         return $existingTables;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTableColumns(string $table, bool $flushCache = false): array
+    {
+        $cacheKey = __METHOD__;
+        if (!$flushCache && isset($this->cache[$cacheKey])) {
+            return $this->cache[$cacheKey];
+        }
+        $this->cache[$cacheKey] = $this->fetchAssoc(
+            "SHOW FULL FIELDS FROM " . $this->quoteIdentifier($table),
+            null,
+            'Field'
+        );
+        return $this->cache[$cacheKey];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTableIndexes(string $table, bool $flushCache = false): array
+    {
+        $cacheKey = __METHOD__;
+        if (!$flushCache && isset($this->cache[$cacheKey])) {
+            return $this->cache[$cacheKey];
+        }
+        $this->cache[$cacheKey] = $this->fetchAssoc(
+            "SHOW INDEXES FROM " . $this->quoteIdentifier($table),
+            null,
+            'Key_name');
+        return $this->cache[$cacheKey];
     }
 }

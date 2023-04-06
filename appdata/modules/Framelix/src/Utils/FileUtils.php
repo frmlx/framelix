@@ -35,7 +35,7 @@ class FileUtils
         string $module = FRAMELIX_MODULE,
         bool $autoCreateFolder = true
     ): string {
-        $userdataFolder = "/framelix/userdata/$module/" . ($public ? "public" : "private") . "/" . $filePath;
+        $userdataFolder = FRAMELIX_USERDATA_FOLDER . "/$module/" . ($public ? "public" : "private") . "/" . $filePath;
         $dir = dirname($userdataFolder);
         if ($autoCreateFolder && !is_dir($dir)) {
             mkdir($dir, recursive: true);

@@ -56,8 +56,7 @@ class MPdfWrapper extends Mpdf
         $efvalue = 0,
         $pagesel = '',
         $newformat = ''
-    )
-    {
+    ) {
         if ($this->onBeforeAddPage) {
             call_user_func_array($this->onBeforeAddPage, []);
         }

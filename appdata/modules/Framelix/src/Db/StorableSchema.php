@@ -7,6 +7,7 @@ use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\PhpDocParser;
+use Framelix\Framelix\Utils\StringUtils;
 use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionClass;
 
@@ -15,6 +16,7 @@ use function array_key_last;
 use function call_user_func_array;
 use function explode;
 use function in_array;
+use function is_array;
 use function preg_match;
 use function str_contains;
 use function str_ends_with;
@@ -253,20 +255,18 @@ class StorableSchema
 
     /**
      * Add an index
-     * @param string $indexName If $properties is not set, then the name must equal property name
-     * @param string $type
-     * @param array|null $properties If not set than use $indexName as the only property to add
+     * @param string|string[] $properties If properties combined in this index
+     * @param string $type fulltext is only supported in mysql, it becomes "index" on unsupported dbs
      */
     public function addIndex(
-        string $indexName,
+        string|array $properties,
         #[ExpectedValues(["unique", "index", "fulltext"])]
-        string $type,
-        ?array $properties = null
+        string $type
     ): void {
-        if (!$properties) {
-            $properties = [$indexName];
+        if (!is_array($properties)) {
+            $properties = [$properties];
         }
-        $this->indexes[$indexName] = [
+        $this->indexes[StringUtils::stringify($properties)] = [
             'type' => strtolower($type),
             'properties' => $properties
         ];

@@ -15,8 +15,8 @@ final class StorableFileTest extends TestCase
     public function test(): void
     {
         $storableFile = new TestStorableFile();
-        FileUtils::deleteDirectory("/framelix/userdata/" . $storableFile->relativePathOnDisk);
-        mkdir("/framelix/userdata/" . $storableFile->relativePathOnDisk, recursive: true);
+        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
+        mkdir(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk, recursive: true);
 
         $this->setupDatabase();
         $this->addSimulatedFile("test.txt", "foobar", false);
@@ -79,6 +79,6 @@ final class StorableFileTest extends TestCase
         $this->assertNull($storableFile->getFiledata());
 
         $storableFile = new TestStorableFile();
-        FileUtils::deleteDirectory("/framelix/userdata/" . $storableFile->relativePathOnDisk);
+        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
     }
 }

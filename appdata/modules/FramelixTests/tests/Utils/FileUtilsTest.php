@@ -21,7 +21,7 @@ final class FileUtilsTest extends TestCase
     public function tests(): void
     {
         $this->assertSame(
-            "/framelix/userdata/FramelixTests/public/test.php",
+            FRAMELIX_USERDATA_FOLDER . "/FramelixTests/public/test.php",
             FileUtils::getUserdataFilepath("test.php", true)
         );
         $this->assertSame(str_replace("\\", "/", __DIR__), FileUtils::normalizePath(__DIR__));

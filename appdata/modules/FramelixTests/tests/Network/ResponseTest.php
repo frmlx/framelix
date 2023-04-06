@@ -21,8 +21,8 @@ final class ResponseTest extends TestCase
     public function tests(): void
     {
         $storableFile = new TestStorableFile();
-        FileUtils::deleteDirectory("/framelix/userdata/" . $storableFile->relativePathOnDisk);
-        mkdir("/framelix/userdata/" . $storableFile->relativePathOnDisk);
+        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
+        mkdir(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
 
         Buffer::start();
         try {

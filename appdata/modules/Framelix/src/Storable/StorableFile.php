@@ -270,7 +270,7 @@ class StorableFile extends StorableExtended
      */
     public function getPath(bool $fileCheck = true): ?string
     {
-        $path = "/framelix/userdata/" . $this->relativePathOnDisk;
+        $path = FRAMELIX_USERDATA_FOLDER . "/" . $this->relativePathOnDisk;
         if ($fileCheck && !file_exists($path)) {
             return null;
         }
@@ -378,7 +378,7 @@ class StorableFile extends StorableExtended
                 }
             }
 
-            $folder = dirname("/framelix/userdata/" . $this->relativePathOnDisk);
+            $folder = dirname(FRAMELIX_USERDATA_FOLDER . "/" . $this->relativePathOnDisk);
             if (!is_dir($folder)) {
                 mkdir($folder, recursive: true);
                 clearstatcache();

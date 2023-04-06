@@ -587,6 +587,23 @@ class Config
     }
 
     /**
+     * Add a sqlite database connection
+     * @param string $id
+     * @param string $path
+     * @return void
+     */
+    public static function addSqliteConnection(
+        string $id,
+        string $path
+    ): void {
+        Config::$sqlConnections[$id] = [
+            'type' => Sql::TYPE_SQLITE,
+            'id' => $id,
+            'path' => $path
+        ];
+    }
+
+    /**
      * Add captcha key
      * @param string $type
      * @param string $privateKey

@@ -2,10 +2,6 @@
 
 namespace Framelix\FramelixTests;
 
-use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
-use Framelix\Framelix\Storable\User;
-
 class Config
 {
     /**
@@ -48,7 +44,7 @@ class Config
         $bundle->addFile('scss/framelix-unit-test-scsstest.scss');
 
         if (defined('PHPUNIT_TESTS')) {
-            // configured so that no setup is needed and tests can assume the app is fully configured
+            // configured so that salt and test db connection is hardcoded for unit tests
             \Framelix\Framelix\Config::addSalt('jdTbhul2sd3yyaLQPfTFNToE42PcXOCC991SzzKlUrQhS1hhkdTIHufuJ8Sj6XPgd');
             \Framelix\Framelix\Config::addMysqlConnection(
                 'test',
@@ -57,23 +53,6 @@ class Config
                 'root',
                 'app'
             );
-
-            // instantiate db if not yet done, to fix issue when a test is failed prev.
-            $gen = new SqlStorableSchemeBuilder(Mysql::get());
-            if (!$gen->db->getExistingTables()) {
-                $gen->executeQueries($gen->getSafeQueries());
-            }
-
-            // create default user if not yet exist
-            if (!User::getByConditionOne()) {
-                $user = new User();
-                $user->email = "unit@tests.local";
-                $user->setPassword('unit@tests.local');
-                $user->addRole('admin');
-                $user->addRole('dev');
-                $user->flagLocked = false;
-                $user->store();
-            }
         }
     }
 }

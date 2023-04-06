@@ -63,7 +63,7 @@ class MPdfBase extends View
     ): void {
         $defaultConfig = (new ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
-        $tmpDir = '/framelix/userdata/tmp/mpdf';
+        $tmpDir = FRAMELIX_USERDATA_FOLDER . '/tmp/mpdf';
         if (!is_dir($tmpDir)) {
             mkdir($tmpDir, recursive: true);
         }

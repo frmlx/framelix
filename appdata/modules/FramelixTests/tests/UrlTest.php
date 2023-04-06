@@ -140,7 +140,8 @@ final class UrlTest extends TestCase
         }, [], Redirect::class);
 
         FileUtils::getUserdataFilepath("test", true);
-        $this->assertInstanceOf(Url::class, Url::getUrlToPublicFile("/framelix/userdata/FramelixTests/public"));
+        $this->assertInstanceOf(Url::class,
+            Url::getUrlToPublicFile(FRAMELIX_USERDATA_FOLDER . "/FramelixTests/public"));
         $this->assertInstanceOf(
             Url::class,
             Url::getUrlToPublicFile(__DIR__ . "/../../Framelix/public/img/favicon.ico")

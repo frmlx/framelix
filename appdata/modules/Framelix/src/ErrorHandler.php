@@ -32,7 +32,7 @@ use const JSON_PRETTY_PRINT;
  */
 class ErrorHandler
 {
-    public const LOGFOLDER = "/framelix/userdata/_logs";
+    public const LOGFOLDER = FRAMELIX_USERDATA_FOLDER . "/_logs";
 
     /**
      * Throwable to json

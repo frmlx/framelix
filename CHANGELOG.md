@@ -9,6 +9,8 @@
 
 * ➕ added property to force screen size and color scheme for layout view
 * ➕ added `$hiddenView` property to `View` to allow view to be hidden from public access
+* ➕ added `Editor` field (tinymce) 
+* ➕ added `Sqlite` database connection, scheme builder and general availability
 * 🛠️ fixed minor layout glitch in small size mode
 * 🛠️ fixed many tests and core code that failed because of now better error detection of new PhpUnit
 * ✏️ ⚠️ renamed `Time` functions `timeStringToHours->toHours, timeStringToSeconds->toSeconds` and make conversion more lazy (accepting more types of values)
@@ -18,6 +20,7 @@
 * ✏️ changed internals of how app is set up (reduced checks, more streamlined, easier maintenance)
 * ✏️ changed some vendor frontend libraries to package.json instead of manual installation
 * ✏️ changed backend layout to be more flexible
+* ✏️ a lot of minor code changes and cleanups
 * ❌ removed old unsupported setup vars
 * ❌ removed `Config::$appSetupDone`, so you have to update your `01-core.php` config and remove it there manually
 * ️⬆️ upgraded PhpUnit to v10, PhpStan, Playwright, and various other integrated vendor libs

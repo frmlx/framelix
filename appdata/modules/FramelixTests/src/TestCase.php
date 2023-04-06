@@ -6,8 +6,8 @@ use Exception;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
-use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\Sqlite;
 use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Exception\FatalError;
@@ -49,10 +49,30 @@ use const FRAMELIX_MODULE;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
+    public ?int $setupTestDbType = null;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->setSimulatedUrl('http://localhost');
+        switch ($this->setupTestDbType) {
+            case Sql::TYPE_MYSQL:
+                \Framelix\Framelix\Config::addMysqlConnection(
+                    'test',
+                    'unittests',
+                    'localhost',
+                    'root',
+                    'app'
+                );
+                break;
+            case Sql::TYPE_SQLITE:
+                $file = FRAMELIX_USERDATA_FOLDER . "/test.db";
+                \Framelix\Framelix\Config::addSqliteConnection(
+                    'test',
+                    $file
+                );
+                break;
+        }
     }
 
     /**
@@ -228,9 +248,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $db = Sql::get('test');
         $builder = new SqlStorableSchemeBuilder($db);
         $queries = $builder->getQueries();
-        foreach ($queries as $queryData) {
-            $db->query($queryData['query']);
-        }
+        $builder->executeQueries($queries);
     }
 
     /**
@@ -240,11 +258,17 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function cleanupDatabase(): void
     {
-        $db = Mysql::get('test');
-        $dbQuoted = $db->quoteIdentifier($db->database);
-        $db->query("DROP DATABASE $dbQuoted");
-        $db->query("CREATE DATABASE $dbQuoted");
-        $db->query("USE $dbQuoted");
+        $db = Sql::get('test');
+        if ($db instanceof Sqlite) {
+            $db->disconnect();
+            unlink($db->path);
+            $db->connect();
+        } else {
+            $dbQuoted = $db->quoteIdentifier($db->database ?? '');
+            $db->query("DROP DATABASE $dbQuoted");
+            $db->query("CREATE DATABASE $dbQuoted");
+            $db->query("USE $dbQuoted");
+        }
     }
 
     /**

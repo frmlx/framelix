@@ -105,6 +105,7 @@ class FramelixFormFieldEditor extends FramelixFormField {
         readonly: self.disabled,
         pagebreak_separator: '<div class="framelix-form-field-editor-pagebreak" pagebreak="true"></div>',
         pagebreak_split_block: true,
+        ui_mode: 'split',
         'plugins': plugins,
         contextmenu: 'copy | paste | link image inserttable | cell row column deletetable',
         toolbar: 'insert | undo redo | fontsizeselect | bold italic underline forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | placeholders textconditions pagebreak',
@@ -124,12 +125,6 @@ class FramelixFormFieldEditor extends FramelixFormField {
             editor.save()
           })
           self.editor = editor
-          // move last aux helper to dialog, if field is in a dialog
-          const dialogContainer = editor.editorContainer.closest('dialog')
-          if (dialogContainer) {
-            const auxElements = document.querySelectorAll('body > .tox-tinymce-aux')
-            if (auxElements.length) dialogContainer.append(auxElements[auxElements.length - 1])
-          }
           resolve(editor)
         },
         setup: function (editor) {
