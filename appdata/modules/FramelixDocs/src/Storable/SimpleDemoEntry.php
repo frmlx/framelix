@@ -17,7 +17,6 @@ use Framelix\Framelix\Storable\StorableExtended;
  * @property bool $flagActive
  * @property mixed|null $anyJsonData
  * @property SimpleDemoEntry|null $referenceEntry
- * @property SimpleDemoEntry[]|null $arrayOfReferences
  */
 class SimpleDemoEntry extends StorableExtended
 {

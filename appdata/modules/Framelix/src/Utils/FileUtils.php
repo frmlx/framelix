@@ -126,11 +126,12 @@ class FileUtils
     }
 
     /**
-     * Delete directory including all files in it including the directory itself
+     * Delete directory including all files in it and also the directory itself if provided
      * @param string $directory
+     * @param bool $includeSelf
      * @return void
      */
-    public static function deleteDirectory(string $directory): void
+    public static function deleteDirectory(string $directory, bool $includeSelf = true): void
     {
         if (!is_dir($directory)) {
             return;

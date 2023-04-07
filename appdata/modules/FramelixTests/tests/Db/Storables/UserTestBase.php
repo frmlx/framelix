@@ -4,9 +4,9 @@ namespace Db\Storables;
 
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Storable\UserToken;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
-final class UserTest extends TestCase
+abstract class UserTestBase extends TestCaseDbTypes
 {
     public function test(): void
     {
@@ -16,9 +16,9 @@ final class UserTest extends TestCase
         $user->email = "test@test";
         $user->flagLocked = false;
         $user->setPassword("blub");
+        $user->store();
         $user->addRole("foo");
         $user->addRole("bar");
-        $user->store();
         $this->assertSame(1, $user->id);
 
         $user2 = new User();

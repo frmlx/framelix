@@ -16,7 +16,6 @@ use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Storable\User;
-use Framelix\Framelix\Storable\UserRole;
 use Framelix\Framelix\Storable\UserToken;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\RandomGenerator;

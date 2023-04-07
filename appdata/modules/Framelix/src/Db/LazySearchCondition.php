@@ -64,11 +64,11 @@ class LazySearchCondition
 
     /**
      * Get prepared condition based on the columns
-     * @param Mysql $db The database connection
+     * @param Sql $db The database connection
      * @param string $userSearchQuery
      * @return string
      */
-    public function getPreparedCondition(Mysql $db, string $userSearchQuery): string
+    public function getPreparedCondition(Sql $db, string $userSearchQuery): string
     {
         $condition = (string)$this->prependFixedCondition;
         // this wildcard search for everything

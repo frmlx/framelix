@@ -19,9 +19,9 @@ use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\FramelixTests\Storable\TestStorable1;
 use Framelix\FramelixTests\Storable\TestStorableSystemValue;
 use Framelix\FramelixTests\StorableMeta\TestStorable2;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
-final class StorableMetaTest extends TestCase
+abstract class StorableMetaTestBase extends TestCaseDbTypes
 {
     public function tests(): void
     {

@@ -375,7 +375,9 @@ class SqlStorableSchemeBuilder
                     $existingSchemeData = $this->db->fetchAssocOne($checkQuery);
                 }
                 if (
-                    $this->db->escapeValue($existingSchemeData['storableClassParents'] ?? null) !== $storableClassParents
+                    $this->db->escapeValue(
+                        $existingSchemeData['storableClassParents'] ?? null
+                    ) !== $storableClassParents
                 ) {
                     if ($existingSchemeData['id'] ?? null) {
                         $query = '
@@ -386,7 +388,9 @@ class SqlStorableSchemeBuilder
                     } else {
                         $query = '
                             INSERT INTO ' . StorableSchema::SCHEMA_TABLE . ' (storableClass, storableClassParents) 
-                            VALUES (' . $this->db->escapeValue($storableSchema->className) . ', ' . $storableClassParents . ')';
+                            VALUES (' . $this->db->escapeValue(
+                                $storableSchema->className
+                            ) . ', ' . $storableClassParents . ')';
                     }
                     $queries[] = [
                         "type" => 'create-schema',

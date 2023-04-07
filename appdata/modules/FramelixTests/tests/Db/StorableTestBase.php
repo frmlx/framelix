@@ -21,7 +21,7 @@ use Framelix\FramelixTests\Storable\Deeper\TestStorableDeeper;
 use Framelix\FramelixTests\Storable\TestStorable1;
 use Framelix\FramelixTests\Storable\TestStorable2;
 use Framelix\FramelixTests\Storable\TestStorablePrefetch;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
 use function array_chunk;
 use function array_keys;
@@ -34,7 +34,7 @@ use function shuffle;
 use function str_repeat;
 use function var_export;
 
-abstract class StorableTestBase extends TestCase
+abstract class StorableTestBase extends TestCaseDbTypes
 {
     /**
      * Executed queries
@@ -260,8 +260,7 @@ abstract class StorableTestBase extends TestCase
                     $storable->otherReferenceOptional->id
                 );
             }
-            // db value is always null or string as mysql driver doesn't support other values
-            $this->assertIsString($storable->getNewDbValueForProperty('intNumber'));
+            $this->assertIsInt($storable->getNewDbValueForProperty('intNumber'));
             $this->assertNull($storable->getNewDbValueForProperty('notExist'));
 
             // some getter tests

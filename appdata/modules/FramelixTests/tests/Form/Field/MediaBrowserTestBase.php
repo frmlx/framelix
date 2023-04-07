@@ -12,11 +12,11 @@ use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\FramelixTests\Storable\TestStorableFile;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
 use function json_encode;
 
-final class MediaBrowserTest extends TestCase
+abstract class MediaBrowserTestBase extends TestCaseDbTypes
 {
     public function tests(): void
     {

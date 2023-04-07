@@ -5,9 +5,9 @@ namespace Form\Field;
 use Framelix\Framelix\Form\Field\Search;
 use Framelix\FramelixTests\Storable\TestStorable1;
 use Framelix\FramelixTests\StorableMeta\TestStorable2;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
-final class SearchTest extends TestCase
+abstract class SearchTestBase extends TestCaseDbTypes
 {
     public function tests(): void
     {

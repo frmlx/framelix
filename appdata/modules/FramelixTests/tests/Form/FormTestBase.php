@@ -28,12 +28,12 @@ use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\FramelixTests\Storable\TestStorable1;
 use Framelix\FramelixTests\Storable\TestStorable2;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 use Framelix\FramelixTests\View\TestView;
 
 use function str_repeat;
 
-final class FormTest extends TestCase
+abstract class FormTestBase extends TestCaseDbTypes
 {
     public function tests(): void
     {

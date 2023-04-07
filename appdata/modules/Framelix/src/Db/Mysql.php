@@ -259,7 +259,8 @@ class Mysql extends Sql
         $this->cache[$cacheKey] = $this->fetchAssoc(
             "SHOW INDEXES FROM " . $this->quoteIdentifier($table),
             null,
-            'Key_name');
+            'Key_name'
+        );
         return $this->cache[$cacheKey];
     }
 }

@@ -96,7 +96,7 @@ class UserToken extends StorableExtended
         if (!$token) {
             return null;
         }
-        return self::getByConditionOne('token = {0} && user.flagLocked = 0', [$token]);
+        return self::getByConditionOne('token = {0} AND user.flagLocked = 0', [$token]);
     }
 
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void

@@ -3,9 +3,9 @@
 namespace Db\Storables;
 
 use Framelix\FramelixTests\Storable\TestStorableSystemValue;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
-final class SystemValueTest extends TestCase
+abstract class SystemValueTestBase extends TestCaseDbTypes
 {
     public function test(): void
     {

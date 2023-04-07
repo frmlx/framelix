@@ -317,9 +317,6 @@ class Config
 
         self::$environmentConfig = JsonUtils::readFromFile("/framelix/system/environment.json");
 
-        // set default mysql db connection for current module
-        self::addMysqlConnection(FRAMELIX_MODULE, FRAMELIX_MODULE, 'localhost', 'root', 'app');
-
         // register the other module
         Framelix::registerModule(FRAMELIX_MODULE);
 

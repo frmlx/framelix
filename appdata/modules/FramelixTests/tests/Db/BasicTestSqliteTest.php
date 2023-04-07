@@ -5,18 +5,17 @@ namespace Db;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\Sqlite;
 
-require_once __DIR__ . "/SqlTestBase.php";
-
-final class SqliteTest extends SqlTestBase
+final class BasicTestSqliteTest extends BasicTestBase
 {
-    public ?int $setupTestDbType = Sql::TYPE_SQLITE;
+    public ?int $currentDbType = Sql::TYPE_SQLITE;
 
     protected function createTestTable(): void
     {
         $db = $this->getDb();
         $table = 'condition_tests';
         $db->query("DROP TABLE IF EXISTS $table");
-        $db->query("
+        $db->query(
+            "
             CREATE TABLE " . $db->quoteIdentifier($table) . " (
                 " . $db->quoteIdentifier("id") . " INTEGER PRIMARY KEY AUTOINCREMENT,
                 " . $db->quoteIdentifier("date_a") . " DATE NULL,
@@ -27,7 +26,8 @@ final class SqliteTest extends SqlTestBase
                 " . $db->quoteIdentifier("int_b") . " INTEGER NULL,
                " . $db->quoteIdentifier("jsondata") . " LONGTEXT NULL
             )
-        ");
+        "
+        );
     }
 
     /**

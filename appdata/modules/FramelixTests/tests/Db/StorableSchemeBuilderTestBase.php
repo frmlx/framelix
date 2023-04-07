@@ -9,13 +9,13 @@ use Framelix\Framelix\Storable\User;
 use Framelix\FramelixTests\Storable\TestStorable2;
 use Framelix\FramelixTests\StorableException\TestStorableNoType;
 use Framelix\FramelixTests\StorableException\TestStorableUnsupportedType;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
 use function count;
 use function in_array;
 use function print_r;
 
-abstract class StorableSchemeBuilderTestBase extends TestCase
+abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
 {
     private SqlStorableSchemeBuilder $builder;
 
@@ -87,7 +87,9 @@ abstract class StorableSchemeBuilderTestBase extends TestCase
         $fakeProperty = $scheme->createProperty('unusedTime');
         $fakeProperty->databaseType = 'DATETIME';
         $this->builder->executeQueries($this->builder->getQueries());
-        $db->query('CREATE TABLE ' . $db->quoteIdentifier('framelix_unused_table') . ' (`id` INTEGER NULL DEFAULT NULL)');
+        $db->query(
+            'CREATE TABLE ' . $db->quoteIdentifier('framelix_unused_table') . ' (`id` INTEGER NULL DEFAULT NULL)'
+        );
         // 3rd party tables are untouched by default
         $db->query('CREATE TABLE ' . $db->quoteIdentifier('unused_table') . ' (`id` INTEGER NULL DEFAULT NULL)');
     }

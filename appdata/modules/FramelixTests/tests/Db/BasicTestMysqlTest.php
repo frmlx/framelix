@@ -5,18 +5,17 @@ namespace Db;
 use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\Sql;
 
-require_once __DIR__ . "/SqlTestBase.php";
-
-final class MysqlTest extends SqlTestBase
+final class BasicTestMysqlTest extends BasicTestBase
 {
-    public ?int $setupTestDbType = Sql::TYPE_MYSQL;
+    public ?int $currentDbType = Sql::TYPE_MYSQL;
 
     protected function createTestTable(): void
     {
         $db = $this->getDb();
         $table = 'condition_tests';
         $db->query("DROP TABLE IF EXISTS $table");
-        $db->query("
+        $db->query(
+            "
             CREATE TABLE `$table` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `date_a` DATE NULL,
@@ -30,7 +29,8 @@ final class MysqlTest extends SqlTestBase
             )
             COLLATE='utf8mb4_unicode_ci'
             ENGINE=InnoDB
-        ");
+        "
+        );
     }
 
     /**

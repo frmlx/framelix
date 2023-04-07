@@ -2,6 +2,8 @@
 
 namespace Framelix\FramelixTests;
 
+use Framelix\Framelix\Utils\FileUtils;
+
 class Config
 {
     /**
@@ -11,6 +13,11 @@ class Config
      */
     public static function onRegister(): void
     {
+        \Framelix\Framelix\Config::addSqliteConnection(
+            FRAMELIX_MODULE,
+            FileUtils::getUserdataFilepath("database.db", false)
+        );
+
         \Framelix\Framelix\Config::$devMode = true;
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "js", "test-folder");
@@ -46,13 +53,6 @@ class Config
         if (defined('PHPUNIT_TESTS')) {
             // configured so that salt and test db connection is hardcoded for unit tests
             \Framelix\Framelix\Config::addSalt('jdTbhul2sd3yyaLQPfTFNToE42PcXOCC991SzzKlUrQhS1hhkdTIHufuJ8Sj6XPgd');
-            \Framelix\Framelix\Config::addMysqlConnection(
-                'test',
-                'unittests',
-                'localhost',
-                'root',
-                'app'
-            );
         }
     }
 }

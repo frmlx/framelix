@@ -2,7 +2,6 @@
 
 namespace Framelix\Framelix\View\Backend\Logs;
 
-use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Html\Tabs;
 use Framelix\Framelix\Html\Toast;

@@ -470,14 +470,19 @@ abstract class Sql
     }
 
     /**
-     * Execute the query
+     * Does replace some framework specials inside given query
+     * It searches for class names and replace it to table names
+     * It searches framelix default quote chars and replace it with db specific quote chars
+     * It searches && and || and replaced with AND OR because that is SQL standard
      * @param string $query
-     * @param array|null $parameters
-     * @return mixed The sql result
+     * @return string
      */
-    public function query(string $query, ?array $parameters = null): mixed
+    public function prepareQuery(string $query): string
     {
-        // replace ramelix default quote identifiers,  which are `, with sql specific quote identifiers, which not always be `
+        // replace && and ||
+        $query = str_replace(['&&', '||'], ['AND', 'OR'], $query);
+
+        // replace framelix default quote identifiers,  which are `, with sql specific quote identifiers, which not always be `
         $query = preg_replace("~`([a-z0-9-_]+)`~i", $this->quoteChars[0] . "$1" . $this->quoteChars[1], $query);
 
         // replace php class names to real table names
@@ -494,7 +499,18 @@ abstract class Sql
             $tableName = Storable::getTableName($classNames[1][$key]);
             $query = str_replace($search, $this->quoteIdentifier($tableName), $query);
         }
-        $query = $this->replaceParameters($query, $parameters);
+        return $query;
+    }
+
+    /**
+     * Execute the query
+     * @param string $query
+     * @param array|null $parameters
+     * @return mixed The sql result
+     */
+    public function query(string $query, ?array $parameters = null): mixed
+    {
+        $query = $this->replaceParameters($this->prepareQuery($query), $parameters);
         return $this->queryRaw($query);
     }
 

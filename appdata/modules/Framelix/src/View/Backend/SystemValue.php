@@ -2,7 +2,6 @@
 
 namespace Framelix\Framelix\View\Backend;
 
-use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Form\Form;

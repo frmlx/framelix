@@ -4,11 +4,11 @@ namespace Db\Storables;
 
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Storable\BruteForceProtection;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
 use function sleep;
 
-final class BruteForceProtectionTest extends TestCase
+abstract class BruteForceProtectionTestBase extends TestCaseDbTypes
 {
     public function test(): void
     {
@@ -18,7 +18,7 @@ final class BruteForceProtectionTest extends TestCase
         $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, 1, 1, 'test'));
         BruteForceProtection::countUp('testid1', 'test');
         BruteForceProtection::countUp('testid1', 'test');
-        // after reaching threshold, its blocked until enough time has passed
+        // after reaching threshold, it is blocked until enough time has passed
         // in this test we use minimal time possible
         $this->assertTrue(BruteForceProtection::isBlocked('testid1', true, 1, 1, 'test'));
         $this->assertToastError();

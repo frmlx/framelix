@@ -39,6 +39,7 @@ use function is_int;
 use function is_string;
 use function ob_end_clean;
 use function ob_start;
+use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function strtoupper;
@@ -49,30 +50,12 @@ use const FRAMELIX_MODULE;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
-    public ?int $setupTestDbType = null;
+    public ?int $currentDbType = null;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->setSimulatedUrl('http://localhost');
-        switch ($this->setupTestDbType) {
-            case Sql::TYPE_MYSQL:
-                \Framelix\Framelix\Config::addMysqlConnection(
-                    'test',
-                    'unittests',
-                    'localhost',
-                    'root',
-                    'app'
-                );
-                break;
-            case Sql::TYPE_SQLITE:
-                $file = FRAMELIX_USERDATA_FOLDER . "/test.db";
-                \Framelix\Framelix\Config::addSqliteConnection(
-                    'test',
-                    $file
-                );
-                break;
-        }
     }
 
     /**

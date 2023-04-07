@@ -6,11 +6,11 @@ use Framelix\Framelix\Network\UploadedFile;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\Storable\TestStorableFile;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
 use function mkdir;
 
-final class StorableFileTest extends TestCase
+abstract class StorableFileTestBase extends TestCaseDbTypes
 {
     public function test(): void
     {

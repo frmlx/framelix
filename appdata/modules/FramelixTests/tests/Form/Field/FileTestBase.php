@@ -8,11 +8,11 @@ use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\UploadedFile;
 use Framelix\FramelixTests\Storable\TestStorable2;
 use Framelix\FramelixTests\Storable\TestStorableFile;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 
 use function reset;
 
-final class FileTest extends TestCase
+abstract class FileTestBase extends TestCaseDbTypes
 {
     public function tests(): void
     {

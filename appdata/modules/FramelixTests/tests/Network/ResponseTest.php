@@ -22,7 +22,7 @@ final class ResponseTest extends TestCase
     {
         $storableFile = new TestStorableFile();
         FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
-        mkdir(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
+        mkdir(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk, recursive: true);
 
         Buffer::start();
         try {

@@ -110,7 +110,7 @@ class StorableMetaProperty
                 $entries = $storableClass::getEntries($this->getValue());
                 $field = new Field\Select();
                 $field->addOptionsByStorables($entries);
-                if ($entries > 10) {
+                if (count($entries) > 10) {
                     $field->searchable = true;
                 }
             } elseif ($storableClass instanceof StorableFile) {

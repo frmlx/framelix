@@ -10,11 +10,12 @@ use Framelix\Framelix\Utils\Buffer;
 use Framelix\FramelixTests\Storable\TestStorable2;
 use Framelix\FramelixTests\TestCase;
 
+use Framelix\FramelixTests\TestCaseDbTypes;
+
 use function json_encode;
 
-final class TableTest extends TestCase
+abstract class TableTestBase extends TestCaseDbTypes
 {
-
     public function tests(): void
     {
         $this->setupDatabase();

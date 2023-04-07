@@ -2,10 +2,18 @@
 
 namespace Framelix\FramelixDocs;
 
+use Framelix\Framelix\Utils\FileUtils;
+
+use const FRAMELIX_MODULE;
+
 class Config
 {
     public static function onRegister(): void
     {
+        \Framelix\Framelix\Config::addSqliteConnection(
+            FRAMELIX_MODULE,
+            FileUtils::getUserdataFilepath("database.db", false)
+        );
         \Framelix\Framelix\Config::$languagesAvailable = ['en'];
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "docs");
         $bundle->addFile("scss/docs.scss");

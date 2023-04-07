@@ -6,12 +6,12 @@ use Framelix\Framelix\Config;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\Sql;
-use Framelix\FramelixTests\TestCase;
+use Framelix\FramelixTests\TestCaseDbTypes;
 use ReflectionClass;
 
 use function fopen;
 
-abstract class SqlTestBase extends TestCase
+abstract class BasicTestBase extends TestCaseDbTypes
 {
     abstract protected function createTestTable(): void;
 

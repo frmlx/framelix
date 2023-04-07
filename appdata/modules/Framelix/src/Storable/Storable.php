@@ -705,11 +705,11 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
     /**
      * Get the database value the is to be stored in database when calling store()
      * This is always the actual value that represent to current database value of the given property value
-     * So if you have modified a value of a property after fetching from database, than this value is the modified one
+     * So if you have modified a value of a property after fetching from database, then this value is the modified one
      * @param string $propertyName
-     * @return string|null Always string or null, as database will also always return string or null, no other type
+     * @return mixed
      */
-    final public function getNewDbValueForProperty(string $propertyName): ?string
+    final public function getNewDbValueForProperty(string $propertyName): mixed
     {
         $storableSchemaProperty = self::getStorableSchemaProperty($this, $propertyName);
         if (!$storableSchemaProperty) {
@@ -719,15 +719,15 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         if ($phpValue === null) {
             return null;
         }
-        if ($storableSchemaProperty->storableInterface) {
+        if ($storableSchemaProperty->storableClass || $storableSchemaProperty->storableInterface) {
             if ($phpValue instanceof ObjectTransformable) {
                 return $phpValue->getDbValue();
             }
         }
         return match ($storableSchemaProperty->internalType) {
-            "bool" => $phpValue ? '1' : '0',
+            "bool" => $phpValue ? 1 : 0,
             "mixed" => JsonUtils::encode($phpValue),
-            default => (string)$phpValue
+            default => $phpValue
         };
     }
 
@@ -755,18 +755,31 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         $storableSchema = Storable::getStorableSchema($this);
         $storeValues = [];
         foreach ($storableSchema->properties as $propertyName => $storableSchemaProperty) {
-            // skip untouched properties in edit mode
-            if ($this->id && (!$this->isPropertyModified($propertyName) || !ArrayUtils::keyExists(
-                        $this->propertyCache,
-                        'phpvalue[' . $propertyName . ']'
-                    ))) {
+            // skip untouched properties on updates
+            if (
+                $this->id &&
+                (
+                    !$this->isPropertyModified($propertyName) ||
+                    !ArrayUtils::keyExists($this->propertyCache, 'phpvalue[' . $propertyName . ']')
+                )
+            ) {
                 continue;
             }
             $finalDatabaseValue = $this->getNewDbValueForProperty($propertyName);
             // optional check
             if (!$storableSchemaProperty->optional && $finalDatabaseValue === null && $propertyName !== 'id') {
+                $propertyValue = $this->{$propertyName};
+                if ($propertyValue !== null) {
+                    throw new FatalError(
+                        "Property " . get_class(
+                            $this
+                        ) . "->$propertyName is set with an unstored Storable. Store this reference Storable first, so it does have property storable id to reference with."
+                    );
+                }
                 throw new FatalError(
-                    "Property " . get_class($this) . "->$propertyName is null and not optional"
+                    "Property " . get_class(
+                        $this
+                    ) . "->$propertyName is null but must be set (is not optional/nullable)"
                 );
             }
 
@@ -785,7 +798,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
             $storableClassId = self::$schemaTableCache[$this->connectionId][$class]['id'];
             $db->insert(StorableSchema::ID_TABLE, ['storableId' => $storableClassId]);
             $this->id = $db->getLastInsertId();
-            $storeValues["id"] = (string)$this->id;
+            $storeValues["id"] = $this->id;
         }
         if (!$existingId) {
             $db->insert($storableSchema->tableName, $storeValues);

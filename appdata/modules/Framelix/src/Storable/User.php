@@ -5,7 +5,6 @@ namespace Framelix\Framelix\Storable;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
-use Framelix\Framelix\Utils\StringUtils;
 use Framelix\Framelix\View;
 use SensitiveParameter;
 
@@ -43,7 +42,7 @@ class User extends StorableExtended
      */
     public static function get(bool $originalUser = false): ?self
     {
-        $key = __METHOD__ . "-" . (int)$originalUser;
+        $key = "getuser-" . (int)$originalUser;
         if (ArrayUtils::keyExists(self::$cache, $key)) {
             return self::$cache[$key];
         }
@@ -72,7 +71,7 @@ class User extends StorableExtended
 
     /**
      * Check if given user has any of the given roles
-     * The roles are cached by default, once they have been called
+     * The roles are cached by default, once they have been called for a user
      * @param mixed $checkRoles If an array (or comma separated list) and any of that roles match, return true
      * @param User|false|null $user On false, automatically use the user returned by User::get()
      * @param bool $flushCache The check is cached by default, once it have been checked. Set true to flush the cache
@@ -86,19 +85,16 @@ class User extends StorableExtended
         if ($user === false) {
             $user = self::get();
         }
-        $cacheKey = __METHOD__ . "-" . $user . "-" . StringUtils::stringify($checkRoles);
-        $cacheKeyRoles = __METHOD__ . "-" . $user;
-        if (ArrayUtils::keyExists(self::$cache, $cacheKey) && !$flushCache) {
-            return self::$cache[$cacheKey];
-        }
         if ($checkRoles === false) {
-            self::$cache[$cacheKey] = !$user;
-            return self::$cache[$cacheKey];
+            return !$user;
         }
         if ($checkRoles === true) {
-            self::$cache[$cacheKey] = !!$user;
-            return self::$cache[$cacheKey];
+            return !!$user;
         }
+        if (!$user) {
+            return false;
+        }
+        $cacheKeyRoles = __METHOD__ . "-" . $user;
         $existingUserRoles = self::$cache[$cacheKeyRoles] ?? null;
         if ($existingUserRoles === null || $flushCache) {
             if ($user->simulateRoles) {
@@ -112,9 +108,8 @@ class User extends StorableExtended
             }
             self::$cache[$cacheKeyRoles] = $existingUserRoles;
         }
-        if (!$user || !$existingUserRoles) {
-            self::$cache[$cacheKey] = false;
-            return self::$cache[$cacheKey];
+        if (!$existingUserRoles) {
+            return false;
         }
         if (!is_array($checkRoles)) {
             $checkRoles = explode(",", $checkRoles);
@@ -124,12 +119,10 @@ class User extends StorableExtended
             if (!strlen($role)) {
                 continue;
             }
-            if (!isset($existingUserRoles[$role])) {
-                self::$cache[$cacheKey] = true;
+            if (isset($existingUserRoles[$role])) {
                 return true;
             }
         }
-        self::$cache[$cacheKey] = false;
         return false;
     }
 
@@ -143,7 +136,7 @@ class User extends StorableExtended
     {
         $condition = "email = {0}";
         if (!$ignoreLocked) {
-            $condition .= " && flagLocked = 0";
+            $condition .= " AND flagLocked = 0";
         }
         return self::getByConditionOne($condition, [$email]);
     }

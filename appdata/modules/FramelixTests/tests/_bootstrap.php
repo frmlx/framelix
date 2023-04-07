@@ -10,3 +10,11 @@ Config::$enabledBuiltInSystemEventLogs = [];
 ini_set("date.timezone", "Europe/Berlin");
 // disable time limit
 ini_set("max_execution_time", -1);
+
+spl_autoload_register(function ($className) {
+    $className = str_replace("\\", "/", $className);
+    $path = __DIR__ . "/$className.php";
+    if (file_exists($path)) {
+        require_once $path;
+    }
+});

@@ -82,16 +82,20 @@ class Console
      */
     public static function appWarmup(): int
     {
-        Shell::prepare("mysql -u root -papp -e 'CREATE DATABASE IF NOT EXISTS `" . FRAMELIX_MODULE . "`'")->execute();
-        $db = Sql::get();
-        $builder = new SqlStorableSchemeBuilder($db);
-        $queries = $builder->getSafeQueries();
-        if ($queries) {
-            self::info("Database upgrade");
-            $builder->executeQueries($queries);
-            self::success(count($queries) . " safe queries has been executed");
-        } else {
-            self::success("Everything was already up 2 date");
+        // if a default db connection is added, create and update database automatically on app startup
+        if (isset(Config::$sqlConnections[FRAMELIX_MODULE])) {
+            Shell::prepare("mysql -u root -papp -e 'CREATE DATABASE IF NOT EXISTS `" . FRAMELIX_MODULE . "`'")
+                ->execute();
+            $db = Sql::get();
+            $builder = new SqlStorableSchemeBuilder($db);
+            $queries = $builder->getSafeQueries();
+            if ($queries) {
+                self::info("Database upgrade");
+                $builder->executeQueries($queries);
+                self::success(count($queries) . " safe queries has been executed");
+            } else {
+                self::success("Everything was already up 2 date");
+            }
         }
         return 0;
     }

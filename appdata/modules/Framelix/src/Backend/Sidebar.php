@@ -199,7 +199,8 @@ abstract class Sidebar
                 View\Backend\UserProfile\Index::class,
                 '<div>' . Lang::get(
                     '__framelix_view_backend_userprofile_index__'
-                ) . '</div><div class="framelix-sidebar-label-nowrap framelix-sidebar-label-small">' . User::get()->email . '</div>',
+                ) . '</div><div class="framelix-sidebar-label-nowrap framelix-sidebar-label-small">' . User::get(
+                )->email . '</div>',
                 "person"
             );
             $this->showHtmlForLinkData(order: 506);

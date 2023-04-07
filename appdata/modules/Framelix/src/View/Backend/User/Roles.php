@@ -3,7 +3,6 @@
 namespace Framelix\Framelix\View\Backend\User;
 
 use Framelix\Framelix\Config;
-use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
