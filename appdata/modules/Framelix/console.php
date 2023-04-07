@@ -13,12 +13,12 @@ $argv = $_SERVER['argv'];
 unset($argv[0]);
 $moduleName = $argv[1] ?? null;
 if (!$moduleName) {
-    echo "First parameter must be a module name or '*' for all modules. Bye.";
+    echo "First parameter must be a module name or 'all' for all modules. Bye.";
     exit(1);
 }
 unset($argv[1]);
 
-if ($moduleName === "*") {
+if ($moduleName === "all") {
     $modules = scandir(__DIR__ . "/../");
     foreach ($modules as $module) {
         $moduleEntryPoint = __DIR__ . "/../$module/public/index.php";

@@ -48,7 +48,7 @@ class SchemeGenerator extends View
         </p>
         <?php
         $this->showCodeBlock(
-            "framelix_console '*' updateDatabaseSafe\nframelix_console '*' updateDatabaseUnsafe",
+            "framelix_console '*' updateDatabaseSafe\nframelix_console all updateDatabaseUnsafe",
             codeLanguage: 'bash'
         );
     }

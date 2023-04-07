@@ -52,7 +52,7 @@ echo "Done."
 echo ""
 
 cecho b "# Run appWarmup"
-docker $DOCKER_EXECPARAMS "framelix_console '*' appWarmup"
+docker $DOCKER_EXECPARAMS "framelix_console all appWarmup"
 echo ""
 echo "Done."
 echo ""
