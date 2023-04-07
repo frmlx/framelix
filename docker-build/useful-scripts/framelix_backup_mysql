@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# backup complete database
+# backup complete mysql database
 mkdir -p /framelix/userdata/backups
 FILENAME=$( date +"%Y-%m-%d-%H-%M-%S")
 FILENAME="$FILENAME.sql"

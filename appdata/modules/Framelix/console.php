@@ -11,9 +11,9 @@ if (php_sapi_name() !== 'cli' || !isset($_SERVER['argv'][0])) {
 
 $argv = $_SERVER['argv'];
 unset($argv[0]);
-$moduleName = $argv[1];
+$moduleName = $argv[1] ?? null;
 if (!$moduleName) {
-    echo "First parameter must be a module name or * for all modules. Bye.";
+    echo "First parameter must be a module name or '*' for all modules. Bye.";
     exit(1);
 }
 unset($argv[1]);
@@ -38,6 +38,11 @@ if ($moduleName === "*") {
 }
 
 $moduleEntryPoint = __DIR__ . "/../$moduleName/public/index.php";
+
+if (!file_exists($moduleEntryPoint)) {
+    echo $moduleEntryPoint . " does not exist";
+    exit(2);
+}
 
 ini_set("memory_limit", -1);
 ini_set("max_execution_time", -1);

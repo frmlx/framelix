@@ -130,38 +130,44 @@ fi
 echo "Done."
 echo ""
 
-cecho y "# Starting MariaDB service"
-echo ""
+if [ "$FRAMELIX_MARIADB_ENABLED" == "1" ]; then
 
-echo "[mysqld]
-innodb_buffer_pool_size=128M" >/etc/mysql/mariadb.conf.d/71-framelix.cnf
+  cecho y "# Starting MariaDB service"
+  echo ""
 
-# truncate/create error log file
-echo "" >/var/log/mariadb-error.log
-echo "" >/var/log/mariadb-slow.log
-chmod 0777 /var/log/mariadb-*
+  echo "[mysqld]
+  innodb_buffer_pool_size=128M" >/etc/mysql/mariadb.conf.d/71-framelix.cnf
 
-# setup db
-if [ ! -d "$FRAMELIX_DBDATA/mysql" ]; then
-  echo "Fresh database directory - Installing database"
-  mysql_install_db \
-    --user=mysql \
-    --basedir=/usr \
-    --datadir=$FRAMELIX_DBDATA \
-    --skip-test-db \
-    --default-time-zone=SYSTEM \
-    --enforce-storage-engine= \
-    --skip-log-bin \
-    --expire-logs-days=0 \
-    --loose-innodb_buffer_pool_load_at_startup=0 \
-    --loose-innodb_buffer_pool_dump_at_shutdown=0
-  start_mysql
-  # update root password to a default
-  mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'app';"
+  # truncate/create error log file
+  echo "" >/var/log/mariadb-error.log
+  echo "" >/var/log/mariadb-slow.log
+  chmod 0777 /var/log/mariadb-*
+
+  # setup db
+  if [ ! -d "$FRAMELIX_DBDATA/mysql" ]; then
+    echo "Fresh database directory - Installing database"
+    mysql_install_db \
+      --user=mysql \
+      --basedir=/usr \
+      --datadir=$FRAMELIX_DBDATA \
+      --skip-test-db \
+      --default-time-zone=SYSTEM \
+      --enforce-storage-engine= \
+      --skip-log-bin \
+      --expire-logs-days=0 \
+      --loose-innodb_buffer_pool_load_at_startup=0 \
+      --loose-innodb_buffer_pool_dump_at_shutdown=0
+    start_mysql
+    # update root password to a default
+    mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'app';"
+  else
+    start_mysql
+    # upgrade database if required
+    mysql_upgrade -u root -papp
+  fi
 else
-  start_mysql
-  # upgrade database if required
-  mysql_upgrade -u root -papp
+  cecho y "# MariaDB service disabled. Enable it by setting FRAMELIX_MARIADB_ENABLED=1 environment variable"
+echo ""
 fi
 
 cecho y "# Starting php fpm service"

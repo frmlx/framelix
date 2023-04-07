@@ -77,7 +77,8 @@ class Cron extends Console
         if ((Config::$automaticDbBackupInterval > 0 && $dayDiffSinceLastBackup >= Config::$automaticDbBackupInterval) || self::getParameter(
                 'forceBackup'
             )) {
-            self::backupAppDatabase("auto_" . FRAMELIX_MODULE . "_" . date("Y-m-d-H-i-s") . ".sql");
+            self::backupMysqlDatabase("mariadb_auto_" . FRAMELIX_MODULE . "_" . date("Y-m-d-H-i-s") . ".sql");
+            self::backupSqliteDatabases("sqlite_auto_");
         }
     }
 }

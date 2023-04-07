@@ -5,6 +5,8 @@ namespace Framelix\FramelixDocs\View\Database;
 use Framelix\Framelix\Db\StorablePropertyInterface;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Storable\Storable;
+use Framelix\Framelix\Storable\User;
+use Framelix\Framelix\Storable\UserRole;
 use Framelix\FramelixDocs\Storable\SimpleDemoEntry;
 use Framelix\FramelixDocs\View\View;
 
@@ -59,10 +61,18 @@ class Storables extends View
             framework resolves this to the required Storable when you need it to fetch.
         </p>
         <p>
-            <code>SimpleDemoEntry[]|null $arrayOfReferences</code> hold an array references to other
-            <code>Storable</code> in the database. In the database this will be a longtext, the same as JSON. It only
-            holds the IDs of the given storables. The framework resolves this to the required array of Storables when
-            you need it to fetch.
+            Arrays and other data is supported with the <code>mixed</code> datatype, as it is converted to a JSON string
+            in the database.
+            Defining any <code>@property</code> as an array, by adding square brackets to the type, example <code>string[]</code>,
+            will result in an error. This is not supported.
+        </p>
+        <p>
+            If your intention of using an array is to store 1-n data entries to a Storable (Let's say a list of
+            strings), than it
+            is best practice to create another Storable type with a <code>@property ParentStorableType $parent</code>
+            reference back to the parent. This is future-proof and you can always extend this <code>child</code>
+            Storable with more data properties. A good example of that is the
+            built-in User and Roles with <?= $this->getShowSourceFileLinkTag([User::class, UserRole::class]) ?>
         </p>
         <?php
 

@@ -8,7 +8,7 @@ while getopts ":f:" opt; do
         exit 1
       fi
 
-      echo -n "Import $OPTARG into database ... "
+      echo -n "Import $OPTARG into mariadb database ... "
       mysql -u root -papp app < $OPTARG
       echo "Done"
 

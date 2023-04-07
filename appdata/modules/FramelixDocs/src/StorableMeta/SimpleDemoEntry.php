@@ -50,13 +50,6 @@ class SimpleDemoEntry extends StorableMeta
         $property->setLabel("Another Entry References");
         $property->setLabelDescription('Search by Name');
 
-        $field = new Search();
-        $field->setSearchWithStorable(\Framelix\FramelixDocs\Storable\SimpleDemoEntry::class, ['email']);
-        $property = $this->createProperty("arrayOfReferences");
-        $property->field = $field;
-        $property->setLabel("More other references");
-        $property->setLabelDescription('Search by E-Mail');
-
         $this->addDefaultPropertiesAtEnd();
     }
 }
