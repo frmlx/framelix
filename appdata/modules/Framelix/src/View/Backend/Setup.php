@@ -3,7 +3,6 @@
 namespace Framelix\Framelix\View\Backend;
 
 use Framelix\Framelix\Config;
-use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Form\Field\Email;
@@ -17,6 +16,7 @@ use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Storable\User;
+use Framelix\Framelix\Storable\UserRole;
 use Framelix\Framelix\Storable\UserToken;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\RandomGenerator;
@@ -60,13 +60,12 @@ class Setup extends View
                     if (!$user) {
                         $user = new User();
                         $user->email = Request::getPost('email');
-                        $user->roles = ['admin', 'dev'];
                     }
                     $user->flagLocked = false;
-                    $user->addRole("admin");
-                    $user->addRole("dev");
                     $user->setPassword(Request::getPost('password'));
                     $user->store();
+                    $user->addRole("admin");
+                    $user->addRole("dev");
 
                     $token = UserToken::create($user);
                     UserToken::setCookieValue($token->token);

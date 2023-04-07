@@ -25,18 +25,10 @@ use function str_repeat;
  * @property mixed $jsonData
  * @property mixed|null $jsonDataOptional
  * @property Time|null $time
- * @property int[]|null $typedIntArray
- * @property float[]|null $typedFloatArray
- * @property string[]|null $typedStringArray
- * @property bool[]|null $typedBoolArray
- * @property DateTime[]|null $typedDateArray
  * @property TestStorable2|null $selfReferenceOptional
  * @property TestStorableSystemValue|null $systemValueOptional
- * @property TestStorableSystemValue[]|null $systemValueArrayOptional
  * @property TestStorableFile|null $storableFileOptional
- * @property TestStorableFile[]|null $storableFileArrayOptional
  * @property TestStorable1|null $otherReferenceOptional
- * @property TestStorable1[]|null $otherReferenceArrayOptional
  * @property DateTime $dateTime
  * @property DateTime|null $dateTimeOptional
  * @property Date $date
@@ -57,15 +49,6 @@ class TestStorable2 extends StorableExtended
         $storable->jsonData = ['foobar', 1];
         $storable->dateTime = new DateTime("2000-01-01 12:23:44");
         $storable->date = Date::create("2000-01-01");
-        $storable->typedIntArray = [1, 3, 5];
-        $storable->typedBoolArray = [true, false, true];
-        $storable->typedStringArray = ["yes", "baby", "yes"];
-        $storable->typedFloatArray = [1.2, 1.6, 1.7];
-        $storable->typedDateArray = [
-            DateTime::create("2000-01-01 12:23:44"),
-            DateTime::create("2000-01-01 12:23:44 + 10 days"),
-            DateTime::create("2000-01-01 12:23:44 + 1 year")
-        ];
         $storable->time = Time::create("12:00:01");
         $storable->sort = 0;
         $storable->updateTime = DateTime::create('now - 10 seconds');

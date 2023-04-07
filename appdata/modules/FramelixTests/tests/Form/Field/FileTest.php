@@ -94,7 +94,6 @@ final class FileTest extends TestCase
         $createdFile = reset($files['created']);
         $this->assertInstanceOf(TestStorableFile::class, $createdFile);
         $this->assertSame($storable, $createdFile->assignedStorable);
-        $this->assertSame($files['created'], $storable->storableFileArrayOptional);
         $this->assertCount(2, $files['created']);
 
         // test delete multiple
@@ -106,6 +105,5 @@ final class FileTest extends TestCase
         $files = $field->store($storable);
         $this->assertSame(2, $files['deleted']);
         $this->assertSame(null, $createdFile->id);
-        $this->assertSame(null, $storable->storableFileArrayOptional);
     }
 }

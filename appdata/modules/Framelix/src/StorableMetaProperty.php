@@ -104,43 +104,25 @@ class StorableMetaProperty
             return null;
         }
         $field = new Field\Text();
-        if ($storableSchemaProperty->storableClass || $storableSchemaProperty->arrayStorableClass) {
-            $storableClass = $storableSchemaProperty->storableClass ? new $storableSchemaProperty->storableClass() : null;
-            $arrayStorableClass = $storableSchemaProperty->arrayStorableClass ? new $storableSchemaProperty->arrayStorableClass() : null;
-            if ($storableClass instanceof SystemValue || $arrayStorableClass instanceof SystemValue) {
-                if ($storableClass) {
-                    $entries = $storableClass::getEntries($this->getValue());
-                } else {
-                    $entries = $arrayStorableClass::getEntries($this->getValue());
-                }
+        if ($storableSchemaProperty->storableClass) {
+            $storableClass = new $storableSchemaProperty->storableClass();
+            if ($storableClass instanceof SystemValue) {
+                $entries = $storableClass::getEntries($this->getValue());
                 $field = new Field\Select();
                 $field->addOptionsByStorables($entries);
-                if ($arrayStorableClass) {
-                    $field->multiple = true;
-                }
                 if ($entries > 10) {
                     $field->searchable = true;
                 }
-            } elseif ($storableClass instanceof StorableFile || $arrayStorableClass instanceof StorableFile) {
-                if ($storableClass) {
-                    $entries = $storableClass::getByCondition('assignedStorable = {0}', [$this->meta->storable]);
-                } else {
-                    $entries = $arrayStorableClass::getByCondition('assignedStorable = {0}', [$this->meta->storable]);
-                }
+            } elseif ($storableClass instanceof StorableFile) {
+                $entries = $storableClass::getByCondition('assignedStorable = {0}', [$this->meta->storable]);
                 $field = new Field\File();
-                if ($arrayStorableClass) {
-                    $field->multiple = true;
-                }
-                $field->storableFileBase = $storableClass ?? $arrayStorableClass;
+                $field->storableFileBase = $storableClass;
                 $field->defaultValue = $entries;
-            } elseif ($storableClass instanceof Storable || $arrayStorableClass instanceof Storable) {
-                $class = $storableClass ? get_class($storableClass) : get_class($arrayStorableClass);
+            } elseif ($storableClass instanceof Storable) {
+                $class = get_class($storableClass);
                 $storableMetaClass = str_replace("\\Storable\\", "\\StorableMeta\\", $class);
                 if (class_exists($storableMetaClass)) {
                     $field = new Field\Search();
-                    if ($arrayStorableClass) {
-                        $field->multiple = true;
-                    }
                     $field->setSearchWithStorableMetaQuickSearch($class, $storableMetaClass);
                 }
             }

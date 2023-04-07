@@ -18,12 +18,9 @@ use ReflectionClass;
 
 use function array_pop;
 use function array_reverse;
-use function array_unique;
-use function array_values;
 use function call_user_func;
 use function call_user_func_array;
 use function class_exists;
-use function count;
 use function explode;
 use function get_class;
 use function implode;
@@ -373,31 +370,19 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
                         $depthPath .= $partPropertyName . "-";
                         $partStorableSchemaProperty = $partStorableSchema->properties[$partPropertyName] ?? null;
                         // skip if property has not been found
-                        if (!$partStorableSchemaProperty || (!$partStorableSchemaProperty->storableClass && !$partStorableSchemaProperty->arrayStorableClass)) {
+                        if (!$partStorableSchemaProperty || !$partStorableSchemaProperty->storableClass) {
                             $aliasTableName = null;
                             continue;
                         }
-                        $partStorableSchema = Storable::getStorableSchema(
-                            $partStorableSchemaProperty->storableClass ?? $partStorableSchemaProperty->arrayStorableClass
-                        );
+                        $partStorableSchema = Storable::getStorableSchema($partStorableSchemaProperty->storableClass);
                         $prevAliasTableName = !$prevDepthPath ? "t0" : $tableAliasToDepthPath[$prevDepthPath];
                         $aliasTableName = $tableAliasToDepthPath[$depthPath] ?? null;
                         if (!$aliasTableName) {
                             $aliasTableName = "t" . $joinCount;
-                            $query .= "LEFT JOIN `$partStorableSchema->tableName` as `$aliasTableName` ";
-                            $query .= "ON ";
-                            if ($partStorableSchemaProperty->arrayStorableClass) {
-                                $query .= $db->quoteIdentifier(
-                                        $prevAliasTableName,
-                                        $partStorableSchemaProperty->name
-                                    ) . " LIKE " . $db->getConcatedStringForQuery(
-                                        $db->escapeValue("%|"),
-                                        $db->quoteIdentifier($aliasTableName, "id"),
-                                        $db->escapeValue("|%")
-                                    );
-                            } else {
-                                $query .= " `$aliasTableName`.`id` = `$prevAliasTableName`.`$partStorableSchemaProperty->name`";
-                            }
+                            $query .= "LEFT JOIN `$partStorableSchema->tableName` as `$aliasTableName` ON ";
+                            $query .=
+                                $db->quoteIdentifier($aliasTableName, "id") . " = " .
+                                $db->quoteIdentifier($prevAliasTableName, $partStorableSchemaProperty->name);
                             $query .= "\n";
                             $tableAliasToDepthPath[$depthPath] = $aliasTableName;
                             $joinCount++;
@@ -652,79 +637,27 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
                     "$label need to be an instance of " . $storableSchemaProperty->storableInterface
                 );
             }
-            if ($storableSchemaProperty->arrayType || $storableSchemaProperty->arrayStorableClass || $storableSchemaProperty->arrayStorableInterface) {
-                if (!is_array($value)) {
-                    throw new FatalError("$label needs to be an array");
-                }
-                // a storable class array must be unique in values
-                $valueUnique = array_unique($value);
-                if ($storableSchemaProperty->arrayStorableClass && count($valueUnique) !== count($value)) {
-                    throw new FatalError("$label have duplicate values in array of storable references");
-                }
-                foreach ($value as $key => $arrayValue) {
-                    $arrayLabel = $label . "[$key]";
-                    if ($storableSchemaProperty->arrayType) {
-                        switch ($storableSchemaProperty->arrayType) {
-                            case "bool":
-                                if (!is_bool($arrayValue)) {
-                                    throw new FatalError("$arrayLabel need to be a boolean value");
-                                }
-                                break;
-                            case "int":
-                                if (!is_int($arrayValue)) {
-                                    throw new FatalError("$arrayLabel need to be a integer value");
-                                }
-                                break;
-                            case "float":
-                                if (!is_float($arrayValue)) {
-                                    throw new FatalError("$arrayLabel need to be a float value");
-                                }
-                                break;
-                            case "string":
-                                if (!is_string($arrayValue)) {
-                                    throw new FatalError("$arrayLabel need to be a string value");
-                                }
-                                break;
-                        }
+            switch ($storableSchemaProperty->internalType) {
+                case "bool":
+                    if (!is_bool($value)) {
+                        throw new FatalError("$label need to be a boolean value");
                     }
-                    if ($storableSchemaProperty->arrayStorableClass) {
-                        if (!($arrayValue instanceof $storableSchemaProperty->arrayStorableClass)) {
-                            throw new FatalError(
-                                "$arrayLabel needs to be instance of $storableSchemaProperty->arrayStorableClass"
-                            );
-                        }
+                    break;
+                case "int":
+                    if (!is_int($value)) {
+                        throw new FatalError("$label need to be a integer value");
                     }
-                    if ($storableSchemaProperty->arrayStorableInterface) {
-                        if (!($arrayValue instanceof $storableSchemaProperty->arrayStorableInterface)) {
-                            throw new FatalError(
-                                "$arrayLabel needs to be instance of $storableSchemaProperty->arrayStorableClass"
-                            );
-                        }
+                    break;
+                case "float":
+                    if (!is_float($value)) {
+                        throw new FatalError("$label need to be a float value");
                     }
-                }
-            } else {
-                switch ($storableSchemaProperty->internalType) {
-                    case "bool":
-                        if (!is_bool($value)) {
-                            throw new FatalError("$label need to be a boolean value");
-                        }
-                        break;
-                    case "int":
-                        if (!is_int($value)) {
-                            throw new FatalError("$label need to be a integer value");
-                        }
-                        break;
-                    case "float":
-                        if (!is_float($value)) {
-                            throw new FatalError("$label need to be a float value");
-                        }
-                        break;
-                    case "string":
-                        if (!is_string($value)) {
-                            throw new FatalError("$label need to be a string value");
-                        }
-                        break;
-                }
+                    break;
+                case "string":
+                    if (!is_string($value)) {
+                        throw new FatalError("$label need to be a string value");
+                    }
+                    break;
             }
         }
         $this->propertyCache['phpvalue'][$name] = $value;
@@ -785,21 +718,6 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         $phpValue = $this->{$propertyName};
         if ($phpValue === null) {
             return null;
-        }
-        if ($storableSchemaProperty->arrayStorableClass) {
-            return JsonUtils::encode(array_values($phpValue));
-        }
-        if ($storableSchemaProperty->arrayType) {
-            return JsonUtils::encode($phpValue);
-        }
-        if ($storableSchemaProperty->arrayStorableInterface) {
-            $arr = [];
-            foreach ($phpValue as $value) {
-                if ($value instanceof ObjectTransformable) {
-                    $arr[] = $value->getDbValue();
-                }
-            }
-            return JsonUtils::encode($arr);
         }
         if ($storableSchemaProperty->storableInterface) {
             if ($phpValue instanceof ObjectTransformable) {
@@ -1044,74 +962,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
                 }
             }
         }
-        if ($storableSchemaProperty->arrayType || $storableSchemaProperty->arrayStorableClass || $storableSchemaProperty->arrayStorableInterface) {
-            // handling typed arrays
-            $phpValue = JsonUtils::decode($dbValue);
-            if ($storableSchemaProperty->arrayStorableClass) {
-                if ($prefetchEnabled && $cachedStorables) {
-                    // prefetch, loading all already cached storables up to the prefetchLimit
-                    $fetchReferenceIds = [];
-                    $count = 0;
-                    $cachedJsonValues = [];
-                    foreach ($cachedStorables as $cachedStorable) {
-                        // if this was already in a previous prefetch cycle
-                        if (ArrayUtils::keyExists($cachedStorable->propertyCache, "phpvalue[$propertyName]")) {
-                            continue;
-                        }
-                        $referenceJsonStr = $cachedStorable->getOriginalDbValueForProperty($propertyName);
-                        $cachedJsonValues[$cachedStorable->id] = null;
-                        if ($referenceJsonStr) {
-                            $referenceJsonData = JsonUtils::decode($referenceJsonStr);
-                            $cachedJsonValues[$cachedStorable->id] = $referenceJsonData;
-                            foreach ($referenceJsonData as $referenceId) {
-                                $fetchReferenceIds[$referenceId] = $referenceId;
-                            }
-                            $count++;
-                            if ($count >= $storableSchemaProperty->prefetchLimit) {
-                                break;
-                            }
-                        }
-                    }
-                    $fetchReferenceIds[$this->id] = $this->id;
-                    $referenceStorables = call_user_func_array(
-                        [$storableSchemaProperty->arrayStorableClass, "getByIds"],
-                        [$fetchReferenceIds, $referenceStorableConnectionId]
-                    );
-                    foreach ($cachedStorables as $cachedStorable) {
-                        // not qualified for prefetch (limit reached, so skip)
-                        if (!ArrayUtils::keyExists($cachedJsonValues, $cachedStorable->id)) {
-                            continue;
-                        }
-                        $referenceJsonData = $cachedJsonValues[$cachedStorable->id];
-                        $newValue = [];
-                        if ($referenceJsonData) {
-                            foreach ($referenceJsonData as $referenceId) {
-                                if (isset($referenceStorables[$referenceId])) {
-                                    $newValue[$referenceId] = $referenceStorables[$referenceId];
-                                }
-                            }
-                        }
-                        $cachedStorable->propertyCache['phpvalue'][$propertyName] = $newValue ?: null;
-                    }
-                } elseif (!$prefetchEnabled) {
-                    // no prefetch, fetching directly with getByIds
-                    return call_user_func_array(
-                        [$storableSchemaProperty->arrayStorableClass, "getByIds"],
-                        [$phpValue, $referenceStorableConnectionId]
-                    );
-                }
-                return $this->propertyCache['phpvalue'][$propertyName] ?? null;
-            } elseif ($storableSchemaProperty->arrayStorableInterface) {
-                foreach ($phpValue as $key => $value) {
-                    $phpValue[$key] = call_user_func_array([
-                        $storableSchemaProperty->arrayStorableInterface,
-                        'createFromDbValue'
-                    ], [$value]);
-                }
-                return $phpValue;
-            }
-            return $phpValue;
-        } elseif ($storableSchemaProperty->storableInterface) {
+        if ($storableSchemaProperty->storableInterface) {
             return call_user_func_array([$storableSchemaProperty->storableInterface, 'createFromDbValue'], [$dbValue]);
         } elseif ($storableSchemaProperty->storableClass) {
             if ($prefetchEnabled) {

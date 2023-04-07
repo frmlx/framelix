@@ -80,9 +80,6 @@ class File extends Field
             $addTo = false;
             if ($schemeProperty) {
                 $addTo = null;
-                if ($schemeProperty->arrayStorableClass) {
-                    $addTo = $storable->{$this->name} ?? [];
-                }
             }
             foreach ($uploadedFiles as $uploadedFile) {
                 $storableFile = $this->storableFileBase->clone();
@@ -91,9 +88,7 @@ class File extends Field
                 }
                 $storableFile->store(false, $uploadedFile);
                 $createdFiles[$storableFile->id] = $storableFile;
-                if (is_array($addTo)) {
-                    $addTo[$storableFile->id] = $storableFile;
-                } elseif ($addTo === null) {
+                if ($addTo === null) {
                     $addTo = $storableFile;
                 }
             }

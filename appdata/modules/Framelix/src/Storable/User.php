@@ -5,12 +5,12 @@ namespace Framelix\Framelix\Storable;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
+use Framelix\Framelix\Utils\StringUtils;
 use Framelix\Framelix\View;
 use SensitiveParameter;
 
-use function array_search;
+use function array_combine;
 use function explode;
-use function in_array;
 use function is_array;
 use function password_hash;
 use function password_verify;
@@ -21,14 +21,20 @@ use function strlen;
  * @property string $email
  * @property string|null $password
  * @property bool $flagLocked
- * @property mixed|null $roles
  * @property string|null $twoFactorSecret
  * @property mixed|null $twoFactorBackupCodes
  * @property mixed|null $settings
  */
 class User extends StorableExtended
 {
+
     private static array $cache = [];
+
+    /**
+     * Only used for unit tests to simulate specific roles without actually storing that in the database The check is cached by default, once it have been checked. Set true to flush the cache
+     * @var string[]|null
+     */
+    public ?array $simulateRoles = null;
 
     /**
      * Get current logged-in user
@@ -37,7 +43,7 @@ class User extends StorableExtended
      */
     public static function get(bool $originalUser = false): ?self
     {
-        $key = "getuser-" . (int)$originalUser;
+        $key = __METHOD__ . "-" . (int)$originalUser;
         if (ArrayUtils::keyExists(self::$cache, $key)) {
             return self::$cache[$key];
         }
@@ -66,39 +72,64 @@ class User extends StorableExtended
 
     /**
      * Check if given user has any of the given roles
-     * @param mixed $roles
+     * The roles are cached by default, once they have been called
+     * @param mixed $checkRoles If an array (or comma separated list) and any of that roles match, return true
      * @param User|false|null $user On false, automatically use the user returned by User::get()
+     * @param bool $flushCache The check is cached by default, once it have been checked. Set true to flush the cache
      * @return bool
      */
-    public static function hasRole(mixed $roles, User|bool|null $user = false): bool
+    public static function hasRole(mixed $checkRoles, User|bool|null $user = false, bool $flushCache = false): bool
     {
-        if ($roles === "*") {
+        if ($checkRoles === "*") {
             return true;
         }
         if ($user === false) {
             $user = self::get();
         }
-        if ($roles === false) {
-            return !$user;
+        $cacheKey = __METHOD__ . "-" . $user . "-" . StringUtils::stringify($checkRoles);
+        $cacheKeyRoles = __METHOD__ . "-" . $user;
+        if (ArrayUtils::keyExists(self::$cache, $cacheKey) && !$flushCache) {
+            return self::$cache[$cacheKey];
         }
-        if ($roles === true) {
-            return !!$user;
+        if ($checkRoles === false) {
+            self::$cache[$cacheKey] = !$user;
+            return self::$cache[$cacheKey];
         }
-        if (!$user || !$user->roles) {
-            return false;
+        if ($checkRoles === true) {
+            self::$cache[$cacheKey] = !!$user;
+            return self::$cache[$cacheKey];
         }
-        if (!is_array($roles)) {
-            $roles = explode(",", $roles);
+        $existingUserRoles = self::$cache[$cacheKeyRoles] ?? null;
+        if ($existingUserRoles === null || $flushCache) {
+            if ($user->simulateRoles) {
+                $existingUserRoles = array_combine($user->simulateRoles, $user->simulateRoles);
+            } else {
+                $existingUserRoles = UserRole::getByCondition(
+                    $user->getDb()->quoteIdentifier('user') . ' = {0}',
+                    [$user]
+                );
+                $existingUserRoles = ArrayUtils::map($existingUserRoles, 'role', 'role');
+            }
+            self::$cache[$cacheKeyRoles] = $existingUserRoles;
         }
-        foreach ($roles as $role) {
+        if (!$user || !$existingUserRoles) {
+            self::$cache[$cacheKey] = false;
+            return self::$cache[$cacheKey];
+        }
+        if (!is_array($checkRoles)) {
+            $checkRoles = explode(",", $checkRoles);
+        }
+        foreach ($checkRoles as $role) {
             $role = trim($role);
             if (!strlen($role)) {
                 continue;
             }
-            if (in_array($role, $user->roles)) {
+            if (!isset($existingUserRoles[$role])) {
+                self::$cache[$cacheKey] = true;
                 return true;
             }
         }
+        self::$cache[$cacheKey] = false;
         return false;
     }
 
@@ -121,7 +152,6 @@ class User extends StorableExtended
     {
         parent::setupStorableSchema($selfStorableSchema);
         $selfStorableSchema->connectionId = FRAMELIX_MODULE;
-        $selfStorableSchema->properties['roles']->lazyFetch = true;
         $selfStorableSchema->properties['settings']->lazyFetch = true;
         $selfStorableSchema->addIndex('email', 'unique');
     }
@@ -131,23 +161,40 @@ class User extends StorableExtended
         return View::getUrl(View\Backend\User\Index::class)->setParameter('id', $this);
     }
 
-    public function addRole(string $role): void
+    /**
+     * Add a role to the user
+     * Return UserRole if role was not set previously
+     * @param string $role
+     * @return UserRole|null
+     */
+    public function addRole(string $role): ?UserRole
     {
-        $roles = $this->roles ?? [];
-        if (!in_array($role, $roles)) {
-            $roles[] = $role;
-            $this->roles = $roles;
+        if (self::hasRole($role, $this)) {
+            return null;
         }
+        $roleObject = new UserRole();
+        $roleObject->user = $this;
+        $roleObject->role = $role;
+        $roleObject->store();
+        // flush the cache after role change
+        self::hasRole($role, $this, true);
+        return $roleObject;
     }
 
-    public function removeRole(string $role): void
+    /**
+     * Remove a role from the user
+     * @param string $role
+     * @return bool True if role has been found and removed, false if user had not this role
+     */
+    public function removeRole(string $role): bool
     {
-        $roles = $this->roles ?? [];
-        $key = array_search($role, $roles);
-        if ($key !== false) {
-            unset($roles[$key]);
-            $this->roles = $roles;
+        if (!self::hasRole($role, $this)) {
+            return false;
         }
+        UserRole::getByConditionOne('`user` = {0}', [$this])?->delete();
+        // flush the cache after role change
+        self::hasRole($role, $this, true);
+        return true;
     }
 
     public function setPassword(#[SensitiveParameter] string $plainPassword): void

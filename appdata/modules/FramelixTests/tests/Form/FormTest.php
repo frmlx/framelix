@@ -66,16 +66,6 @@ final class FormTest extends TestCase
         $storable->dateTime = new \Framelix\Framelix\DateTime("2000-01-01 12:23:44");
         $storable->date = \Framelix\Framelix\Date::create("2000-01-01");
         $storable->otherReferenceOptional = $storableReference;
-        $storable->otherReferenceArrayOptional = [$storableReference];
-        $storable->typedIntArray = [1, 3, 5];
-        $storable->typedBoolArray = [true, false, true];
-        $storable->typedStringArray = ["yes", "baby", "yes"];
-        $storable->typedFloatArray = [1.2, 1.6, 1.7];
-        $storable->typedDateArray = [
-            \Framelix\Framelix\DateTime::create("2000-01-01 12:23:44"),
-            \Framelix\Framelix\DateTime::create("2000-01-01 12:23:44 + 10 days"),
-            \Framelix\Framelix\DateTime::create("2000-01-01 12:23:44 + 1 year")
-        ];
         $storable->time = \Framelix\Framelix\Time::create("12:00:01");
         $storable->updateTime = \Framelix\Framelix\DateTime::create('now - 10 seconds');
         $storable->store();

@@ -430,7 +430,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * Set simulated user
      * @param mixed $roles
      *  null = No user
-     *  true = A user without roles
+     *  true = A user only, without roles
      *  array = A user with given roles
      * @return void
      */
@@ -441,8 +441,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             return;
         }
         $user = new User();
+        $user->simulateRoles = [];
         if (is_array($roles)) {
-            $user->roles = $roles;
+            $user->simulateRoles = $roles;
         }
         User::setCurrentUser($user);
     }

@@ -57,16 +57,6 @@ final class StorableMetaTest extends TestCase
         $storable->dateTime = new DateTime("2000-01-01 12:23:44");
         $storable->date = Date::create("2000-01-01");
         $storable->otherReferenceOptional = $storableReference;
-        $storable->otherReferenceArrayOptional = [$storableReference];
-        $storable->typedIntArray = [1, 3, 5];
-        $storable->typedBoolArray = [true, false, true];
-        $storable->typedStringArray = ["foo" => "yes", "baby", "yes"];
-        $storable->typedFloatArray = [1.2, 1.6, 1.7];
-        $storable->typedDateArray = [
-            DateTime::create("2000-01-01 12:23:44"),
-            DateTime::create("2000-01-01 12:23:44 + 10 days"),
-            DateTime::create("2000-01-01 12:23:44 + 1 year")
-        ];
         $storable->time = Time::create("12:00:01");
         $storable->updateTime = DateTime::create('now - 10 seconds');
         $storable->store();

@@ -10,6 +10,7 @@ use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Storable\User;
+use Framelix\Framelix\Storable\UserRole;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\View\Backend\View;
 
@@ -36,11 +37,8 @@ class Roles extends View
                 }
             }
             // check if at least one admin exist
-            $admins = User::getByCondition(
-                Sql::get()->getConditionJsonContainsArrayValue('roles', '$', 'admin') .
-                " && id != " . $this->storable
-            );
-            if (!$admins && !User::hasRole("admin", $this->storable)) {
+            $hasAdmin = UserRole::getByConditionOne("`user` != {0} && role = {1}", [$this->storable, 'admin']);
+            if (!$hasAdmin && !User::hasRole("admin", $this->storable)) {
                 Response::stopWithFormValidationResponse('__framelix_user_edituser_validation_adminrequired__');
             }
             $this->storable->store();

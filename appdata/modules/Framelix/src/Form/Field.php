@@ -308,14 +308,8 @@ abstract class Field implements JsonSerializable
         if ($schemaProperty->storableClass) {
             $this->setConverterStorable($schemaProperty->storableClass);
         }
-        if ($schemaProperty->arrayStorableClass) {
-            $this->setConverterStorable($schemaProperty->arrayStorableClass);
-        }
         if ($schemaProperty->storableInterface) {
             $this->setConverterStorableInterface($schemaProperty->storableInterface);
-        }
-        if ($schemaProperty->arrayStorableInterface) {
-            $this->setConverterStorableInterface($schemaProperty->arrayStorableInterface);
         }
     }
 

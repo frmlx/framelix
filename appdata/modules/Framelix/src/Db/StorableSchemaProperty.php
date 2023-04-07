@@ -77,38 +77,21 @@ class StorableSchemaProperty
 
     /**
      * A comment for the database column, directly in the database
+     * Does not work for all db engines like Sqlite
      * @var string|null
      */
     public ?string $dbComment = null;
 
     /**
-     * Lazy fetch does not fetch this property from database until it is actually called
+     * Lazy fetch does not fetch this property from database until it is actually called with a storable getter
      * Useful for blobs and big data chunks that you don't need often
      * @var bool
      */
     public bool $lazyFetch = false;
 
     /**
-     * This is set when type is declared as array (eg: Storable[]) and does contain the type
-     * This isn't set when arrayStorableClass or arrayStorableInterface isset
-     * @var string|null
-     */
-    public string|null $arrayType = null;
-
-    /**
-     * This is set when type is declared as array (eg: Storable[]) that is a storable
-     * @var string|null
-     */
-    public string|null $arrayStorableClass = null;
-
-    /**
-     * This is set when type is declared as array (eg: DateTime[]) that is a storable interface
-     * @var string|null
-     */
-    public string|null $arrayStorableInterface = null;
-
-    /**
      * Comes after this property in the database
+     * Does not work for all db engines like Sqlite
      * @var StorableSchemaProperty|null
      */
     public ?StorableSchemaProperty $after = null;

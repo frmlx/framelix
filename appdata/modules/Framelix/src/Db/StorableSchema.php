@@ -3,6 +3,8 @@
 namespace Framelix\Framelix\Db;
 
 use Framelix\Framelix\Exception\FatalError;
+use Framelix\Framelix\Storable\User;
+use Framelix\Framelix\Storable\UserRole;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\FileUtils;
@@ -125,10 +127,10 @@ class StorableSchema
             unset($types['null']);
             $type = reset($types);
             $typeIsArray = str_ends_with($type, "[]");
-            // typed array
             if ($typeIsArray) {
-                $type = substr($type, 0, -2);
-                $storableSchemaProperty->arrayType = $type;
+                throw new FatalError(
+                    'Array\'s are not supported in @property annotations of Storables. Consider using a separate storable and add a reference property in that new storable. For example the ' . User::class . ' and ' . UserRole::class
+                );
             }
             if (!in_array($type, ["bool", "int", "float", "double", "string", "mixed"])) {
                 $possibleClassNames[] = $namespace . "\\" . $type;
@@ -162,42 +164,30 @@ class StorableSchema
                     )
                 ];
                 foreach ($classFiles as $classFile) {
-                    if (file_exists($classFile)) {
-                        $isStorable = str_contains($classFile, "/src/Storable/");
-                        $type = $possibleClassName;
-                        if ($storableSchemaProperty->arrayType) {
-                            // typed storable array or typed storable interface array
-                            $storableSchemaProperty->arrayType = null;
-                            if ($isStorable) {
-                                $storableSchemaProperty->arrayStorableClass = $possibleClassName;
-                            } else {
-                                $storableSchemaProperty->arrayStorableInterface = $possibleClassName;
-                            }
-                            $type = "mixed";
-                        } elseif (!$isStorable) {
-                            // storable interfaces
-                            $storableSchemaProperty->storableInterface = $possibleClassName;
-                            call_user_func_array(
-                                [$possibleClassName, 'setupSelfStorableSchemaProperty'],
-                                [$storableSchemaProperty]
-                            );
-                        } else {
-                            // storable classes
-                            $storableSchemaProperty->storableClass = $possibleClassName;
-                            $storableSchemaProperty->databaseType = "bigint";
-                            $storableSchemaProperty->length = 18;
-                            $storableSchemaProperty->unsigned = true;
-                            $this->addIndex($propertyName, 'index');
-                        }
-                        break 2;
+                    if (!file_exists($classFile)) {
+                        continue;
                     }
+                    $isStorable = str_contains($classFile, "/src/Storable/");
+                    $type = $possibleClassName;
+                    if (!$isStorable) {
+                        // storable interfaces
+                        $storableSchemaProperty->storableInterface = $possibleClassName;
+                        call_user_func_array(
+                            [$possibleClassName, 'setupSelfStorableSchemaProperty'],
+                            [$storableSchemaProperty]
+                        );
+                    } else {
+                        // storable classes
+                        $storableSchemaProperty->storableClass = $possibleClassName;
+                        $storableSchemaProperty->databaseType = "bigint";
+                        $storableSchemaProperty->length = 18;
+                        $storableSchemaProperty->unsigned = true;
+                        $this->addIndex($propertyName, 'index');
+                    }
+                    break 2;
                 }
             }
-            // if not found as suitable class for the array, then it is a native php typed array
-            if ($storableSchemaProperty->arrayType) {
-                $type = "mixed";
-            }
-            // if type is not set with defaults above, so check for default php types now
+            // if type is not pre-defined from user code, check for built-in framelix types
             if (!$storableSchemaProperty->databaseType) {
                 if ($type === 'bool') {
                     // booleans are automatically set to tinyint
@@ -210,12 +200,10 @@ class StorableSchema
                     $storableSchemaProperty->length = 11;
                 }
                 if ($type === 'double') {
-                    throw new FatalError(
-                        "Double is considered deprecated in php - Use float instead"
-                    );
+                    throw new FatalError("Double is considered deprecated in php - Use float instead");
                 }
                 if ($type === 'float') {
-                    // float in PHP will be double in mysql for higher precision
+                    // float in PHP will be double in sql for higher precision
                     $storableSchemaProperty->databaseType = "double";
                 }
                 if ($type === 'string') {
@@ -224,8 +212,14 @@ class StorableSchema
                     $storableSchemaProperty->length = 191;
                 }
                 if ($type === 'mixed') {
-                    // mixed is considered to be json of any length, so reserve big space
+                    // mixed is considered to be json of any length, so use a big data type that can hold lots of data
                     $storableSchemaProperty->databaseType = 'longtext';
+                }
+                if ($type === 'array') {
+                    // typed arrays have a special meaning and later become an extra table in the database
+                    // but the column itself hold just an integer of number of entries in the array
+                    $storableSchemaProperty->databaseType = 'int';
+                    $storableSchemaProperty->length = 11;
                 }
             }
             if (!$storableSchemaProperty->databaseType) {

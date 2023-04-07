@@ -22,9 +22,9 @@ use function is_string;
 use function mb_substr;
 use function preg_match_all;
 use function preg_quote;
+use function preg_replace;
 use function reset;
 use function str_replace;
-use function str_starts_with;
 
 abstract class Sql
 {
@@ -192,80 +192,6 @@ abstract class Sql
     {
         $this->cache = [];
         $this->connected = false;
-    }
-
-    /**
-     * Mysql uses a CONCAT() function, Sqlite do have || operator
-     * @param string ...$parts
-     * @return string
-     */
-    public function getConcatedStringForQuery(string ...$parts): string
-    {
-        return "CONCAT(" . implode(", ", $parts) . ")";
-    }
-
-    /**
-     * Get a condition that checks if a given value is in given stored array
-     * @param string $propertyName
-     * @param string $keyPath Same rules as self::getConditionJsonGetValue()
-     * @param mixed $value The value must match the value in the given path
-     *     Also make sure they are the same type as "20192" is NOT equal 20192 and will return false
-     * @param bool $compareEach If true and $value is an array, compare each individual array value separately and return true if any of them match
-     * @param string|null $fixedCast Cast value to this value type to make sure comparison works
-     * @return string
-     */
-    public function getConditionJsonContainsArrayValue(
-        string $propertyName,
-        string $keyPath,
-        mixed $value,
-        bool $compareEach = false,
-        #[ExpectedValues(values: ['int', 'string'])] ?string $fixedCast = null
-    ): string {
-        if (is_array($value) && $compareEach) {
-            // empty array, is false anyway
-            if (!$value) {
-                return '0';
-            }
-            $condition = [];
-            foreach ($value as $v) {
-                $condition[] = self::getConditionJsonContainsArrayValue($propertyName, $keyPath, $v, false, $fixedCast);
-            }
-            return "(" . implode(" OR ", $condition) . ")";
-        }
-        if ($this instanceof Sqlite) {
-            return 'EXISTS (SELECT 1 FROM json_each(' .
-                $this->quoteIdentifier(str_replace('$', $propertyName, $keyPath)) . ') WHERE value = ' .
-                $this->escapeValue($value, $fixedCast) . ')';
-        } else {
-            return 'JSON_CONTAINS(' . self::getConditionJsonGetValue($propertyName, $keyPath) .
-                ', ' . $this->escapeValue($value, $fixedCast) . ') = 1';
-        }
-    }
-
-    /**
-     * Get a condition that fetches json fields array/object value
-     *
-     * Data for the examples: {"id" => 1, "users" => [100, 200]}
-     * $.id fetches the id of the object => 1
-     * $.users[0] fetches the first value of the "users" property, which is an array => 100
-     *
-     * Data for the examples: [100, 200, 300]
-     * $ fetches the complete array
-     * $[0] fetches the key 0 from array => 100
-     * $[2] fetches the key 2 from array => 300
-     *
-     * @param string $propertyName
-     * @param string $keyPath
-     * @return string
-     */
-    public function getConditionJsonGetValue(
-        string $propertyName,
-        string $keyPath
-    ): string {
-        if (!str_starts_with($keyPath, "\$")) {
-            throw new FatalError('keyPath must start with $');
-        }
-        return 'JSON_EXTRACT(' . $propertyName . ', \'' . $keyPath . '\')';
     }
 
     /**
@@ -551,6 +477,9 @@ abstract class Sql
      */
     public function query(string $query, ?array $parameters = null): mixed
     {
+        // replace ramelix default quote identifiers,  which are `, with sql specific quote identifiers, which not always be `
+        $query = preg_replace("~`([a-z0-9-_]+)`~i", $this->quoteChars[0] . "$1" . $this->quoteChars[1], $query);
+
         // replace php class names to real table names
         preg_match_all(
             "~" .

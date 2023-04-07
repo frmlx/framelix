@@ -116,16 +116,6 @@ abstract class StorableTestBase extends TestCase
         $storable->dateTime = new DateTime("2000-01-01 12:23:44");
         $storable->date = Date::create("2000-01-01");
         $storable->otherReferenceOptional = $storableReference;
-        $storable->otherReferenceArrayOptional = [$storableReference];
-        $storable->typedIntArray = [1, 3, 5];
-        $storable->typedBoolArray = [true, false, true];
-        $storable->typedStringArray = ["yes", "baby", "yes"];
-        $storable->typedFloatArray = [1.2, 1.6, 1.7];
-        $storable->typedDateArray = [
-            DateTime::create("2000-01-01 12:23:44"),
-            DateTime::create("2000-01-01 12:23:44 + 10 days"),
-            DateTime::create("2000-01-01 12:23:44 + 1 year")
-        ];
         $storable->time = Time::create("12:00:01");
         $storable->updateTime = DateTime::create('now - 10 seconds');
         $storable->store();
@@ -202,7 +192,6 @@ abstract class StorableTestBase extends TestCase
         for ($i = 0; $i <= 50; $i++) {
             $storableNew = $storable2->clone();
             $storableNew->otherReferenceOptional = $storable1;
-            $storableNew->otherReferenceArrayOptional = TestStorable1::getByIds([1]);
             $storableNew->selfReferenceOptional = $storable2;
             $storableNew->store();
             $arr[$storableNew->id] = $storableNew;
@@ -222,12 +211,6 @@ abstract class StorableTestBase extends TestCase
                     'normal' => array_values($chunk),
                     'reverse' => array_values($chunkRev),
                 ];
-                $storableNewPrefetch->otherReferenceArrayDefaultPrefetch = $chunkRev;
-                // use a different array everytime to test prefetch
-                // if we would take the same array everytime the prefetcher only would require one query
-                $storableNewPrefetch->otherReferenceArrayNoPrefetch = $chunkRev;
-                // use the same array everytime to test the redueced prefetcher steps
-                $storableNewPrefetch->otherReferenceArrayReducedPrefetch = $chunk;
             }
             $storableNewPrefetch->store();
         }
@@ -235,7 +218,6 @@ abstract class StorableTestBase extends TestCase
 
     /**
      * @depends testStoreAndDelete
-     * @runInSeparateProcess
      */
     public function testFetch(): void
     {
@@ -255,17 +237,8 @@ abstract class StorableTestBase extends TestCase
             $this->assertSame(['foobar', 1], $storable->jsonData);
             $this->assertSame("2000-01-01 12:23:44", $storable->dateTime->format("Y-m-d H:i:s"));
             $this->assertSame("2000-01-01", $storable->dateTime->format("Y-m-d"));
-            $this->assertSame([1, 3, 5], $storable->typedIntArray);
-            $this->assertSame([true, false, true], $storable->typedBoolArray);
-            $this->assertSame(["yes", "baby", "yes"], $storable->typedStringArray);
-            $this->assertSame([1.2, 1.6, 1.7], $storable->typedFloatArray);
             $this->assertEquals(Time::create("12:00:01"), $storable->time);
             $this->assertEquals(Date::create("2000-01-01"), $storable->date);
-            $this->assertEquals([
-                DateTime::create("2000-01-01 12:23:44"),
-                DateTime::create("2000-01-01 12:23:44 + 10 days"),
-                DateTime::create("2000-01-01 12:23:44 + 1 year")
-            ], $storable->typedDateArray);
             $this->assertNull($storable->dateOptional);
             $this->assertNull($storable->longTextOptional);
             $this->assertNull($storable->boolFlagOptional);
@@ -285,14 +258,6 @@ abstract class StorableTestBase extends TestCase
                 $this->assertSame(
                     (int)$storable->getOriginalDbValueForProperty("otherReferenceOptional"),
                     $storable->otherReferenceOptional->id
-                );
-            }
-            if ($storable->otherReferenceArrayOptional) {
-                $otherReference = TestStorable1::getById(1);
-                $this->assertIsArray($storable->otherReferenceArrayOptional);
-                $this->assertSame(
-                    [$otherReference->id => $otherReference],
-                    $storable->otherReferenceArrayOptional
                 );
             }
             // db value is always null or string as mysql driver doesn't support other values
@@ -326,7 +291,6 @@ abstract class StorableTestBase extends TestCase
 
     /**
      * @depends testFetch
-     * @runInSeparateProcess
      */
     public function testDepthFetch(): void
     {
@@ -334,19 +298,10 @@ abstract class StorableTestBase extends TestCase
             "selfReferenceOptional.selfReferenceOptional IS NULL AND selfReferenceOptional.createTime IS NOT NULL"
         );
         $this->assertGreaterThan(0, count($storables));
-        $storables = TestStorable2::getByCondition(
-            "otherReferenceArrayOptional.name = {0}",
-            ['foobar@dev.me'],
-            ["+id"],
-            10,
-            10
-        );
-        $this->assertCount(10, $storables);
     }
 
     /**
      * @depends testDepthFetch
-     * @runInSeparateProcess
      */
     public function testUpdate(): void
     {
@@ -370,7 +325,6 @@ abstract class StorableTestBase extends TestCase
 
     /**
      * @depends testDepthFetch
-     * @runInSeparateProcess
      */
     public function testFetchChildsOfAbstractStorables(): void
     {
@@ -393,7 +347,6 @@ abstract class StorableTestBase extends TestCase
 
     /**
      * @depends testFetchChildsOfAbstractStorables
-     * @runInSeparateProcess
      */
     public function testDatatypesSetter(): void
     {
@@ -411,28 +364,16 @@ abstract class StorableTestBase extends TestCase
         $storable = TestStorable2::getByConditionOne(condition: "-id", sort: "-id");
         $this->assertStorablePropertyValueSetter($storable, "id", ['int']);
         $this->assertStorablePropertyValueSetter($storable, "name", ['string']);
-        $this->assertStorablePropertyValueSetter($storable, "typedStringArray", ['string'], true);
         $this->assertStorablePropertyValueSetter($storable, "intNumber", ['int']);
-        $this->assertStorablePropertyValueSetter($storable, "typedIntArray", ['int'], true);
         $this->assertStorablePropertyValueSetter($storable, "floatNumber", ['float']);
-        $this->assertStorablePropertyValueSetter($storable, "typedFloatArray", ['float'], true);
         $this->assertStorablePropertyValueSetter($storable, "boolFlag", ['bool']);
-        $this->assertStorablePropertyValueSetter($storable, "typedBoolArray", ['bool'], true);
         $this->assertStorablePropertyValueSetter($storable, "jsonData", array_keys($this->dummyValues));
         $this->assertStorablePropertyValueSetter($storable, "selfReferenceOptional", [TestStorable2::class]);
-        $this->assertStorablePropertyValueSetter(
-            $storable,
-            "otherReferenceArrayOptional",
-            [TestStorable1::class],
-            true
-        );
         $this->assertStorablePropertyValueSetter($storable, "dateTime", [DateTime::class]);
-        $this->assertStorablePropertyValueSetter($storable, "typedDateArray", [DateTime::class], true);
     }
 
     /**
      * @depends testDatatypesSetter
-     * @runInSeparateProcess
      */
     public function testDatatypesGetter(): void
     {
@@ -456,7 +397,6 @@ abstract class StorableTestBase extends TestCase
 
     /**
      * @depends testDatatypesSetter
-     * @runInSeparateProcess
      */
     public function testDatatypesNoPrefetch(): void
     {
@@ -473,7 +413,6 @@ abstract class StorableTestBase extends TestCase
 
     /**
      * @depends testDatatypesNoPrefetch
-     * @runInSeparateProcess
      */
     public function testDatatypesPrefetch(): void
     {
@@ -495,77 +434,6 @@ abstract class StorableTestBase extends TestCase
 
     /**
      * @depends testDatatypesPrefetch
-     * @runInSeparateProcess
-     */
-    public function testDatatypesNoPrefetchArray(): void
-    {
-        $db = Sql::get('test');
-        $entriesWithArray = (int)$db->fetchOne(
-            'SELECT COUNT(*) 
-            FROM `' . TestStorablePrefetch::class . '` 
-            WHERE otherReferenceArrayNoPrefetch IS NOT NULL'
-        );
-        $storables = TestStorablePrefetch::getByCondition();
-        $this->startRecordExecutedQueries();
-        foreach ($storables as $storable) {
-            $arr = $storable->otherReferenceArrayNoPrefetch;
-            // running twice to double check if cache works fine
-            $arr2 = $storable->otherReferenceArrayNoPrefetch;
-            if (!$arr) {
-                continue;
-            }
-            // valid if expected ids match prefetched ids
-            $this->assertSame($storable->requiredIds['reverse'], array_keys($arr));
-        }
-        // when prefetch is disabled, every getter to a referenced storable array requires a database getByIds
-        $this->assertExecutedQueries($entriesWithArray);
-    }
-
-    /**
-     * @depends testDatatypesNoPrefetchArray
-     * @runInSeparateProcess
-     */
-    public function testDatatypesPrefetchArray(): void
-    {
-        $db = Sql::get('test');
-        $entriesWithArray = (int)$db->fetchOne(
-            'SELECT COUNT(*) 
-            FROM `' . TestStorablePrefetch::class . '` 
-            WHERE otherReferenceArrayReducedPrefetch IS NOT NULL'
-        );
-        $storables = TestStorablePrefetch::getByCondition();
-
-        $this->startRecordExecutedQueries();
-        foreach ($storables as $storable) {
-            $arr = $storable->otherReferenceArrayReducedPrefetch;
-            if (!$arr) {
-                continue;
-            }
-            // valid if expected ids match prefetched ids
-            $this->assertSame($storable->requiredIds['normal'], array_keys($arr));
-        }
-        $this->assertExecutedQueries(1);
-
-        $prefetchLimit = Storable::getStorableSchemaProperty(
-            TestStorablePrefetch::class,
-            "otherReferenceArrayDefaultPrefetch"
-        )->prefetchLimit;
-        $requiredPrefetchQueries = ceil($entriesWithArray / $prefetchLimit);
-        $this->startRecordExecutedQueries();
-        foreach ($storables as $storable) {
-            $arr = $storable->otherReferenceArrayDefaultPrefetch;
-            if (!$arr) {
-                continue;
-            }
-            // valid if expected ids match prefetched ids
-            $this->assertSame($storable->requiredIds['reverse'], array_keys($arr));
-        }
-        $this->assertExecutedQueries($requiredPrefetchQueries);
-    }
-
-    /**
-     * @depends testDatatypesNoPrefetchArray
-     * @runInSeparateProcess
      */
     public function testDeleteAll(): void
     {
@@ -577,44 +445,10 @@ abstract class StorableTestBase extends TestCase
     }
 
     /**
-     * @depends testFetch
-     * @runInSeparateProcess
-     */
-    public function testExceptionDepthFetch(): void
-    {
-        $this->assertExceptionOnCall(function () {
-            TestStorable2::getByCondition(
-                "otherReferenceArrayOptional.otherReferenceArrayOptional.notExist = {0}",
-                ['foobar@dev.me']
-            );
-        });
-    }
-
-    /**
-     * @depends testFetch
-     * @runInSeparateProcess
+     * @depends testDeleteAll
      */
     public function testMiscExceptions(): void
     {
-        $this->assertExceptionOnCall(function () {
-            $storable2 = new TestStorable2();
-            $storable2->otherReferenceArrayOptional = "bla";
-        });
-
-        $storable1 = TestStorable1::getByConditionOne();
-        $this->assertExceptionOnCall(function () use ($storable1) {
-            $storable2 = new TestStorable2();
-            $storable2->otherReferenceArrayOptional = [$storable1, $storable1];
-        });
-
-        $this->assertExceptionOnCall(function () {
-            TestStorable2::getByCondition(
-                "otherReferenceArrayOptional.otherReferenceArrayOptional.notExist = {0}",
-                ['foobar@dev.me'],
-                ['name']
-            );
-        });
-
         $this->assertExceptionOnCall(function () {
             $storable = new TestStorable2();
             $storable = clone $storable;
@@ -657,7 +491,6 @@ abstract class StorableTestBase extends TestCase
     /**
      * Test all framework default storables with generic and specific tests
      * @depends testMiscExceptions
-     * @runInSeparateProcess
      */
     public function testDefaultStorables(): void
     {
@@ -681,51 +514,28 @@ abstract class StorableTestBase extends TestCase
      * @param Storable $storable
      * @param string $propertyName
      * @param array $allowedTypes
-     * @param bool $isArray
      * @return void
      */
     private function assertStorablePropertyValueSetter(
         Storable $storable,
         string $propertyName,
         array $allowedTypes,
-        bool $isArray = false
     ): void {
-        if ($isArray) {
-            $arr = [];
-        }
         foreach ($allowedTypes as $allowedType) {
-            if ($isArray) {
-                $arr[] = $this->dummyValues[$allowedType];
-            } else {
-                $storable->{$propertyName} = $this->dummyValues[$allowedType];
-            }
-        }
-        if ($isArray) {
-            $storable->{$propertyName} = $arr;
+            $storable->{$propertyName} = $this->dummyValues[$allowedType];
         }
         foreach ($this->dummyValues as $type => $value) {
             if (in_array($type, $allowedTypes)) {
                 continue;
             }
-            if ($isArray) {
-                // explicit array testing
-                try {
-                    $storable->{$propertyName} = [$value];
-                    $valid = false;
-                } catch (Exception $e) {
-                    $valid = true;
-                }
-                $this->assertTrue($valid, "Property: $propertyName, Type: {$type}[], Got: " . var_export($value, true));
-            } else {
-                // testing normal values
-                try {
-                    $storable->{$propertyName} = $value;
-                    $valid = false;
-                } catch (Exception $e) {
-                    $valid = true;
-                }
-                $this->assertTrue($valid, "Property: $propertyName, Type: $type, Got: " . var_export($value, true));
+            // testing normal values
+            try {
+                $storable->{$propertyName} = $value;
+                $valid = false;
+            } catch (Exception $e) {
+                $valid = true;
             }
+            $this->assertTrue($valid, "Property: $propertyName, Type: $type, Got: " . var_export($value, true));
         }
     }
 

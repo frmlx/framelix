@@ -55,13 +55,7 @@ class TestStorable2 extends StorableMeta
         $property->addDefaultField();
         $property->setLabel("systemValueOptional");
 
-        $property = $this->createProperty("systemValueArrayOptional");
-        $property->addDefaultField();
-
         $property = $this->createProperty("storableFileOptional");
-        $property->addDefaultField();
-
-        $property = $this->createProperty("storableFileArrayOptional");
         $property->addDefaultField();
 
         $property = $this->createProperty("longText");
@@ -76,23 +70,11 @@ class TestStorable2 extends StorableMeta
         $property = $this->createProperty("otherReferenceOptional");
         $property->addDefaultField();
 
-        $property = $this->createProperty("otherReferenceArrayOptional");
-        $property->addDefaultField();
-
         $property = $this->createProperty("dateTime");
         $property->addDefaultField();
 
         $property = $this->createProperty("date");
         $property->addDefaultField();
-
-        $property = $this->createProperty("typedFloatArray");
-        $property->field = new Select();
-        $property->field->multiple = true;
-        $property->field->addOption('123', '123');
-
-        $property = $this->createProperty("typedStringArray[foo]");
-        $property->field = new Select();
-        $property->field->addOption('test', 'test');
 
         // to test coverage for invalid property type
         $storable = $this->storable;

@@ -380,8 +380,8 @@ class Form implements JsonSerializable
             if (!$storableSchemaProperty) {
                 continue;
             }
-            // in case of raw json (no specific storable type), merge arrays keys instead of override complete property
-            if ($storableSchemaProperty->internalType === 'mixed' && !$storableSchemaProperty->arrayStorableClass && !$storableSchemaProperty->arrayStorableInterface) {
+            // in case of mixed data with raw json, merge arrays keys separately instead of override complete property
+            if ($storableSchemaProperty->internalType === 'mixed') {
                 array_shift($nameParts);
                 $storableValue = $storable->{$storableSchemaProperty->name} ?? [];
                 if (!is_array($storableValue)) {
