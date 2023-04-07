@@ -3,7 +3,7 @@
 namespace Framelix\Framelix\View\Backend\User;
 
 use Framelix\Framelix\Config;
-use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
@@ -37,11 +37,8 @@ class Roles extends View
             }
             // check if at least one admin exist
             $admins = User::getByCondition(
-                Mysql::get()->getConditionJsonContainsArrayValue(
-                    'roles',
-                    '$',
-                    'admin'
-                ) . " && id != " . $this->storable
+                Sql::get()->getConditionJsonContainsArrayValue('roles', '$', 'admin') .
+                " && id != " . $this->storable
             );
             if (!$admins && !User::hasRole("admin", $this->storable)) {
                 Response::stopWithFormValidationResponse('__framelix_user_edituser_validation_adminrequired__');

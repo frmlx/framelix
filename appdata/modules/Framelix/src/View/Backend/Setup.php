@@ -53,18 +53,8 @@ class Setup extends View
                 Config::$applicationHost = $url->urlData['host'] . (($url->urlData['port'] ?? null) ? ":" . $url->urlData['port'] : '');
                 Config::$applicationUrlPrefix = $url->urlData['path'];
                 Config::$salts['default'] = RandomGenerator::getRandomString(64, 70);
-                Mysql::get()->query(
-                    "CREATE TABLE `__framelix_test__` (
-                    `id` BIGINT(18) UNSIGNED NOT NULL AUTO_INCREMENT,
-                    PRIMARY KEY (`id`) USING BTREE
-                )"
-                );
-                Mysql::get()->query("DROP TABLE `__framelix_test__`");
                 $builder = new SqlStorableSchemeBuilder(Sql::get());
                 $queries = $builder->getQueries();
-                foreach ($queries as $row) {
-                    $builder->db->query($row['query']);
-                }
                 if (Request::getPost('email')) {
                     $user = User::getByConditionOne('email = {0}', [Request::getPost('email')]);
                     if (!$user) {
@@ -88,7 +78,7 @@ class Setup extends View
                 Config::$salts['default'] = RandomGenerator::getRandomString(64, 70);
 
                 // just calling db to make sure db is running before finalizing setup
-                $db = Mysql::get();
+                $db = Sql::get();
 
                 Framelix::createInitialUserConfig(
                     FRAMELIX_MODULE,

@@ -3,7 +3,7 @@
 namespace Framelix\Framelix\Storable;
 
 use Framelix\Framelix\Config;
-use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Db\StorableSchemaProperty;
 use Framelix\Framelix\Exception\FatalError;
@@ -281,7 +281,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         ?bool $readable = true
     ): array {
         $storableSchema = static::getStorableSchema();
-        $db = Mysql::get($connectionId ?? static::getConnectionId());
+        $db = Sql::get($connectionId ?? static::getConnectionId());
         // abstract classes can not be directly fetched from the database, as they not exist
         // we consider abstract class fetch to want to fetch all its childs that met the condition
         if ($withChilds === null && $storableSchema->abstract) {
@@ -350,7 +350,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         // depth joins
         // find all conditions that are concated with a dot
         // each part represent the nested storable reference from the storable
-        // so example: 'createUser.email IS NULL' will find each storable where its create user email is null
+        // so example: 'createUser.email IS NULL' will find each storable where its createUser email is null
         // this will get automatically joined by this technique
         $depthJoinSearchReplace = [];
         if ($querySearch) {
@@ -387,7 +387,14 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
                             $query .= "LEFT JOIN `$partStorableSchema->tableName` as `$aliasTableName` ";
                             $query .= "ON ";
                             if ($partStorableSchemaProperty->arrayStorableClass) {
-                                $query .= " JSON_CONTAINS(CAST(`$prevAliasTableName`.`$partStorableSchemaProperty->name` as CHAR), CAST(`$aliasTableName`.`id` as CHAR), '\$')";
+                                $query .= $db->quoteIdentifier(
+                                        $prevAliasTableName,
+                                        $partStorableSchemaProperty->name
+                                    ) . " LIKE " . $db->getConcatedStringForQuery(
+                                        $db->escapeValue("%|"),
+                                        $db->quoteIdentifier($aliasTableName, "id"),
+                                        $db->escapeValue("|%")
+                                    );
                             } else {
                                 $query .= " `$aliasTableName`.`id` = `$prevAliasTableName`.`$partStorableSchemaProperty->name`";
                             }
@@ -546,11 +553,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
     {
         if (!isset(self::$schemaTableCache[$connectionId])) {
             self::$schemaTableCache[$connectionId] = [];
-            $fetch = Mysql::get($connectionId)->fetchAssoc(
-                "
-                SELECT * FROM " . StorableSchema::SCHEMA_TABLE . "
-            "
-            );
+            $fetch = Sql::get($connectionId)->fetchAssoc("SELECT * FROM " . StorableSchema::SCHEMA_TABLE);
             foreach ($fetch as $row) {
                 self::$schemaTableCache[$connectionId][$row['storableClass']] = [
                     'id' => (int)$row['id'],
@@ -747,11 +750,11 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
 
     /**
      * Get database connection
-     * @return Mysql
+     * @return Sql
      */
-    final public function getDb(): Mysql
+    final public function getDb(): Sql
     {
-        return Mysql::get($this->connectionId);
+        return Sql::get($this->connectionId);
     }
 
     /**

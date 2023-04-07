@@ -3,6 +3,7 @@
 namespace Framelix\Framelix\View\Backend;
 
 use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Tabs;
@@ -81,7 +82,7 @@ abstract class SystemValue extends View
             default:
                 $form = $this->metaIntern->getEditForm();
                 $form->show();
-                $counts = Mysql::get()->fetchColumn(
+                $counts = Sql::get()->fetchColumn(
                     "
                     SELECT COUNT(*), flagActive
                     FROM `" . $this->storableIntern::class . "`

@@ -3,6 +3,7 @@
 namespace Framelix\Framelix\View\Backend\Logs;
 
 use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Html\Tabs;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Network\Request;
@@ -34,7 +35,7 @@ class SystemEventLogs extends View
             return;
         }
         $logs = SystemEventLog::getByCondition(sort: "-id", limit: 2000);
-        $logCategories = Mysql::get()->fetchColumn(
+        $logCategories = Sql::get()->fetchColumn(
             "SELECT DISTINCT(category) FROM `" . SystemEventLog::class . "` ORDER BY category"
         );
         if (!$logs) {

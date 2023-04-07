@@ -195,6 +195,16 @@ abstract class Sql
     }
 
     /**
+     * Mysql uses a CONCAT() function, Sqlite do have || operator
+     * @param string ...$parts
+     * @return string
+     */
+    public function getConcatedStringForQuery(string ...$parts): string
+    {
+        return "CONCAT(" . implode(", ", $parts) . ")";
+    }
+
+    /**
      * Get a condition that checks if a given value is in given stored array
      * @param string $propertyName
      * @param string $keyPath Same rules as self::getConditionJsonGetValue()
@@ -222,13 +232,14 @@ abstract class Sql
             }
             return "(" . implode(" OR ", $condition) . ")";
         }
-        return 'JSON_CONTAINS(' . self::getConditionJsonGetValue(
-                $propertyName,
-                $keyPath
-            ) . ', ' . $this->escapeValue(
-                $value,
-                $fixedCast
-            ) . ') = 1';
+        if ($this instanceof Sqlite) {
+            return 'EXISTS (SELECT 1 FROM json_each(' .
+                $this->quoteIdentifier(str_replace('$', $propertyName, $keyPath)) . ') WHERE value = ' .
+                $this->escapeValue($value, $fixedCast) . ')';
+        } else {
+            return 'JSON_CONTAINS(' . self::getConditionJsonGetValue($propertyName, $keyPath) .
+                ', ' . $this->escapeValue($value, $fixedCast) . ') = 1';
+        }
     }
 
     /**

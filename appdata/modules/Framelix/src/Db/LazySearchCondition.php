@@ -208,20 +208,20 @@ class LazySearchCondition
                     $conditionParts[] = $conditionPart;
                 }
                 if ($conditionParts) {
-                    $conditionMain[] = $this->partsToStr($conditionParts, "||");
+                    $conditionMain[] = $this->partsToStr($conditionParts, "OR");
                 }
             }
             if ($conditionMain) {
-                $conditionOrParts[] = $this->partsToStr($conditionMain, "&&");
+                $conditionOrParts[] = $this->partsToStr($conditionMain, "AND");
             }
         }
         if (!$conditionOrParts && $condition === '') {
             return "0";
         }
         if ($condition !== '') {
-            $condition .= " && ";
+            $condition .= " AND ";
         }
-        $condition .= $this->partsToStr($conditionOrParts, "||", true);
+        $condition .= $this->partsToStr($conditionOrParts, "OR", true);
         return $condition;
     }
 

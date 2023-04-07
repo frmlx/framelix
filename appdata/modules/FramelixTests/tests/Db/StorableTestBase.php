@@ -6,7 +6,6 @@ use Exception;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
-use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Exception\Redirect;
 use Framelix\Framelix\Html\TableCell;
@@ -35,7 +34,7 @@ use function shuffle;
 use function str_repeat;
 use function var_export;
 
-final class StorableTest extends TestCase
+abstract class StorableTestBase extends TestCase
 {
     /**
      * Executed queries
@@ -58,7 +57,7 @@ final class StorableTest extends TestCase
             SystemEventLog::CATEGORY_STORABLE_DELETED => true
         ];
         $this->setupDatabase();
-        $db = Mysql::get('test');
+        $db = Sql::get('test');
 
         $this->startRecordExecutedQueries();
         // we have no objects in DB, so this does create a new entry
@@ -332,7 +331,7 @@ final class StorableTest extends TestCase
     public function testDepthFetch(): void
     {
         $storables = TestStorable2::getByCondition(
-            "selfReferenceOptional.selfReferenceOptional IS NULL && selfReferenceOptional.createTime IS NOT NULL"
+            "selfReferenceOptional.selfReferenceOptional IS NULL AND selfReferenceOptional.createTime IS NOT NULL"
         );
         $this->assertGreaterThan(0, count($storables));
         $storables = TestStorable2::getByCondition(
@@ -377,7 +376,7 @@ final class StorableTest extends TestCase
     {
         // fetching all from type storable are effectively all that exist
         $storables = Storable::getByCondition(connectionId: "test");
-        $this->assertCount((int)Mysql::get('test')->fetchOne('SELECT COUNT(*) FROM framelix__id'), $storables);
+        $this->assertCount((int)Sql::get('test')->fetchOne('SELECT COUNT(*) FROM framelix__id'), $storables);
         $extendedIds = [];
         foreach ($storables as $storable) {
             if ($storable instanceof StorableExtended) {
@@ -438,7 +437,7 @@ final class StorableTest extends TestCase
     public function testDatatypesGetter(): void
     {
         $storable = TestStorable2::getByConditionOne(
-            "selfReferenceOptional IS NOT NULL && longTextLazy IS NOT NULL",
+            "selfReferenceOptional IS NOT NULL AND longTextLazy IS NOT NULL",
             sort: "+id"
         );
         $this->assertIsInt($storable->id);
@@ -500,7 +499,7 @@ final class StorableTest extends TestCase
      */
     public function testDatatypesNoPrefetchArray(): void
     {
-        $db = Mysql::get('test');
+        $db = Sql::get('test');
         $entriesWithArray = (int)$db->fetchOne(
             'SELECT COUNT(*) 
             FROM `' . TestStorablePrefetch::class . '` 
@@ -528,7 +527,7 @@ final class StorableTest extends TestCase
      */
     public function testDatatypesPrefetchArray(): void
     {
-        $db = Mysql::get('test');
+        $db = Sql::get('test');
         $entriesWithArray = (int)$db->fetchOne(
             'SELECT COUNT(*) 
             FROM `' . TestStorablePrefetch::class . '` 
@@ -737,7 +736,7 @@ final class StorableTest extends TestCase
     private function startRecordExecutedQueries(): void
     {
         Sql::$logExecutedQueries = true;
-        $db = Mysql::get('test');
+        $db = Sql::get('test');
         $db->executedQueries = [];
         $this->executedQueries = $db->executedQueriesCount;
     }
@@ -749,7 +748,7 @@ final class StorableTest extends TestCase
      */
     private function assertExecutedQueries(int $queries): void
     {
-        $db = Mysql::get('test');
+        $db = Sql::get('test');
         $now = $db->executedQueriesCount - $this->executedQueries;
         if ($queries !== $now) {
             echo implode("\n", $db->executedQueries);

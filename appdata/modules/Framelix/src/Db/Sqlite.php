@@ -132,6 +132,14 @@ class Sqlite extends Sql
     /**
      * @inheritDoc
      */
+    public function getConcatedStringForQuery(string ...$parts): string
+    {
+        return implode(" || ", $parts);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function fetchArray(
         string $query,
         ?array $parameters = null,
@@ -209,11 +217,13 @@ class Sqlite extends Sql
         if (!$flushCache && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
-        $result = $this->fetchOne("            
+        $result = $this->fetchOne(
+            "            
             SELECT sql 
             FROM sqlite_master 
             WHERE tbl_name = " . $this->escapeValue($table) . "  AND type = 'table'
-        ");
+        "
+        );
         $arr = [];
         if ($result) {
             $result = substr($result, strpos($result, "(") + 1, -1);
@@ -238,11 +248,15 @@ class Sqlite extends Sql
         if (!$flushCache && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
-        $results = $this->fetchAssoc("            
+        $results = $this->fetchAssoc(
+            "            
             SELECT name, sql 
             FROM sqlite_master 
             WHERE tbl_name = " . $this->escapeValue($table) . "  AND type = 'index'
-        ", null, "name");
+        ",
+            null,
+            "name"
+        );
         $arr = [];
         foreach ($results as $result) {
             $arr[$result['name']] = $result['sql'];

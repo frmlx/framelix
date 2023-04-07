@@ -90,6 +90,7 @@ class StorableSchemaProperty
 
     /**
      * This is set when type is declared as array (eg: Storable[]) and does contain the type
+     * This isn't set when arrayStorableClass or arrayStorableInterface isset
      * @var string|null
      */
     public string|null $arrayType = null;
