@@ -15,6 +15,7 @@ use function array_shift;
 use function array_unshift;
 use function array_values;
 use function basename;
+use function copy;
 use function count;
 use function date;
 use function file_exists;
@@ -23,7 +24,6 @@ use function in_array;
 use function is_array;
 use function is_bool;
 use function is_string;
-use function ltrim;
 use function mkdir;
 use function readline;
 use function readline_add_history;
@@ -64,8 +64,8 @@ class Console
     }
 
     /**
-     * Backup app each individual sqlite database that are added to the config to /framelix/userdata/backups
-     * @param string|null $filenamePrefix Backup filename
+     * Backup each individual sqlite database that are added to the config to /framelix/userdata/backups
+     * @param string|null $filenamePrefix Backup filename prefix
      * @return int Status Code, 0 = success
      */
     public static function backupSqliteDatabases(?string $filenamePrefix = null): int
@@ -85,21 +85,33 @@ class Console
     }
 
     /**
-     * Backup the complete mysql database from the container to /framelix/userdata/backups
-     * @param string|null $filename Backup filename
+     * Backup each individual mysql databases that are added to the config to /framelix/userdata/backups
+     * @param string|null $filenamePrefix Backup filename prefix
      * @return int Status Code, 0 = success
      */
-    public static function backupMysqlDatabase(?string $filename = null): int
+    public static function backupMysqlDatabases(?string $filenamePrefix = null): int
     {
-        $filename = $filename ?? date("Y-m-d-H-i-s") . ".sql";
-        $shell = Shell::prepare('framelix_backup_mariadb {*}', [$filename]);
-        $shell->execute();
-        if ($shell->status > 0) {
-            self::error($shell->getOutput());
-        } else {
-            self::line($shell->getOutput());
+        $backupFolder = FRAMELIX_USERDATA_FOLDER . "/backups";
+        if (!file_exists($backupFolder)) {
+            mkdir($backupFolder, recursive: true);
         }
-        return $shell->status;
+        foreach (Config::$sqlConnections as $key => $row) {
+            if ($row['type'] === Sql::TYPE_MYSQL) {
+                $filename = $filenamePrefix . $row['database'] . "_" . $key . "_" . date("Y-m-d-H-i-s") . ".sql";
+                $params = $row;
+                $params['path'] = $backupFolder . "/" . $filename;
+                $shell = Shell::prepare(
+                    'mysqldump -h {host} -u {username} -p{password} --add-drop-database {database} > {path}',
+                    $params
+                );
+                $shell->execute();
+                if ($shell->status > 0) {
+                    echo implode("\n", $shell->output);
+                    return $shell->status;
+                }
+            }
+        }
+        return 0;
     }
 
     /**

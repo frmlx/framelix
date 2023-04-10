@@ -218,7 +218,7 @@ echo ""
 
 cecho y "# Do app warmup"
 echo ""
-framelix_console '*' appWarmup
+framelix_console all appWarmup
 echo ""
 
 cecho y "# Set correct files owners for folder that need to be writable"

@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|2654729727",
+    "directoryListHash": "3|1636509748",
     "views": {
         "Framelix\\Framelix\\View\\Api": {
             "accessRole": "*",
@@ -10,36 +10,6 @@
             "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/api"
-        },
-        "Framelix\\Framelix\\View\\Backend\\Config\\Index": {
-            "accessRole": "admin",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/config"
-        },
-        "Framelix\\Framelix\\View\\Backend\\Config\\ModuleConfig": {
-            "accessRole": "admin",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/config\/moduleconfig"
-        },
-        "Framelix\\Framelix\\View\\Backend\\Config\\TestEmail": {
-            "accessRole": "admin",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/config\/testemail"
         },
         "Framelix\\Framelix\\View\\Backend\\Dev\\LangEditor": {
             "accessRole": true,

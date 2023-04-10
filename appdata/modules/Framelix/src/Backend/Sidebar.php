@@ -181,9 +181,6 @@ abstract class Sidebar
         }
         $this->showHtmlForLinkData(true, 501);
 
-        $this->addLink(View\Backend\Config\Index::class, null, "settings");
-        $this->showHtmlForLinkData(order: 502);
-
         $this->startGroup("__framelix_view_backend_logs__", "storage");
         $this->addLink(View\Backend\Logs\ErrorLogs::class);
         $this->addLink(View\Backend\Logs\SystemEventLogs::class);
