@@ -1,7 +1,7 @@
 <?php
 
 $buildType = $_SERVER['argv'][1];
-$version = file_get_contents("/framelix/system/VERSION");
+$version = $_SERVER['argv'][2];
 
 function runCmd(string $cmd): void
 {
@@ -19,7 +19,7 @@ if ($buildType === 'dev') {
     runCmd("cd /framelix/appdata && composer update");
     echo "Done.\n\n";
 
-    echo "## Installing PhpUnit deps\n\n";
+    echo "## Installing PhpStorm deps\n\n";
     runCmd("mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage");
     echo "Done.\n\n";
 
@@ -55,6 +55,13 @@ if ($buildType === 'prod') {
     runCmd("mv $tmpFolder/*/appdata/modules/FramelixStarter $modulesFolder/FramelixStarter");
     runCmd("rm -rf $tmpFolder");
     echo "Done.\n\n";
+
+    // replace version number
+    $coreFile = "/framelix/appdata/modules/Framelix/src/Framelix.php";
+    $coreFileData = file_get_contents($coreFile);
+    $coreFileData = str_replace('public const VERSION = "dev";', 'public const VERSION = "' . $version . '";',
+        $coreFileData);
+    file_put_contents($coreFile, $coreFileData);
 
     echo "# Running npm install and composer install for modules\n";
     runCmd("framelix_npm_modules_install");

@@ -69,6 +69,9 @@ export class FramelixUtils {
    * @return {Promise<Response>}
    */
   async goto (relativePath: string): Promise<Response> {
+    if (relativePath.startsWith('https://')) {
+      return this.page.goto(relativePath)
+    }
     return this.page.goto(this.framelixConfig.rootUrl + '/' + relativePath.replace(/^\//, ''))
   }
 

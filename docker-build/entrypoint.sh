@@ -20,7 +20,7 @@ cecho() {
 start_mysql() {
   mkdir /run/mysqld/
   chown mysql:mysql /run/mysqld/
-  /usr/bin/mysqld_safe --basedir=/usr --datadir=$FRAMELIX_DBDATA --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/run/mysqld/mysqld.pid --socket=/run/mysqld/mysqld.sock --skip-syslog --log-error=/var/log/mariadb-error.log &
+  /usr/bin/mysqld_safe --basedir=/usr --datadir=$FRAMELIX_DBDATA/mysql --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/run/mysqld/mysqld.pid --socket=/run/mysqld/mysqld.sock --skip-syslog --log-error=/var/log/mariadb-error.log &
   sleep 1
   echo -n "Wait for DB to come up ..."
   while [ 1 ]; do
@@ -144,12 +144,12 @@ if [ "$FRAMELIX_MARIADB_ENABLED" == "1" ]; then
   chmod 0777 /var/log/mariadb-*
 
   # setup db
-  if [ ! -d "$FRAMELIX_DBDATA/mysql" ]; then
+  if [ ! -d "$FRAMELIX_DBDATA/mysql/mysql" ]; then
     echo "Fresh database directory - Installing database"
     mysql_install_db \
       --user=mysql \
       --basedir=/usr \
-      --datadir=$FRAMELIX_DBDATA \
+      --datadir=$FRAMELIX_DBDATA/mysql \
       --skip-test-db \
       --default-time-zone=SYSTEM \
       --enforce-storage-engine= \
@@ -223,8 +223,8 @@ echo ""
 
 cecho y "# Set correct files owners for folder that need to be writable"
 mkdir -p $FRAMELIX_USERDATA/tmp
-chown -L "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_USERDATA $FRAMELIX_USERDATA/tmp
-chown -L -R "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_APPDATA/modules/*/public/dist $FRAMELIX_APPDATA/modules/*/_meta $FRAMELIX_APPDATA/modules/*/tmp
+chown -L "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_USERDATA $FRAMELIX_DBDATA $FRAMELIX_USERDATA/tmp
+chown -L -R "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_APPDATA/modules/*/public/dist $FRAMELIX_APPDATA/modules/*/_meta
 echo ""
 echo "Done."
 echo ""

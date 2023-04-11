@@ -6,32 +6,20 @@ source $SCRIPTDIR/lib.sh
 cecho b "Running tests"
 echo "Available command line flags:"
 echo "-t : Type of test: phpstan, phpunit, playwright"
+echo "-f : Specify the testfile."
 
+TESTFILE=""
 TESTTYPE=0
-while getopts "t:" opt; do
+while getopts "f:t:" opt; do
   case $opt in
+  f) TESTFILE=$OPTARG ;;
   t) TESTTYPE=$OPTARG ;;
   esac
 done
 
-DOCKERTYPE=0
-DOCKER_EXECPARAMS="-f $SCRIPTDIR/docker-compose.yml exec -t app bash -c"
-if [ ! -z "$(docker ps --filter 'name=framelix_tests-app' --filter 'status=running' --no-trunc -q)" ]; then
-  DOCKERTYPE=compose
-  DOCKER_EXECPARAMS=" compose -f $SCRIPTDIR/docker-compose.yml exec -t app bash -c "
-else
-  if [ ! -z "$(docker ps --filter 'name=framelix_tests' --filter 'status=running' --no-trunc -q)" ]; then
-    DOCKERTYPE=docker
-    DOCKER_EXECPARAMS=" exec -t $COMPOSE_PROJECT_NAME bash -c "
-  fi
-fi
+DOCKER_EXECPARAMS=" compose -f $SCRIPTDIR/docker-compose.yml exec -t app bash -c "
 
-if [ "$DOCKERTYPE" == "0" ]; then
-  echo "No $COMPOSE_PROJECT_NAME container is running"
-  exit 1
-fi
-
-cecho y "[i] Running tests on docker container from type '$DOCKERTYPE'"
+cecho y "[i] Running tests"
 
 if [ $TESTTYPE == "phpstan" ]; then
   cecho b "# Php Stan Static Code Analyzer"
@@ -46,7 +34,7 @@ echo "Done."
 echo ""
 
 cecho b "# Drop databases"
-docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests; DROP DATABASE IF EXISTS FramelixDocs; DROP DATABASE IF EXISTS FramelixStarter;'"
+docker $DOCKER_EXECPARAMS "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests; DROP DATABASE IF EXISTS FramelixDocs; DROP DATABASE IF EXISTS FramelixStarter;' && rm -fv /framelix/dbdata/sqlite_*"
 echo ""
 echo "Done."
 echo ""
@@ -68,21 +56,23 @@ fi
 if [ $TESTTYPE == "playwright" ]; then
   cecho b "# Playwright End-to-End Tests"
   PLAYWRIGHT_CACHE=/framelix/system/playwright/cache
-  docker $DOCKER_EXECPARAMS "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE && mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npm install -y && npx playwright install-deps && npx playwright install chromium && npx playwright test"
 
-  RESULT=$?
-  if [ "$RESULT" == "0" ]; then
-    echo -n "Passed" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
-    echo -n "#00FF59" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
-  else
-    echo -n "Error" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
-    echo -n "#FF2100" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
+  if [ "$TESTFILE" != "" ]; then
+    TESTFILE="/framelix/appdata/playwright/tests/$TESTFILE.spec.ts"
+  fi
+
+  docker $DOCKER_EXECPARAMS "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE  && mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright test $TESTFILE"
+
+  if [ "$TESTFILE" == "" ]; then
+    RESULT=$?
+    if [ "$RESULT" == "0" ]; then
+      echo -n "Passed" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
+      echo -n "#00FF59" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
+    else
+      echo -n "Error" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
+      echo -n "#FF2100" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
+    fi
   fi
 
   exit $RESULT
 fi
-
-cecho b "Framelix Testrunner"
-echo "Available command line flags:"
-echo "-t : Testtypes available: phpstan, phpunit, playwright"
-echo ""

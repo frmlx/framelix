@@ -14,7 +14,6 @@ VERSION=$(cat "$ROOTDIR/VERSION")
 MAJOR_VERSION=$(echo $VERSION| cut -d'.' -f 1)
 MINOR_VERSION=$(echo $VERSION| cut -d'.' -f 1,2)
 
-
 cecho() {
   local code="\033["
   case "$1" in

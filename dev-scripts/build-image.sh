@@ -38,7 +38,7 @@ if [ "$BUILD_TYPE" == "dev" ]; then
   cp -R $SRCFOLDER/modules/FramelixStarter $TMPFOLDER/modules/FramelixStarter
 fi
 
-docker build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_TYPE=$BUILD_TYPE" $SCRIPTDIR/..
+docker build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_TYPE=$BUILD_TYPE" --build-arg "FRAMELIX_BUILD_VERSION=$VERSION" $SCRIPTDIR/..
 
 if [ "$?" != "0" ]; then
   cecho r "Build failed"
