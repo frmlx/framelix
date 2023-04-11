@@ -677,31 +677,21 @@ class Config
 
     /**
      * Get the file to the modules config file, placed in userdata/$module/private folder
-     * @param string $id
      * @param string $module
      * @return string
      */
-    public static function getUserConfigFilePath(
-        #[ExpectedValues(values: ['01-core', '02-ui', '03-custom'])] string $id = "01-core",
-        string $module = FRAMELIX_MODULE
-    ): string {
-        return FileUtils::getUserdataFilepath(
-            "config/$id.php",
-            false,
-            $module
-        );
+    public static function getUserConfigFilePath(string $module = FRAMELIX_MODULE): string
+    {
+        return FileUtils::getUserdataFilepath("config/01-app.php", false, $module);
     }
 
     /**
      * Get the file to the modules config file, placed in userdata/$module/private folder
-     * @param string $id
      * @param string $module
      * @return bool
      */
-    public static function doesUserConfigFileExist(
-        #[ExpectedValues(values: ['01-core', '02-ui', '03-custom'])] string $id = "01-core",
-        string $module = FRAMELIX_MODULE
-    ): bool {
-        return file_exists(self::getUserConfigFilePath($id, $module));
+    public static function doesUserConfigFileExist(string $module = FRAMELIX_MODULE): bool
+    {
+        return file_exists(self::getUserConfigFilePath($module));
     }
 }

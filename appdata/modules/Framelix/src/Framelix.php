@@ -13,7 +13,6 @@ use function class_exists;
 use function error_reporting;
 use function explode;
 use function file_exists;
-use function file_get_contents;
 use function implode;
 use function ini_set;
 use function is_dir;
@@ -37,15 +36,15 @@ use const FRAMELIX_MODULE;
 class Framelix
 {
     /**
+     * The version of the framelix core itself
+     * Will be replaced in production build with actual version number
+     */
+    public const VERSION = "dev";
+
+    /**
      * @var string[]
      */
     public static array $registeredModules = [];
-
-    /**
-     * The version of the framelix module itself
-     * @var string
-     */
-    public static string $version;
 
     /**
      * Initializes the framework
@@ -92,15 +91,10 @@ class Framelix
             }
         });
 
-        // composer autoloader
-        require __DIR__ . "/../vendor/autoload.php";
-
         // exception handling
         set_error_handler([ErrorHandler::class, "onError"], E_ALL);
         set_exception_handler([ErrorHandler::class, "onException"]);
         register_shutdown_function([__CLASS__, "onShutdown"]);
-
-        self::$version = file_get_contents("/framelix/system/VERSION");
 
         // grab dev mode initially from env
         Config::$devMode = !!($_SERVER['FRAMELIX_DEVMODE'] ?? null);
@@ -162,6 +156,13 @@ class Framelix
         if (!is_dir($moduleDir)) {
             throw new FatalError($module . " not exist");
         }
+
+        // composer autoloader
+        $composerFile = $moduleDir . "/vendor/autoload.php";
+        if (file_exists($composerFile)) {
+            require $composerFile;
+        }
+
         self::$registeredModules[$module] = $module;
         $configClass = "\\Framelix\\" . $module . "\\Config";
         if (class_exists($configClass)) {
@@ -228,9 +229,9 @@ class Framelix
     }
 
     /**
-     * Create minimal initial user config files (core and ui) to be able to use the application
+     * Create minimal initial user config files to be able to use the application
      * Used in setup via web interface as well
-     * Will throw an error if user config files aready exist
+     * Will throw an error if config file aready exist
      * @param string $module
      * @param string $defaultSalt
      * @param string $applicationHost
@@ -242,26 +243,19 @@ class Framelix
         string $applicationHost,
         string $applicationUrlPrefix
     ): void {
-        $userConfigFileCore = Config::getUserConfigFilePath(module: $module);
-        $userConfigFileUi = Config::getUserConfigFilePath("02-ui", $module);
-        if (file_exists($userConfigFileCore) || file_exists($userConfigFileUi)) {
-            throw new FatalError("User config already exists");
+        $userConfigFile = Config::getUserConfigFilePath($module);
+        if (file_exists($userConfigFile)) {
+            throw new FatalError("Config file already exists");
         }
         $fileContents = [
             "<?php",
-            "// this file contains all core settings that are not changable with UI or in the backend",
-            "// this file can only be modified manually directly in this file",
+            "// this file contains overrides and custom configuration for all default settings",
+            "// this file should contain data that varies from instance to instance (like server vs. local development)",
+            "// database connections, urls, salts and all that sensible stuff belongs to here",
             "\\Framelix\\Framelix\\Config::addSalt('" . $defaultSalt . "');",
             "\\Framelix\\Framelix\\Config::\$applicationHost = '" . $applicationHost . "';",
             "\\Framelix\\Framelix\\Config::\$applicationUrlPrefix = '" . $applicationUrlPrefix . "';"
         ];
-        file_put_contents($userConfigFileCore, implode("\n", $fileContents));
-        $fileContents = [
-            "<?php",
-            "// this file will be modified with changes in backend UI for system config",
-            "// you should not manually update this, as it will be overriden when UI settings have changed",
-            "// initially this is empty on purpose"
-        ];
-        file_put_contents($userConfigFileUi, implode("\n", $fileContents));
+        file_put_contents($userConfigFile, implode("\n", $fileContents));
     }
 }

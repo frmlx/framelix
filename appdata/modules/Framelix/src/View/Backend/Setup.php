@@ -35,8 +35,7 @@ class Setup extends View
 
     public function onRequest(): void
     {
-        $userConfigFileCore = Config::getUserConfigFilePath();
-        $userConfigFileUi = Config::getUserConfigFilePath("02-ui");
+        $userConfigFile = Config::getUserConfigFilePath();
         $this->sidebarClosedInitially = true;
         $this->layout = self::LAYOUT_SMALL_CENTERED;
 
@@ -86,17 +85,13 @@ class Setup extends View
                 );
 
                 // include now, so we can deal with errors in the catch handler, just in case
-                require $userConfigFileCore;
-                require $userConfigFileUi;
+                require $userConfigFile;
 
                 // wait 3 seconds to let opcache refresh
                 sleep(3);
             } catch (Throwable $e) {
-                if (file_exists($userConfigFileCore)) {
-                    unlink($userConfigFileCore);
-                }
-                if (file_exists($userConfigFileUi)) {
-                    unlink($userConfigFileUi);
+                if (file_exists($userConfigFile)) {
+                    unlink($userConfigFile);
                 }
                 Response::stopWithFormValidationResponse($e->getMessage() . "\n" . $e->getTraceAsString());
             }

@@ -13,6 +13,7 @@ framelix-button {
   --light-color: calc(255 * var(--is-dark-mode));
   transition: .2s;
   overflow: hidden;
+  user-select: none;
 
   .icon {
     border-radius: var(--border-radius) 0 0 var(--border-radius);

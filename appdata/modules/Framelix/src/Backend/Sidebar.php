@@ -209,7 +209,7 @@ abstract class Sidebar
         $this->showHtmlForLinkData(order: 507);
 
         $versionInfo = [];
-        $versionInfo[] = 'Framelix: ' . Framelix::$version;
+        $versionInfo[] = 'Framelix: ' . Framelix::VERSION;
 
         echo '<div style="order:99999;font-size: 9px; opacity:0.5; padding-top: 10px; text-align: center">'
             . implode(" | ", $versionInfo)
