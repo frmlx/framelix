@@ -2,8 +2,8 @@
 
 namespace Framelix\FramelixDocs;
 
-use const FRAMELIX_DBDATA_FOLDER;
 use const FRAMELIX_MODULE;
+use const FRAMELIX_USERDATA_FOLDER;
 
 class Config
 {
@@ -11,7 +11,7 @@ class Config
     {
         \Framelix\Framelix\Config::addSqliteConnection(
             FRAMELIX_MODULE,
-            FRAMELIX_DBDATA_FOLDER . "/sqlite_" . FRAMELIX_MODULE . ".db"
+            FRAMELIX_USERDATA_FOLDER . "/sqlite_" . FRAMELIX_MODULE . ".db"
         );
         \Framelix\Framelix\Config::$languagesAvailable = ['en'];
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "docs");

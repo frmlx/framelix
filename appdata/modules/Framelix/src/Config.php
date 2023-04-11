@@ -141,16 +141,16 @@ class Config
     ];
 
     /**
-     * Automatic db backup interval (0=disabled)
+     * Automatic backup all sql database in given interval days (0=disabled)
      * @var int
      */
-    public static int $automaticDbBackupInterval = 1;
+    public static int $automaticSqlBackupInterval = 1;
 
     /**
-     * Automatic db backup how much logs to keep
+     * How many logfiles should automatic sql backup keep
      * @var int
      */
-    public static int $automaticDbBackupMaxLogs = 7;
+    public static int $automaticSqlBackupMaxLogs = 7;
 
     /**
      * Compiler file bundles added by self::createCompilerFileBundle()

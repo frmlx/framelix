@@ -2,6 +2,8 @@
 
 namespace Framelix\FramelixTests;
 
+use const FRAMELIX_USERDATA_FOLDER;
+
 class Config
 {
     /**
@@ -13,7 +15,7 @@ class Config
     {
         \Framelix\Framelix\Config::addSqliteConnection(
             FRAMELIX_MODULE,
-            FRAMELIX_DBDATA_FOLDER . "/sqlite_" . FRAMELIX_MODULE . ".db"
+            FRAMELIX_USERDATA_FOLDER . "/sqlite_" . FRAMELIX_MODULE . ".db"
         );
 
         \Framelix\Framelix\Config::$devMode = true;

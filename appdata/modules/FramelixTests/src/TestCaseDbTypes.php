@@ -4,6 +4,8 @@ namespace Framelix\FramelixTests;
 
 use Framelix\Framelix\Db\Sql;
 
+use mysqli;
+
 use function get_class;
 use function str_ends_with;
 
@@ -27,10 +29,14 @@ abstract class TestCaseDbTypes extends TestCase
         }
         switch ($this->currentDbType) {
             case Sql::TYPE_MYSQL:
+                // create mysql db if not yet exists
+                $mysqli = new mysqli('mariadb', 'root', 'app', 'mysql');
+                $mysqli->query('CREATE DATABASE IF NOT EXISTS unittests');
+
                 \Framelix\Framelix\Config::addMysqlConnection(
                     'test',
                     'unittests',
-                    'localhost',
+                    'mariadb',
                     'root',
                     'app'
                 );

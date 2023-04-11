@@ -17,30 +17,6 @@ cecho() {
   echo -e "$text"
 }
 
-start_mysql() {
-  mkdir /run/mysqld/
-  chown mysql:mysql /run/mysqld/
-  /usr/bin/mysqld_safe --basedir=/usr --datadir=$FRAMELIX_DBDATA/mysql --plugin-dir=/usr/lib/mysql/plugin --user=mysql --pid-file=/run/mysqld/mysqld.pid --socket=/run/mysqld/mysqld.sock --skip-syslog --log-error=/var/log/mariadb-error.log &
-  sleep 1
-  echo -n "Wait for DB to come up ..."
-  while [ 1 ]; do
-    mysql -u root -papp -e "quit" >/dev/null 2>&1
-    if [ $? -eq 0 ]; then
-      echo " OK"
-      break
-    fi
-    echo -n .
-    sleep 1
-  done
-  cecho b "# Run mysql_upgrade"
-  echo ""
-  # mysql upgrade in case database has been upgraded
-  mysql_upgrade -u root -papp
-  echo ""
-  echo "Done"
-  echo "Mysql Server started"
-}
-
 # in case the ready file already exist, delete it
 rm -f /framelix/system/READY
 
@@ -130,46 +106,6 @@ fi
 echo "Done."
 echo ""
 
-if [ "$FRAMELIX_MARIADB_ENABLED" == "1" ]; then
-
-  cecho y "# Starting MariaDB service"
-  echo ""
-
-  echo "[mysqld]
-  innodb_buffer_pool_size=128M" >/etc/mysql/mariadb.conf.d/71-framelix.cnf
-
-  # truncate/create error log file
-  echo "" >/var/log/mariadb-error.log
-  echo "" >/var/log/mariadb-slow.log
-  chmod 0777 /var/log/mariadb-*
-
-  # setup db
-  if [ ! -d "$FRAMELIX_DBDATA/mysql/mysql" ]; then
-    echo "Fresh database directory - Installing database"
-    mysql_install_db \
-      --user=mysql \
-      --basedir=/usr \
-      --datadir=$FRAMELIX_DBDATA/mysql \
-      --skip-test-db \
-      --default-time-zone=SYSTEM \
-      --enforce-storage-engine= \
-      --skip-log-bin \
-      --expire-logs-days=0 \
-      --loose-innodb_buffer_pool_load_at_startup=0 \
-      --loose-innodb_buffer_pool_dump_at_shutdown=0
-    start_mysql
-    # update root password to a default
-    mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'app';"
-  else
-    start_mysql
-    # upgrade database if required
-    mysql_upgrade -u root -papp
-  fi
-else
-  cecho y "# MariaDB service disabled. Enable it by setting FRAMELIX_MARIADB_ENABLED=1 environment variable"
-echo ""
-fi
-
 cecho y "# Starting php fpm service"
 echo ""
 
@@ -223,7 +159,7 @@ echo ""
 
 cecho y "# Set correct files owners for folder that need to be writable"
 mkdir -p $FRAMELIX_USERDATA/tmp
-chown -L "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_USERDATA $FRAMELIX_DBDATA $FRAMELIX_USERDATA/tmp
+chown -L "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_USERDATA $FRAMELIX_USERDATA/tmp
 chown -L -R "$NGINX_USERNAME":"$NGINX_GROUPNAME" $FRAMELIX_APPDATA/modules/*/public/dist $FRAMELIX_APPDATA/modules/*/_meta
 echo ""
 echo "Done."
@@ -233,8 +169,6 @@ cecho y "# Server software versions now used"
 echo ""
 output=`nginx -v 2>&1`
 echo "* Nginx: $output"
-output=`mysql --version 2>&1`
-echo "* MariaDB: $output"
 output=`php -r 'echo PHP_VERSION;'`
 echo "* PHP: $output"
 output=`node -v`

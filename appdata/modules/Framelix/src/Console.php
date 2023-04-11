@@ -85,30 +85,29 @@ class Console
     }
 
     /**
-     * Backup each individual mysql databases that are added to the config to /framelix/userdata/backups
+     * Backup each individual sql databases that is added to the config
+     * Backup path is /framelix/userdata/backups
      * @param string|null $filenamePrefix Backup filename prefix
      * @return int Status Code, 0 = success
      */
-    public static function backupMysqlDatabases(?string $filenamePrefix = null): int
+    public static function backupSqlDatabases(?string $filenamePrefix = null): int
     {
         $backupFolder = FRAMELIX_USERDATA_FOLDER . "/backups";
         if (!file_exists($backupFolder)) {
             mkdir($backupFolder, recursive: true);
         }
         foreach (Config::$sqlConnections as $key => $row) {
-            if ($row['type'] === Sql::TYPE_MYSQL) {
-                $filename = $filenamePrefix . $row['database'] . "_" . $key . "_" . date("Y-m-d-H-i-s") . ".sql";
-                $params = $row;
-                $params['path'] = $backupFolder . "/" . $filename;
-                $shell = Shell::prepare(
-                    'mysqldump -h {host} -u {username} -p{password} --add-drop-database {database} > {path}',
-                    $params
-                );
-                $shell->execute();
-                if ($shell->status > 0) {
-                    echo implode("\n", $shell->output);
-                    return $shell->status;
-                }
+            $filename = $filenamePrefix . $row['database'] . "_" . $key . "_" . date("Y-m-d-H-i-s") . ".sql";
+            $params = $row;
+            $params['path'] = $backupFolder . "/" . $filename;
+            $shell = Shell::prepare(
+                'mysqldump -h {host} -u {username} -p{password} --add-drop-database {database} > {path}',
+                $params
+            );
+            $shell->execute();
+            if ($shell->status > 0) {
+                echo implode("\n", $shell->output);
+                return $shell->status;
             }
         }
         return 0;
@@ -121,24 +120,18 @@ class Console
      */
     public static function appWarmup(): int
     {
-        // if a default db connection is added, create and update database automatically on app startup
+        // if a default db connection is added, update database scheme automatically on app startup
         $config = Config::$sqlConnections[FRAMELIX_MODULE] ?? null;
         if ($config) {
-            // create database when using containers mariadb database service
-            if ($config['type'] === Sql::TYPE_MYSQL && ($config['host'] === "127.0.0.1" || $config['host'] === "localhost")) {
-                Shell::prepare("mysql -u root -papp -e 'CREATE DATABASE IF NOT EXISTS `" . FRAMELIX_MODULE . "`'")
-                    ->execute();
-            }
             $db = Sql::get();
             $builder = new SqlStorableSchemeBuilder($db);
             $queries = $builder->getSafeQueries();
             if ($queries) {
-                self::info("Database upgrade");
+                self::info("Database upgrade for '" . $db->id . "'");
                 $builder->executeQueries($queries);
                 self::success(count($queries) . " safe queries has been executed");
-            } else {
-                self::success("Everything was already up 2 date");
             }
+            self::success("Database is '" . $db->id . "' Up2Date");
         }
         return 0;
     }

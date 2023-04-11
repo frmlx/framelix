@@ -5,7 +5,7 @@ source $SCRIPTDIR/lib.sh
 
 cecho b "Start Docker Container for development"
 echo "Available command line flags:"
-echo "-d : Does delete and recreate the existing database volume (start with a new database container)"
+echo "-d : Does delete and recreate the existing database volumes"
 echo ""
 
 while getopts "cd" opt; do
@@ -16,14 +16,12 @@ done
 
 source $SCRIPTDIR/stop-container.sh
 
-VOLUME_NAME="${COMPOSE_PROJECT_NAME}_vol"
 
 if [ "$DEL_VOL" == "1" ]; then
-  echo "Recreate volume $VOLUME_NAME"
-  docker volume rm $VOLUME_NAME
+  echo "Delete database volumes"
+  docker volume rm "${VOLUME_NAME}_mariadb"
 fi
 
-docker volume create $VOLUME_NAME
 docker compose -f $SCRIPTDIR/docker-compose.yml up -d
 docker compose -f $SCRIPTDIR/docker-compose.yml exec -t app bash -c "framelix_wait_for_ready"
 

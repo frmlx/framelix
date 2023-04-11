@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 
 networks:
   app:
@@ -6,14 +6,32 @@ networks:
 
 
 volumes:
-  framelix_tests_vol:
+    mariadb:
+      name: ${COMPOSE_PROJECT_NAME}_mariadb
 
 services:
+  mariadb:
+    image: mariadb:10.11
+    restart: on-failure
+    volumes:
+      - mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - COMPOSE_PROJECT_NAME
+      - MARIADB_ROOT_PASSWORD=app
+    healthcheck:
+      test: /usr/local/bin/healthcheck.sh --connect
+      interval: 5s
+      timeout: 5s
+      retries: 5
   app:
     image: ${USE_IMAGE_NAME}
     restart: on-failure
+    depends_on:
+      mariadb:
+        condition: service_healthy
     volumes:
-      - framelix_tests_vol:/framelix/dbdata
       - ../appdata:/framelix/appdata
       - ../userdata:/framelix/userdata
     ports:

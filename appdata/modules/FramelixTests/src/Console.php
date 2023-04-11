@@ -18,7 +18,6 @@ class Console extends \Framelix\Framelix\Console
      */
     public static function appWarmup(): int
     {
-        Shell::prepare("mysql -u root -papp -e 'CREATE DATABASE IF NOT EXISTS unittests'")->execute();
         $userConfigFile = \Framelix\Framelix\Config::getUserConfigFilePath();
         if (!file_exists($userConfigFile)) {
             Framelix::createInitialUserConfig(

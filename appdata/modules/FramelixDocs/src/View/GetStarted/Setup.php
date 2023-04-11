@@ -62,7 +62,6 @@ class Setup extends View
             -p "' . $port . ':' . $port . '" \
             -v $SCRIPTDIR/appdata/modules/' . $moduleName . ':/framelix/appdata/modules/' . $moduleName . ' \
             -v $SCRIPTDIR/userdata:/framelix/userdata \
-            -v ' . $volumeName . ':/framelix/dbdata \
             ' . $repoName . '         
         echo "Now open https://127.0.0.1:' . $port . ' in your browser and follow setup in the web interface"
         ',

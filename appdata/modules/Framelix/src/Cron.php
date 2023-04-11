@@ -61,8 +61,8 @@ class Cron extends Console
             }
             ArrayUtils::sort($arr, "time", [SORT_DESC, SORT_NUMERIC]);
             $dayDiffSinceLastBackup = ceil((time() - reset($arr)['time']) / 86400);
-            if (Config::$automaticDbBackupMaxLogs > 0) {
-                $chunks = array_chunk($arr, Config::$automaticDbBackupMaxLogs - 1);
+            if (Config::$automaticSqlBackupMaxLogs > 0) {
+                $chunks = array_chunk($arr, Config::$automaticSqlBackupMaxLogs - 1);
                 if (count($chunks) > 1) {
                     unset($chunks[0]);
                     foreach ($chunks as $arr) {
@@ -73,11 +73,10 @@ class Cron extends Console
                 }
             }
         }
-        if ((Config::$automaticDbBackupInterval > 0 && $dayDiffSinceLastBackup >= Config::$automaticDbBackupInterval) || self::getParameter(
+        if ((Config::$automaticSqlBackupInterval > 0 && $dayDiffSinceLastBackup >= Config::$automaticSqlBackupInterval) || self::getParameter(
                 'forceBackup'
             )) {
-            self::backupMysqlDatabases("mariadb_auto_");
-            self::backupSqliteDatabases("sqlite_auto_");
+            self::backupSqlDatabases("sql_auto_");
         }
     }
 }
