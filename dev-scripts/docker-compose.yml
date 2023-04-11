@@ -10,7 +10,7 @@ volumes:
 
 services:
   app:
-    image: nullixat/framelix:local
+    image: ${USE_IMAGE_NAME}
     restart: on-failure
     volumes:
       - framelix_tests_vol:/framelix/dbdata

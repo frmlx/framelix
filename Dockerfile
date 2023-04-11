@@ -27,9 +27,8 @@ RUN export DEBIAN_FRONTEND=noninteractive &&  \
     add-apt-repository ppa:ondrej/nginx-mainline -y && \
     add-apt-repository 'deb https://mirror.netcologne.de/mariadb/repo/10.11/ubuntu jammy main' -y && \
     apt update && \
-    apt install ca-certificates cron nginx mariadb-server nodejs php8.2-cli php8.2-fpm php8.2-common php8.2-mysql php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml php8.2-bcmath php8.2-sqlite3 php8.2-pgsql php8.2-xdebug 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
-    apt upgrade -y && \
-    rm /etc/php/*/*/conf.d/*-xdebug.ini
+    apt install ca-certificates cron nginx mariadb-server nodejs php8.2-cli php8.2-fpm php8.2-common php8.2-mysql php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml php8.2-bcmath php8.2-sqlite3 php8.2-pgsql 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
+    apt upgrade -y
 
 # system stuff
 COPY docker-build/entrypoint.sh $FRAMELIX_SYSTEMDIR/entrypoint.sh

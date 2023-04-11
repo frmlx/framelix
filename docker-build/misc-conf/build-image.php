@@ -19,8 +19,8 @@ if ($buildType === 'dev') {
     runCmd("cd /framelix/appdata && composer update");
     echo "Done.\n\n";
 
-    echo "## Installing PhpStorm deps\n\n";
-    runCmd("mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage");
+    echo "## Installing PhpUnit deps\n\n";
+    runCmd("export DEBIAN_FRONTEND=noninteractive && mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage && apt install php8.2-xdebug -y");
     echo "Done.\n\n";
 
     $cacheFolder = "/framelix/system/playwright/cache";
