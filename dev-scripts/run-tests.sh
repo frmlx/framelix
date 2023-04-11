@@ -5,7 +5,7 @@ source $SCRIPTDIR/lib.sh
 
 cecho b "Running tests"
 echo "Available command line flags:"
-echo "-t : Type of test: phpstan, phpunit, playwright, deps"
+echo "-t : Type of test: phpstan, phpunit, playwright, install-deps"
 echo "-f : Specify the testfile."
 
 TESTFILE=""
@@ -24,8 +24,8 @@ DOCKER_EXECPARAMS_MARIADB="$DOCKER_EXECPARAMS mariadb bash -c "
 cecho y "[i] Running tests"
 
 if [ $TESTTYPE == "install-deps" ]; then
-  cecho b "# Install composer deps"
-  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && composer update"
+  cecho b "# Install composer and npm dependencies"
+  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && composer update && cd /framelix/appdata/playwright && npm install -y"
   exit $?
 fi
 
