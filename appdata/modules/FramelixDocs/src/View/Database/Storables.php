@@ -176,7 +176,7 @@ class Storables extends View
             But let's explain some specials of <code>getByCondition</code>
         </p>
         <p>
-            The first parameter is basically comparable to a default mysql <code>WHERE</code> condition.
+            The first parameter is basically comparable to a default SQL <code>WHERE</code> condition.
             The placeholders in brackets <code>{xxx}</code> will be replaced with the corresponding keys in the second
             parameter <code>$parameters</code>.<br/>
             All placeholders are automatically proper sql escaped, so you can pass direct user input with need to worry

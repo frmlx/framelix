@@ -41,7 +41,7 @@ class Setup extends View
             want help develop the core itself, head to this page.
         </blockquote>
         <?php
-        $repoName = 'nullixat/framelix:' . Framelix::$version;
+        $repoName = 'nullixat/framelix:' . Framelix::VERSION;
         $moduleName = 'FramelixStarter';
         $imageName = 'framelix_starter';
         $volumeName = $imageName . '_db';

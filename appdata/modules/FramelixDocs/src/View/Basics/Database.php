@@ -2,7 +2,7 @@
 
 namespace Framelix\FramelixDocs\View\Basics;
 
-use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Sql;
 use Framelix\FramelixDocs\View\Database\Storables;
 use Framelix\FramelixDocs\View\View;
 
@@ -14,8 +14,13 @@ class Database extends View
     {
         ?>
         <p>
-            Framelix runs with MariaDB (Mysql) by default. Our docker image comes with everything built-in, so you don't
-            have to worry about setting up or managing your database.
+            Framelix runs comes with MariaDB (Mysql) by default. However, Framelix fully supports other SQL database
+            engines like Sqlite, PostgreSQL, etc... You can run Framelix and all it's advanced database ORM features
+            just with any supported SQL engine, right out of the box, if you wish.
+            Our docker image comes with everything built-in for MariaDB (recommended for production environments, as it
+            more stable than a single file Sqlite DB for example).
+            In any way, integration is seamless and you never have to worry about database much. Framelix does most
+            things for you.
         </p>
         <?= $this->getAnchoredTitle('storables', 'Storables - The way you store data in Framelix') ?>
         <p>
@@ -30,9 +35,8 @@ class Database extends View
         </p>
         <p>
             Storables have extremely powerful auto-completion features and without <em>any</em> modification to your
-            IDE, your editor should always know what you are currently using.
-            There are <u>NO</u> (undocommented) magic getters, setters or methods. This is always a huge problem in
-            other framworks, when they inject so many code in the background what the editor don't know about.
+            IDE, your editor should always know what you are currently using. This is one of the huge benefits of
+            Framelix. It helps the developer to develop code fast. Auto-completion is a big part of that goal.
         </p>
         <?php
         echo $this->getLinkToInternalPage(Storables::class, 'Check out the detailed article about storables');
@@ -45,7 +49,7 @@ class Database extends View
         <?php
         $this->startCodeRecording(function () {
             // using default db
-            $db = Mysql::get();
+            $db = Sql::get();
 
             // raw
             $db->query("INSERT ...");
@@ -57,7 +61,7 @@ class Database extends View
             $db->delete("table", 'id = {0}', [3018]);
 
             // using anotherdb db
-            $db = Mysql::get('anotherdb');
+            $db = Sql::get('anotherdb');
             $db->query("INSERT ...");
         });
         $this->showRecordedCode('php');
@@ -70,7 +74,7 @@ class Database extends View
         <?php
         $this->startCodeRecording(function () {
             // using default db
-            $db = Mysql::get();
+            $db = Sql::get();
             // returns an array-array with column names as indexes
             $db->fetchAssoc("SELECT ...");
             // same as above but with parameters automatically escaped properly

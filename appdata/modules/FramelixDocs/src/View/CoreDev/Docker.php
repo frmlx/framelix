@@ -25,7 +25,7 @@ class Docker extends View
         </p>
         <ul>
             <li>Nginx - The webserver hosting the app and serving PHP and all other files</li>
-            <li>MariaDB (mysql) - The default database engine in Framelix</li>
+            <li>MariaDB (mysql) - The default installed database service in the Framelix docker container</li>
             <li>NodeJS - The javascript backend engine for using Websockets, Compiler, and stuff like that</li>
             <li>PHP - The programming language Framelix is based on</li>
         </ul>
