@@ -18,6 +18,9 @@ jobs:
       - name: Start docker container
         run: bash dev-scripts/start-container.sh
 
+      - name: Install dependencies
+        run: bash dev-scripts/run-tests.sh -t install-deps
+
       - name: Run PhpStan Static Analysis
         run: bash dev-scripts/run-tests.sh -t phpstan
 

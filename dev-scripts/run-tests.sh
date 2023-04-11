@@ -5,7 +5,7 @@ source $SCRIPTDIR/lib.sh
 
 cecho b "Running tests"
 echo "Available command line flags:"
-echo "-t : Type of test: phpstan, phpunit, playwright"
+echo "-t : Type of test: phpstan, phpunit, playwright, deps"
 echo "-f : Specify the testfile."
 
 TESTFILE=""
@@ -23,9 +23,16 @@ DOCKER_EXECPARAMS_MARIADB="$DOCKER_EXECPARAMS mariadb bash -c "
 
 cecho y "[i] Running tests"
 
+if [ $TESTTYPE == "install-deps" ]; then
+  cecho b "# Install composer deps"
+  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && composer update"
+  exit $?
+fi
+
+
 if [ $TESTTYPE == "phpstan" ]; then
   cecho b "# Php Stan Static Code Analyzer"
-  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
+  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata  && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 
