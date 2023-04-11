@@ -13,6 +13,7 @@ use function mkdir;
 use function str_replace;
 
 use const FRAMELIX_MODULE;
+use const FRAMELIX_TMP_FOLDER;
 use const SCANDIR_SORT_DESCENDING;
 
 final class FileUtilsTest extends TestCase
@@ -35,42 +36,42 @@ final class FileUtilsTest extends TestCase
         );
         $this->assertFilelist(
             [
-                "modules/FramelixTests/tmp/fileutils-test/.gitignore",
-                "modules/FramelixTests/tmp/fileutils-test/test1",
-                "modules/FramelixTests/tmp/fileutils-test/test1.txt"
+                "fileutils-test/.gitignore",
+                "fileutils-test/test1",
+                "fileutils-test/test1.txt"
             ],
-            FileUtils::getFiles(__DIR__ . "/../../tmp/fileutils-test")
+            FileUtils::getFiles(__DIR__ . "/../../test-files/fileutils-test")
         );
         $this->assertFilelist(
             [
-                "modules/FramelixTests/tmp/fileutils-test/test1.txt",
-                "modules/FramelixTests/tmp/fileutils-test/test1",
-                "modules/FramelixTests/tmp/fileutils-test/.gitignore",
+                "fileutils-test/test1.txt",
+                "fileutils-test/test1",
+                "fileutils-test/.gitignore",
             ],
-            FileUtils::getFiles(__DIR__ . "/../../tmp/fileutils-test", sortOrder: SCANDIR_SORT_DESCENDING)
+            FileUtils::getFiles(__DIR__ . "/../../test-files/fileutils-test", sortOrder: SCANDIR_SORT_DESCENDING)
         );
         $this->assertFilelist(
             [
-                "modules/FramelixTests/tmp/fileutils-test/test1.txt"
+                "fileutils-test/test1.txt"
             ],
-            FileUtils::getFiles(__DIR__ . "/../../tmp/fileutils-test", "~\.txt$~")
+            FileUtils::getFiles(__DIR__ . "/../../test-files/fileutils-test", "~\.txt$~")
         );
         $this->assertFilelist(
             [
-                "modules/FramelixTests/tmp/fileutils-test/sub/test1.txt",
-                "modules/FramelixTests/tmp/fileutils-test/test1.txt",
+                "fileutils-test/sub/test1.txt",
+                "fileutils-test/test1.txt",
             ],
-            FileUtils::getFiles(__DIR__ . "/../../tmp/fileutils-test", "~\.txt$~", true)
+            FileUtils::getFiles(__DIR__ . "/../../test-files/fileutils-test", "~\.txt$~", true)
         );
         $this->assertFilelist(
             [
-                "modules/FramelixTests/tmp/fileutils-test/sub",
-                "modules/FramelixTests/tmp/fileutils-test/sub/test1.txt",
-                "modules/FramelixTests/tmp/fileutils-test/test1.txt",
+                "fileutils-test/sub",
+                "fileutils-test/sub/test1.txt",
+                "fileutils-test/test1.txt",
             ],
-            FileUtils::getFiles(__DIR__ . "/../../tmp/fileutils-test", "~\.txt$~", true, true)
+            FileUtils::getFiles(__DIR__ . "/../../test-files/fileutils-test", "~\.txt$~", true, true)
         );
-        $testFolder = __DIR__ . "/../../tmp/fileutils-test-tmp";
+        $testFolder = FRAMELIX_TMP_FOLDER . "/fileutils-test-tmp";
         FileUtils::deleteDirectory($testFolder);
         mkdir($testFolder);
         mkdir($testFolder . "/test");
@@ -78,11 +79,12 @@ final class FileUtilsTest extends TestCase
         file_put_contents($testFolder . "/test/test.txt", "1");
         $this->assertFilelist(
             [
-                "modules/FramelixTests/tmp/fileutils-test-tmp/test",
-                "modules/FramelixTests/tmp/fileutils-test-tmp/test/test.txt",
-                "modules/FramelixTests/tmp/fileutils-test-tmp/test.txt",
+                "fileutils-test-tmp/test",
+                "fileutils-test-tmp/test/test.txt",
+                "fileutils-test-tmp/test.txt",
             ],
-            FileUtils::getFiles($testFolder, null, true, true)
+            FileUtils::getFiles($testFolder, null, true, true),
+            FRAMELIX_TMP_FOLDER
         );
         FileUtils::deleteDirectory($testFolder);
         $this->assertFilelist(
@@ -96,12 +98,13 @@ final class FileUtilsTest extends TestCase
      * Assert a filelist to match exactly
      * @param string[] $expected
      * @param string[] $actual
+     * @param string|null $baseFolder
      * @return void
      */
-    private function assertFilelist(array $expected, array $actual): void
+    private function assertFilelist(array $expected, array $actual, ?string $baseFolder = null): void
     {
         foreach ($actual as $key => $value) {
-            $actual[$key] = FileUtils::getRelativePathToBase($value);
+            $actual[$key] = FileUtils::getRelativePathToBase($value, $baseFolder ?? __DIR__ . "/../../test-files");
         }
         $this->assertSame($expected, $actual);
     }

@@ -9,13 +9,15 @@ use Framelix\FramelixTests\TestCase;
 
 use function json_encode;
 
+use const FRAMELIX_TMP_FOLDER;
+
 final class ArchiverTest extends TestCase
 {
 
     public function testExtract(): void
     {
-        $tarFile = __DIR__ . "/../../tmp/test.zip";
-        $tmpFolder = __DIR__ . "/../../tmp/tartest";
+        $tarFile = __DIR__ . "/../../test-files/test.zip";
+        $tmpFolder = FRAMELIX_TMP_FOLDER . "/tartest";
         FileUtils::deleteDirectory($tmpFolder);
         mkdir($tmpFolder);
 
@@ -33,10 +35,10 @@ final class ArchiverTest extends TestCase
 
         Archiver::extractTo($tarFile, $tmpFolder, true);
         $this->assertFilelist([
-            'modules/FramelixTests/tmp/tartest/fileutils-test/sub/test1',
-            'modules/FramelixTests/tmp/tartest/fileutils-test/sub/test1.txt',
-            'modules/FramelixTests/tmp/tartest/fileutils-test/test1',
-            'modules/FramelixTests/tmp/tartest/fileutils-test/test1.txt'
+            'tartest/fileutils-test/sub/test1',
+            'tartest/fileutils-test/sub/test1.txt',
+            'tartest/fileutils-test/test1',
+            'tartest/fileutils-test/test1.txt'
         ], $tmpFolder);
         $list = Archiver::listFiles($tarFile);
         $this->assertSame(
@@ -53,9 +55,9 @@ final class ArchiverTest extends TestCase
 
     public function testCreate(): void
     {
-        $tarCreateFile = __DIR__ . "/../../tmp/tartest/test.tar";
-        $tmpFolder = __DIR__ . "/../../tmp/tartest";
-        $packFolder = __DIR__ . "/../../tmp/fileutils-test";
+        $tarCreateFile = FRAMELIX_TMP_FOLDER . "/tartest/test.tar";
+        $tmpFolder = FRAMELIX_TMP_FOLDER . "/tartest";
+        $packFolder = __DIR__ . "/../../test-files/fileutils-test";
 
         FileUtils::deleteDirectory($tmpFolder);
         mkdir($tmpFolder);
@@ -69,12 +71,12 @@ final class ArchiverTest extends TestCase
 
         Archiver::extractTo($tarCreateFile, $tmpFolder, true);
         $this->assertFilelist([
-            'modules/FramelixTests/tmp/tartest/.gitignore',
-            'modules/FramelixTests/tmp/tartest/sub/test1',
-            'modules/FramelixTests/tmp/tartest/sub/test1.txt',
-            'modules/FramelixTests/tmp/tartest/test.tar',
-            'modules/FramelixTests/tmp/tartest/test1',
-            'modules/FramelixTests/tmp/tartest/test1.txt'
+            'tartest/.gitignore',
+            'tartest/sub/test1',
+            'tartest/sub/test1.txt',
+            'tartest/test.tar',
+            'tartest/test1',
+            'tartest/test1.txt'
         ], $tmpFolder);
         FileUtils::deleteDirectory($tmpFolder);
     }
@@ -89,7 +91,7 @@ final class ArchiverTest extends TestCase
     {
         $actual = FileUtils::getFiles($folder, null, true);
         foreach ($actual as $key => $value) {
-            $actual[$key] = FileUtils::getRelativePathToBase($value);
+            $actual[$key] = FileUtils::getRelativePathToBase($value, FRAMELIX_TMP_FOLDER);
         }
         $this->assertSame($expected, $actual);
     }

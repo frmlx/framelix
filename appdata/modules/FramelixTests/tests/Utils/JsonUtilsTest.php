@@ -10,12 +10,14 @@ use function base64_encode;
 use function file_exists;
 use function unlink;
 
+use const FRAMELIX_TMP_FOLDER;
+
 final class JsonUtilsTest extends TestCase
 {
 
     public function tests(): void
     {
-        $tmpFile = __DIR__ . "/../../tmp/test-json.json";
+        $tmpFile = FRAMELIX_TMP_FOLDER . "/test-json.json";
         $this->assertSame('"blab\u00f6\u00e4\u00fc\u00df"', JsonUtils::encode('blaböäüß'));
         // using base64 because it contains white space and new lines which are hard to keep on code format
         $this->assertSame(

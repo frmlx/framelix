@@ -39,7 +39,6 @@ use function is_int;
 use function is_string;
 use function ob_end_clean;
 use function ob_start;
-use function str_ends_with;
 use function str_starts_with;
 use function strlen;
 use function strtoupper;
@@ -47,6 +46,7 @@ use function unlink;
 use function var_dump;
 
 use const FRAMELIX_MODULE;
+use const FRAMELIX_TMP_FOLDER;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -272,7 +272,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     ): void {
         $this->removeSimulatedFile($fieldName);
         if ($isMultiple) {
-            $tmpName = __DIR__ . "/../tmp/" . $fieldName . "-0.txt";
+            $tmpName = FRAMELIX_TMP_FOLDER . "/" . $fieldName . "-0.txt";
             $_FILES[$fieldName]['name'][0] = $filename ?? $fieldName;
             $_FILES[$fieldName]['tmp_name'][0] = $tmpName;
             $_FILES[$fieldName]['size'][0] = (string)strlen($filedata);
@@ -282,7 +282,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 file_put_contents($tmpName, $filedata);
             }
 
-            $tmpName = __DIR__ . "/../tmp/" . $fieldName . "-1.txt";
+            $tmpName = FRAMELIX_TMP_FOLDER . "/" . $fieldName . "-1.txt";
             $_FILES[$fieldName]['name'][1] = $filename ?? $fieldName;
             $_FILES[$fieldName]['tmp_name'][1] = $tmpName;
             $_FILES[$fieldName]['size'][1] = (string)strlen($filedata);
@@ -292,7 +292,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 file_put_contents($tmpName, $filedata);
             }
         } else {
-            $tmpName = __DIR__ . "/../tmp/" . $fieldName . ".txt";
+            $tmpName = FRAMELIX_TMP_FOLDER . "/" . $fieldName . ".txt";
             $_FILES[$fieldName]['name'] = $filename ?? $fieldName;
             $_FILES[$fieldName]['tmp_name'] = $tmpName;
             $_FILES[$fieldName]['size'] = (string)strlen($filedata);
@@ -311,7 +311,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function removeSimulatedFile(string $name): void
     {
-        $tmpName = __DIR__ . "/../tmp/" . $name . ".txt";
+        $tmpName = FRAMELIX_TMP_FOLDER . "/" . $name . ".txt";
         if (file_exists($tmpName)) {
             unlink($tmpName);
         }
