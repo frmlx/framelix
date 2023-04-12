@@ -14,12 +14,9 @@ class Basics extends View
         ?>
         <p>
             Framelix is built for SQL databases. All ORM features are only available for SQL.
-            However, Framelix fully supports different SQL database engines like MySQL/MariaDB, SQLite, PostgreSQL and
-            MsSQL.
-            You can run Framelix and all it's advanced database ORM features
-            just with any supported SQL engine, right out of the box.
+            However, Framelix fully supports MySQL/MariaDB and SQLite.
             For quick and tiny application, SQLite is the easiest way, as it requires no additional services.
-            For productions and larger scale projects, a proper DB Engine, like MySQL is recommended.
+            For productions and larger scale projects, MySQL is recommended.
             Our configuration builder will guide you through some variants.
             In any way, integration is seamless and you never have to worry about database much, after first setup.
             Framelix does most things for you.

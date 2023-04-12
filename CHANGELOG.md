@@ -26,7 +26,7 @@ Generally, as v3 wasn't really public used or available, this should not be cons
 * ✏️ ⚠️ renamed `Time` functions `timeStringToHours->toHours, timeStringToSeconds->toSeconds` and make conversion more
   lazy (accepting more types of values)
 * ✏️ ⚠️ changed database handling as described above
-* ✏️ ⚠️ changed database handling to abstract SQL and make place for other types like mssql, sqlite, postgreesql
+* ✏️ ⚠️ changed database handling to abstract SQL and make place for other types like sqlite
 * ✏️ changed to hidden sidebar by default for some small views (Login, ForgotPassword, etc..)
 * ✏️ changed many internals of how app is set up (reduced checks, more streamlined, easier maintenance)
 * ✏️ changed some vendor libraries to package.json and composer instead of manual installation
