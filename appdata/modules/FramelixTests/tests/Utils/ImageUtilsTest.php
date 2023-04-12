@@ -41,7 +41,7 @@ final class ImageUtilsTest extends TestCase
             ImageUtils::getImageData(self::TESTFILES_ROOT . "/test-image.jpg"));
         $this->assertEquals(['type' => 'png', 'width' => 225, 'height' => 225],
             ImageUtils::getImageData(self::TESTFILES_ROOT . "/test-image.png"));
-        $this->assertNull(ImageUtils::getImageData(__DIR__ . "/../../test-files/test-files.zip"));
+        $this->assertIsString(ImageUtils::getImageData(__DIR__ . "/../../test-files/test-files.zip"));
     }
 
     public function testResize(): void

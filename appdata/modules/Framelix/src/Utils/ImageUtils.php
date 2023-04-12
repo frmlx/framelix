@@ -15,14 +15,14 @@ class ImageUtils
     /**
      * Get image data for given file
      * @param string $path Path to image file
-     * @return array{type: string, width: int, height:int}|null (type is always lowercase)
+     * @return array{type: string, width: int, height:int}|string (type is always lowercase), string return is error message
      */
-    public static function getImageData(string $path): ?array
+    public static function getImageData(string $path): array|string
     {
         $shell = Shell::prepare('identify {*}', [$path]);
         $shell->execute();
         if ($shell->status) {
-            return null;
+            return $shell->getOutput();
         }
         $data = explode(" ", $shell->output[0]);
         $size = explode("x", $data[2]);
