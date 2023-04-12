@@ -14,8 +14,6 @@ use function array_key_exists;
 use function array_shift;
 use function array_unshift;
 use function array_values;
-use function basename;
-use function copy;
 use function count;
 use function date;
 use function file_exists;
@@ -64,27 +62,6 @@ class Console
     }
 
     /**
-     * Backup each individual sqlite database that are added to the config to /framelix/userdata/backups
-     * @param string|null $filenamePrefix Backup filename prefix
-     * @return int Status Code, 0 = success
-     */
-    public static function backupSqliteDatabases(?string $filenamePrefix = null): int
-    {
-        $backupFolder = FRAMELIX_USERDATA_FOLDER . "/backups";
-        if (!file_exists($backupFolder)) {
-            mkdir($backupFolder, recursive: true);
-        }
-        foreach (Config::$sqlConnections as $key => $row) {
-            if ($row['type'] === Sql::TYPE_SQLITE) {
-                $filename = $filenamePrefix . basename($row['path']) .
-                    "_" . $key . "_" . date("Y-m-d-H-i-s") . ".db";
-                copy($row['path'], $backupFolder . "/" . $filename);
-            }
-        }
-        return 0;
-    }
-
-    /**
      * Backup each individual sql databases that is added to the config
      * Backup path is /framelix/userdata/backups
      * @param string|null $filenamePrefix Backup filename prefix
@@ -96,18 +73,12 @@ class Console
         if (!file_exists($backupFolder)) {
             mkdir($backupFolder, recursive: true);
         }
-        foreach (Config::$sqlConnections as $key => $row) {
-            $filename = $filenamePrefix . $row['database'] . "_" . $key . "_" . date("Y-m-d-H-i-s") . ".sql";
-            $params = $row;
-            $params['path'] = $backupFolder . "/" . $filename;
-            $shell = Shell::prepare(
-                'mysqldump -h {host} -u {username} -p{password} --add-drop-database {database} > {path}',
-                $params
-            );
-            $shell->execute();
-            if ($shell->status > 0) {
-                echo implode("\n", $shell->output);
-                return $shell->status;
+        foreach (Config::$sqlConnections as $row) {
+            $filename = $filenamePrefix . $row['id'] . "_" . date("Y-m-d-H-i-s") . ".sql";
+            $db = Sql::get($row['id']);
+            $tables = $db->getTables(true);
+            foreach ($tables as $table) {
+                $db->dumpSqlTableToFile($backupFolder . "/" . $filename, $table);
             }
         }
         return 0;

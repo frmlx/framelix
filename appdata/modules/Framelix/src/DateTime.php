@@ -400,9 +400,7 @@ class DateTime extends \DateTime implements StorablePropertyInterface
      */
     public function getHtmlString(): string
     {
-        return '<framelix-time datetime="' . $this->format(
-                'c'
-            ) . '" format="' . Config::$dateTimeFormatJs . '"></framelix-time>';
+        return '<framelix-time datetime="' . $this->format('c') . '" format="' . Config::$dateTimeFormatJs . '"></framelix-time>';
     }
 
     /**

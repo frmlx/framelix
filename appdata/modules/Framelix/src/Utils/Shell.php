@@ -142,11 +142,20 @@ class Shell
     }
 
     /**
-     * Get output as string
+     * Get output as raw text
+     * @return string
+     */
+    public function getOutputText(): string
+    {
+        return implode("\n", $this->output);
+    }
+
+    /**
+     * Get output as html formated string
      * @param bool $nl2br convertNewLines into <br/>
      * @return string
      */
-    public function getOutput(bool $nl2br = false): string
+    public function getOutputHtmlFormated(bool $nl2br = false): string
     {
         return self::convertCliOutputToHtml($this->output, $nl2br);
     }

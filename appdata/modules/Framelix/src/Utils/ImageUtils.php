@@ -22,7 +22,7 @@ class ImageUtils
         $shell = Shell::prepare('identify {*}', [$path]);
         $shell->execute();
         if ($shell->status) {
-            return $shell->getOutput();
+            return $shell->getOutputText();
         }
         $data = explode(" ", $shell->output[0]);
         $size = explode("x", $data[2]);

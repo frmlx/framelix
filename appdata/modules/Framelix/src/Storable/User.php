@@ -209,4 +209,13 @@ class User extends StorableExtended
     {
         return $this->email ?? '';
     }
+
+    public function delete(bool $force = false): void
+    {
+        self::deleteMultiple(UserRole::getByCondition('`user` = {0}', [$this]));
+        self::deleteMultiple(UserToken::getByCondition('`user` = {0}', [$this]));
+        self::deleteMultiple(UserVerificationToken::getByCondition('`user` = {0}', [$this]));
+        self::deleteMultiple(UserWebAuthn::getByCondition('`user` = {0}', [$this]));
+        parent::delete($force);
+    }
 }

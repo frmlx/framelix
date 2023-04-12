@@ -7,6 +7,8 @@ use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Html\TableCell;
 use Framelix\Framelix\Lang;
 
+use Framelix\Framelix\Utils\HtmlUtils;
+
 use function implode;
 
 /**
@@ -36,22 +38,20 @@ abstract class StorableExtended extends Storable
         }
         $tooltip = [
             Lang::get('__framelix_modified_timestamp_createuser__', [
-                $this->createUser->email ?? Lang::get("__framelix_unknown_user__"),
-                $this->createTime->format('d.m.Y H:i:s')
+                HtmlUtils::escape($this->createUser->email ?? Lang::get("__framelix_unknown_user__")),
+                $this->createTime->getHtmlString()
             ])
         ];
         $html = '';
         if ($this->createTime->getTimestamp() !== $this->updateTime->getTimestamp()) {
             $html = '<span class="material-icons" title="__framelix_modified_timestamp_updated__">edit</span>';
             $tooltip[] = Lang::get('__framelix_modified_timestamp_updateuser__', [
-                $this->updateUser->email ?? Lang::get("__framelix_unknown_user__"),
-                $this->updateTime->format('d.m.Y H:i:s')
+                HtmlUtils::escape($this->updateUser->email ?? Lang::get("__framelix_unknown_user__")),
+                $this->updateTime->getHtmlString()
             ]);
         }
-        $html = '<span class="framelix-modified-timestamp"><span title="' . implode(
-                "<br/>",
-                $tooltip
-            ) . '">' . $this->updateTime->format('d.m.Y H:i:s') . '</span>' . $html . '</span>';
+        $html = '<span class="framelix-modified-timestamp"><span title=\'' . implode("<br/>", $tooltip) . '\'>' .
+            $this->updateTime->getHtmlString() . '</span>' . $html . '</span>';
         $tableCell = new TableCell();
         $tableCell->sortValue = $this->updateTime->getTimestamp();
         $tableCell->stringValue = $html;

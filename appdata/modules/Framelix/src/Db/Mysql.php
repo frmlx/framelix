@@ -9,6 +9,11 @@ use mysqli_result;
 use mysqli_sql_exception;
 use Throwable;
 
+use function array_keys;
+use function fclose;
+use function fopen;
+use function fwrite;
+use function implode;
 use function mysqli_insert_id;
 use function mysqli_query;
 use function mysqli_real_escape_string;
@@ -207,6 +212,34 @@ class Mysql extends Sql
             }
         }
         return $fetch;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function dumpSqlTableToFile(string $path, string $tableName): void
+    {
+        $file = fopen($path, "w+");
+        fwrite($file,
+            $this->fetchAssocOne('SHOW CREATE TABLE ' . $this->quoteIdentifier($tableName))['Create Table'] . ";\n");
+        $result = $this->query("SELECT * FROM " . $this->quoteIdentifier($tableName));
+        $keys = null;
+        while ($row = $result->fetch_assoc()) {
+            if ($keys === null) {
+                $tmp = [];
+                foreach (array_keys($row) as $key) {
+                    $tmp[] = $this->quoteIdentifier($key);
+                }
+                $keys = implode(", ", $tmp);
+            }
+            $values = [];
+            foreach ($row as $value) {
+                $values[] = $this->escapeValue($value);
+            }
+            fwrite($file, "INSERT INTO " . $this->quoteIdentifier($tableName) . " ($keys) VALUES (" . implode(", ",
+                    $values) . ");\n");
+        }
+        fclose($file);
     }
 
     /**

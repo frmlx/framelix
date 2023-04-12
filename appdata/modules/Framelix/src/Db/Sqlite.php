@@ -188,9 +188,43 @@ class Sqlite extends Sql
     }
 
     /**
-     * Get all existing database tables in lower case
-     * @param bool $flushCache If false the result is cached by default if already called previously
-     * @return string[]
+     * @inheritDoc
+     */
+    public function dumpSqlTableToFile(string $path, string $tableName): void
+    {
+        $file = fopen($path, "w+");
+        fwrite($file,
+            $this->fetchOne("SELECT sql 
+            FROM sqlite_master 
+            WHERE tbl_name = " . $this->escapeValue($tableName) . "  AND type = 'table'") . ";\n");
+        $indexSql = $this->fetchOne("SELECT sql 
+            FROM sqlite_master 
+            WHERE tbl_name = " . $this->escapeValue($tableName) . "  AND type = 'index'");
+        if ($indexSql) {
+            fwrite($file, $indexSql . ";\n");
+        }
+        $this->query("SELECT * FROM " . $this->quoteIdentifier($tableName));
+        $keys = null;
+        while ($row = $this->lastResult->fetchArray(SQLITE3_ASSOC)) {
+            if ($keys === null) {
+                $tmp = [];
+                foreach (array_keys($row) as $key) {
+                    $tmp[] = $this->quoteIdentifier($key);
+                }
+                $keys = implode(", ", $tmp);
+            }
+            $values = [];
+            foreach ($row as $value) {
+                $values[] = $this->escapeValue($value);
+            }
+            fwrite($file, "INSERT INTO " . $this->quoteIdentifier($tableName) . " ($keys) VALUES (" . implode(", ",
+                    $values) . ");\n");
+        }
+        fclose($file);
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getTables(bool $flushCache = false): array
     {
