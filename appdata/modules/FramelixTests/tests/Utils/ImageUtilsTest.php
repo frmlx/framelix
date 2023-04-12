@@ -11,9 +11,6 @@ use const FRAMELIX_TMP_FOLDER;
 
 final class ImageUtilsTest extends TestCase
 {
-
-    public const TESTFILES_ROOT = __DIR__ . "/../../test-files/imageutils";
-
     public function testCompare(): void
     {
         $this->assertTrue(
