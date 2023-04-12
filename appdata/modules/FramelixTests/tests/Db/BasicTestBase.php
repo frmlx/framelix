@@ -2,14 +2,24 @@
 
 namespace Db;
 
-use Framelix\Framelix\Config;
+use Framelix\Framelix\Console;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
+use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Db\Sqlite;
+use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\TestCaseDbTypes;
 use ReflectionClass;
 
+use function file_get_contents;
 use function fopen;
+use function json_encode;
+
+use function unlink;
+
+use const FRAMELIX_TMP_FOLDER;
+use const FRAMELIX_USERDATA_FOLDER;
 
 abstract class BasicTestBase extends TestCaseDbTypes
 {
@@ -168,7 +178,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
     }
 
     /**
-     * @depends testExceptionConnectError
+     * @depends testConditions
      */
     public function testQueries(): void
     {
@@ -244,12 +254,11 @@ abstract class BasicTestBase extends TestCaseDbTypes
     }
 
     /**
-     * @depends testConditions
+     * @depends testQueries
      */
     public function testExceptionDbQuery()
     {
         $db = $this->getDb();
-        Config::$devMode = true;
 
         $this->assertExceptionOnCall(function () use ($db) {
             $db->queryRaw('foo');
@@ -284,8 +293,50 @@ abstract class BasicTestBase extends TestCaseDbTypes
     }
 
     /**
-     * Drop tables after execution
+     * Test backup dump
      * @depends testExceptionUnsupportedDbValue
+     */
+    public function testDumps(): void
+    {
+        $db = $this->getDb();
+        $tmpFile = FRAMELIX_TMP_FOLDER . "/sqldump-test.sql";
+        $db->dumpSqlTableToFile($tmpFile, 'condition_tests');
+        $tables = $db->getTables(true);
+
+        $fetchBefore = [];
+        foreach ($tables as $table) {
+            $fetchBefore[$table] = $db->fetchAssoc("SELECT * FROM " . $db->quoteIdentifier($table));
+            $db->query("DROP TABLE " . $db->quoteIdentifier($table));
+        }
+        if ($db instanceof Sqlite) {
+            $db->execRaw(file_get_contents($tmpFile));
+        } elseif ($db instanceof Mysql) {
+            $db->mysqli->multi_query(file_get_contents($tmpFile));
+            while ($db->mysqli->next_result()) {
+            }
+        }
+
+        $fetchAfter = [];
+        foreach ($tables as $table) {
+            $fetchAfter[$table] = $db->fetchAssoc("SELECT * FROM " . $db->quoteIdentifier($table));
+        }
+        $this->assertSame(json_encode($fetchBefore), json_encode($fetchAfter));
+        unlink($tmpFile);
+    }
+
+    /**
+     * @depends testDumps
+     */
+    public function testConsoleBackups(): void
+    {
+        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/backups");
+        Console::backupSqlDatabases('test_');
+        $this->assertCount(2, FileUtils::getFiles(FRAMELIX_USERDATA_FOLDER . "/backups"));
+    }
+
+    /**
+     * Drop tables after execution
+     * @depends testConsoleBackups
      */
     public function testCleanup(): void
     {

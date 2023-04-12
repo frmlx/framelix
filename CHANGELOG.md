@@ -1,16 +1,21 @@
 # [4.0.0 - TBA]
 
-⚠️ **BREAKING CHANGE** ⚠️: Combined 3 repositories (tests, core, docker) to one, called `framelix`. This make
+⚠️ **BREAKING CHANGE** ⚠️: A lot have changed. Combined 3 repositories (tests, core, docker) to one, called `framelix`. This make
 maintenance, further development and end-user usage a lot easier. The way you must setup your docker installation have
-changed. However, a working installation of v3.x can be upgraded with a bit of effort.
+changed. However, a working installation of v3.x can be upgraded with a some effort.
 
 ### 🎯 Framelix core (backend/frontend) changes
 
-⚠️ **BREAKING CHANGE** ⚠️: All changes marked with ⚠️ are breaking changes. Database handling have also changed. The
-previous default DB `app` is not being generated and used anymore. Each module instance have it's own database, named by
-the module name by default. So `default` database connection also not exist anymore. To migrate, you must rename
-the `app` database to the module name of your instance. Also removed support for arrays in `@property` annotiations for
-Storables because of performance issues.
+⚠️ **BREAKING CHANGE** ⚠️: All changes marked with ⚠️ are breaking changes. Database handling have also changed quite a
+lot.
+Generally, v3 is not compatible with v4 out of the box. The MariaDB service has been stripped out of the docker image.
+You have to use an other docker image for the DB Engine, which give more flexibility in the end.
+Also, previously, a default DB connection to the DB 'app' was added to the initializer.
+So the `default` database connection also not exist anymore. 
+Now you have to set it yourself.
+Also removed support for arrays in `@property` annotiations for Storables because of performance and unflexible behaviour.
+
+Generally, as v3 wasn't really public used or available, this should not be considered a problem for any of you new users.
 
 * ➕ added property to force screen size and color scheme for layout view
 * ➕ added `$hiddenView` property to `View` to allow view to be hidden from public access
@@ -20,16 +25,15 @@ Storables because of performance issues.
 * 🛠️ fixed many tests and core code that failed because of now better error detection of new PhpUnit
 * ✏️ ⚠️ renamed `Time` functions `timeStringToHours->toHours, timeStringToSeconds->toSeconds` and make conversion more
   lazy (accepting more types of values)
-* ✏️ ⚠️ changed database handling so each module instance have it's own separate database, the default `app` database is
-  being dropped
+* ✏️ ⚠️ changed database handling as described above
 * ✏️ ⚠️ changed database handling to abstract SQL and make place for other types like mssql, sqlite, postgreesql
 * ✏️ changed to hidden sidebar by default for some small views (Login, ForgotPassword, etc..)
-* ✏️ changed internals of how app is set up (reduced checks, more streamlined, easier maintenance)
-* ✏️ changed some vendor frontend libraries to package.json instead of manual installation
+* ✏️ changed many internals of how app is set up (reduced checks, more streamlined, easier maintenance)
+* ✏️ changed some vendor libraries to package.json and composer instead of manual installation
 * ✏️ changed backend layout to be more flexible
 * ✏️ a lot of minor code changes and cleanups
 * ❌ removed old unsupported setup vars
-* ❌ removed `Config::$appSetupDone`, so you have to update your `01-core.php` config and remove it there manually
+* ❌ removed `Config::$appSetupDone`
 * ❌ ⚠️ removed support for arrays in `@property` annotations for Storables because of performance issues when searching
   over it. Better use a separate `Storable` to hold the array data.
 * ️⬆️ upgraded PhpUnit to v10, PhpStan, Playwright, and various other integrated vendor libs
@@ -39,18 +43,13 @@ Storables because of performance issues.
 
 * ➕ added build ARG `OS_IMAGE` to be able to use another base ubuntu image (experimental). So you can install this also
   on a Raspberry PI for example, which have ARM architecture.
-* ✏️ reworked many internals of how the image works and streamlined build, test and development process - most notable
-  the `.env` file has changed variables, so you have to update yours according to the templates
-* ⬆️ upgraded mariadb to v10.11.2 (from 10.6.12)
-* ⬆️ upgraded NodeJS to v19.8.1 (from 18.14.0)
-* ⬆️ upgraded PHP to v8.2.4 (from 8.2.2)
+* ✏️ reworked many internals of how the image works and streamlined build, test and development process
 
 #### 📚 Installed server applications are now:
 
-* Nginx: nginx version: nginx/1.23.3
-* MariaDB: mysql Ver 15.1 Distrib 10.11.2-MariaDB, for debian-linux-gnu (x86_64) using EditLine wrapper
+* Nginx: nginx version: nginx/1.23.4
 * PHP: 8.2.4
-* NodeJS: v19.8.1
+* NodeJS: v19.9.0
 
 # [3.1.1 - 2023-02-13]
 

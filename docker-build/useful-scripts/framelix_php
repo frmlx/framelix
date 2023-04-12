@@ -4,4 +4,10 @@
 # docker exec does run as root by default
 
 NGINX_USERNAME=$(stat -L -c %U /framelix/userdata/)
-su $NGINX_USERNAME -s /usr/bin/php  -- "$@"
+CURRENT_USERNAME=$(whoami)
+
+if [ "$NGINX_USERNAME" != "$CURRENT_USERNAME" ]; then
+  su $NGINX_USERNAME -s /usr/bin/php  -- "$@"
+else
+  /usr/bin/php "$@"
+fi

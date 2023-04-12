@@ -18,10 +18,9 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - COMPOSE_PROJECT_NAME
       - MARIADB_ROOT_PASSWORD=app
     healthcheck:
-      test: /usr/local/bin/healthcheck.sh --connect
+      test: mysql -u root -papp -e '\q'
       interval: 5s
       timeout: 5s
       retries: 5
