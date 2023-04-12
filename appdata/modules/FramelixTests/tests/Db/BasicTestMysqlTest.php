@@ -34,7 +34,7 @@ final class BasicTestMysqlTest extends BasicTestBase
     }
 
     /**
-     * @depends testCreate
+     * @depends testCleanup
      */
     public function testExceptionConnectError()
     {

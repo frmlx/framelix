@@ -37,7 +37,7 @@ if [ $TESTTYPE == "phpstan" ]; then
 fi
 
 cecho b "# Removing all userdata files and databases to start clean with each full test run"
-docker $DOCKER_EXECPARAMS_APP "rm -Rfv /framelix/userdata/*"
+docker $DOCKER_EXECPARAMS_APP "rm -Rfv /framelix/userdata/* && mkdir -p /framelix/userdata/tmp && chmod 0777 /framelix/userdata/tmp"
 echo ""
 echo "Done."
 echo ""
