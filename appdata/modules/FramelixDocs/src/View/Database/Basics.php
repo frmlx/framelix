@@ -1,12 +1,11 @@
 <?php
 
-namespace Framelix\FramelixDocs\View\Basics;
+namespace Framelix\FramelixDocs\View\Database;
 
 use Framelix\Framelix\Db\Sql;
-use Framelix\FramelixDocs\View\Database\Storables;
 use Framelix\FramelixDocs\View\View;
 
-class Database extends View
+class Basics extends View
 {
     protected string $pageTitle = 'Database Basics';
 
@@ -14,13 +13,16 @@ class Database extends View
     {
         ?>
         <p>
-            Framelix runs comes with MariaDB (Mysql) by default. However, Framelix fully supports other SQL database
-            engines like Sqlite, PostgreSQL, etc... You can run Framelix and all it's advanced database ORM features
-            just with any supported SQL engine, right out of the box, if you wish.
-            Our docker image comes with everything built-in for MariaDB (recommended for production environments, as it
-            more stable than a single file Sqlite DB for example).
-            In any way, integration is seamless and you never have to worry about database much. Framelix does most
-            things for you.
+            Framelix is built for SQL databases. All ORM features are only available for SQL.
+            However, Framelix fully supports different SQL database engines like MySQL/MariaDB, SQLite, PostgreSQL and
+            MsSQL.
+            You can run Framelix and all it's advanced database ORM features
+            just with any supported SQL engine, right out of the box.
+            For quick and tiny application, SQLite is the easiest way, as it requires no additional services.
+            For productions and larger scale projects, a proper DB Engine, like MySQL is recommended.
+            Our configuration builder will guide you through some variants.
+            In any way, integration is seamless and you never have to worry about database much, after first setup.
+            Framelix does most things for you.
         </p>
         <?= $this->getAnchoredTitle('storables', 'Storables - The way you store data in Framelix') ?>
         <p>

@@ -26,6 +26,19 @@ class StorableMeta extends View
         $form->show();
     }
 
+    public static function showTable(): void
+    {
+        $arr = \Framelix\FramelixDocs\Storable\SimpleDemoEntry::getByCondition();
+        $meta = new SimpleDemoEntry(new \Framelix\FramelixDocs\Storable\SimpleDemoEntry());
+        $meta->getTable($arr)->show();
+    }
+
+    public static function showQuickSearch(): void
+    {
+        $meta = new SimpleDemoEntry(new \Framelix\FramelixDocs\Storable\SimpleDemoEntry());
+        $meta->getQuickSearch()->show();
+    }
+
     public function showContent(): void
     {
         ?>
@@ -55,11 +68,17 @@ class StorableMeta extends View
 
         echo $this->getAnchoredTitle('form', 'The form out of this meta');
         $this->addPhpExecutableMethod([__CLASS__, "showForm"], "The form",
-            "The form that will be generated here, is completely generated only by the StorableMeta we have here.");
+            "The form that will be generated here, is completely generated only by the StorableMeta information we have above.");
         $this->showPhpExecutableMethodsCodeBlock();
 
-
         echo $this->getAnchoredTitle('table', 'The table out of this meta');
+        $this->addPhpExecutableMethod([__CLASS__, "showTable"], "The table",
+            "The table that will be generated here, is completely generated only by the StorableMeta information we have above.");
+        $this->showPhpExecutableMethodsCodeBlock();
+
         echo $this->getAnchoredTitle('quicksearch', 'The quick search out of this meta');
+        $this->addPhpExecutableMethod([__CLASS__, "showQuickSearch"], "The quick search",
+            "QuickSearch as some sort of 'lazy' search. Type in what you want, the system do a lazy search and display the results. This is convinient and just work most use-cases.");
+        $this->showPhpExecutableMethodsCodeBlock();
     }
 }

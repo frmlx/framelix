@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|3911132359",
+    "directoryListHash": "3|3775546314",
     "views": {
         "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
             "accessRole": "*",
@@ -31,16 +31,6 @@
             "pageTitle": "Terminology \/ How things are named in Framelix",
             "url": "\/background\/terminology"
         },
-        "Framelix\\FramelixDocs\\View\\Basics\\Database": {
-            "accessRole": "*",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "Database Basics",
-            "url": "\/basics\/database"
-        },
         "Framelix\\FramelixDocs\\View\\CoreDev\\Docker": {
             "accessRole": "*",
             "customUrl": null,
@@ -60,6 +50,16 @@
             "hiddenView": false,
             "pageTitle": "Framelix development",
             "url": "\/coredev\/framelix"
+        },
+        "Framelix\\FramelixDocs\\View\\Database\\Basics": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Database Basics",
+            "url": "\/database\/basics"
         },
         "Framelix\\FramelixDocs\\View\\Database\\SchemeGenerator": {
             "accessRole": "*",

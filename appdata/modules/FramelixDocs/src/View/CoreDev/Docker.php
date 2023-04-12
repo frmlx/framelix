@@ -21,11 +21,10 @@ class Docker extends View
         </p>
         <p>
             The image as based on Ubuntu and contains everything, starting from all services and the Framelix code
-            itself. The main services used for Framelix are:
+            itself. The main services integrated in the docker image are:
         </p>
         <ul>
             <li>Nginx - The webserver hosting the app and serving PHP and all other files</li>
-            <li>MariaDB (mysql) - The default installed database service in the Framelix docker container</li>
             <li>NodeJS - The javascript backend engine for using Websockets, Compiler, and stuff like that</li>
             <li>PHP - The programming language Framelix is based on</li>
         </ul>

@@ -16,6 +16,7 @@ class SimpleDemoEntry extends StorableMeta
 
     protected function init(): void
     {
+        $this->tableDefault->storableDeletable = false;
         $this->addDefaultPropertiesAtStart();
 
         $field = new Email();
