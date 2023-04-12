@@ -58,7 +58,7 @@ if [ $TESTTYPE == "phpunit" ]; then
   # phpunit with process isolation have a bug with enabling xdebug on the fly with -d ini parameters
   # so, modifying the php config globally for the time this test is running
   cecho b "# Php Unit Tests"
-  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && framelix_php_xdebug vendor/bin/phpunit --coverage-clover /framelix/userdata/clover.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
+  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && framelix_php_xdebug vendor/bin/phpunit --coverage-clover /framelix/userdata/clover.xml --log-junit /framelix/userdata/phpunit-results.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
 fi
 
