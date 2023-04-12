@@ -9,7 +9,7 @@ final class ConsoleTest extends TestCase
     {
         $shell = Shell::prepare('framelix_console ' . FRAMELIX_MODULE . ' appWarmup');
         $shell->execute();
-        $this->assertSame(0, $shell->status);
+        $this->assertSame(0, $shell->status, $shell->getOutputText());
         $this->assertStringContainsString('[SUCCESS]', $shell->getOutputText());
         $this->assertStringContainsString('appWarmup', $shell->getOutputText());
     }
