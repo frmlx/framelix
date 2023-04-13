@@ -15,10 +15,6 @@ function runCmd(string $cmd): void
 if ($buildType === 'dev') {
     echo "## Running build requirements for DEV build\n\n";
 
-    echo "## Installing composer deps\n\n";
-    runCmd("cd /framelix/appdata && composer update");
-    echo "Done.\n\n";
-
     echo "## Installing PhpUnit deps\n\n";
     runCmd("export DEBIAN_FRONTEND=noninteractive && mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage && apt install php8.2-xdebug -y && rm /etc/php/*/*/conf.d/*-xdebug.ini");
     echo "Done.\n\n";

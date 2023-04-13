@@ -48,6 +48,12 @@ if [ "$?" != "0" ]; then
   exit 1
 fi
 
+bash $SCRIPTDIR/run-tests.sh -t install-deps
+if [ "$?" != "0" ]; then
+  cecho r "Container start failed"
+  exit 1
+fi
+
 bash $SCRIPTDIR/run-tests.sh -t phpstan
 if [ "$?" != "0" ]; then
   cecho r "PhpStan tests failed"

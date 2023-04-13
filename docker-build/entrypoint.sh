@@ -34,22 +34,6 @@ if [ ! -d "$FRAMELIX_APPDATA/modules" ]; then
   exit 1
 fi
 
-if [ "$FRAMELIX_BUILD_VERSION" == "dev" ]; then
-  cecho y "# Running npm install and composer install because app was built in dev mode"
-
-  echo ""
-  framelix_npm_modules_install
-  echo ""
-  echo "Done."
-  echo ""
-
-  echo ""
-  framelix_composer_modules_install
-  echo ""
-  echo "Done."
-  echo ""
-fi
-
 cecho y "# Checking required folder mappings and variables"
 echo ""
 

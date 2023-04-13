@@ -24,11 +24,10 @@ DOCKER_EXECPARAMS_MARIADB="$DOCKER_EXECPARAMS mariadb bash -c "
 cecho y "[i] Running tests"
 
 if [ $TESTTYPE == "install-deps" ]; then
-  cecho b "# Install composer and npm dependencies"
-  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && composer update && cd /framelix/appdata/playwright && npm install -y"
+  cecho b "# Install/Update composer and npm dependencies"
+  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && composer update && cd /framelix/appdata/playwright && npm install -y && framelix_npm_modules_install && framelix_composer_modules_install"
   exit $?
 fi
-
 
 if [ $TESTTYPE == "phpstan" ]; then
   cecho b "# Php Stan Static Code Analyzer"
