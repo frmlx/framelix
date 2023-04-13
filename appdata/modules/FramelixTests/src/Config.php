@@ -22,16 +22,16 @@ class Config
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "js", "test-folder");
         $bundle->pageAutoInclude = false;
-        $bundle->addFolder('js', true);
+        $bundle->addFolder('vendor-frontend/js', true);
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "js", "test-path");
         $bundle->pageAutoInclude = false;
-        $bundle->addFile('js/framelix-unit-test-jstest.js');
+        $bundle->addFile('vendor-frontend/js/framelix-unit-test-jstest.js');
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "js", "test-nocompile");
         $bundle->pageAutoInclude = false;
         $bundle->compile = false;
-        $bundle->addFile('js/framelix-unit-test-jstest.js');
+        $bundle->addFile('vendor-frontend/js/framelix-unit-test-jstest.js');
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle(
             "FramelixTests",
@@ -40,15 +40,15 @@ class Config
         );
         $bundle->pageAutoInclude = false;
         $bundle->compile = false;
-        $bundle->addFolder('js', true, ["framelix-unit-test-jstest2.js"]);
+        $bundle->addFolder('vendor-frontend/js', true, ["vendor-frontend/js/framelix-unit-test-jstest2.js"]);
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "scss", "test-folder");
         $bundle->pageAutoInclude = false;
-        $bundle->addFolder('scss', true);
+        $bundle->addFolder('vendor-frontend/scss', true);
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "scss", "test-path");
         $bundle->pageAutoInclude = false;
-        $bundle->addFile('scss/framelix-unit-test-scsstest.scss');
+        $bundle->addFile('vendor-frontend/scss/framelix-unit-test-scsstest.scss');
 
         if (defined('PHPUNIT_TESTS')) {
             // configured so that salt and test db connection is hardcoded for unit tests
