@@ -2,15 +2,14 @@
 
 namespace Framelix\FramelixStarter;
 
-use const FRAMELIX_USERDATA_FOLDER;
-
 class Config
 {
     public static function onRegister(): void
     {
-        \Framelix\Framelix\Config::addSqliteConnection(
-            FRAMELIX_MODULE,
-            FRAMELIX_USERDATA_FOLDER . "/sqlite_" . FRAMELIX_MODULE . ".db"
-        );
+        $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixStarter", "scss", "test");
+        $bundle->addFolder("vendor-frontend/scss", true);
+
+        $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixStarter", "js", "test");
+        $bundle->addFolder("vendor-frontend/js", true);
     }
 }
