@@ -53,7 +53,7 @@ const config: PlaywrightTestConfig = {
 
     // use the storage state for each test as it contains SSO tokens
     // is generated in includes/global-setup.ts
-    storageState: '../../userdata/playwright/browserStorageState.json',
+    // storageState: '../../userdata/playwright/browserStorageState.json',
 
     // headless is default
     headless: true

@@ -303,6 +303,10 @@
         "Weiter",
         "6dd82"
     ],
+    "__framelix_language__": [
+        "Sprache",
+        "4994a"
+    ],
     "__framelix_login_fido2__": [
         "Mit FIDO2 einloggen",
         "eb133"
@@ -663,9 +667,49 @@
         "Setup abschlie\u00dfen",
         "85a18"
     ],
+    "__framelix_setup_mysql_database__": [
+        "MySQL Datenbank",
+        "10969"
+    ],
+    "__framelix_setup_mysql_database_desc__": [
+        "Das Setup versucht die Datenbank zu erzeugen, falls sie noch nicht existiert. Das ben\u00f6tigt korrekte Berechtigungen f\u00fcr diesen Benutzer. Falls du unser Standard docker compose file verwendest, dann ist die vorausgef\u00fcllte Datenbank bereits angelegt.",
+        "a8b7d"
+    ],
+    "__framelix_setup_mysql_desc__": [
+        "Anstatt SQLite",
+        "d81a1"
+    ],
+    "__framelix_setup_mysql_host__": [
+        "MySQL Hostname",
+        "7b751"
+    ],
+    "__framelix_setup_mysql_host_desc__": [
+        "Falls du MariaDB im Containerverbund mit docker compose verwendest (Ist Standard wenn du unser generiertes docker compose file verwendest), dann musst du hier den Namen des Services angeben.",
+        "a6669"
+    ],
+    "__framelix_setup_mysql_label__": [
+        "Benutze eine MySQL Datenbank",
+        "5d09d"
+    ],
+    "__framelix_setup_mysql_password__": [
+        "MySQL Passwort",
+        "8443a"
+    ],
+    "__framelix_setup_mysql_port__": [
+        "MySQL Port",
+        "c9535"
+    ],
+    "__framelix_setup_mysql_username__": [
+        "MySQL Benutzername",
+        "39d71"
+    ],
     "__framelix_setup_next__": [
         "N\u00e4chster Schritt",
         "c290a"
+    ],
+    "__framelix_setup_sqlite_path__": [
+        "SQLite Dateipfad",
+        "c272f"
     ],
     "__framelix_setup_step_application_title__": [
         "Grundeinstellungen",
@@ -680,12 +724,12 @@
         "a20dd"
     ],
     "__framelix_setup_step_security_desc__": [
-        "Administrator Accountdaten",
-        "58e87"
+        "Dieser Account wird mit der Administratorrolle angelegt.",
+        "ecd94"
     ],
     "__framelix_setup_step_security_title__": [
-        "Sicherheit",
-        "2fae3"
+        "Adminstrator Account Details",
+        "58e87"
     ],
     "__framelix_setup_step_welcome_title__": [
         "Willkommen",

@@ -16,11 +16,13 @@ async function globalSetup () {
   await page.fill('input[name="password2"]', 'test@test.local')
   await utils.submitFormAndWaitForFormSubmitFinished('setup', 'setup')
 
+  await utils.goto('backend/login')
+  await page.fill('input[name="email"]', 'test@test.local')
+  await page.fill('input[name="password"]', 'test@test.local')
+  await utils.submitFormAndWaitForFormSubmitFinished('login', 'login')
+
   await utils.goto('/')
 
-  // storing browser cookies and session to re-use later
-  // after setup, the user is automatically logged in as admin
-  await page.context().storageState({ path: __dirname + '/../../../userdata/playwright/browserStorageState.json' })
   await browser.close()
   FramelixUtils.logSuccess('# Prepare done')
   FramelixUtils.logInfo('')

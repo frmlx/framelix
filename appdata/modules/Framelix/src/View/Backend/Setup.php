@@ -9,6 +9,7 @@ use Framelix\Framelix\Form\Field\Email;
 use Framelix\Framelix\Form\Field\Html;
 use Framelix\Framelix\Form\Field\Password;
 use Framelix\Framelix\Form\Field\Text;
+use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Framelix;
 use Framelix\Framelix\Html\Toast;
@@ -16,15 +17,18 @@ use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Storable\User;
-use Framelix\Framelix\Storable\UserToken;
 use Framelix\Framelix\Url;
+use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
+use mysqli;
 use Throwable;
 
 use function file_exists;
+use function file_put_contents;
 use function sleep;
 use function strtolower;
 
+use const FILE_APPEND;
 use const FRAMELIX_MODULE;
 
 class Setup extends View
@@ -46,36 +50,54 @@ class Setup extends View
                 Response::stopWithFormValidationResponse(['password2' => '__framelix_password_notmatch__']);
             }
             try {
-                $url = Url::create(strtolower(Request::getPost('applicationUrl')));
+                $configLine = null;
+                if (!isset(Config::$sqlConnections[FRAMELIX_MODULE])) {
+                    if (Request::getPost('mysql')) {
+                        $configLine = '\Framelix\Framelix\Config::addMysqlConnection(FRAMELIX_MODULE, "' . Request::getPost('mysql_database') . '", "' . Request::getPost('mysql_host') . '", "' . Request::getPost('mysql_username') . '", "' . Request::getPost('mysql_password') . '", ' . (int)Request::getPost('mysql_port') . ');';
+                        // create database if not yet exists
+                        $mysqli = new mysqli(Request::getPost('mysql_host'), Request::getPost('mysql_username'),
+                            Request::getPost('mysql_password'), null, (int)Request::getPost('mysql_port'));
+                        $mysqli->query('CREATE DATABASE IF NOT EXISTS `' . FRAMELIX_MODULE . '`');
+                        $mysqli->close();
+                        Config::addMysqlConnection(FRAMELIX_MODULE,
+                            Request::getPost('mysql_database'),
+                            Request::getPost('mysql_host'),
+                            Request::getPost('mysql_username'),
+                            Request::getPost('mysql_password'),
+                            (int)Request::getPost('mysql_port'),
+                        );
+                    } else {
+                        $configLine = '\Framelix\Framelix\Config::addSqliteConnection(FRAMELIX_MODULE, "' . Request::getPost('sqlite_path') . '");';
+                        Config::addSqliteConnection(FRAMELIX_MODULE, Request::getPost('sqlite_path'));
+                    }
+                }
+                $db = Sql::get();
 
+                $url = Url::create(strtolower(Request::getPost('applicationUrl')));
                 Config::$applicationHost = $url->urlData['host'] . (($url->urlData['port'] ?? null) ? ":" . $url->urlData['port'] : '');
                 Config::$applicationUrlPrefix = $url->urlData['path'];
                 Config::$salts['default'] = RandomGenerator::getRandomString(64, 70);
-                $builder = new SqlStorableSchemeBuilder(Sql::get());
-                $queries = $builder->getQueries();
-                if (Request::getPost('email')) {
-                    $user = User::getByConditionOne('email = {0}', [Request::getPost('email')]);
-                    if (!$user) {
-                        $user = new User();
-                        $user->email = Request::getPost('email');
-                    }
-                    $user->flagLocked = false;
-                    $user->setPassword(Request::getPost('password'));
-                    $user->store();
-                    $user->addRole("admin");
-                    $user->addRole("dev");
 
-                    $token = UserToken::create($user);
-                    UserToken::setCookieValue($token->token);
+                $builder = new SqlStorableSchemeBuilder($db);
+                $queries = $builder->getSafeQueries();
+                $builder->executeQueries($queries);
+
+                $user = User::getByConditionOne('email = {0}', [Request::getPost('email')]);
+                if (!$user) {
+                    $user = new User();
+                    $user->email = Request::getPost('email');
+                }
+                $user->flagLocked = false;
+                $user->setPassword(Request::getPost('password'));
+                $user->store();
+                $user->addRole("admin");
+                if (Config::$devMode) {
+                    $user->addRole("dev");
                 }
 
-
                 Config::$applicationHost = $url->urlData['host'] . (($url->urlData['port'] ?? null) ? ":" . $url->urlData['port'] : '');
                 Config::$applicationUrlPrefix = $url->urlData['path'];
                 Config::$salts['default'] = RandomGenerator::getRandomString(64, 70);
-
-                // just calling db to make sure db is running before finalizing setup
-                $db = Sql::get();
 
                 Framelix::createInitialUserConfig(
                     FRAMELIX_MODULE,
@@ -83,6 +105,11 @@ class Setup extends View
                     Config::$applicationHost,
                     Config::$applicationUrlPrefix
                 );
+
+                if ($configLine) {
+                    // append database config to the config file
+                    file_put_contents($userConfigFile, "\n$configLine\n", FILE_APPEND);
+                }
 
                 // include now, so we can deal with errors in the catch handler, just in case
                 require $userConfigFile;
@@ -135,31 +162,89 @@ class Setup extends View
         $field->defaultValue = Url::getApplicationUrl()->getUrlAsString();
         $form->addField($field);
 
-        if (!User::getByCondition()) {
-            $field = new Html();
-            $field->name = "headerSecurity";
-            $field->defaultValue = '<h2>' . Lang::get('__framelix_setup_step_security_desc__') . '</h2>';
+        if (!isset(Config::$sqlConnections[FRAMELIX_MODULE])) {
+            $field = new Toggle();
+            $field->name = "mysql";
+            $field->label = "__framelix_setup_mysql_label__";
+            $field->labelDescription = "__framelix_setup_mysql_desc__";
             $form->addField($field);
 
-            $field = new Email();
-            $field->name = "email";
-            $field->label = "__framelix_email__";
+            $field = new Text();
+            $field->getVisibilityCondition()->empty('mysql');
+            $field->name = "sqlite_path";
             $field->required = true;
-            $field->maxWidth = null;
+            $field->label = "__framelix_setup_sqlite_path__";
+            $field->defaultValue = FileUtils::getUserdataFilepath(FRAMELIX_MODULE . ".db", false);
+            $form->addField($field);
+
+            $field = new Text();
+            $field->getVisibilityCondition()->equal('mysql', 1);
+            $field->name = "mysql_host";
+            $field->required = true;
+            $field->label = "__framelix_setup_mysql_host__";
+            $field->labelDescription = "__framelix_setup_mysql_host_desc__";
+            $field->defaultValue = "mariadb";
+            $form->addField($field);
+
+            $field = new Text();
+            $field->getVisibilityCondition()->equal('mysql', 1);
+            $field->name = "mysql_port";
+            $field->required = true;
+            $field->label = "__framelix_setup_mysql_port__";
+            $field->defaultValue = "3306";
+            $form->addField($field);
+
+            $field = new Text();
+            $field->getVisibilityCondition()->equal('mysql', 1);
+            $field->name = "mysql_username";
+            $field->required = true;
+            $field->label = "__framelix_setup_mysql_username__";
+            $field->defaultValue = "app";
             $form->addField($field);
 
             $field = new Password();
-            $field->name = "password";
-            $field->label = "__framelix_password__";
-            $field->minLength = 8;
+            $field->getVisibilityCondition()->equal('mysql', 1);
+            $field->name = "mysql_password";
+            $field->required = true;
+            $field->label = "__framelix_setup_mysql_password__";
             $form->addField($field);
 
-            $field = new Password();
-            $field->name = "password2";
-            $field->label = "__framelix_password_repeat__";
-            $field->minLength = 8;
+            $field = new Text();
+            $field->getVisibilityCondition()->equal('mysql', 1);
+            $field->name = "mysql_database";
+            $field->required = true;
+            $field->label = "__framelix_setup_mysql_database__";
+            $field->labelDescription = "__framelix_setup_mysql_database_desc__";
+            $field->defaultValue = FRAMELIX_MODULE;
             $form->addField($field);
         }
+
+        $field = new Html();
+        $field->name = "headerSecurity";
+        $field->defaultValue = '<h2>' . Lang::get('__framelix_setup_step_security_title__') . '</h2><div>' . Lang::get('__framelix_setup_step_security_desc__') . '</div>';
+        $form->addField($field);
+
+        $field = new Email();
+        $field->name = "email";
+        $field->label = "__framelix_email__";
+        $field->required = true;
+        $field->maxWidth = null;
+        $form->addField($field);
+
+        $field = new Password();
+        $field->name = "password";
+        $field->required = true;
+        $field->label = "__framelix_password__";
+        $field->minLength = 8;
+        $form->addField($field);
+
+        $field = new Password();
+        $field->name = "password2";
+        $field->required = true;
+        $field->label = "__framelix_password_repeat__";
+        $field->minLength = 8;
+        $form->addField($field);
+
 
         return $form;
     }

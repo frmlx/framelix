@@ -325,11 +325,11 @@ class Config
         self::addAvailableUserRole('usermanagement', '__framelix_edituser_sidebar_title__');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "form");
-        $bundle->addFile('js/form/framelix-form.js');
-        $bundle->addFile('js/form/framelix-form-field.js');
-        $bundle->addFile('js/form/framelix-form-field-text.js');
-        $bundle->addFile('js/form/framelix-form-field-select.js');
-        $bundle->addFolder('js/form', true);
+        $bundle->addFile('vendor-frontend/js/form/framelix-form.js');
+        $bundle->addFile('vendor-frontend/js/form/framelix-form-field.js');
+        $bundle->addFile('vendor-frontend/js/form/framelix-form-field-text.js');
+        $bundle->addFile('vendor-frontend/js/form/framelix-form-field-select.js');
+        $bundle->addFolder('vendor-frontend/js/form', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-vendor-native");
         $bundle->compile = false;
@@ -353,12 +353,12 @@ class Config
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-early");
         $bundle->pageAutoInclude = false;
-        $bundle->addFile('js/framelix-local-storage.js');
-        $bundle->addFile('js/framelix-session-storage.js');
-        $bundle->addFile('js/framelix-device-detection.js');
+        $bundle->addFile('vendor-frontend/js/framelix-local-storage.js');
+        $bundle->addFile('vendor-frontend/js/framelix-session-storage.js');
+        $bundle->addFile('vendor-frontend/js/framelix-device-detection.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general");
-        $bundle->addFolder('js', false, [
+        $bundle->addFolder('vendor-frontend/js', false, [
             "framelix-table-sort-serviceworker.js",
             "framelix-device-detection.js",
             "framelix-local-storage.js",
@@ -369,26 +369,26 @@ class Config
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "table-sorter");
         $bundle->pageAutoInclude = false;
-        $bundle->addFile('js/framelix-table-sort-serviceworker.js');
+        $bundle->addFile('vendor-frontend/js/framelix-table-sort-serviceworker.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "backend");
         $bundle->pageAutoInclude = false;
-        $bundle->addFolder('js/backend', true);
+        $bundle->addFolder('vendor-frontend/js/backend', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "general");
-        $bundle->addFolder('scss/general', false);
+        $bundle->addFolder('vendor-frontend/scss/general', false);
         $bundle->addFolder('custom-elements', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "form");
-        $bundle->addFolder('scss/form', true);
+        $bundle->addFolder('vendor-frontend/scss/form', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "backend");
         $bundle->pageAutoInclude = false;
-        $bundle->addFolder('scss/backend', true, ["framelix-backend-fonts.scss"]);
+        $bundle->addFolder('vendor-frontend/scss/backend', true, ["framelix-backend-fonts.scss"]);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "backend-fonts");
         $bundle->pageAutoInclude = false;
-        $bundle->addFile("scss/backend/framelix-backend-fonts.scss");
+        $bundle->addFile("vendor-frontend/scss/backend/framelix-backend-fonts.scss");
     }
 
     /**

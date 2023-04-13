@@ -19,7 +19,7 @@ test('Login/Logout', async ({ page, utils }) => {
   await utils.goto('')
 
   // now user must be logged in
-  await expect(page.locator('html[data-user]')).toHaveCount(1)
+  await expect(page.locator('html[data-user="1"]')).toHaveCount(1)
 
   // logout
   await utils.goto('backend/logout')

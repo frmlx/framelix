@@ -73,14 +73,7 @@ if [ $TESTTYPE == "playwright" ]; then
   docker $DOCKER_EXECPARAMS_APP "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE  && mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright test $TESTFILE"
 
   if [ "$TESTFILE" == "" ]; then
-    RESULT=$?
-    if [ "$RESULT" == "0" ]; then
-      echo -n "Passed" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
-      echo -n "#00FF59" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
-    else
-      echo -n "Error" > $SCRIPTDIR/../userdata/playwright/badge-message.txt
-      echo -n "#FF2100" > $SCRIPTDIR/../userdata/playwright/badge-color.txt
-    fi
+    docker $DOCKER_EXECPARAMS_APP "framelix_php /framelix/appdata/hooks/after-playwright.php"
   fi
 
   exit $RESULT

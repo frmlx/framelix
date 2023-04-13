@@ -71,7 +71,7 @@ class Compiler
         foreach ($compilerFileBundles as $bundle) {
             $files = [];
             if ($bundle->type === 'scss') {
-                $bootstrapFile = $moduleRoot . "/scss/_compiler-bootstrap.scss";
+                $bootstrapFile = $moduleRoot . "/vendor-frontend/scss/_compiler-bootstrap.scss";
                 if (file_exists($bootstrapFile)) {
                     $files[] = $bootstrapFile;
                 }

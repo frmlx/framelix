@@ -227,6 +227,9 @@
     "__framelix_goahead__": [
         "Go ahead"
     ],
+    "__framelix_language__": [
+        "Language"
+    ],
     "__framelix_login_fido2__": [
         "Login with FIDO2"
     ],
@@ -491,8 +494,38 @@
     "__framelix_setup_finish_setup__": [
         "Finish setup"
     ],
+    "__framelix_setup_mysql_database__": [
+        "MySQL Database"
+    ],
+    "__framelix_setup_mysql_database_desc__": [
+        "The set up try to create the database if not exist. This requires proper permissions for the database user. If you use our default composer file, the database does already exist."
+    ],
+    "__framelix_setup_mysql_desc__": [
+        "Instead of SQLite"
+    ],
+    "__framelix_setup_mysql_host__": [
+        "MySQL Hostname"
+    ],
+    "__framelix_setup_mysql_host_desc__": [
+        "If you run MariaDB container with our default compose file (mariadb service in docker-compose.yml), you must provide the service name here."
+    ],
+    "__framelix_setup_mysql_label__": [
+        "Use a MySQL database"
+    ],
+    "__framelix_setup_mysql_password__": [
+        "MySQL Password"
+    ],
+    "__framelix_setup_mysql_port__": [
+        "MySQL Port"
+    ],
+    "__framelix_setup_mysql_username__": [
+        "MySQL Username"
+    ],
     "__framelix_setup_next__": [
         "Next step"
+    ],
+    "__framelix_setup_sqlite_path__": [
+        "SQLite File path"
     ],
     "__framelix_setup_step_application_title__": [
         "Application basics"
@@ -504,10 +537,10 @@
         "Finish"
     ],
     "__framelix_setup_step_security_desc__": [
-        "Administrator account credentials"
+        "This account will be created with the administrator role."
     ],
     "__framelix_setup_step_security_title__": [
-        "Security"
+        "Administrator account credentials"
     ],
     "__framelix_setup_step_welcome_title__": [
         "Welcome"

@@ -81,7 +81,7 @@ abstract class View extends LayoutView
             if (count(Config::$languagesAvailable) > 1) {
                 $field = new Select();
                 $field->name = "languageSelect";
-                $field->label = "__framelix_configuration_module_language_pagetitle__";
+                $field->label = "__framelix_language__";
                 foreach (Config::$languagesAvailable as $supportedLanguage) {
                     $url = Url::getBrowserUrl();
                     $url->replaceLanguage($supportedLanguage);

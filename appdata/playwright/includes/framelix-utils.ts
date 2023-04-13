@@ -1,7 +1,7 @@
 import { Page, Response } from '@playwright/test'
 import * as fs from 'fs'
 
-type FramelixConfig = { rootUrl: string; }
+type FramelixConfig = { environment: object, rootUrlDocs: string, rootUrlStarter: string; }
 
 export class FramelixUtils {
   readonly page: Page
@@ -46,8 +46,13 @@ export class FramelixUtils {
   constructor (page: Page) {
     this.page = page
     this.framelixConfig = {
-      rootUrl: 'https://127.0.0.1:' + JSON.parse(fs.readFileSync('/framelix/system/environment.json').toString())['moduleAccessPoints']['FramelixDocs']['port']
+      environment: JSON.parse(fs.readFileSync('/framelix/system/environment.json').toString()),
+      rootUrlDocs: '',
+      rootUrlStarter: ''
     }
+    this.framelixConfig.rootUrlDocs = 'https://127.0.0.1:' + this.framelixConfig.environment['moduleAccessPoints']['FramelixDocs']['port']
+    this.framelixConfig.rootUrlStarter = 'https://127.0.0.1:' + this.framelixConfig.environment['moduleAccessPoints']['FramelixStarter']['port']
+
     // stop on any uncaught page error
     this.page.on('pageerror', exception => {
       throw exception
@@ -72,7 +77,7 @@ export class FramelixUtils {
     if (relativePath.startsWith('https://')) {
       return this.page.goto(relativePath)
     }
-    return this.page.goto(this.framelixConfig.rootUrl + '/' + relativePath.replace(/^\//, ''))
+    return this.page.goto(this.framelixConfig.rootUrlDocs + '/' + relativePath.replace(/^\//, ''))
   }
 
   /**
