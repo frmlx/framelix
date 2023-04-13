@@ -41,7 +41,7 @@ class ExcelSpreadsheet extends View
         </p>
         <p>
             We have a small wrapper around it, for most common
-            features. <?= $this->getShowSourceFileLinkTag([SpreadsheetWrapper::class]) ?>
+            features. <?= $this->getSourceFileLinkTag([SpreadsheetWrapper::class]) ?>
         </p>
         <?php
 

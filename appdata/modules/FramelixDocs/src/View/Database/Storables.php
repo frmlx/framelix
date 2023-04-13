@@ -72,7 +72,7 @@ class Storables extends View
             is best practice to create another Storable type with a <code>@property ParentStorableType $parent</code>
             reference back to the parent. This is future-proof and you can always extend this <code>child</code>
             Storable with more data properties. A good example of that is the
-            built-in User and Roles with <?= $this->getShowSourceFileLinkTag([User::class, UserRole::class]) ?>
+            built-in User and Roles with <?= $this->getSourceFileLinkTag([User::class, UserRole::class]) ?>
         </p>
         <?php
 

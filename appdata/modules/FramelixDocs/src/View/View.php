@@ -146,6 +146,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             }
         }
         $tabs?->show();
+        $this->sourceFiles = [];
     }
 
     /**
@@ -330,7 +331,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
      * @param string[] $files Path is relative starting from /framelix/appdata/modules/$filepath
      * @return string
      */
-    public function getShowSourceFileLinkTag(array $files): string
+    public function getSourceFileLinkTag(array $files): string
     {
         $tags = [];
         foreach ($files as $relativePath) {

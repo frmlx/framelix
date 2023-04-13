@@ -6,9 +6,11 @@ namespace Framelix\FramelixDocs\Backend;
 use Framelix\FramelixDocs\View\Background\CodingStandards;
 use Framelix\FramelixDocs\View\Background\Idea;
 use Framelix\FramelixDocs\View\Background\Terminology;
+use Framelix\FramelixDocs\View\Basics\Database;
+use Framelix\FramelixDocs\View\Basics\Config;
+use Framelix\FramelixDocs\View\Basics\Modules;
 use Framelix\FramelixDocs\View\CoreDev\Docker;
 use Framelix\FramelixDocs\View\CoreDev\Framelix;
-use Framelix\FramelixDocs\View\Database\Basics;
 use Framelix\FramelixDocs\View\Database\SchemeGenerator;
 use Framelix\FramelixDocs\View\Database\Storables;
 use Framelix\FramelixDocs\View\Features\Cronjobs;
@@ -34,8 +36,13 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(SetupCoreDev::class);
         $this->showHtmlForLinkData();
 
+        $this->startGroup('Basics', 'info', forceOpened: true);
+        $this->addLink(Config::class, 'Configuration');
+        $this->addLink(Database::class, 'Database/Storables');
+        $this->addLink(Modules::class, 'Modules');
+        $this->showHtmlForLinkData();
+
         $this->startGroup('Database', 'database', forceOpened: true);
-        $this->addLink(Basics::class);
         $this->addLink(Storables::class, "Storables");
         $this->addLink(SchemeGenerator::class);
         $this->showHtmlForLinkData();

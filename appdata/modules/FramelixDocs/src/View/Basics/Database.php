@@ -1,11 +1,12 @@
 <?php
 
-namespace Framelix\FramelixDocs\View\Database;
+namespace Framelix\FramelixDocs\View\Basics;
 
 use Framelix\Framelix\Db\Sql;
+use Framelix\FramelixDocs\View\Database\Storables;
 use Framelix\FramelixDocs\View\View;
 
-class Basics extends View
+class Database extends View
 {
     protected string $pageTitle = 'Database Basics';
 

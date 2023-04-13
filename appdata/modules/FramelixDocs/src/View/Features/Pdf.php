@@ -35,7 +35,7 @@ class Pdf extends View
         </p>
         <p>
             We have a view wrapped around it, with most common
-            features <?= $this->getShowSourceFileLinkTag([MPdfBase::class]) ?>
+            features <?= $this->getSourceFileLinkTag([MPdfBase::class]) ?>
         </p>
         <?php
 

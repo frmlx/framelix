@@ -77,7 +77,7 @@ class Toasts extends View
         ?>
         <p>
             The complete source including other functions can be found
-            at <?= $this->getShowSourceFileLinkTag(['Framelix/js/framelix-toast.js']) ?>
+            at <?= $this->getSourceFileLinkTag(['Framelix/js/framelix-toast.js']) ?>
         </p>
         <?php
     }

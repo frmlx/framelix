@@ -1,0 +1,44 @@
+version: "3"
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  ${volumename}:
+
+services:
+# mariadb-start
+  mariadb:
+    image: mariadb:10.11
+    restart: on-failure
+    volumes:
+      -  ${volumename}:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=${mysqlpw}
+      - MARIADB_USER=app
+      - MARIADB_PASSWORD =${mysqlpwuser}
+      - MARIADB_DATABASE=FramelixStarter
+    healthcheck:
+      test: mysql -u root '-p${mysqlpw}' -e '\q'
+      interval: 5s
+      timeout: 5s
+      retries: 5
+# mariadb-end
+  app:
+    image: ${imagename}
+    restart: on-failure
+# mariadb-start
+    depends_on:
+      mariadb:
+        condition: service_healthy
+# mariadb-end
+    volumes:
+      - ./appdata/modules/FramelixStarter:/framelix/${FRAMELIX_APPDATA_MOUNT:-appdata}/modules/FramelixStarter
+#      - ./appdata/modules/Framelix:/framelix/${FRAMELIX_APPDATA_MOUNT:-appdata}/modules/Framelix
+      - ./userdata:/framelix/userdata
+    ports:
+      - "${port}:${port}"
+    environment:
+      - FRAMELIX_MODULES=FramelixStarter,1,${port}
+      - FRAMELIX_DEVMODE=1

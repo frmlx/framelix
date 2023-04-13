@@ -76,13 +76,13 @@ class InlinePopup extends View
             style, contents, listen for events and many more. Here are the corresponding doc comments for that.
         </p>
         <?php
-        $this->addSourceFile(FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/js/framelix-popup.js",
+        $this->addSourceFile(FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/vendor-frontend/js/framelix-popup.js",
             'FramelixPopupShowOptions');
         $this->showSourceFiles();
         ?>
         <p>
             The complete source including other functions can be found
-            at <?= $this->getShowSourceFileLinkTag(['Framelix/js/framelix-popup.js']) ?>
+            at <?= $this->getSourceFileLinkTag(['Framelix/js/framelix-popup.js']) ?>
         </p>
         <?php
     }

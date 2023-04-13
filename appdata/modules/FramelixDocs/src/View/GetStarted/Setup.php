@@ -2,19 +2,130 @@
 
 namespace Framelix\FramelixDocs\View\GetStarted;
 
+use Framelix\Framelix\Form\Field\Select;
+use Framelix\Framelix\Form\Field\Text;
+use Framelix\Framelix\Form\Field\Toggle;
+use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Framelix;
+use Framelix\Framelix\Network\JsCall;
+use Framelix\Framelix\Network\Request;
+use Framelix\Framelix\Network\Response;
+use Framelix\Framelix\Url;
+use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\FramelixDocs\View\View;
+
+use function file_get_contents;
+use function is_array;
+use function preg_replace;
+use function str_replace;
 
 class Setup extends View
 {
     protected string $pageTitle = 'Setup for module development';
 
+    public static function onJsCall(JsCall $jsCall): void
+    {
+        if ($jsCall->action === 'create-config') {
+            if (Form::isFormSubmitted('config')) {
+                $view = new self();
+                $contents = file_get_contents(__DIR__ . "/../../../misc/docker-compose-starter.yml");
+                $vars = Request::getPost('var');
+                if (is_array($vars)) {
+                    $vars['volumename'] = $vars['projectname'] . "_db";
+                    foreach ($vars as $key => $value) {
+                        $contents = str_replace('${' . $key . '}', $value, $contents);
+                    }
+                }
+                if (!Request::getPost('mysql')) {
+                    $contents = preg_replace("~# mariadb-start.*?# mariadb-end~s", '', $contents);
+                }
+                if (Request::getPost('framelixmount')) {
+                    $contents = preg_replace("~^#( .*?appdata/modules/Framelix.*$)~m", '$1', $contents);
+                }
+                $contents = str_replace(['# mariadb-start', '# mariadb-end'], '', $contents);
+                $view->showCodeBlock($contents, 'yml', 'docker-compose.yml');
+                Response::stopWithFormValidationResponse();
+            }
+            ?>
+            <framelix-alert>
+                This tool will create you a docker-compose.yml which you can copy to your empty folder.
+            </framelix-alert>
+            <?php
+            $form = new Form();
+            $form->id = 'config';
+            $form->submitUrl = Url::create();
+
+            $field = new Text();
+            $field->required = true;
+            $field->name = "var[projectname]";
+            $field->label = "Project Name (Lowercase, no whitespace)";
+            $field->defaultValue = "framelix_starter";
+            $form->addField($field);
+
+            $field = new Toggle();
+            $field->name = "mysql";
+            $field->label = "Use MariaDb/Mysql";
+            $field->labelDescription = 'Instead of Sqlite';
+            $form->addField($field);
+
+            $field = new Text();
+            $field->required = true;
+            $field->getVisibilityCondition()->equal('mysql', '1');
+            $field->name = "var[mysqlpw]";
+            $field->label = "Database 'root' user password";
+            $field->defaultValue = RandomGenerator::getRandomString(10, 20);
+            $form->addField($field);
+
+            $field = new Text();
+            $field->required = true;
+            $field->getVisibilityCondition()->equal('mysql', '1');
+            $field->name = "var[mysqlpwuser]";
+            $field->label = "Database 'app' user password";
+            $field->defaultValue = RandomGenerator::getRandomString(5, 10);
+            $form->addField($field);
+
+            $field = new Text();
+            $field->required = true;
+            $field->name = "var[port]";
+            $field->label = "Public Port";
+            $field->maxLength = 5;
+            $field->maxWidth = 100;
+            $field->defaultValue = "6456";
+            $form->addField($field);
+
+            $field = new Toggle();
+            $field->required = true;
+            $field->name = "devmode";
+            $field->label = "Development Mode";
+            $field->labelDescription = 'Can be overriden with config later. Required for some automated file generators.';
+            $field->defaultValue = 1;
+            $form->addField($field);
+
+            $field = new Toggle();
+            $field->name = "framelixmount";
+            $field->label = "Mount Framelix module";
+            $field->labelDescription = 'This allow you to do modifications in the core module that are mapped back to the container. By default, the Framelix module folder is not mounted (The integrated one in the image is taken). You can change that later at any time by removed the comment "#" from the compose file for the Framelix mount.';
+            $form->addField($field);
+
+            $field = new Select();
+            $field->required = true;
+            $field->name = "var[imagename]";
+            $field->label = "Framelix Version";
+            $field->addOption('nullixat/framelix:' . Framelix::VERSION, 'nullixat/framelix:' . Framelix::VERSION);
+            $field->defaultValue = 'nullixat/framelix:' . Framelix::VERSION;
+            $form->addField($field);
+
+            $form->addSubmitButton(buttonText: 'Generate docker-compose.yml');
+            $form->show();
+        }
+    }
+
     public function showContent(): void
     {
         ?>
         <p>
-            Development in Framelix is basically split into <code>modules</code>. One application as just one module, by
-            default.
+            Development in Framelix is basically split into <code>modules</code>.
+            One application as just one module, by default.
             So, here we are showing you how you setup for your first application module in Framelix.
             Framelix has a docker image that is ready to kickstart and what contains everything you need to begin
             developing.
@@ -40,30 +151,25 @@ class Setup extends View
             map the <code>appdata/modules/Framelix</code> folder as well in the <code>docker run</code>. However, if you
             want help develop the core itself, head to this page.
         </blockquote>
+        <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'create-config') ?>" theme="primary"
+                         icon="draft_orders" target="modal">Click here to create your docker-compose.yml
+        </framelix-button>
+        <p>
+            With the generated <code>docker-compose.yml</code> in this folder now run the following.
+        </p>
         <?php
-        $repoName = 'nullixat/framelix:' . Framelix::VERSION;
-        $moduleName = 'FramelixStarter';
-        $imageName = 'framelix_starter';
-        $volumeName = $imageName . '_db';
-        $port = 6456;
         $this->showCodeBlock(
             '
-        SCRIPTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-        docker pull ' . $repoName . '
-        mkdir -p $SCRIPTDIR/appdata/modules/Framelix $SCRIPTDIR/appdata/modules/FramelixStarter userdata
-        echo -n "FRAMELIX_MODULES=' . $moduleName . ',1,' . $port . '" > $SCRIPTDIR/.env
-        docker rm ' . $imageName . '
-        docker create --name ' . $imageName . ' ' . $repoName . '
-        docker cp ' . $imageName . ':/framelix/appdata/modules/Framelix $SCRIPTDIR/appdata/modules/
-        docker cp ' . $imageName . ':/framelix/appdata/modules/FramelixStarter $SCRIPTDIR/appdata/modules/
-        docker rm ' . $imageName . '
-        docker run --name ' . $imageName . ' -d \
-            --env-file $SCRIPTDIR/.env \
-            -p "' . $port . ':' . $port . '" \
-            -v $SCRIPTDIR/appdata/modules/' . $moduleName . ':/framelix/appdata/modules/' . $moduleName . ' \
-            -v $SCRIPTDIR/userdata:/framelix/userdata \
-            ' . $repoName . '         
-        echo "Now open https://127.0.0.1:' . $port . ' in your browser and follow setup in the web interface"
+        mkdir -p ./appdata/modules/Framelix ./appdata/modules/FramelixStarter userdata
+        export FRAMELIX_APPDATA_MOUNT=appdata_dev
+        docker compose down
+        docker compose rm -f
+        docker compose create
+        docker compose cp app:/framelix/appdata/modules/Framelix ./appdata/modules/
+        docker compose cp app:/framelix/appdata/modules/FramelixStarter ./appdata/modules/
+        unset FRAMELIX_APPDATA_MOUNT
+        docker compose up -d  
+        echo "Now open https://127.0.0.1:$PORT_FROM_CONFIG in your browser and follow setup in the web interface"
         ',
             downloadFilename: "framelix-starter-install.sh"
         );

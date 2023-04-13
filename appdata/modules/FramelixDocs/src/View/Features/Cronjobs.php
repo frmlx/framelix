@@ -16,8 +16,8 @@ class Cronjobs extends View
         ?>
         <p>
             Framelix have a built cronjob scheduler, that fires every 5 minutes.
-            You can create your own <?= $this->getShowSourceFileLinkTag([Cron::class]) ?> class by extending the Console
-            class <?= $this->getShowSourceFileLinkTag([Console::class]) ?> and by integrating the function
+            You can create your own <?= $this->getSourceFileLinkTag([Cron::class]) ?> class by extending the Console
+            class <?= $this->getSourceFileLinkTag([Console::class]) ?> and by integrating the function
             <code>runCron</code>, as in this example.
         </p>
         <p>
@@ -26,7 +26,7 @@ class Cronjobs extends View
         <p>
             As the job runs every 5 minutes, you surely need a way to say that it should do something only once a day,
             or every 3 hours, and so on.
-            For this, we have a <?= $this->getShowSourceFileLinkTag([Mutex::class]) ?> which basically hold a <code>Mutex</code>
+            For this, we have a <?= $this->getSourceFileLinkTag([Mutex::class]) ?> which basically hold a <code>Mutex</code>
             for a given time period and then releases the Mutex automatically after that time.
         </p>
         <p>

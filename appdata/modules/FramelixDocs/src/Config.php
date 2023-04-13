@@ -15,14 +15,14 @@ class Config
         );
         \Framelix\Framelix\Config::$languagesAvailable = ['en'];
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "docs");
-        $bundle->addFile("scss/docs.scss");
+        $bundle->addFile("vendor-frontend/scss/docs.scss");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "vendor");
         $bundle->compile = false;
         $bundle->addFile("vendor-frontend/highlightjs/github-dark.css");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "js", "docs");
-        $bundle->addFile("js/docs.js");
+        $bundle->addFile("vendor-frontend/js/docs.js");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "js", "vendor");
         $bundle->compile = false;
