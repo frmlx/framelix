@@ -1,1 +1,1 @@
-*/5 * * * * /usr/bin/framelix_console all cron -c >> /var/log/framelix-cron.log 2>&1
+*/5 * * * * /usr/bin/framelix_console all cron >> /framelix/userdata/_logs/framelix-cron.log 2>&1 ; chmod 0777 /framelix/userdata/_logs/framelix-cron.log
