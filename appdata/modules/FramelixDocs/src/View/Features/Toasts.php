@@ -24,7 +24,7 @@ class Toasts extends View
         <p>
             With our Javascript class <code>FramelixToast</code> you can create small toasts/notifications at the bottom
             right of the screen.
-            Toasts are used to display simple messages to an user, without layout shifts and in an always visible
+            Toasts are used to display simple messages to a user, without layout shifts and in an always visible
             position.
             Toasts can be stacked. To keep toasts from taking up the whole screen, only one toast at a time is
             displayed. The user will see how many messages are in the queue.

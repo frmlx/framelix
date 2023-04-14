@@ -4,7 +4,7 @@ namespace Framelix\FramelixDocs\View\Features;
 
 use Framelix\Framelix\Console;
 use Framelix\Framelix\Cron;
-use Framelix\Framelix\Storable\Mutex;
+use Framelix\Framelix\Utils\Mutex;
 use Framelix\FramelixDocs\View\View;
 
 class Cronjobs extends View

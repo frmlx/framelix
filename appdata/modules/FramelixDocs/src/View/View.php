@@ -3,6 +3,7 @@
 namespace Framelix\FramelixDocs\View;
 
 
+use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Html\Tabs;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
@@ -12,7 +13,9 @@ use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\JsonUtils;
+use Framelix\Framelix\Utils\Mutex;
 use Framelix\Framelix\Utils\RandomGenerator;
+use Framelix\FramelixDocs\Cron;
 use ReflectionClass;
 
 use function array_filter;
@@ -98,6 +101,20 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             echo '</div>';
         };
         $this->showContentBasedOnRequestType();
+    }
+
+    /**
+     * Show a timer alert that show the user when the next data cleanup is
+     * @return void
+     */
+    public function showDataResetTimer(): void
+    {
+        $lifetimeRemains = Mutex::isLocked(Cron::CLEANUP_MUTEX_NAME, Cron::CLEANUP_MUTEX_LIFETIME);
+        if ($lifetimeRemains > 0) {
+            echo '<framelix-alert theme="warning">Next data reset at  ' . DateTime::create(
+                    'now + ' . $lifetimeRemains . ' seconds'
+                )->getHtmlString() . '</framelix-alert>';
+        }
     }
 
     /**
@@ -279,11 +296,16 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $lines = file(ClassUtils::getFilePathForClassName($row['method'][0]), FILE_IGNORE_NEW_LINES);
             $reflection = new ReflectionClass($row['method'][0]);
             $method = $reflection->getMethod($row['method'][1]);
-            $code = implode("\n",
-                array_slice($lines, $method->getStartLine() + 1, $method->getEndLine() - $method->getStartLine()));
+            $code = implode(
+                "\n",
+                array_slice($lines, $method->getStartLine() + 1, $method->getEndLine() - $method->getStartLine())
+            );
             $codeLanguage = "php";
-            $buttonsHtml = '<framelix-button jscall-url="' . JsCall::getUrl(View::class, 'phpCode',
-                    ['callable' => $row['method']]) . '" theme="primary" icon="touch_app" target="modal">Run the code bellow</framelix-button>';
+            $buttonsHtml = '<framelix-button jscall-url="' . JsCall::getUrl(
+                    View::class,
+                    'phpCode',
+                    ['callable' => $row['method']]
+                ) . '" theme="primary" icon="touch_app" target="modal">Run the code bellow</framelix-button>';
             Buffer::start();
             if ($row['description']) {
                 echo '<p>' . $row['description'] . '</p>';
@@ -384,14 +406,20 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     {
         $tags = [];
         foreach ($files as $relativePath) {
-            if (str_starts_with($relativePath,
-                    "Framelix") && (class_exists($relativePath) || interface_exists($relativePath))) {
-                $relativePath = substr(ClassUtils::getFilePathForClassName($relativePath),
-                    strlen(FRAMELIX_APPDATA_FOLDER . "/modules/"));
+            if (str_starts_with(
+                    $relativePath,
+                    "Framelix"
+                ) && (class_exists($relativePath) || interface_exists($relativePath))) {
+                $relativePath = substr(
+                    ClassUtils::getFilePathForClassName($relativePath),
+                    strlen(FRAMELIX_APPDATA_FOLDER . "/modules/")
+                );
             }
-            $tags[] = '<framelix-button small icon="visibility" theme="transparent" jscall-url="' . JsCall::getUrl(View::class,
+            $tags[] = '<framelix-button small icon="visibility" theme="transparent" jscall-url="' . JsCall::getUrl(
+                    View::class,
                     'show-source',
-                    ['path' => $relativePath]) . '" title="Click to show complete source" target="modal">' . $relativePath . '</framelix-button>';
+                    ['path' => $relativePath]
+                ) . '" title="Click to show complete source" target="modal">' . $relativePath . '</framelix-button>';
         }
         if (count($tags) > 1) {
             $lastTag = array_pop($tags);

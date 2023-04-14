@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|3909703373",
+    "directoryListHash": "3|2157788842",
     "views": {
         "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
             "accessRole": "*",
@@ -110,6 +110,16 @@
             "hiddenView": false,
             "pageTitle": "Cronjobs - Scheduled code execution",
             "url": "\/features\/cronjobs"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\DefaultLogin": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Default Login and User features",
+            "url": "\/features\/defaultlogin"
         },
         "Framelix\\FramelixDocs\\View\\Features\\ExcelSpreadsheet": {
             "accessRole": "*",

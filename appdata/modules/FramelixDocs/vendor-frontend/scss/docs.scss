@@ -10,13 +10,17 @@
     gap: 20px;
   }
 
+  .docs-content {
+    padding-bottom: 100px;
+  }
+
   .docs-content p {
     margin: 10px 0;
 
     &:after {
       margin-top: 10px;
       display: block;
-      content:"";
+      content: "";
       height: 1px;
       background: var(--color-page-bg-stencil);
     }

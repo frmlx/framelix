@@ -2,14 +2,17 @@
 
 namespace Framelix\FramelixDocs;
 
-use Framelix\Framelix\Storable\Mutex;
+use Framelix\Framelix\Utils\Mutex;
 
 class Cron extends Console
 {
+    public const CLEANUP_MUTEX_NAME = 'cleanup';
+    public const CLEANUP_MUTEX_LIFETIME = 3600;
+
     public static function runCron(): void
     {
-        if (!Mutex::isLocked('framelixdocs-hourly', 3600)) {
-            Mutex::create('framelixdocs-hourly');
+        if (!Mutex::isLocked(self::CLEANUP_MUTEX_NAME, self::CLEANUP_MUTEX_LIFETIME)) {
+            Mutex::create(self::CLEANUP_MUTEX_NAME);
             Console::cleanupDemoData();
         }
     }

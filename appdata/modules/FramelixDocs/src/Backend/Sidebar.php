@@ -3,6 +3,7 @@
 namespace Framelix\FramelixDocs\Backend;
 
 
+use Framelix\Framelix\Storable\User;
 use Framelix\FramelixDocs\View\Background\CodingStandards;
 use Framelix\FramelixDocs\View\Background\Idea;
 use Framelix\FramelixDocs\View\Background\Terminology;
@@ -14,6 +15,7 @@ use Framelix\FramelixDocs\View\CoreDev\Framelix;
 use Framelix\FramelixDocs\View\Database\SchemeGenerator;
 use Framelix\FramelixDocs\View\Database\Storables;
 use Framelix\FramelixDocs\View\Features\Cronjobs;
+use Framelix\FramelixDocs\View\Features\DefaultLogin;
 use Framelix\FramelixDocs\View\Features\ExcelSpreadsheet;
 use Framelix\FramelixDocs\View\Features\Forms;
 use Framelix\FramelixDocs\View\Features\InlinePopup;
@@ -59,6 +61,7 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(Pdf::class, ['PDF', 'Making and exporting documents']);
         $this->addLink(Cronjobs::class, ['Cronjobs', 'Schedule jobs for automatic execution']);
         $this->addLink(StorableMeta::class, ['StorableMeta', 'The well powered companion to Storables']);
+        $this->addLink(DefaultLogin::class, ['Login and User features', 'Authentication, 2-Factor, Profile, etc...']);
         $this->showHtmlForLinkData();
 
         $this->startGroup('Core Development', 'hub', forceOpened: true);
@@ -71,5 +74,12 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(Terminology::class, ['Terminology', 'How things are named in Framelix']);
         $this->addLink(CodingStandards::class, ['Coding Standards', 'Rules for us and you']);
         $this->showHtmlForLinkData();
+    }
+
+    public function showDefaultSidebarEnd(): void
+    {
+        if (User::get()) {
+            parent::showDefaultSidebarEnd();
+        }
     }
 }
