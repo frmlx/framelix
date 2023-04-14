@@ -3,10 +3,12 @@
 namespace Framelix\FramelixTests;
 
 use Framelix\Framelix\Db\Sql;
-
 use mysqli;
+use Throwable;
 
 use function get_class;
+use function pg_close;
+use function pg_query;
 use function str_ends_with;
 
 /**
@@ -27,11 +29,30 @@ abstract class TestCaseDbTypes extends TestCase
         if (str_ends_with($className, 'SqliteTest')) {
             $this->currentDbType = Sql::TYPE_SQLITE;
         }
+        if (str_ends_with($className, 'PostgresTest')) {
+            $this->currentDbType = Sql::TYPE_POSTGRES;
+        }
         switch ($this->currentDbType) {
+            case Sql::TYPE_POSTGRES:
+                $connection = pg_connect("host=postgres  user=postgres password=app");
+                try {
+                    pg_query($connection, 'CREATE DATABASE unittests');
+                } catch (Throwable $e) {
+                }
+                pg_close($connection);
+
+                \Framelix\Framelix\Config::addPostgresConnection(
+                    'test',
+                    'unittests',
+                    'postgres',
+                    'postgres',
+                    'app'
+                );
+                break;
             case Sql::TYPE_MYSQL:
-                // create mysql db if not yet exists
-                $mysqli = new mysqli('mariadb', 'root', 'app', 'mysql');
-                $mysqli->query('CREATE DATABASE IF NOT EXISTS unittests');
+                $connection = new mysqli('mariadb', 'root', 'app', 'mysql');
+                $connection->query('CREATE DATABASE IF NOT EXISTS unittests');
+                $connection->close();
 
                 \Framelix\Framelix\Config::addMysqlConnection(
                     'test',

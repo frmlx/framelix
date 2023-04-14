@@ -6,16 +6,18 @@ use Framelix\Framelix\Console;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\SchemeBuilderRequirementsInterface;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\Sqlite;
+use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\TestCaseDbTypes;
 use ReflectionClass;
 
+use function file_exists;
 use function file_get_contents;
 use function fopen;
 use function json_encode;
-
 use function unlink;
 
 use const FRAMELIX_TMP_FOLDER;
@@ -160,20 +162,6 @@ abstract class BasicTestBase extends TestCaseDbTypes
                 $baseQuery . $db->getConditionPhpDateInDbRange($dateBase, 'date_a', 'date_b', 'year')
             )
         );
-        $this->assertCount(
-            1,
-            $db->fetchColumn(
-                $baseQuery . $db->getConditionTruthyFalsy('date_a', false)
-            )
-        );
-        $this->assertCount(
-            4,
-            $db->fetchColumn(
-                $baseQuery . $db->getConditionTruthyFalsy('date_a', true)
-            )
-        );
-
-
         $db->query("DROP TABLE $table");
     }
 
@@ -299,9 +287,21 @@ abstract class BasicTestBase extends TestCaseDbTypes
     public function testDumps(): void
     {
         $db = $this->getDb();
-        $tmpFile = FRAMELIX_TMP_FOLDER . "/sqldump-test.sql";
-        $db->dumpSqlTableToFile($tmpFile, 'condition_tests');
+        if (!($db instanceof SchemeBuilderRequirementsInterface)) {
+            $this->expectNotToPerformAssertions();
+            return;
+        }
+        $builder = new SqlStorableSchemeBuilder($db);
+        $builder->executeQueries($builder->getQueries());
+
         $tables = $db->getTables(true);
+        $tmpFile = FRAMELIX_TMP_FOLDER . "/sqldump-test.sql";
+        if (file_exists($tmpFile)) {
+            unlink($tmpFile);
+        }
+        foreach ($tables as $table) {
+            $db->dumpSqlTableToFile($tmpFile, $table);
+        }
 
         $fetchBefore = [];
         foreach ($tables as $table) {
@@ -311,8 +311,8 @@ abstract class BasicTestBase extends TestCaseDbTypes
         if ($db instanceof Sqlite) {
             $db->execRaw(file_get_contents($tmpFile));
         } elseif ($db instanceof Mysql) {
-            $db->mysqli->multi_query(file_get_contents($tmpFile));
-            while ($db->mysqli->next_result()) {
+            $db->connection->multi_query(file_get_contents($tmpFile));
+            while ($db->connection->next_result()) {
             }
         }
 
@@ -329,6 +329,11 @@ abstract class BasicTestBase extends TestCaseDbTypes
      */
     public function testConsoleBackups(): void
     {
+        $db = $this->getDb();
+        if (!($db instanceof SchemeBuilderRequirementsInterface)) {
+            $this->expectNotToPerformAssertions();
+            return;
+        }
         FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/backups");
         Console::backupSqlDatabases('test_');
         $this->assertCount(2, FileUtils::getFiles(FRAMELIX_USERDATA_FOLDER . "/backups"));

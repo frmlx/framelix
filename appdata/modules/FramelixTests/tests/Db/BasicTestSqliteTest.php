@@ -2,13 +2,10 @@
 
 namespace Db;
 
-use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\Sqlite;
 
 final class BasicTestSqliteTest extends BasicTestBase
 {
-    public ?int $currentDbType = Sql::TYPE_SQLITE;
-
     protected function createTestTable(): void
     {
         $db = $this->getDb();

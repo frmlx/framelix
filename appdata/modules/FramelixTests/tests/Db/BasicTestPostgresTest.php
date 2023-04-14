@@ -2,9 +2,9 @@
 
 namespace Db;
 
-use Framelix\Framelix\Db\Mysql;
+use Framelix\Framelix\Db\Postgres;
 
-final class BasicTestMysqlTest extends BasicTestBase
+final class BasicTestPostgresTest extends BasicTestBase
 {
     protected function createTestTable(): void
     {
@@ -14,18 +14,15 @@ final class BasicTestMysqlTest extends BasicTestBase
         $db->query(
             "
             CREATE TABLE `$table` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `id` SERIAL PRIMARY KEY,
                 `date_a` DATE NULL,
                 `date_b` DATE NULL,
-                `text_a` LONGTEXT NULL COLLATE 'utf8mb4_unicode_ci',
-                `text_b` VARCHAR(100) NULL COLLATE 'utf8mb4_unicode_ci',
+                `text_a` TEXT NULL,
+                `text_b` VARCHAR(100) NULL,
                 `int_a` INTEGER NULL,
                 `int_b` INTEGER NULL,
-                `jsondata` LONGTEXT NULL COLLATE 'utf8mb4_unicode_ci',
-                PRIMARY KEY (`id`) USING BTREE
+                `jsondata` TEXT NULL
             )
-            COLLATE='utf8mb4_unicode_ci'
-            ENGINE=InnoDB
         "
         );
     }
@@ -36,7 +33,7 @@ final class BasicTestMysqlTest extends BasicTestBase
     public function testExceptionConnectError()
     {
         $this->assertExceptionOnCall(function () {
-            $db = Mysql::get('test', false);
+            $db = Postgres::get('test', false);
             $db->disconnect();
             // connect error simulate with wrong password
             $db->password = "=!'§$%&%&(&/(/&(";
