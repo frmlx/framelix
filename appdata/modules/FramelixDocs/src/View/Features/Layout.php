@@ -15,7 +15,9 @@ class Layout extends View
     public static function onJsCall(JsCall $jsCall): void
     {
         if ($jsCall->action === 'info') {
-            echo "Test content comes right from the backend. Time on server is " . DateTime::create('now')->getRawTextString();
+            echo "Test content comes right from the backend. Time on server is " . DateTime::create(
+                    'now'
+                )->getRawTextString();
         }
     }
 

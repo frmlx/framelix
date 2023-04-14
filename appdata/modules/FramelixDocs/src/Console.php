@@ -46,6 +46,14 @@ class Console extends \Framelix\Framelix\Console
             $obj->store();
             $obj->addRole('admin');
         }
+
+        // a fixed used without roles
+        $obj = new  User();
+        $obj->email = "test@test.local";
+        $obj->setPassword('test@test.local');
+        $obj->flagLocked = false;
+        $obj->store();
+
         // demo data
         Storable::deleteMultiple(SimpleDemoEntry::getByCondition());
         Storable::deleteMultiple(SimpleDemoFile::getByCondition());
