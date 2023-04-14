@@ -129,8 +129,7 @@ class StorableSchema
             $typeIsArray = str_ends_with($type, "[]");
             if ($typeIsArray) {
                 throw new FatalError(
-                    'Array\'s are not supported in @property at ' . $reflectionClass->getName(
-                    ) . ' annotations of Storables. Consider using a separate storable and add a reference property in that new storable. For example the ' . User::class . ' and ' . UserRole::class
+                    'Array\'s are not supported in @property at ' . $reflectionClass->getName() . ' annotations of Storables. Consider using a separate storable and add a reference property in that new storable. For example the ' . User::class . ' and ' . UserRole::class
                 );
             }
             if (!in_array($type, ["bool", "int", "float", "double", "string", "mixed"])) {

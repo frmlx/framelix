@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix;
 
+use Framelix\Framelix\Db\SchemeBuilderRequirementsInterface;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Exception\SoftError;
@@ -76,6 +77,9 @@ class Console
         foreach (Config::$sqlConnections as $row) {
             $filename = $filenamePrefix . $row['id'] . "_" . date("Y-m-d-H-i-s") . ".sql";
             $db = Sql::get($row['id']);
+            if (!($db instanceof SchemeBuilderRequirementsInterface)) {
+                continue;
+            }
             $tables = $db->getTables(true);
             foreach ($tables as $table) {
                 $db->dumpSqlTableToFile($backupFolder . "/" . $filename, $table);

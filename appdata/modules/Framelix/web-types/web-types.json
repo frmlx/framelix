@@ -77,6 +77,14 @@
                   "description": "Modal window"
                 },
                 {
+                  "name": "attached",
+                  "description": "Same as tooltip, but with color inherited from the page (dark/light mode depended)"
+                },
+                {
+                  "name": "tooltip",
+                  "description": "Displayed as a tooltip attached to this button (Always dark)"
+                },
+                {
                   "name": "none",
                   "description": "Just load the url but do nothing with the result"
                 }
@@ -304,7 +312,7 @@
             "offset": 0
           }
         },
-         {
+        {
           "name": "framelix-image",
           "description": "Display a responsive image tag that uses optimized thumbnails and lazy load.",
           "attributes": [

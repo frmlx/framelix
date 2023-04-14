@@ -6,7 +6,6 @@ use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Html\TableCell;
 use Framelix\Framelix\Lang;
-
 use Framelix\Framelix\Utils\HtmlUtils;
 
 use function implode;

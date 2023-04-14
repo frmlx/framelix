@@ -49,6 +49,7 @@ class FramelixBackend {
     const html = $('html')
     const status = html.attr('data-sidebar-status-force') || (html.attr('data-screen-size') === 's' || html.attr('data-sidebar-status-initial-hidden') === '1' ? 'closed' : 'opened')
     html.attr('data-sidebar-status', status)
+    $('.framelix-sidebar').attr('aria-hidden', status === 'closed' ? 'true' : 'false')
   }
 }
 

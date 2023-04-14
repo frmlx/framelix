@@ -30,10 +30,12 @@ abstract class Sql
 {
     public const TYPE_MYSQL = 1;
     public const TYPE_SQLITE = 2;
+    public const TYPE_POSTGRES = 3;
 
     public static array $typeMap = [
         self::TYPE_MYSQL => ['class' => Mysql::class],
-        self::TYPE_SQLITE => ['class' => Sqlite::class]
+        self::TYPE_SQLITE => ['class' => Sqlite::class],
+        self::TYPE_POSTGRES => ['class' => Postgres::class]
     ];
 
     /**
@@ -135,36 +137,6 @@ abstract class Sql
     abstract public function getLastInsertId(): int;
 
     /**
-     * Dump sql table statements (Create table and insert data) for given table name to given file
-     * @param string $path
-     * @param string $tableName
-     */
-    abstract public function dumpSqlTableToFile(string $path, string $tableName): void;
-
-    /**
-     * Get all existing database tables in lower case
-     * @param bool $flushCache If false the result is cached by default if already called previously
-     * @return string[]
-     */
-    abstract public function getTables(bool $flushCache = false): array;
-
-    /**
-     * Get all existing table columns with all possible meta information
-     * Key of array is column name, value is array of metadata to that column
-     * @param bool $flushCache If false the result is cached by default if already called previously
-     * @return array Data depends on db type
-     */
-    abstract public function getTableColumns(string $table, bool $flushCache = false): array;
-
-    /**
-     * Get all existing table indexes with all possible meta information
-     * Key of array is index name, value is array of metadata to that index
-     * @param bool $flushCache If false the result is cached by default if already called previously
-     * @return array Data depends on db type
-     */
-    abstract public function getTableIndexes(string $table, bool $flushCache = false): array;
-
-    /**
      * Fetch the complete result of a select as bare array (numeric indexes)
      * @param string $query
      * @param array|null $parameters
@@ -202,25 +174,8 @@ abstract class Sql
     }
 
     /**
-     * Get a condition that check for field to be truthy/false
-     * @param string $dbField
-     * @param bool $truthyFalsy
-     * @return string
-     */
-    public function getConditionTruthyFalsy(
-        string $dbField,
-        bool $truthyFalsy
-    ): string {
-        $condition = "($dbField IS NOT NULL AND TRIM($dbField) != '' AND $dbField != '0')";
-        if (!$truthyFalsy) {
-            $condition = "NOT " . $condition;
-        }
-        return $condition;
-    }
-
-    /**
      * Get a condition for given range overlaps a range in the database
-     * If a start time is empty/null - It will converted to 0000-01-01
+     * If a start time is empty/null - It will converted to 0001-01-01
      * If a end time is empty/null - It will be converted to 9999-12-31
      * @param mixed $dateStart
      * @param mixed $dateEnd
@@ -236,9 +191,9 @@ abstract class Sql
     ): string {
         $dateStart = !($dateStart instanceof DateTime) ? DateTime::create($dateStart) : $dateStart;
         $dateEnd = !($dateEnd instanceof DateTime) ? DateTime::create($dateEnd) : $dateEnd;
-        $sqlDateStart = $dateStart ? $dateStart->format('Y-m-d') : '0000-01-01';
+        $sqlDateStart = $dateStart ? $dateStart->format('Y-m-d') : '0001-01-01';
         $sqlDateEnd = $dateEnd ? $dateEnd->format('Y-m-d') : '9999-12-31';
-        return "('$sqlDateStart' <= DATE(IFNULL($dbFieldEnd, '9999-12-31')) AND DATE(IFNULL($dbFieldStart, '0000-01-01')) <= '$sqlDateEnd')";
+        return "('$sqlDateStart' <= DATE(COALESCE($dbFieldEnd, '9999-12-31')) AND DATE(COALESCE($dbFieldStart, '0001-01-01')) <= '$sqlDateEnd')";
     }
 
     /**
@@ -262,12 +217,16 @@ abstract class Sql
         if ($compareMethod === "month") {
             if ($this instanceof Sqlite) {
                 $dbField = "CAST(STRFTIME('%Y%m', $dbField) as UNSIGNED INTEGER)";
+            } elseif ($this instanceof Postgres) {
+                $dbField = "CAST(to_char($dbField, 'YYYYMM') as INTEGER)";
             } else {
                 $dbField = "CAST(DATE_FORMAT($dbField, '%Y%m') as UNSIGNED INTEGER)";
             }
         } elseif ($compareMethod === "year") {
             if ($this instanceof Sqlite) {
                 $dbField = "CAST(STRFTIME('%Y', $dbField) as UNSIGNED INTEGER)";
+            } elseif ($this instanceof Postgres) {
+                $dbField = "CAST(to_char($dbField, 'YYYY') as INTEGER)";
             } else {
                 $dbField = "YEAR($dbField)";
             }
@@ -309,7 +268,7 @@ abstract class Sql
     /**
      * Get a condition that check if date in php is inside given date range database
      * @param mixed $date
-     * @param string $dbFieldStart If null in DB it will converted to 0000-01-01
+     * @param string $dbFieldStart If null in DB it will converted to 0001-01-01
      * @param string $dbFieldEnd If null in DB it will converted to 9999-12-31
      * @param string $compareMethod date, month, year
      * @return string
@@ -321,14 +280,17 @@ abstract class Sql
         #[ExpectedValues(values: ["date", "month", "year"])]
         string $compareMethod = "date"
     ): string {
-        $dbFieldStart = "DATE(IFNULL($dbFieldStart, '0000-01-01'))";
-        $dbFieldEnd = "DATE(IFNULL($dbFieldEnd, '9999-12-31'))";
+        $dbFieldStart = "DATE(COALESCE($dbFieldStart, '0001-01-01'))";
+        $dbFieldEnd = "DATE(COALESCE($dbFieldEnd, '9999-12-31'))";
         $compareValue = DateTime::create($date);
         switch ($compareMethod) {
             case 'month':
                 if ($this instanceof Sqlite) {
                     $dbFieldStart = "CAST(STRFTIME('%Y%m', $dbFieldStart) as UNSIGNED INTEGER)";
                     $dbFieldEnd = "CAST(STRFTIME('%Y%m', $dbFieldEnd) as UNSIGNED INTEGER)";
+                } elseif ($this instanceof Postgres) {
+                    $dbFieldStart = "CAST(to_char($dbFieldStart, 'YYYYMM') as INTEGER)";
+                    $dbFieldEnd = "CAST(to_char($dbFieldEnd, 'YYYYMM') as INTEGER)";
                 } else {
                     $dbFieldStart = "CAST(DATE_FORMAT($dbFieldStart, '%Y%m') as UNSIGNED INTEGER)";
                     $dbFieldEnd = "CAST(DATE_FORMAT($dbFieldEnd, '%Y%m') as UNSIGNED INTEGER)";
@@ -339,6 +301,9 @@ abstract class Sql
                 if ($this instanceof Sqlite) {
                     $dbFieldStart = "CAST(STRFTIME('%Y', $dbFieldStart) as UNSIGNED INTEGER)";
                     $dbFieldEnd = "CAST(STRFTIME('%Y', $dbFieldEnd) as UNSIGNED INTEGER)";
+                } elseif ($this instanceof Postgres) {
+                    $dbFieldStart = "CAST(to_char($dbFieldStart, 'YYYY') as INTEGER)";
+                    $dbFieldEnd = "CAST(to_char($dbFieldEnd, 'YYYY') as INTEGER)";
                 } else {
                     $dbFieldStart = "YEAR($dbFieldStart)";
                     $dbFieldEnd = "YEAR($dbFieldEnd)";
@@ -436,11 +401,30 @@ abstract class Sql
             $query .= $this->quoteIdentifier($key) . ", ";
         }
         $query = mb_substr($query, 0, -2) . ") VALUES (";
-        foreach ($values as $value) {
-            $query .= $this->escapeValue($value) . ", ";
+        foreach ($values as $key => $value) {
+            $query .= "{" . $key . "}, ";
         }
         $query = mb_substr($query, 0, -2) . ")";
-        return $this->query($query);
+        return $this->query($query, $values);
+    }
+
+    /**
+     * Execute an update query
+     * @param string $table
+     * @param array $values
+     * @param string $condition The WHERE condition, need to be set, set to 1 if you want all rows affected
+     * @param array|null $conditionParameters
+     * @return mixed The sql result
+     */
+    public function update(string $table, array $values, string $condition, ?array $conditionParameters = null): mixed
+    {
+        $condition = $this->replaceParameters($condition, $conditionParameters);
+        $query = "UPDATE " . $this->quoteIdentifier($table) . " SET ";
+        foreach ($values as $key => $value) {
+            $query .= $this->quoteIdentifier($key) . " = {" . $key . "}, ";
+        }
+        $query = mb_substr($query, 0, -2) . " WHERE " . $condition;
+        return $this->query($query, $values);
     }
 
     /**
@@ -458,25 +442,6 @@ abstract class Sql
     }
 
     /**
-     * Execute an update query
-     * @param string $table
-     * @param array $values
-     * @param string $condition The WHERE condition, need to be set, set to 1 if you want all rows affected
-     * @param array|null $conditionParameters
-     * @return mixed The sql result
-     */
-    public function update(string $table, array $values, string $condition, ?array $conditionParameters = null): mixed
-    {
-        $condition = $this->replaceParameters($condition, $conditionParameters);
-        $query = "UPDATE " . $this->quoteIdentifier($table) . " SET ";
-        foreach ($values as $key => $value) {
-            $query .= $this->quoteIdentifier($key) . " = " . $this->escapeValue($value) . ", ";
-        }
-        $query = mb_substr($query, 0, -2) . " WHERE " . $condition;
-        return $this->query($query);
-    }
-
-    /**
      * Does replace some framework specials inside given query
      * It searches for class names and replace it to table names
      * It searches framelix default quote chars and replace it with db specific quote chars
@@ -490,7 +455,9 @@ abstract class Sql
         $query = str_replace(['&&', '||'], ['AND', 'OR'], $query);
 
         // replace framelix default quote identifiers,  which are `, with sql specific quote identifiers, which not always be `
-        $query = preg_replace("~`([a-z0-9-_]+)`~i", $this->quoteChars[0] . "$1" . $this->quoteChars[1], $query);
+        if ($this->quoteChars[0] !== "`") {
+            $query = preg_replace("~`([a-z0-9-_]+)`~i", $this->quoteChars[0] . "$1" . $this->quoteChars[1], $query);
+        }
 
         // replace php class names to real table names
         preg_match_all(

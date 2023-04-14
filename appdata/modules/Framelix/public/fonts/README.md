@@ -1,8 +1,3 @@
-### Assistant Font
-Used from https://fonts.google.com/specimen/Assistant
-
-### MaterialIcons-Regular.woff2
-Used from https://github.com/google/material-design-icons/blob/master/font/MaterialIcons-Regular.ttf and converted to woff2.
-
-### material-icons-list.txt
-Used from https://github.com/google/material-design-icons/blob/master/font/MaterialIcons-Regular.codepoints and stripped out codepoints.
+## Update Font
+Open https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,700,1,0 and extract the .woff file from it.
+Copy the file into this folder.

@@ -38,6 +38,9 @@ class SqlStorableSchemeBuilder
 
     public function __construct(public Sql $db)
     {
+        if (!($this->db instanceof SchemeBuilderRequirementsInterface)) {
+            throw new FatalError('SQL Connection "' . $this->db->id . '" of type does not implement SchemeBuilderRequirementsInterface');
+        }
     }
 
     /**

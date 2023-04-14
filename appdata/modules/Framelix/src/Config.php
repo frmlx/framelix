@@ -552,6 +552,35 @@ class Config
     }
 
     /**
+     * Add a postgres database connection
+     * @param string $id
+     * @param string $database
+     * @param string $host
+     * @param string|null $username
+     * @param string|null $password
+     * @param int|null $port
+     * @return void
+     */
+    public static function addPostgresConnection(
+        string $id,
+        string $database,
+        string $host,
+        string|null $username = null,
+        #[SensitiveParameter] string|null $password = null,
+        int|null $port = null
+    ): void {
+        Config::$sqlConnections[$id] = [
+            'type' => Sql::TYPE_POSTGRES,
+            'id' => $id,
+            'host' => $host,
+            'port' => $port,
+            'username' => $username,
+            'password' => $password,
+            'database' => $database
+        ];
+    }
+
+    /**
      * Add a mysql database connection
      * @param string $id
      * @param string $database

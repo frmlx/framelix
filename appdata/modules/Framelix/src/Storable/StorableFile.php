@@ -315,11 +315,12 @@ class StorableFile extends StorableExtended
 
     /**
      * Store with given file
-     * If UploadedFile is given, it does MOVE the file, not COPY it
+     * If UploadedFile is given, it does MOVE or COPY, depending on the third param
      * @param bool $force Force store even if isEditable() is false
      * @param UploadedFile|string|null $file String is considered as binary filedata
+     * @param bool $copy If $file is UploadedFile, copy the file instead of moving
      */
-    public function store(bool $force = false, UploadedFile|string|null $file = null): void
+    public function store(bool $force = false, UploadedFile|string|null $file = null, bool $copy = false): void
     {
         if (!$force && !$this->isEditable()) {
             throw new FatalError(
@@ -392,7 +393,7 @@ class StorableFile extends StorableExtended
                 throw new FatalError("Couldn't copy file to destination folder");
                 // @codeCoverageIgnoreEnd
             }
-            if (file_exists($file->path)) {
+            if (!$copy && file_exists($file->path)) {
                 unlink($file->path);
             }
             $this->filesize = $file->size;

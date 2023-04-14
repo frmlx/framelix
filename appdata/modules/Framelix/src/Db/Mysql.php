@@ -21,18 +21,9 @@ use function mysqli_report;
 
 use const MYSQLI_REPORT_ALL;
 
-class Mysql extends Sql
+class Mysql extends Sql implements SchemeBuilderRequirementsInterface
 {
-    /**
-     * MySQLi connection resource
-     * @var mysqli|null
-     */
-    public ?mysqli $mysqli = null;
-
-    /**
-     * Last query result
-     * @var bool|mysqli_result
-     */
+    public ?mysqli $connection = null;
     public bool|mysqli_result $lastResult = false;
 
     /**
@@ -94,7 +85,7 @@ class Mysql extends Sql
         }
         try {
             mysqli_report(MYSQLI_REPORT_ALL & ~MYSQLI_REPORT_INDEX);
-            $this->mysqli = new mysqli(
+            $this->connection = new mysqli(
                 $this->host,
                 $this->username,
                 $this->password,
@@ -106,7 +97,7 @@ class Mysql extends Sql
         } catch (mysqli_sql_exception $e) {
             throw new FatalError($e->getMessage());
         }
-        $this->mysqli->set_charset('utf8mb4');
+        $this->connection->set_charset('utf8mb4');
     }
 
     /**
@@ -118,8 +109,8 @@ class Mysql extends Sql
             return;
         }
         parent::disconnect();
-        $this->mysqli?->close();
-        $this->mysqli = null;
+        $this->connection?->close();
+        $this->connection = null;
     }
 
     /**
@@ -128,14 +119,14 @@ class Mysql extends Sql
     public function queryRaw(string $query): bool|mysqli_result
     {
         try {
-            $this->lastResult = mysqli_query($this->mysqli, $query);
+            $this->lastResult = mysqli_query($this->connection, $query);
             // this code was unable to reproduce in unit tests
             // every mysql error should throw an exception
             // if it does not but result is still false, we throw by hand
             // maybe it's a legacy behaviour of some mysql drivers
             // @codeCoverageIgnoreStart
             if (!$this->lastResult) {
-                throw new FatalError("No Mysql Result: " . $this->mysqli->error);
+                throw new FatalError("No Mysql Result: " . $this->connection->error);
             }
             // @codeCoverageIgnoreEnd
         } catch (Throwable $e) {
@@ -158,12 +149,12 @@ class Mysql extends Sql
      */
     public function getLastInsertId(): int
     {
-        return (int)mysqli_insert_id($this->mysqli);
+        return (int)mysqli_insert_id($this->connection);
     }
 
     public function escapeString(string $value): string
     {
-        return '"' . mysqli_real_escape_string($this->mysqli, $value) . '"';
+        return '"' . mysqli_real_escape_string($this->connection, $value) . '"';
     }
 
     /**
@@ -175,8 +166,8 @@ class Mysql extends Sql
         ?int $limit = null
     ): array {
         $fetch = [];
-        $result = $this->query($query, $parameters);
-        while ($row = $result->fetch_array(MYSQLI_NUM)) {
+        $this->query($query, $parameters);
+        while ($row = $this->lastResult->fetch_array(MYSQLI_NUM)) {
             $fetch[] = $row;
             if (is_int($limit) && $limit <= count($fetch)) {
                 break;
@@ -195,8 +186,8 @@ class Mysql extends Sql
         ?int $limit = null
     ): array {
         $fetch = [];
-        $result = $this->query($query, $parameters);
-        while ($row = $result->fetch_assoc()) {
+        $this->query($query, $parameters);
+        while ($row = $this->lastResult->fetch_assoc()) {
             if (is_string($valueAsArrayIndex)) {
                 if (!isset($row[$valueAsArrayIndex])) {
                     throw new FatalError(
@@ -219,12 +210,12 @@ class Mysql extends Sql
      */
     public function dumpSqlTableToFile(string $path, string $tableName): void
     {
-        $file = fopen($path, "w+");
+        $file = fopen($path, "a+");
         fwrite($file,
             $this->fetchAssocOne('SHOW CREATE TABLE ' . $this->quoteIdentifier($tableName))['Create Table'] . ";\n");
-        $result = $this->query("SELECT * FROM " . $this->quoteIdentifier($tableName));
+        $this->query("SELECT * FROM " . $this->quoteIdentifier($tableName));
         $keys = null;
-        while ($row = $result->fetch_assoc()) {
+        while ($row = $this->lastResult->fetch_assoc()) {
             if ($keys === null) {
                 $tmp = [];
                 foreach (array_keys($row) as $key) {

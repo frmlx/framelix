@@ -14,7 +14,7 @@ use function str_replace;
 use function strpos;
 use function substr;
 
-class Sqlite extends Sql
+class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
 {
     public SQLite3|null $connection;
     public SQLite3Result|bool|null $lastResult = null;
@@ -132,14 +132,6 @@ class Sqlite extends Sql
     /**
      * @inheritDoc
      */
-    public function getConcatedStringForQuery(string ...$parts): string
-    {
-        return implode(" || ", $parts);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function fetchArray(
         string $query,
         ?array $parameters = null,
@@ -192,16 +184,17 @@ class Sqlite extends Sql
      */
     public function dumpSqlTableToFile(string $path, string $tableName): void
     {
-        $file = fopen($path, "w+");
+        $file = fopen($path, "a+");
         fwrite($file,
             $this->fetchOne("SELECT sql 
             FROM sqlite_master 
             WHERE tbl_name = " . $this->escapeValue($tableName) . "  AND type = 'table'") . ";\n");
-        $indexSql = $this->fetchOne("SELECT sql 
-            FROM sqlite_master 
-            WHERE tbl_name = " . $this->escapeValue($tableName) . "  AND type = 'index'");
-        if ($indexSql) {
-            fwrite($file, $indexSql . ";\n");
+        $indexesSql = $this->getTableIndexes($tableName);
+        if ($indexesSql) {
+            foreach ($indexesSql as $indexName => $indexCreate) {
+                fwrite($file, "DROP INDEX IF EXISTS " . $this->quoteIdentifier($indexName) . ";\n");
+                fwrite($file, $indexCreate . ";\n");
+            }
         }
         $this->query("SELECT * FROM " . $this->quoteIdentifier($tableName));
         $keys = null;

@@ -115,10 +115,8 @@ class LazySearchCondition
 
                 $conditionParts = [];
                 foreach ($columnsUse as $columnRow) {
-                    $columnName = str_contains(
-                        $columnRow['dbPropertyName'],
-                        "."
-                    ) ? $columnRow['dbPropertyName'] : "`" . $columnRow['dbPropertyName'] . "`";
+                    $columnName = str_contains($columnRow['dbPropertyName'], ".") ?
+                        $columnRow['dbPropertyName'] : $db->quoteIdentifier($columnRow['dbPropertyName']);
                     $userSearchQueryPartForColumn = $userSearchQueryPart;
                     if ($columnRow['type'] === 'bool') {
                         $compareOperators = "=";

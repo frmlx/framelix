@@ -47,13 +47,14 @@ abstract class Sidebar
 
     /**
      * Start a group (collapsable)
-     * @param string $label
+     * @param string|string[] $label The label, if null then use the page title if a view class as $url is given
+     *  Array of labels make first value normal font size and all other labels separate rows with smaller font size
      * @param string $icon The icon
      * @param string|null $badgeText Optional red badge text
      * @param bool $forceOpened The group cannot be closed if this is true
      */
     public function startGroup(
-        string $label,
+        string|array $label,
         string $icon = "menu",
         ?string $badgeText = null,
         bool $forceOpened = false
@@ -71,7 +72,8 @@ abstract class Sidebar
     /**
      * Add a link
      * @param string|Url $url Could be a view class name or a direct URL
-     * @param string|null $label The label, if null then use the page title if a view is given
+     * @param string|string[]|null $label The label, if null then use the page title if a view class as $url is given
+     *  Array of labels make first value normal font size and all other labels separate rows with smaller font size
      * @param string $icon The icon
      * @param string $target The link target
      * @param array|null $urlParameters Additional url parameters to add to
@@ -80,7 +82,7 @@ abstract class Sidebar
      */
     public function addLink(
         string|Url $url,
-        ?string $label = null,
+        string|array|null $label = null,
         string $icon = "adjust",
         string $target = "_self",
         ?array $urlParameters = null,
@@ -194,10 +196,7 @@ abstract class Sidebar
         if (User::get()) {
             $this->addLink(
                 View\Backend\UserProfile\Index::class,
-                '<div>' . Lang::get(
-                    '__framelix_view_backend_userprofile_index__'
-                ) . '</div><div class="framelix-sidebar-label-nowrap framelix-sidebar-label-small">' . User::get(
-                )->email . '</div>',
+                ['__framelix_view_backend_userprofile_index__', User::get()->email],
                 "person"
             );
             $this->showHtmlForLinkData(order: 506);
@@ -268,7 +267,15 @@ abstract class Sidebar
             } elseif (str_starts_with($currentUrlStr, $url->getUrlAsString())) {
                 $activeKey = $key;
             }
-            $linkData['links'][$key]['label'] = Lang::get($linkData['links'][$key]['label']);
+            if (is_array($linkData['links'][$key]['label'] ?? null)) {
+                $value = [];
+                foreach ($linkData['links'][$key]['label'] as $label) {
+                    $value[] = '<div class="framelix-sidebar-label-' . (!$value ? 'default' : 'small') . '">' . Lang::get($label) . '</div>';
+                }
+                $linkData['links'][$key]['label'] = implode($value);
+            } elseif (is_string($linkData['links'][$key]['label'] ?? null)) {
+                $linkData['links'][$key]['label'] = Lang::get($linkData['links'][$key]['label']);
+            }
         }
         if (!$linkData['links']) {
             return;
@@ -277,16 +284,23 @@ abstract class Sidebar
         if ($type === 'group') {
             echo $sidebarEntryStart;
             echo '<div class="framelix-sidebar-collapsable ' . ($activeKey !== null ? 'framelix-sidebar-collapsable-active' : '') . '" data-force-opened="' . (int)$linkData['forceOpened'] . '">';
+            if (!$linkData['forceOpened']) {
+                echo '<framelix-button raw class="framelix-sidebar-collapsable-title framelix-activate-toggle-handler">';
+            } else {
+                echo '<div class="framelix-sidebar-collapsable-title">';
+            }
             ?>
-            <framelix-button raw class="framelix-sidebar-collapsable-title framelix-activate-toggle-handler">
-                <span class="framelix-sidebar-main-icon"><span
-                        class="material-icons"><?= $linkData['icon'] ?></span></span>
-                <span
-                    class="framelix-sidebar-label"><?= $linkData['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $linkData['badgeText'] . '</span>' : '' ?><?= Lang::get(
-                        $linkData['label']
-                    ) ?></span>
-            </framelix-button>
+            <span class="framelix-sidebar-main-icon"><span class="material-icons"><?= $linkData['icon'] ?></span></span>
+            <span
+                class="framelix-sidebar-label"><?= $linkData['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $linkData['badgeText'] . '</span>' : '' ?><?= Lang::get(
+                    $linkData['label']
+                ) ?></span>
             <?php
+            if (!$linkData['forceOpened']) {
+                echo '</framelix-button>';
+            } else {
+                echo '</div>';
+            }
             echo '<div class="framelix-sidebar-collapsable-container">';
         }
         if ($sortByLabel) {
