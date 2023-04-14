@@ -9,6 +9,7 @@ use Framelix\Framelix\Html\TableCell;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Network\UploadedFile;
 use Framelix\Framelix\Url;
+use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\Framelix\View;
@@ -25,12 +26,14 @@ use function in_array;
 use function is_dir;
 use function is_string;
 use function mkdir;
+use function strlen;
 use function strrpos;
 use function strtolower;
 use function substr;
 use function unlink;
 
 use const FRAMELIX_MODULE;
+use const FRAMELIX_USERDATA_FOLDER;
 
 /**
  * A storable file to store on disk
@@ -99,16 +102,15 @@ class StorableFile extends StorableExtended
     }
 
     /**
-     * Set default relative path if not yet set
+     * Set default relative path
      * @param bool $public
      * @param string $module
      * @return void
      */
     public function setDefaultRelativePath(bool $public, string $module = FRAMELIX_MODULE): void
     {
-        if (!$this->relativePathOnDisk) {
-            $this->relativePathOnDisk = $module . "/" . ($public ? "public" : "private") . "/storablefile";
-        }
+        $folder = FileUtils::getUserdataFilepath("storablefile", $public, $module);
+        $this->relativePathOnDisk = substr($folder, strlen(FRAMELIX_USERDATA_FOLDER . "/"));
     }
 
     public function isVideo(): bool

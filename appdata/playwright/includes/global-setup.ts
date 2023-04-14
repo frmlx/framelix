@@ -24,6 +24,10 @@ async function globalSetup () {
   await utils.goto('/')
 
   await browser.close()
+
+  // run warmup directly after to restore a proper app state
+  await FramelixUtils.exec('framelix_console', ['all', 'appWarmup'])
+
   FramelixUtils.logSuccess('# Prepare done')
   FramelixUtils.logInfo('')
 }

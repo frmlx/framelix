@@ -1,5 +1,6 @@
 import { Page, Response } from '@playwright/test'
 import * as fs from 'fs'
+import { spawn } from 'child_process'
 
 type FramelixConfig = { environment: object, rootUrlDocs: string, rootUrlStarter: string; }
 
@@ -37,6 +38,31 @@ export class FramelixUtils {
    */
   static logError (msg: string): void {
     console.log(`\x1b[31m${msg}\x1b[0m`)
+  }
+
+  /**
+   * Execute a command on the server
+   * @param {string} cmd
+   * @param {string[]|null} params
+   * @param {boolean} consoleLog Log output to console log
+   * @return {Promise<number>}
+   */
+  static async exec (cmd: string, params = null, consoleLog: boolean = false) {
+    return new Promise(function (resolve) {
+      const execProcess = spawn(cmd, params)
+      execProcess.stdout.on('data', (data) => {
+        if (consoleLog) console.log(`spawn stdout: ${data}`)
+      })
+      execProcess.stderr.on('data', (data) => {
+        if (consoleLog) console.log(`spawn on error ${data}`)
+      })
+      execProcess.on('exit', (code, signal) => {
+        resolve(code)
+      })
+      execProcess.on('close', (code: number, args: any[]) => {
+        resolve(code)
+      })
+    })
   }
 
   /**
