@@ -140,7 +140,6 @@ abstract class Sidebar
                         title="__framelix_backend_startpage__"></a>
             </div>
             <?php
-            echo '<div class="framelix-sidebar-entries">';
         }
         if (UserToken::getByCookie()->simulatedUser ?? null) {
             ?>

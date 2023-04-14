@@ -80,6 +80,17 @@ html[data-sidebar-status='opened'] {
   color: var(--sidebar-text-color);
   transition: .2s;
   overflow: hidden;
+
+  ::-webkit-scrollbar{
+    width: 2px;
+  }
+
+  &:hover,
+  &:focus-within {
+    .framelix-sidebar-label-small {
+      opacity: 1;
+    }
+  }
 }
 
 .framelix-sidebar-inner {
@@ -92,20 +103,9 @@ html[data-sidebar-status='opened'] {
   box-sizing: border-box;
 }
 
-.framelix-sidebar ::-webkit-scrollbar {
-  width: 2px;
-}
-
 .framelix-sidebar-entry {
   border-radius: var(--border-radius);
   margin-bottom: 10px;
-
-  &:hover,
-  &:focus-within {
-    .framelix-sidebar-label-small {
-      opacity: 1;
-    }
-  }
 }
 
 @for $i from 1 through 30 {
@@ -118,7 +118,7 @@ html[data-sidebar-status='opened'] {
 
 .framelix-sidebar-link:any-link,
 .framelix-sidebar-collapsable-title {
-  font-weight: normal;
+  font-weight: bold;
   color: var(--sidebar-text-color);
   text-decoration: none;
   display: flex;
@@ -176,9 +176,6 @@ html[data-sidebar-status='opened'] {
   padding: 4px 0;
 }
 
-.framelix-sidebar-label-default {
-}
-
 .framelix-sidebar-label-small {
   font-size: calc(var(--font-size) - 4px);
   opacity: 0.5;
@@ -217,6 +214,8 @@ html[data-sidebar-status='opened'] {
   margin-bottom: 10px;
   text-align: center;
   border-radius: var(--border-radius);
+  background: #222;
+  padding: 10px;
 
   a:any-link {
     display: flex;
@@ -235,8 +234,6 @@ html[data-sidebar-status='opened'] {
 .framelix-sidebar-collapsable {
   .framelix-sidebar-collapsable-title {
 
-    font-weight: bold;
-
     &::after {
       content: "expand_more";
       font-family: "Material Icons", sans-serif;
@@ -252,6 +249,8 @@ html[data-sidebar-status='opened'] {
     font-weight: normal;
 
     .framelix-sidebar-link {
+
+      font-weight: normal;
       .framelix-sidebar-main-icon {
         html[data-screen-size='l'] & {
           min-height: 20px;

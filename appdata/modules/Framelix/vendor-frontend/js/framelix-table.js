@@ -531,7 +531,7 @@ class FramelixTable {
 
           let cellValue = '<framelix-button theme="transparent"><input type="checkbox" name="_checkbox" value="' + i + '"></framelix-button>'
           if (rowGroup === 'thead') cellValue = `<div class="framelix-table-cell-header">${cellValue}</div>`
-          if(rowGroup === 'thead' && i !== 0) cellValue = ''
+          if (rowGroup === 'thead' && i !== 0) cellValue = ''
           tableHtml += '<' + cellType + ' ' + cellAttributes.toString() + '>'
           tableHtml += cellValue
           tableHtml += '</' + cellType + '>'

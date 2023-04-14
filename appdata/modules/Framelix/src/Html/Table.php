@@ -21,6 +21,7 @@ use JsonSerializable;
 use function array_combine;
 use function array_keys;
 use function array_unshift;
+use function array_values;
 use function get_class;
 use function in_array;
 use function is_array;
@@ -488,7 +489,7 @@ class Table implements JsonSerializable
                 foreach ($value as $k => $v) {
                     $value[$k] = $convertValue($v, $storableSchemaProperty, $sortValue);
                 }
-                return $value;
+                return array_values($value);
             }
             if (is_float($value) && ($storableSchemaProperty->decimals ?? 0) > 0) {
                 $value = NumberUtils::format($value, $storableSchemaProperty?->decimals);
@@ -501,10 +502,15 @@ class Table implements JsonSerializable
                 }
             }
             if ($value instanceof ObjectTransformable) {
-                $tableCell = new TableCell();
-                $tableCell->sortValue = $value->getSortableValue();
-                $tableCell->stringValue = $value->getHtmlTableValue();
-                $value = $tableCell;
+                $htmlValue = $value->getHtmlTableValue();
+                if ($htmlValue instanceof TableCell) {
+                    $value = $htmlValue;
+                } else {
+                    $tableCell = new TableCell();
+                    $tableCell->sortValue = $value->getSortableValue();
+                    $tableCell->stringValue = $htmlValue;
+                    $value = $tableCell;
+                }
             }
             if (!$value instanceof TableCell) {
                 $value = trim(StringUtils::stringify($value, "<br/>"));
