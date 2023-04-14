@@ -8,6 +8,8 @@ networks:
 volumes:
     mariadb:
       name: ${COMPOSE_PROJECT_NAME}_mariadb
+    postgres:
+      name: ${COMPOSE_PROJECT_NAME}_postgres
 
 services:
   mariadb:
@@ -24,11 +26,25 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  postgres:
+    image: postgres:latest
+    restart: on-failure
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=app
+    healthcheck:
+      test: psql -U postgres -c '\q'
+      interval: 5s
+      timeout: 5s
+      retries: 5
   app:
     image: ${USE_IMAGE_NAME}
     restart: on-failure
     depends_on:
       mariadb:
+        condition: service_healthy
+      postgres:
         condition: service_healthy
     volumes:
       - ../appdata:/framelix/appdata

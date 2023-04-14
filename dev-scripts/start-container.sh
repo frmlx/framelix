@@ -20,6 +20,7 @@ source $SCRIPTDIR/stop-container.sh
 if [ "$DEL_VOL" == "1" ]; then
   echo "Delete database volumes"
   docker volume rm "${VOLUME_NAME}_mariadb"
+  docker volume rm "${VOLUME_NAME}_postgres"
 fi
 
 docker compose -f $SCRIPTDIR/docker-compose.yml up -d
