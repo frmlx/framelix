@@ -40,7 +40,7 @@ abstract class Sql
 
     /**
      * Instances
-     * @var static[]
+     * @var Mysql[]|Sqlite[]|Postgres[]
      */
     public static array $instances = [];
 
@@ -91,9 +91,9 @@ abstract class Sql
      * Must be called from a class that extend from Sql
      * @param string $id
      * @param bool $connect If true, then connect before returning
-     * @return static
+     * @return Mysql|Sqlite|Postgres
      */
-    public static function get(string $id = FRAMELIX_MODULE, bool $connect = true): static
+    public static function get(string $id = FRAMELIX_MODULE, bool $connect = true): Mysql|Sqlite|Postgres
     {
         if (isset(self::$instances[$id])) {
             return self::$instances[$id];
@@ -102,7 +102,7 @@ abstract class Sql
         if (!isset($config)) {
             throw new FatalError('Sql connection with id "' . $id . '" do not exist');
         }
-        /** @var static $instance */
+        /** @var Mysql|Sqlite|Postgres $instance */
         $instance = new self::$typeMap[$config['type']]['class']();
         $instance->id = $id;
         self::$instances[$id] = $instance;

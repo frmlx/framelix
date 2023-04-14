@@ -2,11 +2,11 @@
 
 namespace Framelix\Framelix;
 
-use Framelix\Framelix\Storable\Mutex;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\FileUtils;
+use Framelix\Framelix\Utils\Mutex;
 
 use function array_chunk;
 use function ceil;

@@ -6,14 +6,16 @@ use Framelix\Framelix\ErrorHandler;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Url;
-use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\JsonUtils;
+use Framelix\Framelix\Utils\Shell;
 use Framelix\Framelix\View\Backend\View;
 
 use function basename;
 use function clearstatcache;
+use function file_get_contents;
 use function reset;
+use function str_ends_with;
 
 use const SCANDIR_SORT_DESCENDING;
 
@@ -46,16 +48,18 @@ class ErrorLogs extends View
             <?php
             return;
         }
-        $firstFile = basename(reset($files));
         ?>
         <framelix-button href="<?= Url::create()->setParameter('clear', 1) ?>">__framelix_view_backend_logs_clear__
         </framelix-button>
+        <div class="framelix-spacer"></div>
         <?php
         foreach ($files as $file) {
-            Buffer::start();
-            require $file;
-            $contents = Buffer::get();
-            ErrorHandler::showErrorFromExceptionLog(JsonUtils::decode($contents), true);
+            if (str_ends_with($file, '.json')) {
+                ErrorHandler::showErrorFromExceptionLog(JsonUtils::readFromFile($file), true);
+            } elseif (str_ends_with($file, '.log')) {
+                echo '<div style="font-family: monospace; font-size: 12px"><b>' . $file . '</b><br/>' .
+                    Shell::convertCliOutputToHtml(file_get_contents($file), true) . '</div><div class="framelix-spacer"></div>';
+            }
         }
     }
 }

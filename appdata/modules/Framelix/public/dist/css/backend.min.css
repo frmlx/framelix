@@ -116,6 +116,9 @@ html[data-sidebar-status=opened] {
   border-radius: var(--border-radius);
   margin-bottom: 10px;
 }
+.framelix-sidebar-entry:hover .framelix-sidebar-label-small, .framelix-sidebar-entry:focus-within .framelix-sidebar-label-small {
+  opacity: 1;
+}
 
 .framelix-sidebar-entry:nth-child(30n+1) {
   --sidebar-active-container-bg-color: hsl(150, 35%, calc(var(--is-dark-mode) * -20% + 60%));
@@ -358,9 +361,11 @@ html[data-sidebar-status=opened] {
 
 .framelix-sidebar-label-small {
   font-size: calc(var(--font-size) - 4px);
-  opacity: 0.8;
+  opacity: 0.5;
   line-height: var(--font-size);
   font-weight: normal;
+  word-break: break-word;
+  transition: 0.2s;
 }
 
 .framelix-sidebar-badge {

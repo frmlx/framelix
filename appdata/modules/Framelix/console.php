@@ -19,19 +19,21 @@ if (!$moduleName) {
 unset($argv[1]);
 
 if ($moduleName === "all") {
-    $modules = scandir(__DIR__ . "/../");
-    foreach ($modules as $module) {
+    // get all currently active module entry points and call each individually
+    $environments = json_decode(file_get_contents("/framelix/system/environment.json"), true);
+    foreach ($environments['moduleAccessPoints'] as $module => $data) {
         $moduleEntryPoint = __DIR__ . "/../$module/public/index.php";
-        if (file_exists($moduleEntryPoint) && $module !== 'Framelix') {
-            $exitCode = 0;
-            $cmd = "php -f " . escapeshellarg(__FILE__) . " " . escapeshellarg($module);
-            foreach ($argv as $arg) {
-                $cmd .= " " . escapeshellarg($arg);
-            }
-            passthru($cmd, $exitCode);
-            if ($exitCode) {
-                exit($exitCode);
-            }
+        if (!file_exists($moduleEntryPoint)) {
+            continue;
+        }
+        $exitCode = 0;
+        $cmd = "php -f " . escapeshellarg(__FILE__) . " " . escapeshellarg($module);
+        foreach ($argv as $arg) {
+            $cmd .= " " . escapeshellarg($arg);
+        }
+        passthru($cmd, $exitCode);
+        if ($exitCode) {
+            exit($exitCode);
         }
     }
     exit(0);
@@ -57,7 +59,7 @@ try {
     exit(2);
 }
 
-// fetch all available jobs
+// fetch all available jobs for all registered modules
 foreach (Framelix::$registeredModules as $module) {
     $consoleClass = "\\Framelix\\$module\\Console";
     if (!class_exists($consoleClass)) {
@@ -90,48 +92,22 @@ foreach (Framelix::$registeredModules as $module) {
     }
 }
 
-$selectedAction = $actions[$argv[2] ?? -1] ?? null;
+
+$argAction = $argv[2] ?? '__missing__arg__';
+$selectedAction = $actions[$argAction] ?? null;
 if (!$selectedAction) {
-    Console::info("# =============================");
-    Console::info("# FRAMELIX CONSOLE - 😜  Huhuu!");
-    Console::info("# Call a script with framelix_console {moduleName} {actionName} [optional parameters]");
-    Console::info("# Availabe action names are:");
-    Console::info("# =============================");
-    foreach ($actions as $action => $row) {
-        $lines = explode("\n", trim($row['description'] ?? ''));
-        $firstLine = array_shift($lines);
-        foreach ($lines as $key => $line) {
-            $lines[$key] = "   $line";
-        }
-        Console::line("*) " . $action . " => " . $firstLine);
-        if ($lines) {
-            Console::line(implode("\n", $lines));
-        }
-    }
-    Console::line("");
+    Console::warn("Action '$argAction' not available in '$moduleName'. Skipped.");
     return;
 }
 
-$cron = false;
 foreach ($argv as $arg) {
-    if ($arg === "-q" || $arg === "-c") {
+    if ($arg === "-q") {
         Console::$quiet = true;
-        if ($arg === "-c") {
-            $cron = true;
-        }
     }
 }
 
-if ($cron) {
-    echo "Started at " . date("c");
-}
-
-Console::info("# =============================");
-Console::info("# FRAMELIX CONSOLE RUNNER");
-Console::info("# MODULE: " . $moduleName);
-Console::info("# COMMAND: " . $selectedAction['name']);
-Console::info("# CALLABLES: " . implode(", ", $selectedAction['callables']));
-Console::info("# =============================");
+$jobTitle = "JOB $moduleName->" . $selectedAction['name'];
+Console::info($jobTitle . " started");
 
 $start = microtime(true);
 $exitCode = 999;
@@ -140,7 +116,7 @@ foreach ($selectedAction['callables'] as $callable) {
         $exitCode = call_user_func_array($callable, []);
     } catch (Throwable $e) {
         Console::$quiet = false;
-        Console::error('# EXCEPTION');
+        Console::error('EXCEPTION');
         Console::line($e->getMessage() . "\n" . $e->getTraceAsString());
         $exitCode = 998;
     }
@@ -148,16 +124,13 @@ foreach ($selectedAction['callables'] as $callable) {
         break;
     }
 }
-$diff = microtime(true) - $start;
-$diff = round($diff * 1000);
 
 if (!$exitCode) {
-    if ($cron) {
-        echo " | Finished at " . date("c") . " in  $diff ms\n";
-    }
-    Console::success('[SUCCESS] finished in ' . $diff . "ms");
+    Console::success($jobTitle . " finished");
+    echo "\n";
 } else {
-    Console::error('[ERROR] (' . $exitCode . ') finished in ' . $diff . "ms");
+    Console::error($jobTitle . ' failed with error code ' . $exitCode);
+    echo "\n";
 }
 
 exit($exitCode);

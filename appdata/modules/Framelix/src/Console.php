@@ -6,7 +6,6 @@ use Framelix\Framelix\Db\SchemeBuilderRequirementsInterface;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Exception\SoftError;
-use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Utils\Shell;
 use JetBrains\PhpStorm\ExpectedValues;
 use Throwable;
@@ -18,6 +17,7 @@ use function array_values;
 use function count;
 use function date;
 use function file_exists;
+use function filesize;
 use function implode;
 use function in_array;
 use function is_array;
@@ -26,10 +26,15 @@ use function is_string;
 use function mkdir;
 use function readline;
 use function readline_add_history;
+use function str_pad;
+use function str_replace;
 use function str_starts_with;
+use function strlen;
+use function unlink;
 
 use const FRAMELIX_MODULE;
 use const FRAMELIX_USERDATA_FOLDER;
+use const STR_PAD_LEFT;
 
 /**
  * Console runner
@@ -41,10 +46,22 @@ class Console
     public const CONSOLE_SCRIPT = __DIR__ . "/../console.php";
 
     /**
-     * Do not output anything
+     * Do not output anything when using ::error, ::warn, ::success, ::line
      * @var bool
      */
-    static bool $quiet = false;
+    public static bool $quiet = false;
+
+    /**
+     * Include timestamp when outputing a line with ::error, ::warn, ::success, ::info, ::line
+     * @var bool
+     */
+    public static bool $includeTimestamp = true;
+
+    /**
+     * Include a line code (S,E,W,i) when outputing a line with ::error, ::warn, ::success, ::info
+     * @var bool
+     */
+    public static bool $includeLineCode = true;
 
     /**
      * Overriden parameters
@@ -58,7 +75,7 @@ class Console
      */
     public static function healthCheck(): int
     {
-        User::getByConditionOne();
+        // default is OK
         return 0;
     }
 
@@ -148,19 +165,30 @@ class Console
             $cronClass = "\\Framelix\\$module\\Cron";
             if (class_exists($cronClass) && method_exists($cronClass, "runCron")) {
                 try {
-                    $start = microtime(true);
                     call_user_func_array([$cronClass, "runCron"], []);
-                    $diff = microtime(true) - $start;
-                    $diff = round($diff * 1000);
-                    $info = "[OK] Job $cronClass::run() done in {$diff}ms";
-                    self::success("$info");
+                    $info = "$cronClass::run() finished";
+                    self::success($info);
                 } catch (Throwable $e) {
-                    $info = "[ERR] Job $cronClass::run() error: " . $e->getMessage();
-                    self::error("$info");
+                    $info = "$cronClass::run() error: " . $e->getMessage() . "\n" . $e->getTraceAsString();
+                    self::error($info);
                     $exitCode = 1;
                 }
             } else {
-                self::warn("[SKIP] $module as no cron handler is installed");
+                self::warn("$cronClass::run() not exist. Skipped.");
+            }
+        }
+        // truncate log to 2MB max. size of last logs
+        $logFile = ErrorHandler::LOGFOLDER . '/framelix-cron.log';
+        if (file_exists($logFile) && filesize($logFile) > 1024 * 1024 * 4) {
+            $logFileCopy = $logFile . ".rotate";
+            if (file_exists($logFileCopy)) {
+                unlink($logFileCopy);
+            }
+            Shell::prepare(
+                "tac $logFile > $logFileCopy && dd if=/dev/null of=$logFileCopy seek=1 bs=2M && tac $logFileCopy > $logFile"
+            )->execute();
+            if (file_exists($logFileCopy)) {
+                unlink($logFileCopy);
             }
         }
         return $exitCode;
@@ -191,10 +219,7 @@ class Console
      */
     public static function error(string $text): void
     {
-        if (self::$quiet) {
-            return;
-        }
-        echo "\e[31m$text\e[0m\n";
+        self::line($text, "31", "[E] ");
     }
 
     /**
@@ -204,10 +229,7 @@ class Console
      */
     public static function warn(string $text): void
     {
-        if (self::$quiet) {
-            return;
-        }
-        echo "\e[93m$text\e[0m\n";
+        self::line($text, "93", "[W] ");
     }
 
     /**
@@ -217,10 +239,7 @@ class Console
      */
     public static function success(string $text): void
     {
-        if (self::$quiet) {
-            return;
-        }
-        echo "\e[32m$text\e[0m\n";
+        self::line($text, "32", "[S] ");
     }
 
     /**
@@ -230,21 +249,32 @@ class Console
      */
     public static function info(string $text): void
     {
-        if (self::$quiet) {
-            return;
-        }
-        echo "\e[34m$text\e[0m\n";
+        self::line($text, "34", "[i] ");
     }
 
     /**
      * Draw a line with given text
      * @param string $text
+     * @param string|null $colorCode Numeric bash color code for the message
+     * @param string|null $lineCode Some string to prepend before the message
      * @return void
      */
-    public static function line(string $text): void
+    public static function line(string $text, ?string $colorCode = null, ?string $lineCode = null): void
     {
         if (self::$quiet) {
             return;
+        }
+        if ($lineCode && self::$includeLineCode) {
+            // offset lines by line code length for indention
+            $text = $lineCode . str_replace("\n", "\n" . strlen($lineCode), $text);
+        }
+        if ($colorCode) {
+            $text = "\e[{$colorCode}m$text\e[0m";
+        }
+        if (self::$includeTimestamp) {
+            $whole = microtime(true);
+            $ms = str_pad((string)floor(($whole - floor($whole)) * 1000), 3, "0", STR_PAD_LEFT);
+            $text = date("c") . ":$ms " . $text;
         }
         echo "$text\n";
     }

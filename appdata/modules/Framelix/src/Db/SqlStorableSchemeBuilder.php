@@ -36,11 +36,8 @@ class SqlStorableSchemeBuilder
     public const MYSQL_DEFAULT_COLLATION = 'utf8mb4_unicode_ci';
     public const MYSQL_DEFAULT_ENGINE = 'InnoDB';
 
-    public function __construct(public Sql $db)
+    public function __construct(public SchemeBuilderRequirementsInterface & Sql $db)
     {
-        if (!($this->db instanceof SchemeBuilderRequirementsInterface)) {
-            throw new FatalError('SQL Connection "' . $this->db->id . '" of type does not implement SchemeBuilderRequirementsInterface');
-        }
     }
 
     /**
