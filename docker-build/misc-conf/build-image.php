@@ -16,7 +16,7 @@ if ($buildType === 'dev') {
     echo "## Running build requirements for DEV build\n\n";
 
     echo "## Installing PhpUnit deps\n\n";
-    runCmd("export DEBIAN_FRONTEND=noninteractive && mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage && apt install php8.2-xdebug -y && rm /etc/php/*/*/conf.d/*-xdebug.ini");
+    runCmd("mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage");
     echo "Done.\n\n";
 
     $cacheFolder = "/framelix/system/playwright/cache";
