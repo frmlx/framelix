@@ -3,10 +3,12 @@
 namespace Framelix\FramelixDocs;
 
 use Framelix\Framelix\DateTime;
+use Framelix\Framelix\Network\UploadedFile;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\FramelixDocs\Storable\SimpleDemoEntry;
+use Framelix\FramelixDocs\Storable\SimpleDemoFile;
 
 use function shuffle;
 
@@ -46,6 +48,7 @@ class Console extends \Framelix\Framelix\Console
         }
         // demo data
         Storable::deleteMultiple(SimpleDemoEntry::getByCondition());
+        Storable::deleteMultiple(SimpleDemoFile::getByCondition());
         $arr = [];
         for ($i = 4; $i <= 25; $i++) {
             $obj = new  SimpleDemoEntry();
@@ -61,6 +64,13 @@ class Console extends \Framelix\Framelix\Console
                 $obj->referenceEntry = reset($arr);
             }
             $obj->store();
+            $arr[] = $obj;
+        }
+        $arr = [];
+        for ($i = 1; $i <= 2; $i++) {
+            $obj = new  SimpleDemoFile();
+            $obj->setDefaultRelativePath(true);
+            $obj->store(false, UploadedFile::createFromFile(__DIR__ . "/../public/images/demo-$i.jpg"), true);
             $arr[] = $obj;
         }
         return 0;

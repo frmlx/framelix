@@ -7,6 +7,13 @@ class FramelixDocs {
     FramelixDom.addChangeListener('docs', function () {
       FramelixDocs.renderCodeBlocks()
     })
+    $(document).on('click', '.run-html-code', FramelixDocs.runHtmlCode)
+  }
+
+  static runHtmlCode (ev) {
+    const codeBlock = $(ev.target).closest('.code-block')
+    const contents = FramelixDocs.codeBlockMap.get(codeBlock[0])
+    FramelixModal.show({ bodyContent: contents })
   }
 
   static runJsCode (ev) {

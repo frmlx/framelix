@@ -1,13 +1,25 @@
 .framelix-top-bar .framelix-page-title {
-  font-size: 1.4rem;
+  font-size: 24px;
 }
 
 .framelix-content-inner {
-  font-size: 1.2rem;
+  font-size: 18px;
 
   .docs-page {
     display: flex;
     gap: 20px;
+  }
+
+  .docs-content p {
+    margin: 10px 0;
+
+    &:after {
+      margin-top: 10px;
+      display: block;
+      content:"";
+      height: 1px;
+      background: var(--color-page-bg-stencil);
+    }
   }
 
   .docs-right-nav {

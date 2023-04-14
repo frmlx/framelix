@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|1782667414",
+    "directoryListHash": "3|3909703373",
     "views": {
         "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
             "accessRole": "*",
@@ -140,6 +140,16 @@
             "hiddenView": false,
             "pageTitle": "Inline Popup \/ Dropdown",
             "url": "\/features\/inlinepopup"
+        },
+        "Framelix\\FramelixDocs\\View\\Features\\Layout": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Integrated responsive backend layout",
+            "url": "\/features\/layout"
         },
         "Framelix\\FramelixDocs\\View\\Features\\ModalWindow": {
             "accessRole": "*",

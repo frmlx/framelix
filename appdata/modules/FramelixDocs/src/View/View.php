@@ -51,6 +51,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     private ?int $startCodeLineNumber = null;
     private array $jsCodeSnippets = [];
     private array $phpCodeSnippets = [];
+    private array $htmlCodeSnippets = [];
     private array $sourceFiles = [];
 
     public static function onJsCall(JsCall $jsCall): void
@@ -147,6 +148,54 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         }
         $tabs?->show();
         $this->sourceFiles = [];
+    }
+
+    /**
+     * Add a HTML code snippet that can be executed by the user in the docs
+     * @param string $scriptLabel
+     * @param string $description
+     * @param string $code
+     * @return void
+     */
+    public function addHtmlExecutableSnippet(
+        string $scriptLabel,
+        string $description,
+        string $code
+    ): void {
+        $this->htmlCodeSnippets[] = [
+            'scriptLabel' => $scriptLabel,
+            'description' => $description,
+            'code' => $code
+        ];
+    }
+
+    /**
+     * Show the snippets that have been previously collected with ->addHtmlExecutableSnippet
+     * @return void
+     */
+    public function showHtmlExecutableSnippetsCodeBlock(): void
+    {
+        $tabs = null;
+        if (count($this->htmlCodeSnippets) > 1) {
+            $tabs = new Tabs();
+        }
+        foreach ($this->htmlCodeSnippets as $key => $row) {
+            $codeLanguage = "html";
+            $buttonsHtml = '<framelix-button class="run-html-code" theme="primary" icon="touch_app">Show rendered html from the code bellow</framelix-button>';
+            Buffer::start();
+            if ($row['description']) {
+                echo '<p>' . $row['description'] . '</p>';
+            }
+            $this->showCodeBlock($row['code'], $codeLanguage, additionalButtonsHtml: $buttonsHtml);
+            $contents = Buffer::get();
+            if ($tabs) {
+                $tabs->addTab($key, $row['scriptLabel'], $contents);
+            } else {
+                echo $contents;
+            }
+        }
+        $tabs?->show();
+        $this->htmlCodeSnippets = [];
     }
 
     /**
