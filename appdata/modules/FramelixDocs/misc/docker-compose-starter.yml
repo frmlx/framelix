@@ -1,12 +1,8 @@
 version: "3"
-
-networks:
-  app:
-    driver: bridge
-
+# mariadb-start
 volumes:
   ${volumename}:
-
+# mariadb-end
 services:
 # mariadb-start
   mariadb:

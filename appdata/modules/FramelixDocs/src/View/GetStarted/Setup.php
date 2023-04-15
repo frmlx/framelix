@@ -14,7 +14,10 @@ use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\FramelixDocs\View\View;
 
+use function array_filter;
+use function explode;
 use function file_get_contents;
+use function implode;
 use function is_array;
 use function preg_replace;
 use function str_replace;
@@ -43,6 +46,16 @@ class Setup extends View
                     $contents = preg_replace("~^#( .*?appdata/modules/Framelix.*$)~m", '$1', $contents);
                 }
                 $contents = str_replace(['# mariadb-start', '# mariadb-end'], '', $contents);
+                $lines = explode("\n", $contents);
+                $contents = implode(
+                    "\n",
+                    array_filter($lines, function ($line) {
+                        if (!trim($line)) {
+                            return false;
+                        }
+                        return true;
+                    })
+                );
                 $view->showCodeBlock($contents, 'yml', 'docker-compose.yml');
                 Response::stopWithFormValidationResponse();
             }
