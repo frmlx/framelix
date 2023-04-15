@@ -281,67 +281,8 @@ abstract class BasicTestBase extends TestCaseDbTypes
     }
 
     /**
-     * Test backup dump
-     * @depends testExceptionUnsupportedDbValue
-     */
-    public function testDumps(): void
-    {
-        $db = $this->getDb();
-        if (!($db instanceof SchemeBuilderRequirementsInterface)) {
-            $this->expectNotToPerformAssertions();
-            return;
-        }
-        $builder = new SqlStorableSchemeBuilder($db);
-        $builder->executeQueries($builder->getQueries());
-
-        $tables = $db->getTables(true);
-        $tmpFile = FRAMELIX_TMP_FOLDER . "/sqldump-test.sql";
-        if (file_exists($tmpFile)) {
-            unlink($tmpFile);
-        }
-        foreach ($tables as $table) {
-            $db->dumpSqlTableToFile($tmpFile, $table);
-        }
-
-        $fetchBefore = [];
-        foreach ($tables as $table) {
-            $fetchBefore[$table] = $db->fetchAssoc("SELECT * FROM " . $db->quoteIdentifier($table));
-            $db->query("DROP TABLE " . $db->quoteIdentifier($table));
-        }
-        if ($db instanceof Sqlite) {
-            $db->execRaw(file_get_contents($tmpFile));
-        } elseif ($db instanceof Mysql) {
-            $db->connection->multi_query(file_get_contents($tmpFile));
-            while ($db->connection->next_result()) {
-            }
-        }
-
-        $fetchAfter = [];
-        foreach ($tables as $table) {
-            $fetchAfter[$table] = $db->fetchAssoc("SELECT * FROM " . $db->quoteIdentifier($table));
-        }
-        $this->assertSame(json_encode($fetchBefore), json_encode($fetchAfter));
-        unlink($tmpFile);
-    }
-
-    /**
-     * @depends testDumps
-     */
-    public function testConsoleBackups(): void
-    {
-        $db = $this->getDb();
-        if (!($db instanceof SchemeBuilderRequirementsInterface)) {
-            $this->expectNotToPerformAssertions();
-            return;
-        }
-        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/backups");
-        Console::backupSqlDatabases('test_');
-        $this->assertCount(2, FileUtils::getFiles(FRAMELIX_USERDATA_FOLDER . "/backups"));
-    }
-
-    /**
      * Drop tables after execution
-     * @depends testConsoleBackups
+     * @depends testExceptionUnsupportedDbValue
      */
     public function testCleanup(): void
     {

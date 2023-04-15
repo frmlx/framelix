@@ -80,32 +80,6 @@ class Console
     }
 
     /**
-     * Backup each individual sql databases that is added to the config
-     * Backup path is /framelix/userdata/backups
-     * @param string|null $filenamePrefix Backup filename prefix
-     * @return int Status Code, 0 = success
-     */
-    public static function backupSqlDatabases(?string $filenamePrefix = null): int
-    {
-        $backupFolder = FRAMELIX_USERDATA_FOLDER . "/backups";
-        if (!file_exists($backupFolder)) {
-            mkdir($backupFolder, recursive: true);
-        }
-        foreach (Config::$sqlConnections as $row) {
-            $filename = $filenamePrefix . $row['id'] . "_" . date("Y-m-d-H-i-s") . ".sql";
-            $db = Sql::get($row['id']);
-            if (!($db instanceof SchemeBuilderRequirementsInterface)) {
-                continue;
-            }
-            $tables = $db->getTables(true);
-            foreach ($tables as $table) {
-                $db->dumpSqlTableToFile($backupFolder . "/" . $filename, $table);
-            }
-        }
-        return 0;
-    }
-
-    /**
      * Called when the application is warmup, during every docker container start
      * Override this function to provide your own update/upgrade path
      * @return int Status Code, 0 = success

@@ -182,52 +182,6 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
     /**
      * @inheritDoc
      */
-    public function dumpSqlTableToFile(string $path, string $tableName): void
-    {
-        $file = fopen($path, "a+");
-        fwrite(
-            $file,
-            $this->fetchOne(
-                "SELECT sql 
-            FROM sqlite_master 
-            WHERE tbl_name = " . $this->escapeValue($tableName) . "  AND type = 'table'"
-            ) . ";\n"
-        );
-        $indexesSql = $this->getTableIndexes($tableName);
-        if ($indexesSql) {
-            foreach ($indexesSql as $indexName => $indexCreate) {
-                fwrite($file, "DROP INDEX IF EXISTS " . $this->quoteIdentifier($indexName) . ";\n");
-                fwrite($file, $indexCreate . ";\n");
-            }
-        }
-        $this->query("SELECT * FROM " . $this->quoteIdentifier($tableName));
-        $keys = null;
-        while ($row = $this->lastResult->fetchArray(SQLITE3_ASSOC)) {
-            if ($keys === null) {
-                $tmp = [];
-                foreach (array_keys($row) as $key) {
-                    $tmp[] = $this->quoteIdentifier($key);
-                }
-                $keys = implode(", ", $tmp);
-            }
-            $values = [];
-            foreach ($row as $value) {
-                $values[] = $this->escapeValue($value);
-            }
-            fwrite(
-                $file,
-                "INSERT INTO " . $this->quoteIdentifier($tableName) . " ($keys) VALUES (" . implode(
-                    ", ",
-                    $values
-                ) . ");\n"
-            );
-        }
-        fclose($file);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getTables(bool $flushCache = false): array
     {
         $cacheKey = __METHOD__;

@@ -8,13 +8,6 @@ namespace Framelix\Framelix\Db;
 interface SchemeBuilderRequirementsInterface
 {
     /**
-     * Dump sql table statements (Create table and insert data) for given table name to given file
-     * @param string $path
-     * @param string $tableName
-     */
-    public function dumpSqlTableToFile(string $path, string $tableName): void;
-
-    /**
      * Get all existing database tables in lower case
      * @param bool $flushCache If false the result is cached by default if already called previously
      * @return string[]
