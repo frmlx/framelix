@@ -16,7 +16,7 @@ if (file_exists($resultsFile)) {
             }
         }
         $msg = 'Passed ' . $tests . ' Tests';
-        $color = '#00FF59';
+        $color = '#0fbb75';
     }
 }
 file_put_contents($msgFile, $msg);
