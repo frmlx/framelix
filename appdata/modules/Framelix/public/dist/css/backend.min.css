@@ -525,8 +525,10 @@ html[data-screen-size=s][data-sidebar-status=opened] .framelix-content-inner {
   box-sizing: border-box;
 }
 
-html:not([data-layout="2"]) .framelix-content-inner-inner {
-  margin-bottom: 100px;
+html:not([data-layout="2"]) .framelix-content-inner-inner::after {
+  display: block;
+  content: "";
+  height: 100px;
 }
 
 html[data-layout="2"] .framelix-content-inner {

@@ -171,6 +171,12 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         $cachedStorables = self::$dbCache[$connectionId] ?? [];
         $idsRest = $ids;
         $classNow = static::class;
+        // abstract classes can not be directly fetched from the database, as they not exist
+        // we consider abstract class fetch to want to fetch all its childs that met the condition
+        $storableSchema = static::getStorableSchema();
+        if ($withChilds === null && $storableSchema->abstract) {
+            $withChilds = true;
+        }
         foreach ($ids as $key => $id) {
             if (!$id || !is_numeric($id)) {
                 unset($idsRest[$key]);
@@ -596,10 +602,11 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
             return $this->propertyCache["phpvalue"][$name];
         }
         // lazy load if required
-        if ($storableSchemaProperty->lazyFetch && $this->id && !ArrayUtils::keyExists(
-                $this->propertyCache,
-                "dbvalue[$name]"
-            )) {
+        if (
+            $storableSchemaProperty->lazyFetch &&
+            $this->id &&
+            !ArrayUtils::keyExists($this->propertyCache, "dbvalue[$name]")
+        ) {
             $db = $this->getDb();
             $this->propertyCache["dbvalue"][$name] = $db->fetchOne(
                 "SELECT `$storableSchemaProperty->name`
@@ -996,10 +1003,11 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
                             }
                         }
                     }
-                    $referenceStorables = call_user_func_array(
-                        [$storableSchemaProperty->storableClass, "getByIds"],
-                        [$fetchReferenceIds, $referenceStorableConnectionId]
-                    );
+                    // do not use call_user_func_array here, as a PHP bug prevent static::class to resolve properly
+                    /** @var Storable $class */
+                    $class = $storableSchemaProperty->storableClass;
+                    $referenceStorables = $class::getByIds($fetchReferenceIds, $referenceStorableConnectionId);
+
                     foreach ($cachedStorables as $cachedStorable) {
                         $referenceId = $cachedStorable->getOriginalDbValueForProperty($propertyName);
                         if ($referenceId && isset($fetchReferenceIds[$referenceId])) {
@@ -1011,7 +1019,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
             }
             return call_user_func_array(
                 [$storableSchemaProperty->storableClass, "getById"],
-                [$dbValue, $referenceStorableConnectionId]
+                ['id' => $dbValue, 'connectionId' => $referenceStorableConnectionId]
             );
         } else {
             return match ($storableSchemaProperty->internalType) {

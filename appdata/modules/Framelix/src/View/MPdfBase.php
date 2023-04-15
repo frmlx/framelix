@@ -2,7 +2,7 @@
 
 namespace Framelix\Framelix\View;
 
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\MPdfWrapper;
 use Framelix\Framelix\Network\Response;
@@ -102,7 +102,6 @@ class MPdfBase extends View
         $form = $this->getOptionsForm();
         if ($form->fields && !Form::isFormSubmitted($form->id)) {
             $this->showContentBasedOnRequestType();
-            throw new SoftError();
         }
     }
 
@@ -186,7 +185,7 @@ class MPdfBase extends View
     public function output(string $filename): never
     {
         $this->pdf->Output($filename, Destination::INLINE);
-        throw new SoftError();
+        throw new StopExecution();
     }
 
     /**

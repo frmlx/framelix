@@ -5,10 +5,10 @@ namespace Framelix\Framelix\Exception;
 use Exception;
 
 /**
- * Soft error
+ * Stops script execution (Graceful alternative to die() or exit())
  * It is used to stop script execution gracefully to be able to use it even in unit tests
- * It does not log any error log for this
+ * It does not log any errors
  */
-class SoftError extends Exception
+class StopExecution extends Exception
 {
 }

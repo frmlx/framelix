@@ -213,16 +213,10 @@ class StorableFile extends StorableExtended
         if (!$this->id) {
             return null;
         }
-        return View::getUrl(View\Api::class, ['requestMethod' => 'downloadFile'])->setParameter(
-            'id',
-            $this
-        )->setParameter(
-            'connectionId',
-            $this->connectionId
-        )->setParameter(
-            '__noblur',
-            1
-        )->sign();
+        return View::getUrl(View\Api::class, ['requestMethod' => 'downloadFile'])
+            ->setParameter('id', $this)
+            ->setParameter('connectionId', $this->connectionId)
+            ->sign();
     }
 
     /**

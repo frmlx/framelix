@@ -3,7 +3,6 @@
 namespace Framelix\Framelix;
 
 use Framelix\Framelix\Exception\Redirect;
-use Framelix\Framelix\Exception\SoftError;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Storable\UserToken;
 use Framelix\Framelix\Utils\ArrayUtils;
@@ -565,18 +564,13 @@ class Url implements JsonSerializable
 
     /**
      * Verify if the url is correctly signed
-     * @param bool $throwSoftError Throw soft error when validation was not successfull
      * @return bool
-     * @throws SoftError
      */
-    public function verify(bool $throwSoftError = true): bool
+    public function verify(): bool
     {
         $originalData = $this->urlData['queryParameters'] ?? null;
         $sign = (string)$this->getParameter('__s');
         if (!$sign) {
-            if ($throwSoftError) {
-                throw new SoftError("URL has no signature");
-            }
             return false;
         }
         $token = (string)$this->getParameter('__t');
@@ -592,17 +586,14 @@ class Url implements JsonSerializable
             }
         }
         $result = CryptoUtils::compareHash($this, $sign);
-        if (!$result && $throwSoftError) {
-            throw new SoftError("URL not correctly signed");
+        if (!$result) {
+            return false;
         }
-        if ($result && $expires > 0 && $expires < time()) {
-            $result = false;
-            if ($throwSoftError) {
-                throw new SoftError("URL has expired");
-            }
+        if ($expires > 0 && $expires < time()) {
+            return false;
         }
         $this->urlData['queryParameters'] = $originalData;
-        return $result;
+        return true;
     }
 
     /**

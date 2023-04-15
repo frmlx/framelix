@@ -193,7 +193,6 @@ class Framelix {
   /**
    * Redirect the page to the given url
    * If the url is the same as the current url, it will reload the page
-   * If the url contain the string "__noblur", the window will not be blurred (useful when url is expected to be a download)
    * @param {string} url
    */
   static redirect (url) {
@@ -210,19 +209,6 @@ class Framelix {
     } else {
       window.location.href = url
     }
-    const html = $('html')
-    html.css('transition', '.2s')
-    html.css('filter', 'blur(0px)')
-    $('head').append(`
-      <style>
-      *{
-        pointer-events: none !important;
-      }
-      </style>
-    `)
-    setTimeout(function () {
-      html.css('filter', 'blur(20px)')
-    }, 500)
   }
 
   /**

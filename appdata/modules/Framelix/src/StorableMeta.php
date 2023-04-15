@@ -4,6 +4,8 @@ namespace Framelix\Framelix;
 
 use Framelix\Framelix\Db\LazySearchCondition;
 use Framelix\Framelix\Exception\FatalError;
+use Framelix\Framelix\Form\Field\Search;
+use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\QuickSearch;
 use Framelix\Framelix\Html\Table;
@@ -11,6 +13,7 @@ use Framelix\Framelix\Html\Tabs;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Storable\Storable;
+use Framelix\Framelix\Storable\StorableArray;
 use Framelix\Framelix\Storable\StorableExtended;
 use Framelix\Framelix\Storable\SystemValue;
 use Framelix\Framelix\Storable\User;
@@ -23,6 +26,8 @@ use JsonSerializable;
 
 use function base64_decode;
 use function base64_encode;
+use function call_user_func_array;
+use function count;
 use function get_class;
 use function gettype;
 use function is_object;
@@ -222,6 +227,43 @@ abstract class StorableMeta implements JsonSerializable
     }
 
     /**
+     * Create a property that have everything pre-configured to store selected values inside a StorableArray
+     * @param string $name
+     * @param string $storableClass The class to attach the array values to ($parent in StorableArray)
+     * @param string $storableArrayClass The StorableArray class to use
+     * @param bool $multiple Is multiple selectable
+     * @param string $fieldType Can be Select or Search class
+     * @return StorableMetaProperty
+     */
+    public function createPropertyForStorableArray(
+        string $name,
+        string $storableClass,
+        string $storableArrayClass = StorableArray::class,
+        bool $multiple = true,
+        string $fieldType = Select::class
+    ): StorableMetaProperty {
+        $property = $this->createProperty($name);
+        $storable = new $storableClass();
+        /** @var Search|Select $field */
+        $field = new $fieldType();
+        $field->multiple = $multiple;
+        $field->storableArrayClass = $storableArrayClass;
+        $field->setConverterStorable($storableClass);
+        if ($storable instanceof SystemValue && $field instanceof Select) {
+            $entries = $storable::getEntries($property->getValue());
+            $field->addOptionsByStorables($entries);
+            if (count($entries) > 10) {
+                $field->searchable = true;
+            }
+        }
+        $property->field = $field;
+        $property->valueCallable = function () use ($storableArrayClass) {
+            return call_user_func_array([$storableArrayClass, 'getValues'], [$this->storable]);
+        };
+        return $property;
+    }
+
+    /**
      * Create a property, add it the storablemeta and return the property
      * @param string $name
      * @return StorableMetaProperty
@@ -242,13 +284,7 @@ abstract class StorableMeta implements JsonSerializable
         if ($storableSchemaProperty->storableClass ?? null) {
             $storableClass = new $storableSchemaProperty->storableClass();
             if ($storableClass instanceof SystemValue) {
-                $langKeyLabel = ClassUtils::getLangKey(
-                    str_replace(
-                        "\\Storable\\SystemValue\\",
-                        "\\View\\Backend\\SystemValue\\",
-                        $storableSchemaProperty->storableClass
-                    )
-                );
+                $langKeyLabel = ClassUtils::getLangKey($storableSchemaProperty->storableClass);
             }
         }
         $property->setLabel($langKeyLabel);
@@ -468,7 +504,7 @@ abstract class StorableMeta implements JsonSerializable
     /**
      * Set default properties at the start
      */
-    protected function addDefaultPropertiesAtStart(): void
+    public function addDefaultPropertiesAtStart(): void
     {
         $this->tableDefault->addColumnFlag('id', Table::COLUMNFLAG_SMALLWIDTH, Table::COLUMNFLAG_SMALLFONT);
         $property = $this->createProperty("id");
@@ -478,7 +514,7 @@ abstract class StorableMeta implements JsonSerializable
     /**
      * Set default properties at the end
      */
-    protected function addDefaultPropertiesAtEnd(): void
+    public function addDefaultPropertiesAtEnd(): void
     {
         $this->addTimestampProperty();
     }

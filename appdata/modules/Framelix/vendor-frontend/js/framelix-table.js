@@ -464,7 +464,7 @@ class FramelixTable {
       } else if (typeof cellValue === 'object') {
         let str = ''
         for (let i in cellValue) {
-          str += await convertValue(level + 1, cellValue[i], rowGroup, columnName, cellAttributes, removeEmptyCells)
+          str += '<div class="array-value" data-key="' + FramelixStringUtils.htmlEscape(i) + '">' + await convertValue(level + 1, cellValue[i], rowGroup, columnName, cellAttributes, removeEmptyCells) + '</div>'
         }
         cellValue = str
       } else {

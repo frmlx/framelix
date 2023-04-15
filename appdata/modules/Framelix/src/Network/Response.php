@@ -2,7 +2,7 @@
 
 namespace Framelix\Framelix\Network;
 
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\Utils\Buffer;
@@ -57,7 +57,7 @@ class Response
             $fileOrData = $fileOrData->getPath();
             if (!$fileOrData) {
                 http_response_code(404);
-                throw new SoftError();
+                throw new StopExecution();
             }
         } else {
             $isFile = !str_starts_with($fileOrData, "@");
@@ -67,7 +67,7 @@ class Response
         }
         if ($isFile && !file_exists($fileOrData)) {
             http_response_code(404);
-            throw new SoftError();
+            throw new StopExecution();
         }
         self::header('Content-Description: File Transfer');
         self::header('Content-Type: ' . $filetype);
@@ -87,7 +87,7 @@ class Response
         if ($afterDownload) {
             call_user_func_array($afterDownload, []);
         }
-        throw new SoftError();
+        throw new StopExecution();
     }
 
     /**
@@ -103,6 +103,6 @@ class Response
             'errorMessages' => $errorMessages,
             'buffer' => Buffer::getAll()
         ]);
-        throw new SoftError();
+        throw new StopExecution();
     }
 }

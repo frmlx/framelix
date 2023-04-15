@@ -4,7 +4,7 @@ namespace Framelix\Framelix\View;
 
 use Framelix\Framelix\Config;
 use Framelix\Framelix\ErrorHandler;
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Framelix;
 use Framelix\Framelix\Html\PhpToJsData;
 use Framelix\Framelix\Html\Toast;
@@ -236,7 +236,7 @@ abstract class LayoutView extends View
     }
 
     /**
-     * Show a soft error without throwing an exception and without logging an error and stop script execution after that
+     * Show a soft error message without logging an error and stop script execution after that
      * @param string $message
      * @return never
      */
@@ -251,7 +251,7 @@ abstract class LayoutView extends View
             <?php
         };
         $this->showContentBasedOnRequestType();
-        throw new SoftError();
+        throw new StopExecution();
     }
 
     /**
@@ -266,7 +266,7 @@ abstract class LayoutView extends View
             ErrorHandler::showErrorFromExceptionLog($logData);
         };
         $this->showContentBasedOnRequestType();
-        throw new SoftError();
+        throw new StopExecution();
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Framelix\Framelix;
 
 use Framelix\Framelix\Exception\FatalError;
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Html\PhpToJsData;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Storable\User;
@@ -489,7 +489,7 @@ abstract class View implements JsonSerializable
     }
 
     /**
-     * Show a soft error without throwing an exception and without logging an error and stop script execution after that
+     * Show a soft error message without logging an error and stop script execution after that
      * @param string $message
      * @return never
      */
@@ -497,7 +497,7 @@ abstract class View implements JsonSerializable
     {
         Buffer::clear();
         echo Lang::get($message);
-        throw new SoftError();
+        throw new StopExecution();
     }
 
     /**
@@ -509,7 +509,7 @@ abstract class View implements JsonSerializable
     {
         Buffer::clear();
         ErrorHandler::showErrorFromExceptionLog($logData);
-        throw new SoftError();
+        throw new StopExecution();
     }
 
     /**

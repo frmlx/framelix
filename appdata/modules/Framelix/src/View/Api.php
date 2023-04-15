@@ -2,7 +2,7 @@
 
 namespace Framelix\Framelix\View;
 
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
@@ -41,7 +41,7 @@ class Api extends View
 
     public function downloadFile(): void
     {
-        if (!Url::create()->verify(false)) {
+        if (!Url::create()->verify()) {
             http_response_code(404);
             return;
         }
@@ -60,7 +60,7 @@ class Api extends View
     public function jscall(): void
     {
         $url = Url::create();
-        if (!$url->verify(false)) {
+        if (!$url->verify()) {
             http_response_code(400);
             return;
         }
@@ -88,7 +88,7 @@ class Api extends View
     public function success(mixed $result = null): never
     {
         JsonUtils::output($result);
-        throw new SoftError();
+        throw new StopExecution();
     }
 
     /**
@@ -100,6 +100,6 @@ class Api extends View
     {
         http_response_code(500);
         JsonUtils::output($result);
-        throw new SoftError();
+        throw new StopExecution();
     }
 }

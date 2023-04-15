@@ -185,10 +185,14 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
     public function dumpSqlTableToFile(string $path, string $tableName): void
     {
         $file = fopen($path, "a+");
-        fwrite($file,
-            $this->fetchOne("SELECT sql 
+        fwrite(
+            $file,
+            $this->fetchOne(
+                "SELECT sql 
             FROM sqlite_master 
-            WHERE tbl_name = " . $this->escapeValue($tableName) . "  AND type = 'table'") . ";\n");
+            WHERE tbl_name = " . $this->escapeValue($tableName) . "  AND type = 'table'"
+            ) . ";\n"
+        );
         $indexesSql = $this->getTableIndexes($tableName);
         if ($indexesSql) {
             foreach ($indexesSql as $indexName => $indexCreate) {
@@ -210,8 +214,13 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
             foreach ($row as $value) {
                 $values[] = $this->escapeValue($value);
             }
-            fwrite($file, "INSERT INTO " . $this->quoteIdentifier($tableName) . " ($keys) VALUES (" . implode(", ",
-                    $values) . ");\n");
+            fwrite(
+                $file,
+                "INSERT INTO " . $this->quoteIdentifier($tableName) . " ($keys) VALUES (" . implode(
+                    ", ",
+                    $values
+                ) . ");\n"
+            );
         }
         fclose($file);
     }
@@ -240,7 +249,7 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
      */
     public function getTableColumns(string $table, bool $flushCache = false): array
     {
-        $cacheKey = __METHOD__;
+        $cacheKey = __METHOD__ . "_" . $table;
         if (!$flushCache && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
@@ -271,7 +280,7 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
      */
     public function getTableIndexes(string $table, bool $flushCache = false): array
     {
-        $cacheKey = __METHOD__;
+        $cacheKey = __METHOD__ . "_" . $table;
         if (!$flushCache && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }

@@ -211,8 +211,10 @@ class Mysql extends Sql implements SchemeBuilderRequirementsInterface
     public function dumpSqlTableToFile(string $path, string $tableName): void
     {
         $file = fopen($path, "a+");
-        fwrite($file,
-            $this->fetchAssocOne('SHOW CREATE TABLE ' . $this->quoteIdentifier($tableName))['Create Table'] . ";\n");
+        fwrite(
+            $file,
+            $this->fetchAssocOne('SHOW CREATE TABLE ' . $this->quoteIdentifier($tableName))['Create Table'] . ";\n"
+        );
         $this->query("SELECT * FROM " . $this->quoteIdentifier($tableName));
         $keys = null;
         while ($row = $this->lastResult->fetch_assoc()) {
@@ -227,8 +229,13 @@ class Mysql extends Sql implements SchemeBuilderRequirementsInterface
             foreach ($row as $value) {
                 $values[] = $this->escapeValue($value);
             }
-            fwrite($file, "INSERT INTO " . $this->quoteIdentifier($tableName) . " ($keys) VALUES (" . implode(", ",
-                    $values) . ");\n");
+            fwrite(
+                $file,
+                "INSERT INTO " . $this->quoteIdentifier($tableName) . " ($keys) VALUES (" . implode(
+                    ", ",
+                    $values
+                ) . ");\n"
+            );
         }
         fclose($file);
     }
@@ -259,8 +266,11 @@ class Mysql extends Sql implements SchemeBuilderRequirementsInterface
      */
     public function getTableColumns(string $table, bool $flushCache = false): array
     {
-        $cacheKey = __METHOD__;
-        if (!$flushCache && isset($this->cache[$cacheKey])) {
+        $cacheKey = __METHOD__ . "_" . $table;
+        if ($flushCache) {
+            unset($this->cache[$cacheKey]);
+        }
+        if (isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
         $this->cache[$cacheKey] = $this->fetchAssoc(
@@ -276,15 +286,17 @@ class Mysql extends Sql implements SchemeBuilderRequirementsInterface
      */
     public function getTableIndexes(string $table, bool $flushCache = false): array
     {
-        $cacheKey = __METHOD__;
-        if (!$flushCache && isset($this->cache[$cacheKey])) {
+        $cacheKey = __METHOD__ . "_" . $table;
+        if ($flushCache) {
+            unset($this->cache[$cacheKey]);
+        }
+        if (isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
-        $this->cache[$cacheKey] = $this->fetchAssoc(
-            "SHOW INDEXES FROM " . $this->quoteIdentifier($table),
-            null,
-            'Key_name'
-        );
+        $rows = $this->fetchAssoc("SHOW INDEXES FROM " . $this->quoteIdentifier($table));
+        foreach ($rows as $row) {
+            $this->cache[$cacheKey][$row['Key_name']][$row['Seq_in_index']] = $row;
+        }
         return $this->cache[$cacheKey];
     }
 }

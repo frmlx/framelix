@@ -5,7 +5,7 @@ namespace Framelix\Framelix;
 use Framelix\Framelix\Db\SchemeBuilderRequirementsInterface;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Utils\Shell;
 use JetBrains\PhpStorm\ExpectedValues;
 use Throwable;
@@ -336,18 +336,18 @@ class Console
         if (!$arr) {
             if ($requiredParameterType) {
                 self::error("Missing required parameter '--$name'");
-                throw new SoftError();
+                throw new StopExecution();
             }
             return null;
         }
         $param = $arr[0];
         if ($requiredParameterType === 'string' && !is_string($param)) {
             self::error("Parameter '--$name' needs to be a string instead of boolean flag");
-            throw new SoftError();
+            throw new StopExecution();
         }
         if ($requiredParameterType === 'bool' && !is_bool($param)) {
             self::error("Parameter '--$name' needs to be a bool flag instead of string value");
-            throw new SoftError();
+            throw new StopExecution();
         }
         return $param;
     }

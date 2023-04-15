@@ -9,13 +9,18 @@ use Framelix\Framelix\StorableMeta;
 /**
  * SystemValue Storable Meta
  */
-abstract class SystemValue extends StorableMeta
+class SystemValue extends StorableMeta
 {
     /**
      * The storable
      * @var \Framelix\Framelix\Storable\SystemValue
      */
     public Storable $storable;
+
+    protected function init(): void
+    {
+        $this->storable::setupStorableMeta($this);
+    }
 
     /**
      * Get html table filled with rows for the given storable objects
@@ -33,7 +38,7 @@ abstract class SystemValue extends StorableMeta
     /**
      * Set default properties at the end
      */
-    protected function addDefaultPropertiesAtEnd(): void
+    public function addDefaultPropertiesAtEnd(): void
     {
         $property = $this->createProperty("flagActive");
         $property->setLabel('__framelix_systemvalues_active_form_label__');

@@ -9,6 +9,7 @@ use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
+use Framelix\Framelix\Storable\SystemValue;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Storable\UserToken;
 use Framelix\Framelix\Url;
@@ -168,16 +169,21 @@ abstract class Sidebar
 
         // get system values
         $this->startGroup("__framelix_systemvalues__", "dns");
-        $viewFiles = FileUtils::getFiles(
-            FileUtils::getModuleRootPath(FRAMELIX_MODULE) . "/src/View/Backend/SystemValue",
+        $storableFiles = FileUtils::getFiles(
+            FileUtils::getModuleRootPath(FRAMELIX_MODULE) . "/src/Storable/SystemValue",
             "~\.php$~",
             true
         );
-        foreach ($viewFiles as $viewFile) {
-            $viewClass = ClassUtils::getClassNameForFile($viewFile);
-            $meta = View::getMetadataForView($viewClass);
-            if ($meta) {
-                $this->addLink($viewClass, null, "radio_button_unchecked");
+        foreach ($storableFiles as $storableFile) {
+            $systemValueClass = ClassUtils::getClassNameForFile($storableFile);
+            /** @var SystemValue $systemValue */
+            $systemValue = new $systemValueClass();
+            if ($systemValue->isReadable()) {
+                $this->addLink(
+                    $systemValue->getDetailsUrl(),
+                    ClassUtils::getLangKey($systemValue),
+                    "radio_button_unchecked"
+                );
             }
         }
         $this->showHtmlForLinkData(true, 501);
@@ -269,7 +275,9 @@ abstract class Sidebar
             if (is_array($linkData['links'][$key]['label'] ?? null)) {
                 $value = [];
                 foreach ($linkData['links'][$key]['label'] as $label) {
-                    $value[] = '<div class="framelix-sidebar-label-' . (!$value ? 'default' : 'small') . '">' . Lang::get($label) . '</div>';
+                    $value[] = '<div class="framelix-sidebar-label-' . (!$value ? 'default' : 'small') . '">' . Lang::get(
+                            $label
+                        ) . '</div>';
                 }
                 $linkData['links'][$key]['label'] = implode($value);
             } elseif (is_string($linkData['links'][$key]['label'] ?? null)) {

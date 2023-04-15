@@ -72,7 +72,9 @@ class Postgres extends Sql
             return;
         }
         try {
-            $this->connection = pg_connect("host={$this->host} " . ($this->port ? 'port=' . (int)$this->port : '') . " dbname={$this->database} user={$this->username} password='{$this->password}' options='--client_encoding=UTF8'");
+            $this->connection = pg_connect(
+                "host={$this->host} " . ($this->port ? 'port=' . (int)$this->port : '') . " dbname={$this->database} user={$this->username} password='{$this->password}' options='--client_encoding=UTF8'"
+            );
             $this->connected = true;
         } catch (Throwable $e) {
             throw new FatalError($e->getMessage());

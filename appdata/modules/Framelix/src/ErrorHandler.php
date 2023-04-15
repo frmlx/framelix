@@ -4,7 +4,7 @@ namespace Framelix\Framelix;
 
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Exception\Redirect;
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Storable\User;
@@ -190,7 +190,7 @@ class ErrorHandler
             return;
         }
         // a stop exception does nothing, it is a gracefull expected stop of script execution
-        if ($e instanceof SoftError) {
+        if ($e instanceof StopExecution) {
             return;
         }
         $buffer = Buffer::getAll();
@@ -214,7 +214,7 @@ class ErrorHandler
             try {
                 View::$activeView->onException($logData);
             } catch (Throwable $subE) {
-                if ($subE instanceof SoftError) {
+                if ($subE instanceof StopExecution) {
                     return;
                 }
                 Buffer::clear();

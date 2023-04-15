@@ -111,6 +111,16 @@
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/setup"
         },
+        "Framelix\\Framelix\\View\\Backend\\SystemValue": {
+            "accessRole": true,
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/backend\/systemvalue"
+        },
         "Framelix\\Framelix\\View\\Backend\\User\\Basic": {
             "accessRole": "admin,usermanagement",
             "customUrl": null,

@@ -11,10 +11,8 @@ use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\Shell;
 use Framelix\Framelix\View\Backend\View;
 
-use function basename;
 use function clearstatcache;
 use function file_get_contents;
-use function reset;
 use function str_ends_with;
 
 use const SCANDIR_SORT_DESCENDING;
@@ -58,7 +56,10 @@ class ErrorLogs extends View
                 ErrorHandler::showErrorFromExceptionLog(JsonUtils::readFromFile($file), true);
             } elseif (str_ends_with($file, '.log')) {
                 echo '<div style="font-family: monospace; font-size: 12px"><b>' . $file . '</b><br/>' .
-                    Shell::convertCliOutputToHtml(file_get_contents($file), true) . '</div><div class="framelix-spacer"></div>';
+                    Shell::convertCliOutputToHtml(
+                        file_get_contents($file),
+                        true
+                    ) . '</div><div class="framelix-spacer"></div>';
             }
         }
     }

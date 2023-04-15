@@ -81,7 +81,7 @@ html[data-sidebar-status='opened'] {
   transition: .2s;
   overflow: hidden;
 
-  ::-webkit-scrollbar{
+  ::-webkit-scrollbar {
     width: 2px;
   }
 
@@ -251,6 +251,7 @@ html[data-sidebar-status='opened'] {
     .framelix-sidebar-link {
 
       font-weight: normal;
+
       .framelix-sidebar-main-icon {
         html[data-screen-size='l'] & {
           min-height: 20px;
@@ -378,8 +379,10 @@ html[data-screen-size=s][data-sidebar-status='opened'] .framelix-content-inner {
   box-sizing: border-box;
 }
 
-html:not([data-layout='2']) .framelix-content-inner-inner {
-  margin-bottom: 100px;
+html:not([data-layout='2']) .framelix-content-inner-inner::after {
+  display: block;
+  content: "";
+  height: 100px;
 }
 
 html[data-layout='2'] {

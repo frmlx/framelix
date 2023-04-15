@@ -3,49 +3,43 @@
 namespace Framelix\Framelix\View\Backend;
 
 use Framelix\Framelix\Db\Sql;
-use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Tabs;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Url;
-use ReflectionClass;
+use Framelix\Framelix\Utils\ClassUtils;
 
 use function call_user_func_array;
+use function class_exists;
+use function is_string;
 
-abstract class SystemValue extends View
+class SystemValue extends View
 {
     protected \Framelix\Framelix\Storable\SystemValue $storableIntern;
     protected \Framelix\Framelix\StorableMeta\SystemValue $metaIntern;
 
     public function onRequest(): void
     {
-        $reflection = new ReflectionClass($this);
-        $storablePropertyType = $reflection->getProperty('storable')->getType() ?? null;
-        $metaPropertyType = $reflection->getProperty('meta')->getType() ?? null;
-
-        if (!$storablePropertyType || !$storablePropertyType->getName()) {
-            throw new FatalError(
-                "You must define a protected property 'storable' with a system value type"
-            );
+        $systemValueType = Request::getGet('type');
+        if (!is_string($systemValueType) || !class_exists($systemValueType)) {
+            $this->showSoftError('Given type not exist');
         }
 
-        if (!$metaPropertyType || !$metaPropertyType->getName()) {
-            throw new FatalError(
-                "You must define a protected property 'meta' with a storable meta system value type"
-            );
+        $this->storableIntern = new $systemValueType();
+        if (!$this->storableIntern->isReadable()) {
+            $this->showSoftError("Access denied. isReadable must return true in order to access this page.");
         }
-
+        $this->pageTitle = ClassUtils::getLangKey($this->storableIntern);
         $this->storableIntern = call_user_func_array(
-            [$storablePropertyType->getName(), "getByIdOrNew"],
+            [$systemValueType, "getByIdOrNew"],
             [Request::getGet('id')]
         );
+        $this->metaIntern = new  \Framelix\Framelix\StorableMeta\SystemValue($this->storableIntern);
         if (!$this->storableIntern->id) {
             $this->storableIntern->flagActive = true;
         }
-        $metaClass = $metaPropertyType->getName();
-        $this->metaIntern = new $metaClass($this->storableIntern);
 
         if (Form::isFormSubmitted($this->metaIntern->getEditFormId())) {
             $form = $this->metaIntern->getEditForm();

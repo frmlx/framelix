@@ -7,9 +7,12 @@ use Framelix\Framelix\Html\PhpToJsData;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\ObjectTransformable;
 use Framelix\Framelix\Storable\Storable;
+use Framelix\Framelix\Storable\StorableArray;
 use Framelix\Framelix\Url;
 use JetBrains\PhpStorm\ExpectedValues;
 
+use function call_user_func_array;
+use function class_exists;
 use function count;
 use function is_array;
 use function is_string;
@@ -40,7 +43,7 @@ class Select extends Field
 
     /**
      * Show reset button
-     * If null, it will be shown depending if this field is required or not, if required, not show this button
+     * If null, it will be shown if this field is required or not, if required, not show this button
      * @var bool|null
      */
     public ?bool $showResetButton = null;
@@ -72,10 +75,17 @@ class Select extends Field
     /**
      * Load this specific url when user selected a value
      * Value will be added as parameter to the url with name of field as key
-     * If url is a jscall url then it add's the parameter as a jscall parameter to the request
+     * If url is a jscall url then it add the parameter as a jscall parameter to the request
      * @var Url|string|null
      */
     public Url|string|null $loadUrlOnChange = null;
+
+    /**
+     * If this isset to StorableArray class, the field will set those array values based on user selected values
+     * This work for multiple or single selects
+     * @var string|null
+     */
+    public ?string $storableArrayClass = null;
 
     /**
      * If loadUrlOnChange isset, specify the target to load the url into
@@ -91,6 +101,26 @@ class Select extends Field
      * @var array
      */
     protected array $options = [];
+
+
+    /**
+     * Store and delete files based on submit data
+     * @param Storable $storable
+     * @param bool $storeUploads If true, store uploaded files
+     * @param bool $deleteFiles If true, delete files that the user has marked to delete
+     * @return StorableArray[]|null The newly created and updated StorableArray entries
+     */
+    public function store(Storable $storable, bool $storeUploads = true, bool $deleteFiles = true): ?array
+    {
+        if (!$this->storableArrayClass || !class_exists($this->storableArrayClass)) {
+            return null;
+        }
+        /** @var StorableArray $class */
+        $class = $this->storableArrayClass;
+        $values = $this->getConvertedSubmittedValue();
+        return call_user_func_array([$class, 'setValues'], [$storable, !is_array($values) ? [$values] : $values]);
+    }
+
 
     /**
      * Add options by using given storables as key/label

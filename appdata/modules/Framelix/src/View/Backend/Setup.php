@@ -53,13 +53,22 @@ class Setup extends View
                 $configLine = null;
                 if (!isset(Config::$sqlConnections[FRAMELIX_MODULE])) {
                     if (Request::getPost('mysql')) {
-                        $configLine = '\Framelix\Framelix\Config::addMysqlConnection(FRAMELIX_MODULE, "' . Request::getPost('mysql_database') . '", "' . Request::getPost('mysql_host') . '", "' . Request::getPost('mysql_username') . '", "' . Request::getPost('mysql_password') . '", ' . (int)Request::getPost('mysql_port') . ');';
+                        $configLine = '\Framelix\Framelix\Config::addMysqlConnection(FRAMELIX_MODULE, "' . Request::getPost(
+                                'mysql_database'
+                            ) . '", "' . Request::getPost('mysql_host') . '", "' . Request::getPost(
+                                'mysql_username'
+                            ) . '", "' . Request::getPost('mysql_password') . '", ' . (int)Request::getPost(
+                                'mysql_port'
+                            ) . ');';
                         // create database if not yet exists
-                        $mysqli = new mysqli(Request::getPost('mysql_host'), Request::getPost('mysql_username'),
-                            Request::getPost('mysql_password'), null, (int)Request::getPost('mysql_port'));
+                        $mysqli = new mysqli(
+                            Request::getPost('mysql_host'), Request::getPost('mysql_username'),
+                            Request::getPost('mysql_password'), null, (int)Request::getPost('mysql_port')
+                        );
                         $mysqli->query('CREATE DATABASE IF NOT EXISTS `' . FRAMELIX_MODULE . '`');
                         $mysqli->close();
-                        Config::addMysqlConnection(FRAMELIX_MODULE,
+                        Config::addMysqlConnection(
+                            FRAMELIX_MODULE,
                             Request::getPost('mysql_database'),
                             Request::getPost('mysql_host'),
                             Request::getPost('mysql_username'),
@@ -67,7 +76,9 @@ class Setup extends View
                             (int)Request::getPost('mysql_port'),
                         );
                     } else {
-                        $configLine = '\Framelix\Framelix\Config::addSqliteConnection(FRAMELIX_MODULE, "' . Request::getPost('sqlite_path') . '");';
+                        $configLine = '\Framelix\Framelix\Config::addSqliteConnection(FRAMELIX_MODULE, "' . Request::getPost(
+                                'sqlite_path'
+                            ) . '");';
                         Config::addSqliteConnection(FRAMELIX_MODULE, Request::getPost('sqlite_path'));
                     }
                 }
@@ -221,7 +232,9 @@ class Setup extends View
 
         $field = new Html();
         $field->name = "headerSecurity";
-        $field->defaultValue = '<h2>' . Lang::get('__framelix_setup_step_security_title__') . '</h2><div>' . Lang::get('__framelix_setup_step_security_desc__') . '</div>';
+        $field->defaultValue = '<h2>' . Lang::get('__framelix_setup_step_security_title__') . '</h2><div>' . Lang::get(
+                '__framelix_setup_step_security_desc__'
+            ) . '</div>';
         $form->addField($field);
 
         $field = new Email();

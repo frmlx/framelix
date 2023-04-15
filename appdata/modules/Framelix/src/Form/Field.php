@@ -204,12 +204,12 @@ abstract class Field implements JsonSerializable
             $this->converter = null;
             return;
         }
-        $this->converter = function (mixed $submittedValue) use ($storableClass) {
+        $this->converter = function (mixed $submittedValue) use (/** @var Storable $storableClass */ $storableClass) {
             if (is_array($submittedValue)) {
-                return call_user_func_array([$storableClass, "getByIds"], [$submittedValue]) ?: null;
+                return $storableClass::getByIds($submittedValue) ?: null;
             }
             if (is_string($submittedValue)) {
-                return call_user_func_array([$storableClass, "getById"], [$submittedValue]);
+                return $storableClass::getById($submittedValue);
             }
             return null;
         };
