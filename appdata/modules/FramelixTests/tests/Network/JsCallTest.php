@@ -2,7 +2,7 @@
 
 namespace Network;
 
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
@@ -44,7 +44,7 @@ final class JsCallTest extends TestCase
         Buffer::start();
         try {
             View::findViewForUrl(Url::create())->onRequest();
-        } catch (SoftError) {
+        } catch (StopExecution) {
             $this->assertSame(JsonUtils::encode("123"), Buffer::get());
         }
 

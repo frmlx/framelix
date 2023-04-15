@@ -2,7 +2,7 @@
 
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Exception\Redirect;
-use Framelix\Framelix\Exception\SoftError;
+use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\TestCase;
@@ -116,24 +116,17 @@ final class UrlTest extends TestCase
 
 
         $s = $url->getParameter('__s');
-        $this->assertExceptionOnCall(function () use ($url, $s) {
-            $url->setParameter('__s', $s . "1");
-            $url->verify();
-        }, [], SoftError::class);
+        $url->setParameter('__s', $s . "1");
+        $this->assertFalse($url->verify());
         $url->setParameter('__s', $s);
 
         $url = Url::create();
         $url->sign(true, 1);
         sleep(2);
-        $this->assertExceptionOnCall(function () use ($url) {
-            $url->verify();
-        }, [], SoftError::class, "expired");
+        $this->assertFalse($url->verify());
 
-        $this->assertExceptionOnCall(function () use ($url) {
-            $url->removeParameter("__s");
-            $url->verify();
-        }, [], SoftError::class);
-        $this->assertFalse($url->verify(false));
+        $url->removeParameter("__s");
+        $this->assertFalse($url->verify());
 
         $this->assertExceptionOnCall(function () {
             Url::create()->redirect();

@@ -2,7 +2,6 @@
 
 namespace Framelix\FramelixTests\StorableMeta;
 
-use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\StorableMeta;
 use Framelix\FramelixTests\Storable\TestStorable1;
@@ -75,6 +74,9 @@ class TestStorable2 extends StorableMeta
 
         $property = $this->createProperty("date");
         $property->addDefaultField();
+
+        $property = $this->createPropertyForStorableArray("test", \Framelix\FramelixTests\Storable\TestStorable2::class);
+        $property->setLabel("test");
 
         // to test coverage for invalid property type
         $storable = $this->storable;

@@ -14,6 +14,7 @@ use Framelix\FramelixTests\TestCaseDbTypes;
 use function count;
 use function in_array;
 use function print_r;
+use function var_dump;
 
 abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
 {
@@ -26,12 +27,15 @@ abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
         $schema = Storable::getStorableSchema(TestStorable2::class);
         // assert exact same schema (cached already)
         $this->assertSame($schema, Storable::getStorableSchema(TestStorable2::class));
+
         $this->builder = new SqlStorableSchemeBuilder($db);
         // first create all things
         $queries = $this->builder->getQueries();
         // all new queries that do not modify anything are considered safe
         $this->assertCount(count($queries), $this->builder->getSafeQueries());
         $this->builder->executeQueries($queries);
+
+
         // next check should result in 0 queries
         $queries = $this->builder->getQueries();
         $this->assertBuilderQueryCount(0, $queries, false);
@@ -107,7 +111,7 @@ abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
         $this->assertBuilderQueryCount(3, $queries, true, ['create-index']);
 
         $queries = $this->builder->getUnsafeQueries();
-        // previously we have create a fake table, a fake column and a fake index
+        // previously we have created a fake table, a fake column and a fake index
         // everything to change that is considered unsafe as it will modify existing data
         $this->assertBuilderQueryCount(1, $queries, true, ['drop-table']);
         $this->assertBuilderQueryCount(1, $queries, true, ['drop-column']);

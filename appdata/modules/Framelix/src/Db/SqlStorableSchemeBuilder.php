@@ -237,9 +237,15 @@ class SqlStorableSchemeBuilder
                     }
                     $existingScheme->addIndex($properties, $type);
                 } else {
+                    // there can be multiple rows for a single index (composite index)
+                    $columns = [];
+                    $firstIndexRow = reset($row);
+                    foreach ($row as $indexRow) {
+                        $columns[] = $indexRow['Column_name'];
+                    }
                     $existingScheme->addIndex(
-                        explode(",", str_replace(" ", "", $row['Column_name'])),
-                        $row['Key_name'] === 'PRIMARY' ? 'primary' : 'index'
+                        $columns,
+                        $firstIndexRow['Key_name'] === 'PRIMARY' ? 'primary' : 'index'
                     );
                 }
             }

@@ -66,7 +66,7 @@ abstract class StorableMetaTestBase extends TestCaseDbTypes
         $meta->lazySearchConditionDefault->addColumn('longText', 'longText', 'string');
         $this->callMethodsGeneric(
             $meta,
-            ['createFromUrl', 'getTable', 'getTableWithStorableSorting', 'showSearchAndTableInTabs']
+            ['createFromUrl', 'getTable', 'getTableWithStorableSorting', 'showSearchAndTableInTabs', 'createPropertyForStorableArray']
         );
         $this->assertInstanceOf(QuickSearch::class, $meta->getQuickSearch());
         $this->assertInstanceOf(
