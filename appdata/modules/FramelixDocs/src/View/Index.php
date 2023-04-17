@@ -5,6 +5,7 @@ namespace Framelix\FramelixDocs\View;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\HtmlUtils;
+use Framelix\FramelixDocs\View\Features\Layout;
 
 class Index extends \Framelix\Framelix\View
 {
@@ -33,9 +34,7 @@ class Index extends \Framelix\Framelix\View
 
         <div class="bg" data-id="logo">
             <img src="<?= Url::getUrlToPublicFile(__DIR__ . "/../../../Framelix/public/img/logo.svg") ?>" alt="Logo">
-            <div class="color-dot"></div>
-            <div class="color-dot"></div>
-            <div class="color-dot"></div>
+            <div class="color-dot" style="background: #9900ff"></div>
         </div>
         <div class="page">
             <div class="content-max-width">
@@ -57,12 +56,74 @@ class Index extends \Framelix\Framelix\View
                         <span>Well documented</span>
                     </span><span style="color:var(--accent-light)">PHP</span> Framework</h2>
 
+                <br/><br/>
                 <a href="/welcome" style="display: block; font-size:var(--font-size-big)" class="button"><span
                         class="material-icons">rocket</span> Dive in and get started now!</a>
             </div>
-            <div class="content-max-width">
+        </div>
+
+        <div class="bg">
+            <div class="color-dot" style="background: #0077ff"></div>
+        </div>
+        <div class="page">
+            <div class="content-max-width split">
                 <div class="glass">
+                    <div>
+                        <h1>Write fast, but reliable!</h1>
+                        <p>
+                            Framelix give you the tools to write your code fast and reliable. A Full-Stack
+                            environment that comes with everything built-in to write data applications, including
+                            Backend,
+                            Database Management, Full Autocompletion, and many more...
+                        </p>
+                        <a href="<?= \Framelix\Framelix\View::getUrl(Layout::class) ?>" class="button">Learn more</a>
+                    </div>
                 </div>
+                <div>
+                    <img src="<?= Url::getUrlToPublicFile(__DIR__ . "/../../public/images/landing-1.png") ?>"
+                         alt="Landing 1">
+                </div>
+            </div>
+            <div class="content-max-width split reverse">
+                <div class="glass">
+                    <div>
+                        <h1>Dockerized</h1>
+                        <p>
+                            Framelix comes with in a Docker container which contains everything to run your App.
+                            Never worry about updating PHP, Nginx and other libraries. We do this for you.
+                            All you have to do is to pull the new image and restart your container.
+                        </p>
+                        <a href="https://hub.docker.com/r/nullixat/framelix" class="button" target="_blank">Docker Hub</a>
+                    </div>
+                </div>
+                <div>
+                    <img src="<?= Url::getUrlToPublicFile(__DIR__ . "/../../public/images/landing-2.png") ?>"
+                         alt="Landing 2">
+                </div>
+            </div>
+        </div>
+
+        <div class="bg">
+            <div class="color-dot" style="background: #00ff48"></div>
+        </div>
+        <div class="page">
+            <div class="content-max-width split">
+                <div class="glass">
+                    <div>
+                        <h1>Open-Source</h1>
+                        <p>
+                            Open-Source, MIT licensed, period. Use it wherever and however you want.
+                        </p>
+                        <a href="https://github.com/NullixAT/framelix" class="button" target="_blank">GitHub</a>
+                    </div>
+                </div>
+                <div>
+                    <img src="<?= Url::getUrlToPublicFile(__DIR__ . "/../../public/images/landing-3.png") ?>"
+                         alt="Landing 2">
+                </div>
+            </div>
+            <div class="content-max-width">
+                <a href="https://nullix.at/impressum.html" target="_blank">This website is hosted by NullixAT<br/><b>Imprint</b></a>
             </div>
         </div>
 

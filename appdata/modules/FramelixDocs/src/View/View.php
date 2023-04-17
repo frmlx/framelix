@@ -100,6 +100,24 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             }
             echo '</div></nav>';
             echo '</div>';
+            echo "<script>        
+                  window._paq = window._paq || []
+                  _paq.push(['setRequestMethod', 'POST'])
+                  _paq.push(['disableCookies'])
+                  _paq.push(['trackPageView'])
+                  _paq.push(['enableLinkTracking']);
+                  (function () {
+                    let u = 'https://mtmo.0x.at/'
+                    _paq.push(['setTrackerUrl', u + 'welcome.php'])
+                    _paq.push(['setSiteId', '7'])
+                    let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0]
+                    g.type = 'text/javascript'
+                    g.async = true
+                    g.defer = true
+                    g.src = u + 'welcome.js'
+                    s.parentNode.insertBefore(g, s)
+                  })()
+                  </script>";
         };
         $this->showContentBasedOnRequestType();
     }

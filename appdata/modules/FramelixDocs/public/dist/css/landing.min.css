@@ -21,9 +21,9 @@
 /* Check if the inline-size value is supported */
 @supports (contain: inline-size) {
   :root {
-    --font-size-biggest: max(10cqw, 40px);
-    --font-size-bigger: max(4cqw, 26px);
-    --font-size-big: max(2cqw, 20px);
+    --font-size-biggest: max(10cqmin, 40px);
+    --font-size-bigger: max(4cqmin, 26px);
+    --font-size-big: max(2cqmin, 20px);
   }
 }
 html, body {
@@ -53,18 +53,12 @@ html, body {
   pointer-events: none;
 }
 .bg .color-dot {
+  position: absolute;
   border-radius: 1000px;
   filter: blur(200px);
-  background: #9900ff;
   width: 50vw;
   height: 50vw;
   opacity: 0.2;
-}
-.bg .color-dot:nth-child(2) {
-  background: #0077ff;
-}
-.bg .color-dot:nth-child(3) {
-  background: #00ffb2;
 }
 .bg[data-id=logo] {
   opacity: 0.1;
@@ -97,22 +91,53 @@ html, body {
 }
 .welcome h2 .variants span {
   display: none;
-  transition: 2s;
+  transition: 1s transform;
 }
 .welcome h2 .variants span.float {
-  transform: translateX(100vw);
+  transform: translateX(1400px);
 }
 
 .glass {
   border-radius: 20px;
-  background: hsla(200, 50%, 50%, 0.1);
-  border: 10px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.05);
   box-shadow: rgba(0, 0, 0, 0.3) 10px 10px 20px;
+  padding: 20px;
+}
+
+.split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.split > div {
+  flex: 1 1 250px;
+  align-items: center;
+  display: flex;
+}
+.split > div img {
+  max-width: 100%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  transform: rotate(5deg);
+}
+.split.reverse div:first-child {
+  order: 1;
 }
 
 .page {
   position: relative;
   z-index: 1;
+}
+
+.content h1 {
+  font-size: var(--font-size-big);
+  line-height: 1;
+  color: var(--accent-heavy);
+  margin: 0;
+  text-shadow: rgba(0, 0, 0, 0.4) 0 0 20px;
 }
 
 .content-max-width {
