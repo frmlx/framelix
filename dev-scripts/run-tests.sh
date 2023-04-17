@@ -19,6 +19,7 @@ done
 
 DOCKER_EXECPARAMS=" compose -f $SCRIPTDIR/docker-compose.yml exec -t "
 DOCKER_EXECPARAMS_APP="$DOCKER_EXECPARAMS app bash -c "
+DOCKER_EXECPARAMS_PW="$DOCKER_EXECPARAMS playwright bash -c "
 DOCKER_EXECPARAMS_MARIADB="$DOCKER_EXECPARAMS mariadb bash -c "
 
 cecho y "[i] Running tests"
@@ -69,7 +70,7 @@ if [ $TESTTYPE == "playwright" ]; then
     TESTFILE="/framelix/appdata/playwright/tests/$TESTFILE.spec.ts"
   fi
 
-  docker $DOCKER_EXECPARAMS_APP "export PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_CACHE  && mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright test $TESTFILE"
+  docker $DOCKER_EXECPARAMS_PW "mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright test $TESTFILE"
 
   if [ "$TESTFILE" == "" ]; then
     docker $DOCKER_EXECPARAMS_APP "framelix_php /framelix/appdata/hooks/after-playwright.php"

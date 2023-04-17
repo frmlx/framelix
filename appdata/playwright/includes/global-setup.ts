@@ -21,12 +21,10 @@ async function globalSetup () {
   await page.fill('input[name="password"]', 'test@test.local')
   await utils.submitFormAndWaitForFormSubmitFinished('login', 'login')
 
-  await utils.goto('/')
+  // run warmup directly after to restore a proper app state
+  await utils.goto('/appwarmup')
 
   await browser.close()
-
-  // run warmup directly after to restore a proper app state
-  await FramelixUtils.exec('framelix_console', ['all', 'appWarmup'])
 
   FramelixUtils.logSuccess('# Prepare done')
   FramelixUtils.logInfo('')

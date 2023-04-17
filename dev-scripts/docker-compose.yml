@@ -33,6 +33,17 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.32.0-focal
+    restart: on-failure
+    volumes:
+      - ../appdata:/framelix/appdata
+      - ../userdata:/framelix/userdata
+    ipc: host
+    command: sleep infinity
+    environment:
+      - FRAMELIX_MODULES
+    network_mode: "host"
   app:
     image: ${USE_IMAGE_NAME}
     restart: on-failure

@@ -1,7 +1,6 @@
 import { test } from '../../includes/framelix-fixture'
 import * as fs from 'fs'
 import { expect } from '@playwright/test'
-import { FramelixUtils } from '../../includes/framelix-utils'
 
 test('App Setup Page with MySQL on Starter Module', async ({ page, utils }) => {
   // remove some config data before starting to make sure the setup is required
@@ -62,5 +61,5 @@ test('App Setup Page with SQLite on Starter Module', async ({ page, utils }) => 
   await expect(page.locator('html[data-user]')).toHaveCount(1)
 
   // run warmup directly after to restore a proper app state
-  await FramelixUtils.exec('framelix_console', ['all', 'appWarmup'])
+  await utils.goto('/appwarmup')
 })

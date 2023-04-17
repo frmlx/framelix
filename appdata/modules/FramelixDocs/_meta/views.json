@@ -1,6 +1,16 @@
 {
-    "directoryListHash": "3|2157788842",
+    "directoryListHash": "3|2538745136",
     "views": {
+        "Framelix\\FramelixDocs\\View\\AppWarmup": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": true,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/appwarmup"
+        },
         "Framelix\\FramelixDocs\\View\\Background\\CodingStandards": {
             "accessRole": "*",
             "customUrl": null,

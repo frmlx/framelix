@@ -28,11 +28,12 @@ RUN export DEBIAN_FRONTEND=noninteractive &&  \
     rm /etc/php/*/*/conf.d/*-xdebug.ini && \
     apt upgrade -y
 
-# system stuff
+# system and other stuff
 COPY docker-build/entrypoint.sh $FRAMELIX_SYSTEMDIR/entrypoint.sh
 COPY docker-build/useful-scripts $FRAMELIX_SYSTEMDIR/useful-scripts
 COPY docker-build/misc-conf/cronjobs $FRAMELIX_SYSTEMDIR/cronjobs
 COPY docker-build/misc-conf/build-image.php $FRAMELIX_SYSTEMDIR/build-image.php
+RUN mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage
 
 # imagemagick
 COPY docker-build/misc-conf/imagemagick-policy.xml /etc/ImageMagick-6/policy.xml
@@ -57,11 +58,11 @@ RUN crontab $FRAMELIX_SYSTEMDIR/cronjobs
 # create some useful-scripts symlinks
 RUN chmod +x $FRAMELIX_SYSTEMDIR/useful-scripts/* && ln -s $FRAMELIX_SYSTEMDIR/useful-scripts/* /usr/bin
 
-# install composer
-RUN framelix_composer_install
-
-# copy some appdata files directly into the image in order to install required deps upon build
+# copy appdata files directly into the image
 COPY tmp/appdata_dev $FRAMELIX_APPDATA
+
+# install composer and npm stuff
+RUN framelix_composer_install; framelix_npm_modules_install; framelix_composer_modules_install
 
 # some additional build steps (to include appdata, etc...) for dev/production builds
 RUN php -f $FRAMELIX_SYSTEMDIR/build-image.php "$FRAMELIX_BUILD_TYPE" "$FRAMELIX_BUILD_VERSION"

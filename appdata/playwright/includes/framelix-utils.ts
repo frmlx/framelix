@@ -1,5 +1,4 @@
 import { Page, Response } from '@playwright/test'
-import * as fs from 'fs'
 import { spawn } from 'child_process'
 
 type FramelixConfig = { environment: object, rootUrlDocs: string, rootUrlStarter: string; }
@@ -71,13 +70,17 @@ export class FramelixUtils {
    */
   constructor (page: Page) {
     this.page = page
-    this.framelixConfig = {
-      environment: JSON.parse(fs.readFileSync('/framelix/system/environment.json').toString()),
-      rootUrlDocs: '',
-      rootUrlStarter: ''
+    const modules = process.env['FRAMELIX_MODULES'].replace(/[\s"']/g, '').split(';')
+    const environments = {}
+    for (let i = 0; i < modules.length; i++) {
+      const row = modules[i].split(',')
+      environments[row[0]] = row
     }
-    this.framelixConfig.rootUrlDocs = 'https://127.0.0.1:' + this.framelixConfig.environment['moduleAccessPoints']['FramelixDocs']['port']
-    this.framelixConfig.rootUrlStarter = 'https://127.0.0.1:' + this.framelixConfig.environment['moduleAccessPoints']['FramelixStarter']['port']
+    this.framelixConfig = {
+      environment: environments,
+      rootUrlDocs: 'https://127.0.0.1:' + environments['FramelixDocs'][2],
+      rootUrlStarter: 'https://127.0.0.1:' + environments['FramelixStarter'][2],
+    }
 
     // stop on any uncaught page error
     this.page.on('pageerror', exception => {
