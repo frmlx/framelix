@@ -4,7 +4,7 @@ for d in /framelix/appdata/modules/*/; do
   if test -f "$d/package.json"; then
     echo "NPM install in $d"
     cd $d
-    npm install
+    npm install -y
     echo "Install done."
   fi
 done

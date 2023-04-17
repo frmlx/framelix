@@ -15,12 +15,14 @@ ENV FRAMELIX_BUILD_VERSION=$FRAMELIX_BUILD_VERSION
 
 RUN mkdir -p $FRAMELIX_APPDATA $FRAMELIX_SYSTEMDIR /run/php
 
+RUN export DEBIAN_FRONTEND=noninteractive &&  \
+    apt update && apt install software-properties-common gnupg curl -y --no-install-recommends
+
 # add node source
 ADD https://deb.nodesource.com/setup_19.x /root/nodesource_setup.sh
 RUN bash /root/nodesource_setup.sh && rm /root/nodesource_setup.sh
 
 RUN export DEBIAN_FRONTEND=noninteractive &&  \
-    apt install software-properties-common gnupg curl -y --no-install-recommends &&  \
     add-apt-repository ppa:ondrej/php -y &&  \
     add-apt-repository ppa:ondrej/nginx-mainline -y && \
     apt update && \

@@ -12,21 +12,10 @@ function runCmd(string $cmd): void
     }
 }
 
-if ($buildType === 'dev') {
-    echo "## Running build requirements for DEV build\n\n";
-
-    echo "# Running npm install and composer install for modules\n";
-    runCmd("framelix_npm_modules_install");
-    runCmd("framelix_composer_modules_install");
-    echo "Done.\n\n";
-
-    echo "Dev build process completed.\n\n";
-}
-
 if ($buildType === 'prod') {
     $tmpFolder = "/tmp/framelix-tag-$version";
     $modulesFolder = "/framelix/appdata/modules";
-    echo "## Running build requirements for Docker HUB build\n\n";
+    echo "## Running build requirements for production build\n\n";
     echo "# Download framelix for current version $version from Github\n";
     runCmd("rm -rf $tmpFolder");
     runCmd("mkdir -p $tmpFolder");
@@ -34,6 +23,7 @@ if ($buildType === 'prod') {
         "curl https://github.com/NullixAT/framelix/archive/refs/tags/$version.zip -L --output $tmpFolder/package.zip"
     );
     echo "Done.\n\n";
+
     echo "# Extracting packages and move to appdata\n";
     runCmd("mkdir -p $modulesFolder");
     runCmd("7zz x $tmpFolder/package.zip -spf -y -o$tmpFolder");
@@ -50,10 +40,10 @@ if ($buildType === 'prod') {
         $coreFileData);
     file_put_contents($coreFile, $coreFileData);
 
-    echo "# Running npm install and composer install for modules\n";
+    echo "# Running npm install and composer install for modules integrated into the image\n";
     runCmd("framelix_npm_modules_install");
     runCmd("framelix_composer_modules_install");
     echo "Done.\n\n";
 
-    echo "Docker hub build process completed.\n\n";
+    echo "Production build process completed.\n\n";
 }
