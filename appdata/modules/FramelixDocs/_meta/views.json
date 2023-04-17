@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|2538745136",
+    "directoryListHash": "3|3480916161",
     "views": {
         "Framelix\\FramelixDocs\\View\\AppWarmup": {
             "accessRole": "*",
@@ -260,6 +260,16 @@
             "hiddenView": false,
             "pageTitle": "Framelix - A rich featured, Docker ready, Full-Stack PHP Framework",
             "url": ""
+        },
+        "Framelix\\FramelixDocs\\View\\Welcome": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Framelix - A rich featured, Docker ready, Full-Stack PHP Framework",
+            "url": "\/welcome"
         }
     }
 }

@@ -17,6 +17,11 @@ class Config
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "docs");
         $bundle->addFile("vendor-frontend/scss/docs.scss");
 
+        $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "landing");
+        $bundle->pageAutoInclude = false;
+        $bundle->addFile("vendor-frontend/scss/landing.scss");
+        $bundle->addFile("../Framelix/vendor-frontend/scss/general/material-icons.scss");
+
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "vendor");
         $bundle->compile = false;
         $bundle->addFile("vendor-frontend/highlightjs/github-dark.css");

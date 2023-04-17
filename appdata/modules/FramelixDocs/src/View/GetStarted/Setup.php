@@ -21,6 +21,7 @@ use function implode;
 use function is_array;
 use function preg_replace;
 use function str_replace;
+use function substr;
 
 class Setup extends View
 {
@@ -38,6 +39,9 @@ class Setup extends View
                     foreach ($vars as $key => $value) {
                         $contents = str_replace('${' . $key . '}', $value, $contents);
                     }
+                }
+                if (!Request::getPost('devmode')) {
+                    $contents = str_replace("- FRAMELIX_DEVMODE=1", '', $contents);
                 }
                 if (!Request::getPost('mysql')) {
                     $contents = preg_replace("~# mariadb-start.*?# mariadb-end~s", '', $contents);
@@ -107,7 +111,6 @@ class Setup extends View
             $form->addField($field);
 
             $field = new Toggle();
-            $field->required = true;
             $field->name = "devmode";
             $field->label = "Development Mode";
             $field->labelDescription = 'Can be overriden with config later. Required for some automated file generators.';
@@ -120,12 +123,14 @@ class Setup extends View
             $field->labelDescription = 'This allow you to do modifications in the core module that are mapped back to the container. By default, the Framelix module folder is not mounted (The integrated one in the image is taken). You can change that later at any time by removed the comment "#" from the compose file for the Framelix mount.';
             $form->addField($field);
 
+            $versionNumber = substr(Framelix::VERSION, 0, 1);
+            $version = $versionNumber !== 'd' ? $versionNumber : 'dev';
             $field = new Select();
             $field->required = true;
             $field->name = "var[imagename]";
             $field->label = "Framelix Version";
-            $field->addOption('nullixat/framelix:' . Framelix::VERSION, 'nullixat/framelix:' . Framelix::VERSION);
-            $field->defaultValue = 'nullixat/framelix:' . Framelix::VERSION;
+            $field->addOption('nullixat/framelix:' . $version, 'nullixat/framelix:' . $version);
+            $field->defaultValue = 'nullixat/framelix:' . $version;
             $form->addField($field);
 
             $form->addSubmitButton(buttonText: 'Generate docker-compose.yml');

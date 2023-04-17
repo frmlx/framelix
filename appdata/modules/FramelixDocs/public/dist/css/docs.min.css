@@ -2,25 +2,30 @@
   font-size: 24px;
 }
 
-.framelix-content-inner .docs-page {
+.framelix-content-inner .docs-page,
+.framelix-modal-inner .docs-page {
   display: flex;
   gap: 20px;
 }
-.framelix-content-inner .docs-content {
+.framelix-content-inner .docs-content,
+.framelix-modal-inner .docs-content {
   padding-bottom: 100px;
   font-size: 18px;
 }
-.framelix-content-inner .docs-content p {
+.framelix-content-inner .docs-content p,
+.framelix-modal-inner .docs-content p {
   margin: 10px 0;
 }
-.framelix-content-inner .docs-content p:after {
+.framelix-content-inner .docs-content p:after,
+.framelix-modal-inner .docs-content p:after {
   margin-top: 10px;
   display: block;
   content: "";
   height: 1px;
   background: var(--color-page-bg-stencil);
 }
-.framelix-content-inner .docs-right-nav {
+.framelix-content-inner .docs-right-nav,
+.framelix-modal-inner .docs-right-nav {
   max-height: 80vh;
   overflow: auto;
   position: sticky;
@@ -30,47 +35,56 @@
   min-width: 250px;
   border-left: 2px solid var(--color-page-bg-stencil);
 }
-.framelix-content-inner .docs-right-nav a:any-link {
+.framelix-content-inner .docs-right-nav a:any-link,
+.framelix-modal-inner .docs-right-nav a:any-link {
   display: block;
   font-size: 1rem;
   color: var(--color-page-text);
   text-decoration: none;
   margin-bottom: 3px;
 }
-.framelix-content-inner .docs-right-nav a:any-link:hover {
+.framelix-content-inner .docs-right-nav a:any-link:hover,
+.framelix-modal-inner .docs-right-nav a:any-link:hover {
   text-decoration: underline;
 }
-.framelix-content-inner framelix-alert {
+.framelix-content-inner framelix-alert,
+.framelix-modal-inner framelix-alert {
   font-size: 1.2rem;
 }
-.framelix-content-inner .anchor-title {
+.framelix-content-inner .anchor-title,
+.framelix-modal-inner .anchor-title {
   display: flex;
   align-items: center;
   gap: 10px;
   word-break: break-word;
 }
-.framelix-content-inner .anchor-title a:any-link {
+.framelix-content-inner .anchor-title a:any-link,
+.framelix-modal-inner .anchor-title a:any-link {
   opacity: 0.1;
   order: 1;
 }
-.framelix-content-inner .external-link .material-icons {
+.framelix-content-inner .external-link .material-icons,
+.framelix-modal-inner .external-link .material-icons {
   opacity: 0.5;
   text-decoration: none;
   position: relative;
   top: 3px;
 }
-.framelix-content-inner .anchor-title a:any-link {
+.framelix-content-inner .anchor-title a:any-link,
+.framelix-modal-inner .anchor-title a:any-link {
   color: inherit;
   text-decoration: none;
 }
-.framelix-content-inner blockquote {
+.framelix-content-inner blockquote,
+.framelix-modal-inner blockquote {
   margin: 0 0 10px;
   padding: 10px 10px 10px 20px;
   border-left: 5px solid var(--color-success-text);
   background-color: var(--color-page-bg-stencil);
   border-radius: var(--border-radius);
 }
-.framelix-content-inner code {
+.framelix-content-inner code,
+.framelix-modal-inner code {
   font-family: monospace;
   color: var(--color-primary-text);
   background-color: var(--color-page-bg-stencil-strong);
@@ -78,10 +92,12 @@
   border-radius: var(--border-radius);
   font-size: 1rem;
 }
-.framelix-content-inner pre {
+.framelix-content-inner pre,
+.framelix-modal-inner pre {
   margin: 0;
 }
-.framelix-content-inner .code-block {
+.framelix-content-inner .code-block,
+.framelix-modal-inner .code-block {
   color: var(--color-page-text);
   background-color: var(--color-page-bg-stencil);
   display: block;
@@ -89,12 +105,14 @@
   margin: 20px 0;
   max-width: calc(100vw - var(--sidebar-width) - 40px);
 }
-.framelix-content-inner .code-block .buttons {
+.framelix-content-inner .code-block .buttons,
+.framelix-modal-inner .code-block .buttons {
   display: flex;
   gap: 10px;
   padding: 10px;
 }
-.framelix-content-inner .code-block code {
+.framelix-content-inner .code-block code,
+.framelix-modal-inner .code-block code {
   border-radius: 0 0 var(--border-radius) var(--border-radius);
   display: block;
   padding: 10px;
@@ -104,13 +122,19 @@
   color: #adbac7;
   background: hsl(220, 7%, 8%);
 }
-html[data-color-scheme=light] .framelix-content-inner .code-block code {
+html[data-color-scheme=light] .framelix-content-inner .code-block code,
+html[data-color-scheme=light] .framelix-modal-inner .code-block code {
   background: hsl(220, 7%, 20%);
 }
-.framelix-content-inner h1, .framelix-content-inner h2 {
+.framelix-content-inner h1, .framelix-content-inner h2,
+.framelix-modal-inner h1,
+.framelix-modal-inner h2 {
+  letter-spacing: -1px;
   border-bottom: 2px solid var(--color-page-bg-stencil);
 }
-.framelix-content-inner h1:not(:first-child), .framelix-content-inner h2:not(:first-child) {
+.framelix-content-inner h1:not(:first-child), .framelix-content-inner h2:not(:first-child),
+.framelix-modal-inner h1:not(:first-child),
+.framelix-modal-inner h2:not(:first-child) {
   margin-top: 30px;
 }
 

@@ -28,13 +28,17 @@ use Framelix\FramelixDocs\View\Features\Toasts;
 use Framelix\FramelixDocs\View\GetStarted\Setup;
 use Framelix\FramelixDocs\View\GetStarted\SetupCoreDev;
 use Framelix\FramelixDocs\View\Index;
+use Framelix\FramelixDocs\View\Welcome;
 
 class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 {
     public function showContent(): void
     {
+        $this->addLink(Index::class, "Back to Landing Page", target: "_blank");
+        $this->showHtmlForLinkData();
+
         $this->startGroup('Get started', 'start', forceOpened: true);
-        $this->addLink(Index::class, "Welcome");
+        $this->addLink(Welcome::class, "Welcome");
         $this->addLink(Setup::class, ['Setup up for development', 'Usually where you should start']);
         $this->addLink(SetupCoreDev::class, ['Setup up for core development', 'Helping us with Framelix itself']);
         $this->showHtmlForLinkData();

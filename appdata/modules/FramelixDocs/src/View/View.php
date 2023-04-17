@@ -16,6 +16,7 @@ use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\Mutex;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\FramelixDocs\Cron;
+use Framelix\FramelixDocs\View\GetStarted\Setup;
 use ReflectionClass;
 
 use function array_filter;
@@ -61,7 +62,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     {
         if ($jsCall->action === 'show-source') {
             $file = "/framelix/appdata/modules/" . Request::getGet('path');
-            $view = new Index();
+            $view = new Setup();
             $view->addSourceFile($file);
             $view->showSourceFiles();
             ?>
