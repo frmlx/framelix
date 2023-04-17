@@ -40,8 +40,8 @@ final class UrlTest extends TestCase
             (string)Url::getUrlToPublicFile($indexPhp, false)
         );
         $this->assertSame(
-            'https://localhost/_Framelix/img/favicon.ico',
-            (string)Url::getUrlToPublicFile(__DIR__ . "/../../Framelix/public/img/favicon.ico", false)
+            'https://localhost/_Framelix/img/logo.svg',
+            (string)Url::getUrlToPublicFile(__DIR__ . "/../../Framelix/public/img/logo.svg", false)
         );
         $this->assertStringStartsWith(
             'https://localhost/_FramelixTests/index.php?t=',
@@ -137,7 +137,7 @@ final class UrlTest extends TestCase
             Url::getUrlToPublicFile(FRAMELIX_USERDATA_FOLDER . "/FramelixTests/public"));
         $this->assertInstanceOf(
             Url::class,
-            Url::getUrlToPublicFile(__DIR__ . "/../../Framelix/public/img/favicon.ico")
+            Url::getUrlToPublicFile(__DIR__ . "/../../Framelix/public/img/logo.svg")
         );
         $this->assertInstanceOf(
             Url::class,
