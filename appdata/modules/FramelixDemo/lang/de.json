@@ -1,0 +1,574 @@
+{
+    "__framelixdemo_modulename__": [
+        "framelixdemo",
+        "8c120"
+    ],
+    "__framelixdemo_pdf_invoice_category_1_title__": [
+        "Rechnungsnummer {nr}",
+        "e649d"
+    ],
+    "__framelixdemo_pdf_invoice_category_2_title__": [
+        "Angebotsnummer {nr}",
+        "3bcd3"
+    ],
+    "__framelixdemo_pdf_invoice_credit__": [
+        "Gutschrift",
+        "0a90b"
+    ],
+    "__framelixdemo_pdf_invoice_paid__": [
+        "Danke. Sie haben die Rechnung bereits am {date} bezahlt.",
+        "a510b"
+    ],
+    "__framelixdemo_pdf_invoice_qr__": [
+        "Sie k\u00f6nnen diesen QR Code mit Ihrer Banking App einscannen",
+        "1bf0f"
+    ],
+    "__framelixdemo_pdf_invoice_receiver_vatid__": [
+        "Ihre UID",
+        "bbf09"
+    ],
+    "__framelixdemo_pdf_invoice_total_net__": [
+        "Gesamt",
+        "96b01"
+    ],
+    "__framelixdemo_search_option_choose_fixation__": [
+        "Abschl\u00fcsse \/ Filter",
+        "a2c6b"
+    ],
+    "__framelixdemo_search_option_noclosed__": [
+        "Nur Eintr\u00e4ge die nicht geschlossen sind",
+        "bafbd"
+    ],
+    "__framelixdemo_search_option_nofixation__": [
+        "Nur Eintr\u00e4ge ohne Abschluss",
+        "12fb5"
+    ],
+    "__framelixdemo_storable_depreciation_attachments_label__": [
+        "Anh\u00e4nge",
+        "7e270"
+    ],
+    "__framelixdemo_storable_depreciation_comment_label__": [
+        "Kommentar\/Rechnungsnr.",
+        "7480b"
+    ],
+    "__framelixdemo_storable_depreciation_createoutgoing__": [
+        "Ausgabe basierend auf der j\u00e4hrlichen Abschreibung erstellen",
+        "45249"
+    ],
+    "__framelixdemo_storable_depreciation_date_label__": [
+        "Datum",
+        "44749"
+    ],
+    "__framelixdemo_storable_depreciation_flagdone_label__": [
+        "Erledigt",
+        "03f4a"
+    ],
+    "__framelixdemo_storable_depreciation_netsplit_label__": [
+        "J\u00e4hrliche Vorschreibung",
+        "96326"
+    ],
+    "__framelixdemo_storable_depreciation_netsplit_label_value__": [
+        "Betrag",
+        "b2f40"
+    ],
+    "__framelixdemo_storable_depreciation_netsplit_label_year__": [
+        "Jahr",
+        "537c6"
+    ],
+    "__framelixdemo_storable_depreciation_nettotal_label__": [
+        "Betrag",
+        "b2f40"
+    ],
+    "__framelixdemo_storable_depreciation_years_label__": [
+        "Abschreibungsjahre",
+        "854f8"
+    ],
+    "__framelixdemo_storable_fixation_datefrom_label__": [
+        "Datum von",
+        "50d9d"
+    ],
+    "__framelixdemo_storable_fixation_dateto_label__": [
+        "Datum bis",
+        "bad39"
+    ],
+    "__framelixdemo_storable_income_attachments_label__": [
+        "Anh\u00e4nge",
+        "7e270"
+    ],
+    "__framelixdemo_storable_income_comment_label__": [
+        "Kommentar",
+        "0be84"
+    ],
+    "__framelixdemo_storable_income_copy__": [
+        "\u00d6ffne einen neuen Eintrag, vorausgef\u00fcllt mit den Daten der Rechnung (Softcopy)",
+        "2f691"
+    ],
+    "__framelixdemo_storable_income_date_label__": [
+        "Datum Einnahme",
+        "c3a72"
+    ],
+    "__framelixdemo_storable_income_download_invoice__": [
+        "Rechnung downloaden",
+        "ebd14"
+    ],
+    "__framelixdemo_storable_income_incomecategory_label__": [
+        "Kategorie Einnahme",
+        "5a46c"
+    ],
+    "__framelixdemo_storable_income_net_label__": [
+        "Betrag",
+        "b2f40"
+    ],
+    "__framelixdemo_storable_income_receiptnumber_label__": [
+        "Nr",
+        "c2554"
+    ],
+    "__framelixdemo_storable_invoice_copied__": [
+        "Kopiert. Du kannst den Eintrag nun bearbeiten.",
+        "e9229"
+    ],
+    "__framelixdemo_storable_invoice_copy__": [
+        "Kopiere\/Klone diesen Eintrag",
+        "41130"
+    ],
+    "__framelixdemo_storable_invoice_copy_label__": [
+        "Kopie",
+        "5fb63"
+    ],
+    "__framelixdemo_storable_invoice_createincome__": [
+        "Erstelle Einnahme basierend auf dieser Rechnung",
+        "ca0d6"
+    ],
+    "__framelixdemo_storable_invoice_date_label__": [
+        "Datum",
+        "44749"
+    ],
+    "__framelixdemo_storable_invoice_datepaid_label__": [
+        "Datum bezahlt",
+        "120a7"
+    ],
+    "__framelixdemo_storable_invoice_deleteinvoice_label__": [
+        "L\u00f6sche Original PDF Rechnung",
+        "e26c2"
+    ],
+    "__framelixdemo_storable_invoice_deleteinvoice_label_desc__": [
+        "Nachdem du ein Original erstellt hast, kann es nicht mehr ver\u00e4ndert werden. Du musst es dann zuerst hier l\u00f6schen bevor es neu erstellt werden kann.",
+        "3bd9b"
+    ],
+    "__framelixdemo_storable_invoice_download__": [
+        "PDF Download",
+        "8aa97"
+    ],
+    "__framelixdemo_storable_invoice_download_copy__": [
+        "Kopie herunterladen",
+        "c88b4"
+    ],
+    "__framelixdemo_storable_invoice_download_custom__": [
+        "Benutzerdefinierte Rechnung (Zahlungserinnerung, etc...)",
+        "e3f6c"
+    ],
+    "__framelixdemo_storable_invoice_download_label__": [
+        "W\u00e4hlen einen Rechnungstyp",
+        "81cd9"
+    ],
+    "__framelixdemo_storable_invoice_download_original__": [
+        "Original herunterladen",
+        "e8e7f"
+    ],
+    "__framelixdemo_storable_invoice_download_preview__": [
+        "Vorschau",
+        "72c49"
+    ],
+    "__framelixdemo_storable_invoice_flagreversecharge__": [
+        "Die Umsatzsteuerschuld geht auf den Leistungsempf\u00e4nger \u00fcber (Reverse Charge System)",
+        "9bc86"
+    ],
+    "__framelixdemo_storable_invoice_flagreversecharge_label__": [
+        "Reverse Charge",
+        "9180d"
+    ],
+    "__framelixdemo_storable_invoice_income_created__": [
+        "Einnahme auf Basis der Rechnung erzeugt",
+        "7966f"
+    ],
+    "__framelixdemo_storable_invoice_income_label__": [
+        "Verkn\u00fcpfte Einnahme",
+        "95ffb"
+    ],
+    "__framelixdemo_storable_invoice_income_label_desc__": [
+        "Du kannst diese Verkn\u00fcpfung hier nicht bearbeiten und du kannst auch diese Rechnung nicht mehr bearbeiten.\nFalls du nachtr\u00e4glich etwas \u00e4ndern m\u00f6chtest, dann muss die verkn\u00fcpfte Einnahme gel\u00f6scht werden. Danach kannst du die Rechnung wieder bearbeiten.",
+        "dee68"
+    ],
+    "__framelixdemo_storable_invoice_invoicenr_label__": [
+        "Rechnungsnummer",
+        "8ae42"
+    ],
+    "__framelixdemo_storable_invoice_net_label__": [
+        "Summe",
+        "a0ec8"
+    ],
+    "__framelixdemo_storable_invoice_offfertoinvoice__": [
+        "Erstelle eine Rechnung auf Basis dieses Angebots",
+        "6d5f2"
+    ],
+    "__framelixdemo_storable_invoice_performanceperiod_label__": [
+        "Leistungszeitraum\/Datum",
+        "ad574"
+    ],
+    "__framelixdemo_storable_invoice_positions_label__": [
+        "Positionen",
+        "3160e"
+    ],
+    "__framelixdemo_storable_invoice_positions_label_comment__": [
+        "Text",
+        "abd7e"
+    ],
+    "__framelixdemo_storable_invoice_positions_label_count__": [
+        "Anzahl",
+        "ce7fe"
+    ],
+    "__framelixdemo_storable_invoice_positions_label_netsingle__": [
+        "Pro Einheit",
+        "6f8f5"
+    ],
+    "__framelixdemo_storable_invoice_preview_changed_before__": [
+        "Speichere deine \u00c4nderungen bevor du die Vorschau \u00f6ffnest",
+        "c8989"
+    ],
+    "__framelixdemo_storable_invoice_preview_label__": [
+        "Vorschau",
+        "31fde"
+    ],
+    "__framelixdemo_storable_invoice_receiver_label__": [
+        "Empf\u00e4nger voller Name und Adresse",
+        "a02e4"
+    ],
+    "__framelixdemo_storable_invoice_receivervatid_label__": [
+        "Empf\u00e4nger UID",
+        "628eb"
+    ],
+    "__framelixdemo_storable_invoice_textafterposition_label__": [
+        "Text nach den Positionen",
+        "c51cb"
+    ],
+    "__framelixdemo_storable_invoice_textbeforeposition_label__": [
+        "Text vor den Positionen",
+        "fbebf"
+    ],
+    "__framelixdemo_storable_invoice_title_label__": [
+        "Zus\u00e4tzlicher Rechnungstitel (Zahlungserinnerung, etc...)",
+        "a6ed8"
+    ],
+    "__framelixdemo_storable_invoiceposition_comment_label__": [
+        "Text",
+        "9dffb"
+    ],
+    "__framelixdemo_storable_invoiceposition_count_label__": [
+        "Anzahl",
+        "e93f9"
+    ],
+    "__framelixdemo_storable_invoiceposition_netsingle_label__": [
+        "Preis pro Einheit",
+        "9d20a"
+    ],
+    "__framelixdemo_storable_outgoing_attachments_label__": [
+        "Anh\u00e4nge",
+        "7e270"
+    ],
+    "__framelixdemo_storable_outgoing_comment_label__": [
+        "Kommentar\/Rechnungsnr.",
+        "7480b"
+    ],
+    "__framelixdemo_storable_outgoing_created_from_depreciation__": [
+        "Ausgabe erfolgreich von j\u00e4hrlicher Abschreibung erzeugt",
+        "a975b"
+    ],
+    "__framelixdemo_storable_outgoing_date_label__": [
+        "Datum Ausgabe",
+        "eaf3a"
+    ],
+    "__framelixdemo_storable_outgoing_net_label__": [
+        "Betrag",
+        "b2f40"
+    ],
+    "__framelixdemo_storable_outgoing_netoperational_label__": [
+        "Betr. Anteil",
+        "54715"
+    ],
+    "__framelixdemo_storable_outgoing_operationalsharepercent_label__": [
+        "Betrieblicher Anteil in Prozent",
+        "d8695"
+    ],
+    "__framelixdemo_storable_outgoing_operationalsharepercent_label_desc__": [
+        "Nutze 100% falls der gesamte Betrag zum betrieblichen Anteil z\u00e4hlt",
+        "262d5"
+    ],
+    "__framelixdemo_storable_outgoing_outgoingcategory_label__": [
+        "Kategorie Ausgabe",
+        "e5c9f"
+    ],
+    "__framelixdemo_storable_outgoing_receiptnumber_label__": [
+        "Nr",
+        "c2554"
+    ],
+    "__framelixdemo_storable_systemvalue_incomecategory_name_label__": [
+        "Bezeichnung",
+        "49ee3"
+    ],
+    "__framelixdemo_storable_systemvalue_incomecategory_summarykeys_label__": [
+        "Kennzahlen",
+        "6cc78"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_accountname_label__": [
+        "Voller Name des Kontoinhabers",
+        "b7bc1"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_address_label__": [
+        "Voller Name und Adresse",
+        "b8a21"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_bic_label__": [
+        "BIC",
+        "bec75"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_iban_label__": [
+        "IBAN",
+        "350e1"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicefooter_label__": [
+        "Bild Fu\u00dfzeile",
+        "3b634"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicefooter_label_desc__": [
+        "Max. 1000x150 - Dateigr\u00f6\u00dfe so gering wie m\u00f6glich halten, unter 10kb wenn m\u00f6glich",
+        "85320"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoiceheader_label__": [
+        "Bild Kopfzeile",
+        "461cc"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoiceheader_label_desc__": [
+        "Max. 1000x150 - Dateigr\u00f6\u00dfe so gering wie m\u00f6glich halten, unter 10kb wenn m\u00f6glich",
+        "85320"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicetextafterpositions_label__": [
+        "Fixer Text der nach den Positionen in der Rechnung angezeigt wird",
+        "5e962"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicetextafterpositions_label_desc__": [
+        "F\u00fclle diese aus wenn du willst das dieser Text automatisch auf jeder Rechnung erscheint",
+        "5bdd2"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_vatid_label__": [
+        "UID",
+        "200f6"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_name_label__": [
+        "Bezeichnung",
+        "49ee3"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_operationalsharepercent_label__": [
+        "Betrieblicher Anteil in Prozent",
+        "d8695"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_operationalsharepercent_label_desc__": [
+        "Nutze 100% falls der gesamte Betrag zum betrieblichen Anteil z\u00e4hlt",
+        "262d5"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_summarykeys_label__": [
+        "Kennzahlen",
+        "6cc78"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_incomecategory_label__": [
+        "Summierungsmethode bei Einnahme",
+        "ed5f8"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_key_label__": [
+        "Kennzahl",
+        "89735"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_name_label__": [
+        "Info zur Kennzahl",
+        "4059b"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_outgoingcategory_label__": [
+        "Summierungsmethode bei Ausgabe",
+        "12f4b"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_summary_method_1__": [
+        "Addieren",
+        "ec211"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_summary_method_2__": [
+        "Subtrahieren",
+        "bb2c3"
+    ],
+    "__framelixdemo_storable_systemvalue_incomecategory__": [
+        "Kategorien f\u00fcr Einnahmen",
+        "5483a"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator__": [
+        "Rechnungsleger",
+        "b2749"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory__": [
+        "Kategorien f\u00fcr Ausgaben",
+        "7d4ce"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey__": [
+        "Kennzahlen",
+        "6cc78"
+    ],
+    "__framelixdemo_view_depreciation__": [
+        "Anlagenverzeichnis",
+        "41357"
+    ],
+    "__framelixdemo_view_depreciation_create__": [
+        "Basisdaten",
+        "c43ff"
+    ],
+    "__framelixdemo_view_depreciation_years__": [
+        "J\u00e4hrliche Abschreibung",
+        "96326"
+    ],
+    "__framelixdemo_view_fixations__": [
+        "Abschl\u00fcsse",
+        "cb080"
+    ],
+    "__framelixdemo_view_fixations_create__": [
+        "Neuen Abschluss erstellen",
+        "c3bef"
+    ],
+    "__framelixdemo_view_fixations_created__": [
+        "Abschluss gespeichert",
+        "2dc42"
+    ],
+    "__framelixdemo_view_fixations_desc__": [
+        "Abschl\u00fcsse vergeben jeder Einnahme\/Ausgabe eine eindeutige aufsteigende und durchg\u00e4ngige Nummer. Dies wird von den Finanz\u00e4mtern gefordert. Du kannst Abschl\u00fcsse erstellen so viele du willst. Empfohlen wird allerdings, monatlich ab zu schlie\u00dfen, sobald alle Daten eines Monats erfasst wurden.",
+        "d3071"
+    ],
+    "__framelixdemo_view_fixations_list__": [
+        "Abschl\u00fcsse",
+        "4ee29"
+    ],
+    "__framelixdemo_view_incomes__": [
+        "Einnahmen",
+        "79710"
+    ],
+    "__framelixdemo_view_index__": [
+        "FramelixDemo - Die Buchhaltungssoftware f\u00fcr Kleinunternehmer",
+        "4cc8f"
+    ],
+    "__framelixdemo_view_invoice_category_1__": [
+        "Rechnungen",
+        "fce9a"
+    ],
+    "__framelixdemo_view_invoice_category_2__": [
+        "Angebote",
+        "9461b"
+    ],
+    "__framelixdemo_view_invoices_create__": [
+        "Basisdaten",
+        "c43ff"
+    ],
+    "__framelixdemo_view_outgoings__": [
+        "Ausgaben",
+        "2cf3b"
+    ],
+    "__framelixdemo_view_report_better_incomes__": [
+        "Besser - Mehr Einnahmen",
+        "d45cf"
+    ],
+    "__framelixdemo_view_report_better_outgoings__": [
+        "Besser - Weniger Ausgaben",
+        "27860"
+    ],
+    "__framelixdemo_view_report_better_profitloss__": [
+        "Besser",
+        "11e35"
+    ],
+    "__framelixdemo_view_report_compared_to__": [
+        "Vergleichszeitraum {0}",
+        "dfacc"
+    ],
+    "__framelixdemo_view_report_loss__": [
+        "Verlust",
+        "14781"
+    ],
+    "__framelixdemo_view_report_profit__": [
+        "Gewinn",
+        "18287"
+    ],
+    "__framelixdemo_view_report_profitloss__": [
+        "Gewinn - Verlust",
+        "c739e"
+    ],
+    "__framelixdemo_view_report_total__": [
+        "Summe",
+        "a0ec8"
+    ],
+    "__framelixdemo_view_report_worse_incomes__": [
+        "Schlechter - Weniger Einnahmen",
+        "479f7"
+    ],
+    "__framelixdemo_view_report_worse_outgoings__": [
+        "Schlechter - Mehr Ausgaben",
+        "03d8b"
+    ],
+    "__framelixdemo_view_report_worse_profitloss__": [
+        "Schlechter",
+        "b23d1"
+    ],
+    "__framelixdemo_view_reports__": [
+        "Berichte",
+        "c91c7"
+    ],
+    "__framelixdemo_view_reports_custom__": [
+        "Zeitraum w\u00e4hlen",
+        "d5180"
+    ],
+    "__framelixdemo_view_reports_datefrom__": [
+        "Datum von",
+        "50d9d"
+    ],
+    "__framelixdemo_view_reports_dateto__": [
+        "Datum bis",
+        "bad39"
+    ],
+    "__framelixdemo_view_reports_generate__": [
+        "Bericht anzeigen",
+        "5f7fc"
+    ],
+    "__framelixdemo_view_reports_generate_excel__": [
+        "Alle Zahlen als Excel downloaden",
+        "40b88"
+    ],
+    "__framelixdemo_view_reports_lastmonth__": [
+        "Letzter Monat",
+        "80cbd"
+    ],
+    "__framelixdemo_view_reports_lastquarter__": [
+        "Letztes Quartal",
+        "2f335"
+    ],
+    "__framelixdemo_view_reports_lastyear__": [
+        "Letztes Jahr",
+        "00f71"
+    ],
+    "__framelixdemo_view_reports_thismonth__": [
+        "Aktueller Monat",
+        "456cb"
+    ],
+    "__framelixdemo_view_reports_thisquarter__": [
+        "Aktuelles Quartal",
+        "bf4fd"
+    ],
+    "__framelixdemo_view_reports_thisyear__": [
+        "Aktuelles Jahr",
+        "756c9"
+    ],
+    "__framelix_config_moneyunit_label__": [
+        "W\u00e4hrung",
+        "587c2"
+    ]
+}

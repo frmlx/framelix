@@ -1,0 +1,105 @@
+{
+    "directoryListHash": "3|1923983226",
+    "views": {
+        "Framelix\\FramelixDemo\\View\\Depreciation": {
+            "accessRole": "admin,depreciation",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/depreciation"
+        },
+        "Framelix\\FramelixDemo\\View\\Fixations": {
+            "accessRole": "admin,fixation",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/fixations"
+        },
+        "Framelix\\FramelixDemo\\View\\Incomes": {
+            "accessRole": "admin,income",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/incomes"
+        },
+        "Framelix\\FramelixDemo\\View\\Index": {
+            "accessRole": true,
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": ""
+        },
+        "Framelix\\FramelixDemo\\View\\InvoicePdf": {
+            "accessRole": true,
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/invoicepdf"
+        },
+        "Framelix\\FramelixDemo\\View\\InvoicePositions": {
+            "accessRole": "admin,invoice-{category}",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/invoicepositions"
+        },
+        "Framelix\\FramelixDemo\\View\\Invoices": {
+            "accessRole": "admin,invoice-{category}",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/invoices"
+        },
+        "Framelix\\FramelixDemo\\View\\Outgoings": {
+            "accessRole": "admin,outgoing",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/outgoings"
+        },
+        "Framelix\\FramelixDemo\\View\\Reports": {
+            "accessRole": "admin,reports",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/reports"
+        },
+        "Framelix\\FramelixDemo\\View\\Reset": {
+            "accessRole": "admin",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/reset"
+        }
+    }
+}

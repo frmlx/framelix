@@ -1,0 +1,424 @@
+{
+    "__framelixdemo_view_reset__" : "Reset Application",
+    "__framelixdemo_view_reset_info__" : "This will force reset the application now. This is also automatically done each hour. After you have executed this action, it will logout you as well.",
+    "__framelixdemo_modulename__": [
+        "framelixdemo"
+    ],
+    "__framelixdemo_pdf_invoice_category_1_title__": [
+        "Invoice Nr. {nr}"
+    ],
+    "__framelixdemo_pdf_invoice_category_2_title__": [
+        "Offer Nr. {nr}"
+    ],
+    "__framelixdemo_pdf_invoice_credit__": [
+        "Credit"
+    ],
+    "__framelixdemo_pdf_invoice_paid__": [
+        "Thank you. You have already payed this invoice on {date}."
+    ],
+    "__framelixdemo_pdf_invoice_qr__": [
+        "You can scan this QR code with your banking app"
+    ],
+    "__framelixdemo_pdf_invoice_receiver_vatid__": [
+        "Your Vat-ID"
+    ],
+    "__framelixdemo_pdf_invoice_total_net__": [
+        "Total"
+    ],
+    "__framelixdemo_search_option_choose_fixation__": [
+        "Fixations \/ Filters"
+    ],
+    "__framelixdemo_search_option_noclosed__": [
+        "Only entries that are not closed"
+    ],
+    "__framelixdemo_search_option_nofixation__": [
+        "Only entries without fixation"
+    ],
+    "__framelixdemo_storable_depreciation_attachments_label__": [
+        "Attachments"
+    ],
+    "__framelixdemo_storable_depreciation_comment_label__": [
+        "Comment\/Invoice Nr"
+    ],
+    "__framelixdemo_storable_depreciation_createoutgoing__": [
+        "Create outgoing based on the annual depreciation for this entry"
+    ],
+    "__framelixdemo_storable_depreciation_date_label__": [
+        "Date"
+    ],
+    "__framelixdemo_storable_depreciation_flagdone_label__": [
+        "Closed"
+    ],
+    "__framelixdemo_storable_depreciation_netsplit_label__": [
+        "Annual depreciation"
+    ],
+    "__framelixdemo_storable_depreciation_netsplit_label_value__": [
+        "Amount"
+    ],
+    "__framelixdemo_storable_depreciation_netsplit_label_year__": [
+        "Year"
+    ],
+    "__framelixdemo_storable_depreciation_nettotal_label__": [
+        "Amount"
+    ],
+    "__framelixdemo_storable_depreciation_years_label__": [
+        "Accounting depreciation in years"
+    ],
+    "__framelixdemo_storable_fixation_datefrom_label__": [
+        "Date from"
+    ],
+    "__framelixdemo_storable_fixation_dateto_label__": [
+        "Date to"
+    ],
+    "__framelixdemo_storable_income_attachments_label__": [
+        "Attachments"
+    ],
+    "__framelixdemo_storable_income_comment_label__": [
+        "Comment"
+    ],
+    "__framelixdemo_storable_income_copy__": [
+        "Open a new entry with prefilled data from this invoice (Softcopy)"
+    ],
+    "__framelixdemo_storable_income_date_label__": [
+        "Date income"
+    ],
+    "__framelixdemo_storable_income_download_invoice__": [
+        "Invoice download"
+    ],
+    "__framelixdemo_storable_income_incomecategory_label__": [
+        "Income category"
+    ],
+    "__framelixdemo_storable_income_net_label__": [
+        "Amount"
+    ],
+    "__framelixdemo_storable_income_receiptnumber_label__": [
+        "Nr"
+    ],
+    "__framelixdemo_storable_invoice_copied__": [
+        "Copied. You can now edit the entry."
+    ],
+    "__framelixdemo_storable_invoice_copy__": [
+        "Copy\/Clone this entry"
+    ],
+    "__framelixdemo_storable_invoice_copy_label__": [
+        "Copy"
+    ],
+    "__framelixdemo_storable_invoice_createincome__": [
+        "Create income based on this invoice"
+    ],
+    "__framelixdemo_storable_invoice_date_label__": [
+        "Date"
+    ],
+    "__framelixdemo_storable_invoice_datepaid_label__": [
+        "Date paid"
+    ],
+    "__framelixdemo_storable_invoice_deleteinvoice_label__": [
+        "Delete Original PDF Invoice"
+    ],
+    "__framelixdemo_storable_invoice_deleteinvoice_label_desc__": [
+        "Once you have downloaded the original PDF file, you cannot change the original PDF file unless you delete it explicetely here"
+    ],
+    "__framelixdemo_storable_invoice_download__": [
+        "PDF Download"
+    ],
+    "__framelixdemo_storable_invoice_download_copy__": [
+        "Download Copy"
+    ],
+    "__framelixdemo_storable_invoice_download_custom__": [
+        "Download Custom (Payment reminder, etc...)"
+    ],
+    "__framelixdemo_storable_invoice_download_label__": [
+        "Select invoice type"
+    ],
+    "__framelixdemo_storable_invoice_download_original__": [
+        "Download Original"
+    ],
+    "__framelixdemo_storable_invoice_download_preview__": [
+        "Download Preview"
+    ],
+    "__framelixdemo_storable_invoice_flagreversecharge__": [
+        "According to reverse charge system, tax liability transfers to the recipient of the services."
+    ],
+    "__framelixdemo_storable_invoice_flagreversecharge_label__": [
+        "Reverse Charge"
+    ],
+    "__framelixdemo_storable_invoice_income_created__": [
+        "Successfully created income from invoice"
+    ],
+    "__framelixdemo_storable_invoice_income_label__": [
+        "Assigned income"
+    ],
+    "__framelixdemo_storable_invoice_income_label_desc__": [
+        "You cannot edit this assignment and you cannot edit this invoice anymore because you have generated an income entry out of this invoice.\n<br\/>\nYou have to delete the income entry to remove this assignment.<br\/>\nOnly when this invoice is not assigned to an income, you are able to delete or modify the invoice."
+    ],
+    "__framelixdemo_storable_invoice_invoicenr_label__": [
+        "Invoice number"
+    ],
+    "__framelixdemo_storable_invoice_net_label__": [
+        "Sum"
+    ],
+    "__framelixdemo_storable_invoice_offfertoinvoice__": [
+        "Create an invoice based on this offer"
+    ],
+    "__framelixdemo_storable_invoice_performanceperiod_label__": [
+        "Performance date \/ period"
+    ],
+    "__framelixdemo_storable_invoice_positions_label__": [
+        "Positions"
+    ],
+    "__framelixdemo_storable_invoice_preview_changed_before__": [
+        "Save changes before previewing"
+    ],
+    "__framelixdemo_storable_invoice_preview_label__": [
+        "Preview"
+    ],
+    "__framelixdemo_storable_invoice_receiver_label__": [
+        "Receiver full name and address"
+    ],
+    "__framelixdemo_storable_invoice_receivervatid_label__": [
+        "Receiver Vat-Id"
+    ],
+    "__framelixdemo_storable_invoice_textafterposition_label__": [
+        "Text after positions"
+    ],
+    "__framelixdemo_storable_invoice_textbeforeposition_label__": [
+        "Text before positions"
+    ],
+    "__framelixdemo_storable_invoice_title_label__": [
+        "Additional Invoice Title (Payment Reminder, etc...)"
+    ],
+    "__framelixdemo_storable_invoiceposition_comment_label__": [
+        "Text"
+    ],
+    "__framelixdemo_storable_invoiceposition_count_label__": [
+        "Count"
+    ],
+    "__framelixdemo_storable_invoiceposition_netsingle_label__": [
+        "Price per unit"
+    ],
+    "__framelixdemo_storable_outgoing_attachments_label__": [
+        "Attachments"
+    ],
+    "__framelixdemo_storable_outgoing_comment_label__": [
+        "Comment\/Invoice Nr"
+    ],
+    "__framelixdemo_storable_outgoing_created_from_depreciation__": [
+        "Successfully created outgoing from annual depreciation"
+    ],
+    "__framelixdemo_storable_outgoing_date_label__": [
+        "Date outgoing"
+    ],
+    "__framelixdemo_storable_outgoing_net_label__": [
+        "Amount"
+    ],
+    "__framelixdemo_storable_outgoing_netoperational_label__": [
+        "Amount operational"
+    ],
+    "__framelixdemo_storable_outgoing_operationalsharepercent_label__": [
+        "Operational share in percent"
+    ],
+    "__framelixdemo_storable_outgoing_operationalsharepercent_label_desc__": [
+        "Use 100% if you want to use all of the outgoing amount for your business"
+    ],
+    "__framelixdemo_storable_outgoing_outgoingcategory_label__": [
+        "Outgoing category"
+    ],
+    "__framelixdemo_storable_outgoing_receiptnumber_label__": [
+        "Nr"
+    ],
+    "__framelixdemo_storable_systemvalue_incomecategory_name_label__": [
+        "Name"
+    ],
+    "__framelixdemo_storable_systemvalue_incomecategory_summarykeys_label__": [
+        "Summary keys"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_accountname_label__": [
+        "Full name of bank account owner"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_address_label__": [
+        "Full name and address"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_bic_label__": [
+        "BIC"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_iban_label__": [
+        "IBAN"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicefooter_label__": [
+        "Footer image"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicefooter_label_desc__": [
+        "Max. 1000x150 - Keep filesize low, bellow 10kb if possible"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoiceheader_label__": [
+        "Header image"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoiceheader_label_desc__": [
+        "Max. 1000x150 - Keep filesize low, bellow 10kb if possible"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicetextafterpositions_label__": [
+        "Fixed text in invoice after position"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_invoicetextafterpositions_label_desc__": [
+        "Fill out when you always want to append this text in invoice after positions"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator_vatid_label__": [
+        "Vat-Id"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_name_label__": [
+        "Name"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_operationalsharepercent_label__": [
+        "Operational share in percent"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_operationalsharepercent_label_desc__": [
+        "Use 100% if you want to use all of the outgoing amount for your business"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory_summarykeys_label__": [
+        "Summary keys"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_incomecategory_label__": [
+        "Income summary method"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_key_label__": [
+        "Key"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_name_label__": [
+        "Info"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_outgoingcategory_label__": [
+        "Outgoing summary method"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_summary_method_1__": [
+        "Add"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey_summary_method_2__": [
+        "Substract"
+    ],
+    "__framelixdemo_storable_systemvalue_incomecategory__": [
+        "Incoming categories"
+    ],
+    "__framelixdemo_storable_systemvalue_invoicecreator__": [
+        "Invoice accountant"
+    ],
+    "__framelixdemo_storable_systemvalue_outgoingcategory__": [
+        "Outgoing categories"
+    ],
+    "__framelixdemo_storable_systemvalue_summarykey__": [
+        "Summary keys"
+    ],
+    "__framelixdemo_view_depreciation__": [
+        "Accounting depreciation"
+    ],
+    "__framelixdemo_view_depreciation_create__": [
+        "Basic data"
+    ],
+    "__framelixdemo_view_depreciation_years__": [
+        "Annual depreciation"
+    ],
+    "__framelixdemo_view_fixations__": [
+        "Fixations"
+    ],
+    "__framelixdemo_view_fixations_create__": [
+        "Create a new fixation"
+    ],
+    "__framelixdemo_view_fixations_created__": [
+        "Fixation stored"
+    ],
+    "__framelixdemo_view_fixations_desc__": [
+        "Fixations will give each income\/outgoing an unique ascending number which is required by most finance institutes.\nYou can fixate data as often as you want, but it is recommended to do it monthly, as soon as you have entered all data of a month."
+    ],
+    "__framelixdemo_view_fixations_list__": [
+        "List"
+    ],
+    "__framelixdemo_view_incomes__": [
+        "Incomings"
+    ],
+    "__framelixdemo_view_index__": [
+        "FramelixDemo - Accounting software for small business owners"
+    ],
+    "__framelixdemo_view_invoice_category_1__": [
+        "Invoices"
+    ],
+    "__framelixdemo_view_invoice_category_2__": [
+        "Offers"
+    ],
+    "__framelixdemo_view_invoices_create__": [
+        "Basic data"
+    ],
+    "__framelixdemo_view_outgoings__": [
+        "Outgoings"
+    ],
+    "__framelixdemo_view_report_better_incomes__": [
+        "Better - More incomes"
+    ],
+    "__framelixdemo_view_report_better_outgoings__": [
+        "Better - Less outgoings"
+    ],
+    "__framelixdemo_view_report_better_profitloss__": [
+        "Better"
+    ],
+    "__framelixdemo_view_report_compared_to__": [
+        "Compared to period {0}"
+    ],
+    "__framelixdemo_view_report_loss__": [
+        "Loss"
+    ],
+    "__framelixdemo_view_report_profit__": [
+        "Profit"
+    ],
+    "__framelixdemo_view_report_profitloss__": [
+        "Profit - Loss"
+    ],
+    "__framelixdemo_view_report_total__": [
+        "Sum"
+    ],
+    "__framelixdemo_view_report_worse_incomes__": [
+        "Worse - Less incomes"
+    ],
+    "__framelixdemo_view_report_worse_outgoings__": [
+        "Worse - Higher outgoings"
+    ],
+    "__framelixdemo_view_report_worse_profitloss__": [
+        "Worse"
+    ],
+    "__framelixdemo_view_reports__": [
+        "Reports"
+    ],
+    "__framelixdemo_view_reports_custom__": [
+        "Choose a period"
+    ],
+    "__framelixdemo_view_reports_datefrom__": [
+        "Date from"
+    ],
+    "__framelixdemo_view_reports_dateto__": [
+        "Date to"
+    ],
+    "__framelixdemo_view_reports_generate__": [
+        "Generate report and charts"
+    ],
+    "__framelixdemo_view_reports_generate_excel__": [
+        "Download all numbers as excel report"
+    ],
+    "__framelixdemo_view_reports_lastmonth__": [
+        "Last month"
+    ],
+    "__framelixdemo_view_reports_lastquarter__": [
+        "Last quarter"
+    ],
+    "__framelixdemo_view_reports_lastyear__": [
+        "Last year"
+    ],
+    "__framelixdemo_view_reports_thismonth__": [
+        "Current month"
+    ],
+    "__framelixdemo_view_reports_thisquarter__": [
+        "Current quarter"
+    ],
+    "__framelixdemo_view_reports_thisyear__": [
+        "Current year"
+    ],
+    "__framelix_config_moneyunit_label__": [
+        "Currency (\u20ac, $, etc...)"
+    ]
+}
