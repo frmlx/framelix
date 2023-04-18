@@ -191,6 +191,18 @@ button:hover,
   background: var(--accent-heavy);
   box-shadow: var(--accent-heavy) 0 0 20px;
 }
+button.swap-colors,
+.button.swap-colors,
+.button:any-link.swap-colors {
+  background: var(--accent-heavy);
+  box-shadow: var(--accent-heavy) 0 0 20px;
+}
+button.swap-colors:hover,
+.button.swap-colors:hover,
+.button:any-link.swap-colors:hover {
+  background: var(--bg-brighter);
+  box-shadow: rgba(0, 0, 0, 0.5) 0 0 20px;
+}
 
 nav {
   display: flex;

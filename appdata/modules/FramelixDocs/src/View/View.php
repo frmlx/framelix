@@ -29,6 +29,7 @@ use function class_exists;
 use function count;
 use function debug_backtrace;
 use function explode;
+use function file_exists;
 use function file_get_contents;
 use function implode;
 use function interface_exists;
@@ -425,14 +426,18 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     {
         $tags = [];
         foreach ($files as $relativePath) {
-            if (str_starts_with(
-                    $relativePath,
-                    "Framelix"
-                ) && (class_exists($relativePath) || interface_exists($relativePath))) {
+            if (
+                str_starts_with($relativePath, "Framelix")
+                && (class_exists($relativePath) || interface_exists($relativePath))
+            ) {
                 $relativePath = substr(
                     ClassUtils::getFilePathForClassName($relativePath),
                     strlen(FRAMELIX_APPDATA_FOLDER . "/modules/")
                 );
+            }
+            if (!file_exists(FRAMELIX_APPDATA_FOLDER . "/modules/$relativePath")) {
+                $tags[] = '[Missing] <script>console.error(' . JsonUtils::encode($relativePath . " not exist") . ')</script>';
+                continue;
             }
             $tags[] = '<framelix-button small icon="visibility" theme="transparent" jscall-url="' . JsCall::getUrl(
                     View::class,

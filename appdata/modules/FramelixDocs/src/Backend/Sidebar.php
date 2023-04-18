@@ -25,6 +25,7 @@ use Framelix\FramelixDocs\View\Features\Pdf;
 use Framelix\FramelixDocs\View\Features\StorableMeta;
 use Framelix\FramelixDocs\View\Features\Tables;
 use Framelix\FramelixDocs\View\Features\Toasts;
+use Framelix\FramelixDocs\View\GetStarted\DemoApplication;
 use Framelix\FramelixDocs\View\GetStarted\Setup;
 use Framelix\FramelixDocs\View\GetStarted\SetupCoreDev;
 use Framelix\FramelixDocs\View\Index;
@@ -41,6 +42,7 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(Welcome::class, "Welcome");
         $this->addLink(Setup::class, ['Setup up for development', 'Usually where you should start']);
         $this->addLink(SetupCoreDev::class, ['Setup up for core development', 'Helping us with Framelix itself']);
+        $this->addLink(DemoApplication::class, ['Learn with our Demo App', 'Test, learn, write!']);
         $this->showHtmlForLinkData();
 
         $this->startGroup('Basics', 'info', forceOpened: true);

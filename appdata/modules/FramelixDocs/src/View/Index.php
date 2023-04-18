@@ -57,7 +57,7 @@ class Index extends \Framelix\Framelix\View
                     </span><span style="color:var(--accent-light)">PHP</span> Framework</h2>
 
                 <br/><br/>
-                <a href="/welcome" style="display: block; font-size:var(--font-size-big)" class="button"><span
+                <a href="/welcome" style="display: block; font-size:var(--font-size-big)" class="button swap-colors"><span
                         class="material-icons">rocket</span> Dive in and get started now!</a>
             </div>
         </div>

@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|3480916161",
+    "directoryListHash": "3|3335755496",
     "views": {
         "Framelix\\FramelixDocs\\View\\AppWarmup": {
             "accessRole": "*",
@@ -230,6 +230,16 @@
             "hiddenView": false,
             "pageTitle": "Toasts\/Notifications",
             "url": "\/features\/toasts"
+        },
+        "Framelix\\FramelixDocs\\View\\GetStarted\\DemoApplication": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Demo Application",
+            "url": "\/getstarted\/demoapplication"
         },
         "Framelix\\FramelixDocs\\View\\GetStarted\\Setup": {
             "accessRole": "*",

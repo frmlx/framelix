@@ -41,7 +41,7 @@ class SetupCoreDev extends View
         ');
         ?>
         <p>
-            This will create 3 available apps/ports on your host.
+            This will create 4 available apps/ports on your host.
         </p>
         <ul>
             <li><?= $this->getLinkToExternalPage('https://127.0.0.1:6101') ?> - The FramelixTests module which is used
@@ -52,6 +52,9 @@ class SetupCoreDev extends View
             </li>
             <li><?= $this->getLinkToExternalPage('https://127.0.0.1:6103') ?> - The FramelixStarter module which is used
                 as a template for the module development setup
+            </li>
+            <li><?= $this->getLinkToExternalPage('https://127.0.0.1:6104') ?> - The FramelixDemo module which is a
+                full demo application for you to test out
             </li>
         </ul>
         <?php

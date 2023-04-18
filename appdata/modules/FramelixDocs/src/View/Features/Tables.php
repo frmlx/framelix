@@ -118,7 +118,7 @@ class Tables extends View
         ?>
         <p>
             You can read out more features, flags and functions directly from source
-            at <?= $this->getSourceFileLinkTag(['Framelix/js/framelix-table.js', 'Framelix/src/Html/Table.php']) ?>.
+            at <?= $this->getSourceFileLinkTag(['Framelix/vendor-frontend/js/framelix-table.js', 'Framelix/src/Html/Table.php']) ?>.
         </p>
         <?php
     }

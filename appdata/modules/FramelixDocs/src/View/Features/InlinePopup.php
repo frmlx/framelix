@@ -82,7 +82,7 @@ class InlinePopup extends View
         ?>
         <p>
             The complete source including other functions can be found
-            at <?= $this->getSourceFileLinkTag(['Framelix/js/framelix-popup.js']) ?>
+            at <?= $this->getSourceFileLinkTag(['Framelix/vendor-frontend/js/framelix-popup.js']) ?>
         </p>
         <?php
     }

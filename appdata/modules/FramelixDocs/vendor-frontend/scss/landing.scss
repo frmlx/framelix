@@ -200,6 +200,15 @@ button,
     background: var(--accent-heavy);
     box-shadow: var(--accent-heavy) 0 0 20px;
   }
+
+  &.swap-colors{
+    background: var(--accent-heavy);
+    box-shadow: var(--accent-heavy) 0 0 20px;
+    &:hover {
+      background: var(--bg-brighter);
+      box-shadow: rgba(0,0,0,0.5) 0 0 20px;
+    }
+  }
 }
 
 nav {

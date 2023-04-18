@@ -19,9 +19,10 @@ class Modules extends View
         <p>
             Modules in Framelix are basically a <code>App</code>. Each module can be a full application.
             It includes all source code and resources to serve an application.
-            <?php
-            echo $this->getAnchoredTitle('structure', 'Module structure');
-            ?>
+        </p>
+        <?php
+        echo $this->getAnchoredTitle('structure', 'Module structure');
+        ?>
         <p>
             A module is a folder inside <code><?= FRAMELIX_APPDATA_FOLDER . "/modules" ?></code> where the folder name
             is the module name.

@@ -95,7 +95,7 @@ class ModalWindow extends View
         ?>
         <p>
             The complete source including other functions can be found
-            at <?= $this->getSourceFileLinkTag(['Framelix/js/framelix-modal.js']) ?>
+            at <?= $this->getSourceFileLinkTag(['Framelix/vendor-frontend/js/framelix-modal.js']) ?>
         </p>
         <?php
     }

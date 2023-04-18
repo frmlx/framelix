@@ -164,16 +164,21 @@ class Setup extends View
             starter module from the image, to provide you full autocompletion support and a minimal module to start
             with.
         </p>
-        <blockquote>Notice: The extracted module <code>Framelix</code> inside <code>appdata</code> is basically
-            "read-only". It is not mapped from host to container by default. If you want quick hack into the core, just
-            map the <code>appdata/modules/Framelix</code> folder as well in the <code>docker run</code>. However, if you
-            want help develop the core itself, head to this page.
-        </blockquote>
+        <?= $this->getAnchoredTitle('compose', 'Get your docker-compose.yml') ?>
+        <p>
+            At first you need a docker-compose.yml. Click the button bellow to generate one
+        </p>
         <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'create-config') ?>" theme="primary"
                          icon="draft_orders" target="modal">Click here to create your docker-compose.yml
         </framelix-button>
-        <p>
-            With the generated <code>docker-compose.yml</code> in this folder now run the following.
+
+        <?= $this->getAnchoredTitle('start', 'Start container') ?>
+        <p>The code bellow extract the code for the <code>Framelix (Core)</code> and <code>FramelixStarter</code> module from the docker
+            image to your appdata directory.
+            The module <code>Framelix</code> is by default "read-only" (It is not mapped from host to container). It is
+            only for your IDE auto-completion in the first place.
+            If you want quick hack into the core, just uncomment the prepared mapping line in docker-compose.yml.
+            However, if you want help develop the core itself, head to this page.
         </p>
         <?php
         $this->showCodeBlock(
