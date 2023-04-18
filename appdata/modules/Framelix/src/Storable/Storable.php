@@ -102,6 +102,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
 
     /**
      * Get connection that is default responsible for the called storable
+     * Default is always FRAMELIX_MODULE if not overriden in setupStorableScheme
      * @return string
      */
     final public static function getConnectionId(): string
@@ -468,6 +469,10 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
             return;
         }
         foreach ($storables as $storable) {
+            // skip everything that is no proper storable
+            if (!($storable->id) || !($storable instanceof Storable)) {
+                continue;
+            }
             $storable->delete();
         }
     }
@@ -836,7 +841,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
     {
         if (!$this->id) {
             throw new FatalError(
-                "Cannot delete new storable that is not yet saved in database"
+                "Cannot delete new storable that is not yet saved in database (" . get_class($this) . ")"
             );
         }
         if (!$force && !$this->isDeletable()) {
@@ -850,8 +855,8 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         $db->delete(StorableSchema::ID_TABLE, "id = " . $this->id);
         $id = $this->id;
         $textString = $this->getRawTextString();
-        $this->id = null;
         unset(self::$dbCache[$this->connectionId][$this->id]);
+        $this->id = null;
         $this->onDatabaseUpdated();
         // create system event logs
         $logCategory = SystemEventLog::CATEGORY_STORABLE_DELETED;

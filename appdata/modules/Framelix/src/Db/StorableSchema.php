@@ -25,6 +25,8 @@ use function str_ends_with;
 use function strtolower;
 use function substr;
 
+use const FRAMELIX_MODULE;
+
 /**
  * Storable schema
  */
@@ -76,9 +78,8 @@ class StorableSchema
      */
     public function __construct(public string $className)
     {
-        $storableModule = ClassUtils::getModuleForClass($className);
         $this->tableName = strtolower(trim(str_replace("\\", "_", $className), "_"));
-        $this->connectionId = $storableModule;
+        $this->connectionId = FRAMELIX_MODULE;
     }
 
     /**

@@ -18,12 +18,6 @@ class SystemEventLog extends StorableExtended
     public const CATEGORY_LOGIN_FAILED = 4;
     public const CATEGORY_LOGIN_SUCCESS = 5;
 
-    protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
-    {
-        parent::setupStorableSchema($selfStorableSchema);
-        $selfStorableSchema->connectionId = FRAMELIX_MODULE;
-    }
-
     /**
      * Create system event log
      * @param int $category

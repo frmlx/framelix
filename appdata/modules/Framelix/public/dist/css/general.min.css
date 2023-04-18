@@ -1145,3 +1145,12 @@ framelix-button[theme=transparent] {
   color: inherit;
   --hover-color: 0;
 }
+framelix-button[disabled] {
+  cursor: not-allowed !important;
+  background: rgba(var(--light-color), var(--light-color), var(--light-color), 0.07);
+  color: inherit;
+  --hover-color: 0;
+}
+framelix-button[disabled] * {
+  cursor: not-allowed !important;
+}

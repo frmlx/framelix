@@ -107,4 +107,15 @@ framelix-button {
     color: inherit;
     --hover-color: 0;
   }
+
+  &[disabled] {
+    cursor: not-allowed !important;
+    background: rgba(var(--light-color), var(--light-color), var(--light-color), 0.07);
+    color: inherit;
+    --hover-color: 0;
+
+    * {
+      cursor: not-allowed !important;
+    }
+  }
 }
