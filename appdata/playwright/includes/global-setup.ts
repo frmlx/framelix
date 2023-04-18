@@ -10,7 +10,7 @@ async function globalSetup () {
   const utils = new FramelixUtils(page)
 
   // running framelix setup pages
-  let apps = [utils.framelixConfig.rootUrlStarter, utils.framelixConfig.rootUrlDemo]
+  let apps = [utils.framelixConfig.rootUrlDocs, utils.framelixConfig.rootUrlDemo]
 
   for (let i = 0; i < apps.length; i++) {
     const appUrl = apps[i]
@@ -25,8 +25,10 @@ async function globalSetup () {
     await page.fill('input[name="password"]', 'test@test.local')
     await utils.submitFormAndWaitForFormSubmitFinished('login', 'login')
 
-    // run warmup directly after to restore a proper app state
-    await utils.goto(appUrl + '/appwarmup')
+    if (appUrl === utils.framelixConfig.rootUrlDocs) {
+      // run warmup directly after to restore a proper app state
+      await utils.goto(appUrl + '/appwarmup')
+    }
   }
 
   await browser.close()
