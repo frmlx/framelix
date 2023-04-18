@@ -5,6 +5,7 @@ test('Traversing all docs pages', async ({ page, utils }) => {
   // clear browser session/cookie to not affect global sso token
   await page.context().clearCookies()
   await utils.goto('/')
+  await utils.goto('/welcome')
 
   // find all navigation links and go through them
   let elements = page.locator('.framelix-sidebar a.framelix-sidebar-link')

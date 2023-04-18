@@ -1,7 +1,12 @@
 import { Page, Response } from '@playwright/test'
 import { spawn } from 'child_process'
 
-type FramelixConfig = { environment: object, rootUrlDocs: string, rootUrlStarter: string; }
+type FramelixConfig = {
+  environment: object,
+  rootUrlDocs: string,
+  rootUrlStarter: string,
+  rootUrlDemo: string
+}
 
 export class FramelixUtils {
   readonly page: Page
@@ -80,6 +85,7 @@ export class FramelixUtils {
       environment: environments,
       rootUrlDocs: 'https://127.0.0.1:' + environments['FramelixDocs'][2],
       rootUrlStarter: 'https://127.0.0.1:' + environments['FramelixStarter'][2],
+      rootUrlDemo: 'https://127.0.0.1:' + environments['FramelixDemo'][2]
     }
 
     // stop on any uncaught page error

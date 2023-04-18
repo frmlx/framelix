@@ -15,8 +15,8 @@ test('Login/Logout', async ({ page, utils }) => {
   await page.fill('input[name="password"]', 'test@test.local')
   await utils.submitFormAndWaitForFormSubmitFinished('login', 'login')
 
-  // goto start page
-  await utils.goto('')
+  // goto start page where a backend is
+  await utils.goto('welcome')
 
   // now user must be logged in
   await expect(page.locator('html[data-user]')).toHaveCount(1)
@@ -25,7 +25,7 @@ test('Login/Logout', async ({ page, utils }) => {
   await utils.goto('backend/logout')
 
   // goto start page
-  await utils.goto('')
+  await utils.goto('welcome')
 
   // now user must be logged out correctly
   await expect(page.locator('html[data-user]')).toHaveCount(0)
