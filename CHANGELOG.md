@@ -41,9 +41,7 @@ Generally, as v3 wasn't really public used or available, this should not be cons
 
 ### 🐳 Docker container changes
 
-* ➕ added build ARG `OS_IMAGE` to be able to use another base ubuntu image (experimental). So you can install this also
-  on a Raspberry PI for example, which have ARM architecture.
-* ✏️ reworked many internals of how the image works and streamlined build, test and development process
+* ✏️ basically a complete new docker image with a lot of optimization compared to v3
 
 #### 📚 Installed server applications are now:
 
