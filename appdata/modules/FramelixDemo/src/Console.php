@@ -18,7 +18,6 @@ use Framelix\FramelixDemo\Storable\SystemValue\IncomeCategory;
 use Framelix\FramelixDemo\Storable\SystemValue\InvoiceCreator;
 use Framelix\FramelixDemo\Storable\SystemValue\OutgoingCategory;
 use Framelix\FramelixDemo\Storable\SystemValue\SummaryKey;
-use Throwable;
 
 use function shuffle;
 use function substr;
@@ -97,26 +96,24 @@ class Console extends \Framelix\Framelix\Console
             return 0;
         }
         self::$cleanupMode = true;
-        try {
-            Mutex::create(Cron::CLEANUP_MUTEX_NAME);
-            Storable::deleteMultiple(Storable::getByCondition());
-        } catch (Throwable $e) {
-            throw $e;
-        } finally {
-            // make sure in any case a user does exist
-            if (!User::getByEmail('test@test.local', true)) {
-                // create a new testuser
-                $user = new  User();
-                $user->email = "test@test.local";
-                $user->setPassword('test@test.local');
-                $user->flagLocked = false;
-                $user->store();
-                $user->addRole('admin');
-            }
+
+        Mutex::create(Cron::CLEANUP_MUTEX_NAME);
+        Storable::deleteMultiple(Storable::getByCondition());
+
+        $user = User::getByEmail('test@test.local', true);
+        if (!$user) {
+            // create the test user if not yet exist
+            $user = new  User();
+            $user->email = "test@test.local";
+            $pw = RandomGenerator::getRandomString(5, 10);
+            $user->setPassword($pw);
+            $user->flagLocked = false;
+            $user->store();
+            $user->addRole('admin');
         }
 
         // set user to be used for next store methods
-        User::setCurrentUser(User::getByEmail('test@test.local', true));
+        User::setCurrentUser($user);
 
         $incomeCategories = [];
         $values = [
@@ -183,7 +180,7 @@ class Console extends \Framelix\Framelix\Console
 
         $invoiceHeader = new StorableFile();
         $invoiceHeader->setDefaultRelativePath(false);
-        $invoiceHeader->store(file: UploadedFile::createFromFile(__DIR__ . "/../public/img/invoice-header.png"),
+        $invoiceHeader->store(file: UploadedFile::createFromFile(__DIR__ . "/../misc/invoice-header.png"),
             copy: true);
 
         $invoiceCreator = new InvoiceCreator();
@@ -212,6 +209,9 @@ class Console extends \Framelix\Framelix\Console
                 $income->net += RandomGenerator::getRandomInt(1, 100) / 100;
             }
             $income->store();
+            if (rand(0, 10) === 10) {
+                self::assignRandomAttachmentFile($income);
+            }
             $incomes[$income->id] = $income;
         }
 
@@ -228,6 +228,9 @@ class Console extends \Framelix\Framelix\Console
                 $outgoing->net += RandomGenerator::getRandomInt(1, 100) / 100;
             }
             $outgoing->store();
+            if (rand(0, 10) === 10) {
+                self::assignRandomAttachmentFile($outgoing);
+            }
         }
 
         for ($i = 0; $i <= 50; $i++) {
@@ -292,5 +295,15 @@ class Console extends \Framelix\Framelix\Console
             $str .= ucfirst(self::$randomWords[0]) . " ";
         }
         return substr($str, 0, -1);
+    }
+
+    private static function assignRandomAttachmentFile(Storable $assignedStorable): void
+    {
+        $attachment = new StorableFile();
+        $attachment->assignedStorable = $assignedStorable;
+        $attachment->setDefaultRelativePath(false);
+        $attachment->store(file: UploadedFile::createFromFile(__DIR__ . "/../misc/" . (rand(0,
+                1) ? 'you-got-a-framelix-pdf.pdf' : 'you-got-a-framelix-spreadsheet.xlsx')),
+            copy: true);
     }
 }

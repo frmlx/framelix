@@ -2,6 +2,7 @@
 
 namespace Framelix\FramelixDemo\StorableMeta;
 
+use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\FramelixDemo\View\Incomes;
 use Framelix\Framelix\Db\LazySearchCondition;
 use Framelix\Framelix\Form\Field\File;
@@ -63,12 +64,18 @@ class Income extends StorableMeta
 
         $this->addDefaultPropertiesAtStart();
 
-        $this->tableDefault->addColumnFlag('attachments', Table::COLUMNFLAG_REMOVE_IF_EMPTY);
         $property = $this->createProperty("attachments");
         $property->field = new File();
         $property->field->multiple = true;
         $property->field->storableFileBase = new StorableFile();
         $property->field->storableFileBase->setDefaultRelativePath(false);
+        $property->valueCallable = function () {
+            $arr = [];
+            if ($attachments = $this->storable->getAttachments()) {
+                $arr = ArrayUtils::merge($arr, $attachments);
+            }
+            return $arr;
+        };
 
         $this->tableDefault->addColumnFlag('receiptNumber', Table::COLUMNFLAG_SMALLWIDTH);
         $property = $this->createProperty("receiptNumber");

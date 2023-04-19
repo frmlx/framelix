@@ -73,12 +73,12 @@ class SummaryKey extends SystemValue
     }
     public function isEditable(): bool
     {
-        return User::hasRole('admin');
+        return Console::$cleanupMode ?? User::hasRole('admin');
     }
 
     public function isReadable(): bool
     {
-        return User::hasRole('admin');
+        return Console::$cleanupMode ?? User::hasRole('admin');
     }
 
     public function getHtmlString(): string

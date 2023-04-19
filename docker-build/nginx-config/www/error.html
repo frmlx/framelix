@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oopsi</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        background-color: hsla(213, 12%, 17%);
+        font-family: "Open Sans", Arial, sans-serif;
+        overflow: hidden;
+        text-align: center;
+        color: white;
+      }
+      .bg {
+        position: absolute;
+        width: max(50vw, 50vh);
+        height: max(50vw, 50vh);
+        background: #f04;
+        filter: blur(50px);
+        font-size: max(50vw, 50vh);
+        text-align: center;
+        border-radius: 20vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: 5s an forwards;
+        opacity: 0.1;
+        z-index: 0;
+      }
+      @keyframes an {
+        from {
+          filter: blur(200px);
+          opacity: 0.1;
+        }
+        to {
+          filter: blur(100px);
+          opacity: 0.3;
+        }
+      }
+      .text {
+        font-weight: bold;
+        height: 100vh;
+        display: grid;
+        place-items: center;
+        font-size: 24px;
+        text-shadow: rgba(0, 0, 0, 0.5) 2px 2px 10px;
+      }
+      .text .inner {
+        position: relative;
+        z-index: 1;
+        padding: 20px;
+
+      }
+    </style>
+    <script>window.errorCode = 500</script>
+</head>
+<body>
+<div class="text">
+    <div class="bg">
+        F
+    </div>
+    <div class="inner"></div>
+</div>
+<script>
+  (function () {
+    let title = 'Oops! Something went wrong!'
+    let desc = 'Please try again in a few minutes, or now, whenever you feel comfortable for it.<br/>Probably there is currently a short server maintenance.'
+    switch (window.errorCode) {
+      case 404:
+        title = 'Resource not found'
+        desc = 'The URL that you\'ve tried has not found the resource on the server'
+        break
+      case 504:
+        title = 'Request Timeout'
+        desc = 'You reached the exection time limit. Please try again or contact the application maintainer.'
+        break
+    }
+    document.querySelector('.inner').innerHTML = `<h1>${title}</h1><p>${desc}</p>`
+    document.title = title
+  })()
+</script>
+</body>
+</html>
