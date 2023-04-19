@@ -21,7 +21,6 @@ use function ob_get_level;
 use function register_shutdown_function;
 use function set_error_handler;
 use function set_exception_handler;
-use function set_time_limit;
 use function spl_autoload_register;
 use function str_replace;
 use function str_starts_with;
@@ -46,6 +45,7 @@ class Framelix
      */
     public static array $registeredModules = [];
 
+
     /**
      * Initializes the framework
      * @codeCoverageIgnore
@@ -55,8 +55,6 @@ class Framelix
         // report all errors, everything, we not accept any error
         error_reporting(E_ALL);
         ini_set("display_errors", '1');
-        // default 60 seconds run time and 128M memory, suitable for most default app calls
-        set_time_limit(60);
         // everything is utf8
         ini_set("default_charset", "utf-8");
         mb_internal_encoding("UTF-8");
@@ -101,11 +99,8 @@ class Framelix
 
         self::registerModule("Framelix");
 
-        if (!self::isCli()) {
-            // set memory limit to 128M as it is enough for almost every use case
-            // increase it where it is required
-            ini_set("memory_limit", "128M");
-        }
+        // CLI have more time and memory by default
+        Config::setTimeAndMemoryLimit(self::isCli() ? 4 : 1, self::isCli() ? 1024 : 128);
 
         // setup required, skip everything and init with minimal data
         if (!Config::doesUserConfigFileExist()) {

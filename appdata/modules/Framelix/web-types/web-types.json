@@ -52,6 +52,14 @@
               }
             },
             {
+              "name": "modal-options",
+              "description": "If target = modal, this JSON object string to pass to FramelixModal.show()",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
               "name": "target",
               "description": "Target if link attributes is provided",
               "required": false,
@@ -74,7 +82,7 @@
                 },
                 {
                   "name": "modal",
-                  "description": "Modal window"
+                  "description": "Opens in a Modal window. Define modal-pptions as JSON object with custom modal FramelixModal.show options"
                 },
                 {
                   "name": "attached",

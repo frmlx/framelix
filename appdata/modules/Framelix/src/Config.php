@@ -3,6 +3,7 @@
 namespace Framelix\Framelix;
 
 use Framelix\Framelix\Db\Sql;
+use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Form\Field\Captcha;
 use Framelix\Framelix\Form\Field\Email;
 use Framelix\Framelix\Form\Field\Html;
@@ -21,6 +22,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 use SensitiveParameter;
 
 use function file_exists;
+use function set_time_limit;
 
 use const FRAMELIX_MODULE;
 
@@ -389,6 +391,39 @@ class Config
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "backend-fonts");
         $bundle->pageAutoInclude = false;
         $bundle->addFile("vendor-frontend/scss/backend/framelix-backend-fonts.scss");
+    }
+
+    /**
+     * Increase time and/or memory limit for current request
+     * Decreased usually not have an effect or will throw an error
+     * @param int|null $newTimeLimit There are only 4 possible values
+     *  1 = 60 seconds (1 minute = default)
+     *  2 = 600 seconds (10 minutes)
+     *  3 = 3600 (1 hour)
+     *  4 = 7200 seconds (2 hours)
+     *  null = Do not modify the default limit
+     * @param int|null $newMemoryLimit In MB, null doesnt modify it
+     * @return void
+     */
+    public static function setTimeAndMemoryLimit(
+        #[ExpectedValues(values: [null, 0, 1, 2, 3])] ?int $newTimeLimit = 1,
+        ?int $newMemoryLimit = 128
+    ): void {
+        if ($newTimeLimit !== null) {
+            if ($newTimeLimit < 0 || $newTimeLimit > 4) {
+                throw new FatalError('Unsupported time limit category');
+            }
+            $limit = match ($newTimeLimit) {
+                1 => 60,
+                2 => 600,
+                3 => 3600,
+                4 => 7200,
+            };
+            set_time_limit($limit);
+        }
+        if ($newMemoryLimit !== null) {
+            ini_set("memory_limit", $newMemoryLimit . "M");
+        }
     }
 
     /**

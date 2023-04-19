@@ -52,6 +52,7 @@ class FramelixCustomElementButton extends FramelixCustomElement {
           }
         }
         const target = this.getAttribute('target') || '_self'
+        const modalOptions = this.getAttribute('modal-options')
         const jscallUrl = this.getAttribute('jscall-url')
         const href = this.getAttribute('href')
         if (jscallUrl) {
@@ -59,7 +60,7 @@ class FramelixCustomElementButton extends FramelixCustomElement {
           self.updateDomContents()
           const request = FramelixRequest.jsCall(jscallUrl, { 'data': this.dataset })
           if (target === 'modal') {
-            FramelixModal.show({ bodyContent: request })
+            FramelixModal.show(Object.assign({ bodyContent: request }, modalOptions ? JSON.parse(modalOptions) : {}))
           } else if (target === 'tooltip' || target === 'attached') {
             FramelixPopup.show(this, request, { color: target === 'tooltip' ? 'dark' : document.body })
           } else if (target === 'attached') {

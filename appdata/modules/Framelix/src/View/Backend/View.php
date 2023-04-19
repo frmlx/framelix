@@ -101,7 +101,7 @@ abstract class View extends LayoutView
 
             $field = new Html();
             $field->name = "resetAlerts";
-            $field->defaultValue = '<framelix-button class="framelix_reset_alerts">__framelix_reset_alerts__</framelix-button>';
+            $field->defaultValue = '<framelix-button class="framelix_reset_alerts" icon="restart_alt">__framelix_reset_alerts__</framelix-button>';
             $form->addField($field);
 
             $form->show();
@@ -222,8 +222,11 @@ abstract class View extends LayoutView
                     <?php
                     if ($appIsSetup) {
                         ?>
-                        <framelix-button theme="transparent" class="framelix-user-settings"
-                                         jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>" target="modal"
+                        <framelix-button theme="transparent"
+                                         class="framelix-user-settings"
+                                         jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>"
+                                         target="modal"
+                                         modal-options='{"maxWidth":500}'
                                          icon="people"
                                          title="__framelix_backend_user_settings__"></framelix-button>
                         <?php
