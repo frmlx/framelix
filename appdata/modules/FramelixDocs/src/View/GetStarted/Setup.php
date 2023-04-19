@@ -2,6 +2,7 @@
 
 namespace Framelix\FramelixDocs\View\GetStarted;
 
+use Framelix\Framelix\Form\Field\Number;
 use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Form\Field\Text;
 use Framelix\Framelix\Form\Field\Toggle;
@@ -11,6 +12,7 @@ use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Url;
+use Framelix\Framelix\Utils\NumberUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\FramelixDocs\View\View;
 
@@ -34,6 +36,7 @@ class Setup extends View
                 $view = new self();
                 $contents = file_get_contents(__DIR__ . "/../../../misc/docker-compose-starter.yml");
                 $vars = Request::getPost('var');
+                $vars['includeDocs'] = (int)NumberUtils::toFloat($vars['includeDocs'] ?? 0, 0);
                 if (is_array($vars)) {
                     $vars['volumename'] = $vars['projectname'] . "_db";
                     foreach ($vars as $key => $value) {
@@ -46,10 +49,25 @@ class Setup extends View
                 if (!Request::getPost('mysql')) {
                     $contents = preg_replace("~# mariadb-start.*?# mariadb-end~s", '', $contents);
                 }
+                if (!Request::getPost('backup') || !Request::getPost('mysql')) {
+                    $contents = preg_replace("~# mariadb-backup-start.*?# mariadb-backup-end~s", '', $contents);
+                }
+                if ($vars['includeDocs']) {
+                    $contents = preg_replace("~# modules-default .*~m", '', $contents);
+                    $contents = str_replace(['# modules-includeDocs'], '', $contents);
+                } else {
+                    $contents = preg_replace("~# modules-includeDocs .*~m", '', $contents);
+                    $contents = str_replace(['# modules-default'], '', $contents);
+                }
                 if (Request::getPost('framelixmount')) {
                     $contents = preg_replace("~^#( .*?appdata/modules/Framelix.*$)~m", '$1', $contents);
                 }
-                $contents = str_replace(['# mariadb-start', '# mariadb-end'], '', $contents);
+                $contents = str_replace([
+                    '# mariadb-start',
+                    '# mariadb-end',
+                    '# mariadb-backup-start',
+                    '# mariadb-backup-end'
+                ], '', $contents);
                 $lines = explode("\n", $contents);
                 $contents = implode(
                     "\n",
@@ -101,6 +119,13 @@ class Setup extends View
             $field->defaultValue = RandomGenerator::getRandomString(5, 10);
             $form->addField($field);
 
+            $field = new Toggle();
+            $field->name = "backup";
+            $field->label = "Include daily automatic MySQL database backup schedule";
+            $field->labelDescription = 'Defaults to 03:00 am, you can change it manually in the generated docker-compose.yml';
+            $field->getVisibilityCondition()->equal('mysql', '1');
+            $form->addField($field);
+
             $field = new Text();
             $field->required = true;
             $field->name = "var[port]";
@@ -121,6 +146,13 @@ class Setup extends View
             $field->name = "framelixmount";
             $field->label = "Mount Framelix module";
             $field->labelDescription = 'This allow you to do modifications in the core module that are mapped back to the container. By default, the Framelix module folder is not mounted (The integrated one in the image is taken). You can change that later at any time by removed the comment "#" from the compose file for the Framelix mount.';
+            $form->addField($field);
+
+            $field = new Number();
+            $field->name = "var[includeDocs]";
+            $field->label = "Start docs application at port";
+            $field->labelDescription = 'Each Framelix docker image have the complete docs also included (The one you currently see). Enable this to add a second port from where you can open the docs pages.';
+            $field->placeholder = "e.g: 6457";
             $form->addField($field);
 
             $versionNumber = substr(Framelix::VERSION, 0, 1);
@@ -173,7 +205,8 @@ class Setup extends View
         </framelix-button>
 
         <?= $this->getAnchoredTitle('start', 'Start container') ?>
-        <p>The code bellow extract the code for the <code>Framelix (Core)</code> and <code>FramelixStarter</code> module from the docker
+        <p>The code bellow extract the code for the <code>Framelix (Core)</code> and <code>FramelixStarter</code> module
+            from the docker
             image to your appdata directory.
             The module <code>Framelix</code> is by default "read-only" (It is not mapped from host to container). It is
             only for your IDE auto-completion in the first place.
@@ -203,6 +236,15 @@ class Setup extends View
             Our favorite IDE is PhpStorm and Framelix is basically developed only with this. It provides industry
             leading autocompletion and so many other features, which makes development so much faster and easier. We are
             not affiliated with this IDE or company, it's just our recommendation.
+        </p>
+        <?= $this->getAnchoredTitle('older-docs', 'Get older version of this docs') ?>
+        <p>
+            We guess you only will need older docs when you actually using older versions of Framelix.
+            For this, all Framelix docker images have the corresponding docs fully integrated.
+            All you need to do is to enable them on a port, to be accessable.
+            Use the docker-compose generator above to get a docker-compose.yml where the docs module is enabled and
+            accessable. At the end, just modify the version to your needs in the final generated .yml file and start the
+            project.
         </p>
         <?php
     }

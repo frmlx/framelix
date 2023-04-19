@@ -4,6 +4,25 @@ volumes:
   ${volumename}:
 # mariadb-end
 services:
+# mariadb-backup-start
+  mariadb-backup:
+    image: zeenlym/mariadb-backup
+    environment:
+      - TIMEZONE=Europe/Vienna
+      - SCHEDULE=0 0 3 * *
+      - BACKUP_METHOD=mysqldump
+      - MYSQL_HOST=mariadb
+      - MYSQL_DATABASE=FramelixStarter
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=${mysqlpwuser}
+    volumes:
+      - ./userdata/backups:/backup
+    healthcheck:
+      test: find /backup -type f -mtime +7 -delete # this healthcheck is used to remove backups older then 7 days
+      interval: 60s
+      timeout: 5s
+      retries: 5
+# mariadb-backup-end
 # mariadb-start
   mariadb:
     image: mariadb:10.11
@@ -13,7 +32,7 @@ services:
     environment:
       - MARIADB_ROOT_PASSWORD=${mysqlpw}
       - MARIADB_USER=app
-      - MARIADB_PASSWORD =${mysqlpwuser}
+      - MARIADB_PASSWORD=${mysqlpwuser}
       - MARIADB_DATABASE=FramelixStarter
     healthcheck:
       test: mysql -u root '-p${mysqlpw}' -e '\q'
@@ -35,6 +54,8 @@ services:
       - ./userdata:/framelix/userdata
     ports:
       - "${port}:${port}"
+# modules-includeDocs      - "${includeDocs}:${includeDocs}"
     environment:
-      - FRAMELIX_MODULES=FramelixStarter,1,${port}
+# modules-default      - FRAMELIX_MODULES=FramelixStarter,1,${port}
+# modules-includeDocs      - FRAMELIX_MODULES="FramelixStarter,1,${port};FramelixDocs,1,${includeDocs}"
       - FRAMELIX_DEVMODE=1

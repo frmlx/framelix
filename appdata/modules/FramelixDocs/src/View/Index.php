@@ -57,7 +57,8 @@ class Index extends \Framelix\Framelix\View
                     </span><span style="color:var(--accent-light)">PHP</span> Framework</h2>
 
                 <br/><br/>
-                <a href="/welcome" style="display: block; font-size:var(--font-size-big)" class="button swap-colors"><span
+                <a href="/welcome" style="display: block; font-size:var(--font-size-big)"
+                   class="button swap-colors"><span
                         class="material-icons">rocket</span> Dive in and get started now!</a>
             </div>
         </div>
@@ -93,7 +94,8 @@ class Index extends \Framelix\Framelix\View
                             Never worry about updating PHP, Nginx and other libraries. We do this for you.
                             All you have to do is to pull the new image and restart your container.
                         </p>
-                        <a href="https://hub.docker.com/r/nullixat/framelix" class="button" target="_blank">Docker Hub</a>
+                        <a href="https://hub.docker.com/r/nullixat/framelix" class="button" target="_blank">Docker
+                            Hub</a>
                     </div>
                 </div>
                 <div>

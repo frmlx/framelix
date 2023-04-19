@@ -4,6 +4,7 @@ namespace Framelix\FramelixDocs\Backend;
 
 
 use Framelix\Framelix\Storable\User;
+use Framelix\Framelix\View;
 use Framelix\FramelixDocs\View\Background\CodingStandards;
 use Framelix\FramelixDocs\View\Background\Idea;
 use Framelix\FramelixDocs\View\Background\Terminology;
@@ -35,6 +36,7 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 {
     public function showContent(): void
     {
+        echo '<framelix-alert theme="primary"><b>Version: ' . \Framelix\Framelix\Framelix::VERSION . '</b><br/><a style="font-size: 0.8em" href="'.View::getUrl(Setup::class).'#anchor-older-docs">Here is how to access older versions</a></framelix-alert>';
         $this->addLink(Index::class, "Back to Landing Page", target: "_blank");
         $this->showHtmlForLinkData();
 
