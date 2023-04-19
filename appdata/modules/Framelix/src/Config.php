@@ -402,15 +402,15 @@ class Config
      *  3 = 3600 (1 hour)
      *  4 = 7200 seconds (2 hours)
      *  null = Do not modify the default limit
-     * @param int|null $newMemoryLimit In MB, null doesnt modify it
+     * @param int|null $newMemoryLimit In MB, null doesn't modify it
      * @return void
      */
     public static function setTimeAndMemoryLimit(
-        #[ExpectedValues(values: [null, 0, 1, 2, 3])] ?int $newTimeLimit = 1,
+        #[ExpectedValues(values: [null, 1, 2, 3, 4])] ?int $newTimeLimit = 1,
         ?int $newMemoryLimit = 128
     ): void {
         if ($newTimeLimit !== null) {
-            if ($newTimeLimit < 0 || $newTimeLimit > 4) {
+            if ($newTimeLimit < 1 || $newTimeLimit > 4) {
                 throw new FatalError('Unsupported time limit category');
             }
             $limit = match ($newTimeLimit) {
