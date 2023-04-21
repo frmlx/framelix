@@ -94,7 +94,7 @@ class Browser
     /**
      * @param string $url The url for the request
      * @param string $requestMethod Most likeley you will need get or post
-     * @param mixed|null $requestBody Pass an array of values or a raw string
+     * @param array|string|null $requestBody Pass an array of values or a raw string
      */
     public function __construct(
         public string $url = '',
