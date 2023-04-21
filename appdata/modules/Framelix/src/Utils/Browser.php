@@ -2,6 +2,8 @@
 
 namespace Framelix\Framelix\Utils;
 
+use JetBrains\PhpStorm\ExpectedValues;
+
 use function array_shift;
 use function curl_close;
 use function curl_error;
@@ -36,26 +38,6 @@ class Browser
      * @var mixed
      */
     public mixed $lastRequestCurl = null;
-
-    /**
-     * The url to send to
-     * @var string
-     */
-    public string $url = '';
-
-    /**
-     * The request method
-     * @var string
-     */
-    public string $requestMethod = 'get';
-
-    /**
-     * The request body to send
-     * For raw body just pass a string
-     * This will get flushed on sendRequest()
-     * @var mixed
-     */
-    public mixed $requestBody = null;
 
     /**
      * User and/or password credentials for basic auth
@@ -110,14 +92,26 @@ class Browser
     public bool $followRedirects = true;
 
     /**
-     * Create a new instance
-     * @return self
+     * @param string $url The url for the request
+     * @param string $requestMethod Most likeley you will need get or post
+     * @param mixed|null $requestBody Pass an array of values or a raw string
      */
-    public static function create(): self
-    {
-        $instance = new self();
-        $instance->resetCurl();
-        return $instance;
+    public function __construct(
+        public string $url = '',
+        #[ExpectedValues(values: [
+            'get',
+            'post',
+            'head',
+            'delete',
+            'put',
+            'patch',
+            'options',
+            'trace',
+            'connect'
+        ])] public string $requestMethod = 'get',
+        public array|string|null $requestBody = null
+    ) {
+        $this->resetCurl();
     }
 
     /**
@@ -175,7 +169,6 @@ class Browser
         curl_setopt($this->curl, CURLOPT_URL, $this->url);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->sendHeaders);
         if ($this->requestBody !== null) {
-            curl_setopt($this->curl, CURLOPT_POST, 1);
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->requestBody);
             $this->requestBody = null;
         }

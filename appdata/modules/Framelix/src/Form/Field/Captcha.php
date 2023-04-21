@@ -71,7 +71,7 @@ class Captcha extends Field
      */
     public static function recaptchaValidationRequest(string $token, string $privateKey): mixed
     {
-        $browser = Browser::create();
+        $browser = new Browser();
         $browser->url = 'https://www.google.com/recaptcha/api/siteverify';
         $browser->requestMethod = 'post';
         $browser->requestBody = [
