@@ -8,6 +8,7 @@ use const FRAMELIX_USERDATA_FOLDER;
 class Config
 {
     public static string $demoAppUrl = 'https://127.0.0.1:6104';
+    public static string $slackApiToken = '';
 
     public static function onRegister(): void
     {

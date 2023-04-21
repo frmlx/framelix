@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|3335755496",
+    "directoryListHash": "3|3819010657",
     "views": {
         "Framelix\\FramelixDocs\\View\\AppWarmup": {
             "accessRole": "*",
@@ -241,6 +241,16 @@
             "pageTitle": "Demo Application",
             "url": "\/getstarted\/demoapplication"
         },
+        "Framelix\\FramelixDocs\\View\\GetStarted\\Issues": {
+            "accessRole": "*",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "Questions \/ Issues?",
+            "url": "\/getstarted\/issues"
+        },
         "Framelix\\FramelixDocs\\View\\GetStarted\\Setup": {
             "accessRole": "*",
             "customUrl": null,
@@ -270,6 +280,16 @@
             "hiddenView": false,
             "pageTitle": "Framelix - A rich featured, Docker ready, Full-Stack PHP Framework",
             "url": ""
+        },
+        "Framelix\\FramelixDocs\\View\\SlackBadge": {
+            "accessRole": "*",
+            "customUrl": "\/slack-badge.svg",
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/slackbadge"
         },
         "Framelix\\FramelixDocs\\View\\Welcome": {
             "accessRole": "*",
