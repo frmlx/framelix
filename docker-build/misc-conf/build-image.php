@@ -28,6 +28,7 @@ if ($buildType === 'prod') {
     runCmd("mkdir -p $modulesFolder");
     runCmd("7zz x $tmpFolder/package.zip -spf -y -o$tmpFolder");
     runCmd("mv $tmpFolder/*/appdata/modules/Framelix $modulesFolder/Framelix");
+    runCmd("mv $tmpFolder/*/appdata/modules/FramelixDemo $modulesFolder/FramelixDemo");
     runCmd("mv $tmpFolder/*/appdata/modules/FramelixDocs $modulesFolder/FramelixDocs");
     runCmd("mv $tmpFolder/*/appdata/modules/FramelixStarter $modulesFolder/FramelixStarter");
     runCmd("rm -rf $tmpFolder");
