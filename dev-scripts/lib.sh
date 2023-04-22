@@ -13,6 +13,12 @@ MODULENAME_LOWER="${MODULENAME,,}"
 VERSION=$(cat "$ROOTDIR/VERSION")
 MAJOR_VERSION=$(echo $VERSION| cut -d'.' -f 1)
 MINOR_VERSION=$(echo $VERSION| cut -d'.' -f 1,2)
+PRE_VERSION=$(echo $VERSION| cut -d'-' -f 2,2)
+
+# the current version is no pre version, so unset pre version
+if [ "$PRE_VERSION" == "$VERSION" ]; then
+  PRE_VERSION=""
+fi
 
 cecho() {
   local code="\033["

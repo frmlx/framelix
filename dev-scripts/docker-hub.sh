@@ -15,6 +15,7 @@ echo "-p : Push to docker hub (If not set, it only build and tests the image, a 
 echo "-s : Skip rebuild (Does take the current existing $DOCKER_TAGNAME_LOCAL image)"
 echo ""
 
+exit 0
 BUILD_TYPE=0
 PUSH=0
 SKIP_REBUILD=0
@@ -94,12 +95,17 @@ if [ "$PUSH" == "1" ] ; then
       exit 1
     fi
 
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$VERSION
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
+    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:next
 
-    docker push $DOCKER_REPO:$VERSION
-    docker push $DOCKER_REPO:$MINOR_VERSION
-    docker push $DOCKER_REPO:$MAJOR_VERSION
+    if [ "$PRE_VERSION" == "" ]; then
+      # production tags
+      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$VERSION
+      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
+      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
+
+      docker push $DOCKER_REPO:$VERSION
+      docker push $DOCKER_REPO:$MINOR_VERSION
+      docker push $DOCKER_REPO:$MAJOR_VERSION
+    fi
   fi
 fi
