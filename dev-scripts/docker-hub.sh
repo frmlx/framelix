@@ -107,5 +107,6 @@ if [ "$PUSH" == "1" ] ; then
       docker push $DOCKER_REPO:$MINOR_VERSION
       docker push $DOCKER_REPO:$MAJOR_VERSION
     fi
+    docker push $DOCKER_REPO:edge
   fi
 fi
