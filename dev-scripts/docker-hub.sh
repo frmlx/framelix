@@ -95,7 +95,7 @@ if [ "$PUSH" == "1" ] ; then
       exit 1
     fi
 
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:next
+    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:edge
 
     if [ "$PRE_VERSION" == "" ]; then
       # production tags
