@@ -5,7 +5,7 @@ source $SCRIPTDIR/lib.sh
 
 cecho b "Build/Push image to Docker Hub"
 echo "This script does:"
-echo "  * Rebuild the image $DOCKER_TAGNAME_LOCAL,run all tests and only on success will be able to push the image"
+echo "  * Rebuild the image $DOCKER_TAGNAME_LOCAL, run all tests and only on success will be able to push the image"
 echo "  * Deletes all local userdata and db volume"
 echo "  * Runs all tests"
 echo "  * If all success, be able to push to docker"
@@ -94,12 +94,10 @@ if [ "$PUSH" == "1" ] ; then
       exit 1
     fi
 
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:latest
     docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$VERSION
     docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
     docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
 
-    docker push $DOCKER_REPO:latest
     docker push $DOCKER_REPO:$VERSION
     docker push $DOCKER_REPO:$MINOR_VERSION
     docker push $DOCKER_REPO:$MAJOR_VERSION
