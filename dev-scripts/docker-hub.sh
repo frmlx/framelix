@@ -15,7 +15,6 @@ echo "-p : Push to docker hub (If not set, it only build and tests the image, a 
 echo "-s : Skip rebuild (Does take the current existing $DOCKER_TAGNAME_LOCAL image)"
 echo ""
 
-exit 0
 BUILD_TYPE=0
 PUSH=0
 SKIP_REBUILD=0
