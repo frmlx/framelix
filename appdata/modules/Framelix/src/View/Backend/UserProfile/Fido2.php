@@ -6,10 +6,10 @@ use Framelix\Framelix\Enums\ButtonColor;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Lang;
+use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
-use Framelix\Framelix\Network\Session;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Storable\UserWebAuthn;
 use Framelix\Framelix\Url;
@@ -42,7 +42,7 @@ class Fido2 extends View
                     $user->email,
                     $user->email
                 );
-                Session::set('fido2-create-challenge', (string)$webAuthn->getChallenge());
+                Cookie::set('fido2-create-challenge', (string)$webAuthn->getChallenge(), encrypted: true);
                 $jsCall->result = ['createArgs' => (array)$createArgs];
                 break;
             case 'processargs':
@@ -52,7 +52,7 @@ class Fido2 extends View
                     $data = $webAuthn->processCreate(
                         base64_decode($jsCall->parameters["clientData"] ?? ''),
                         base64_decode($jsCall->parameters["attestationObject"] ?? ''),
-                        ByteBuffer::fromHex(Session::get('fido2-create-challenge') ?? '')
+                        ByteBuffer::fromHex(Cookie::get('fido2-create-challenge', encrypted: true) ?? '')
                     );
                     $data->credentialId = base64_encode($data->credentialId);
                     $data->AAGUID = base64_encode($data->AAGUID);
@@ -98,7 +98,7 @@ class Fido2 extends View
             $this->storable->user = User::get();
         }
         $this->meta = new \Framelix\Framelix\StorableMeta\UserWebAuthn($this->storable);
-        if (Session::get(__CLASS__ . "-pw-verified")) {
+        if (Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {
             if (Form::isFormSubmitted($this->meta->getEditFormId())) {
                 $form = $this->meta->getEditForm();
                 $form->validate();
@@ -111,7 +111,7 @@ class Fido2 extends View
             if (!$this->storable->user->passwordVerify(Request::getPost('password'))) {
                 Response::stopWithFormValidationResponse(['password' => '__framelix_password_incorrect__']);
             }
-            Session::set(__CLASS__ . "-pw-verified", true);
+            Cookie::set(__CLASS__ . "-pw-verified", true, encrypted: true);
             Url::getBrowserUrl()->redirect();
         }
         $this->showContentBasedOnRequestType();
@@ -119,7 +119,12 @@ class Fido2 extends View
 
     public function showContent(): void
     {
-        if (!Session::get(__CLASS__ . "-pw-verified")) {
+        if (Url::getBrowserUrl()->getHost() === '127.0.0.1') {
+            echo '<framelix-alert class="framelix-alert" theme="error">' . Lang::get('__framelix_view_backend_userprofile_fido2_domainunsupported__',
+                    ['domain' => Url::getBrowserUrl()->getHost(), 'use' => 'localhost']) . '</framelix-alert>';
+            return;
+        }
+        if (!Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {
             $form = $this->getPasswordVerifyForm();
             $form->addSubmitButton('verify', '__framelix_goahead__', 'lock_open');
             $form->show();

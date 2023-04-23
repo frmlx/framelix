@@ -1135,6 +1135,10 @@
         "Deaktiviere FIDO2 auf diesem Ger\u00e4t",
         "62256"
     ],
+    "__framelix_view_backend_userprofile_fido2_domainunsupported__": [
+        "FIDO 2 funktioniert auf der Domain {domain} nicht. Benutze zum Beispiel {use} um das Problem zu beheben.",
+        "2cdd7"
+    ],
     "__framelix_view_backend_userprofile_fido2_enable__": [
         "Aktiviere jetzt FIDO2 auf diesem Ger\u00e4t",
         "5b39d"

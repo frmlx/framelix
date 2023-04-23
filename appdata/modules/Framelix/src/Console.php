@@ -2,7 +2,6 @@
 
 namespace Framelix\Framelix;
 
-use Framelix\Framelix\Db\SchemeBuilderRequirementsInterface;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Exception\StopExecution;
@@ -23,7 +22,6 @@ use function in_array;
 use function is_array;
 use function is_bool;
 use function is_string;
-use function mkdir;
 use function readline;
 use function readline_add_history;
 use function str_pad;
@@ -33,7 +31,6 @@ use function strlen;
 use function unlink;
 
 use const FRAMELIX_MODULE;
-use const FRAMELIX_USERDATA_FOLDER;
 use const STR_PAD_LEFT;
 
 /**

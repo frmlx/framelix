@@ -2,7 +2,6 @@
 
 namespace Framelix\Framelix\Storable;
 
-use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\View;
 

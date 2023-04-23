@@ -2,8 +2,6 @@
 
 namespace Framelix\Framelix\Storable;
 
-use Framelix\Framelix\Db\StorableSchema;
-
 /**
  * SystemEventLog
  * @property int $category

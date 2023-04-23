@@ -9,11 +9,6 @@ use mysqli_result;
 use mysqli_sql_exception;
 use Throwable;
 
-use function array_keys;
-use function fclose;
-use function fopen;
-use function fwrite;
-use function implode;
 use function mb_strtolower;
 use function mysqli_insert_id;
 use function mysqli_query;

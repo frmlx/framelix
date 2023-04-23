@@ -5,6 +5,7 @@
         "mpdf/qrcode": "^1.2",
         "phpoffice/phpspreadsheet": "^1.28",
         "mpdf/mpdf": "^8.1",
-        "phpmailer/phpmailer": "^6.8"
+        "phpmailer/phpmailer": "^6.8",
+        "brainfoolong/cryptojs-aes-php": "^2.1"
     }
 }

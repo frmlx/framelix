@@ -4,8 +4,6 @@ namespace Framelix\Framelix\Storable;
 
 use Framelix\Framelix\Db\StorableSchema;
 
-use const FRAMELIX_MODULE;
-
 /**
  * A storable helper that allow to quickly save an array of values attached to another storable
  * @property Storable $parent The parent Storable this array is stored to

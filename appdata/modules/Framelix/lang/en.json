@@ -843,6 +843,9 @@
     "__framelix_view_backend_userprofile_fido2_disable__": [
         "Disable FIDO2 on this device"
     ],
+    "__framelix_view_backend_userprofile_fido2_domainunsupported__": [
+        "FIDO 2 doesn't work on {domain}. Use {use} for example to fix that issue."
+    ],
     "__framelix_view_backend_userprofile_fido2_enable__": [
         "Enable FIDO2 on this device now"
     ],

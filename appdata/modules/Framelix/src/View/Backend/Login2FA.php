@@ -7,8 +7,8 @@ use Framelix\Framelix\Form\Field\TwoFactorCode;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Lang;
+use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\Request;
-use Framelix\Framelix\Network\Session;
 use Framelix\Framelix\Storable\BruteForceProtection;
 use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Storable\User;
@@ -28,8 +28,9 @@ class Login2FA extends View
         if (User::get()) {
             Url::getApplicationUrl()->redirect();
         }
-        $this->user = User::getById(Session::get(TwoFactorCode::SESSIONNAME_USERID));
-        if (!$this->user || $this->user->twoFactorSecret !== Session::get(TwoFactorCode::SESSIONNAME_SECRET)) {
+        $this->user = User::getById(Cookie::get(TwoFactorCode::COOKIE_NAME_USERID, encrypted: true));
+        if (!$this->user || $this->user->twoFactorSecret !== Cookie::get(TwoFactorCode::COOKIE_NAME_SECRET,
+                encrypted: true)) {
             \Framelix\Framelix\View::getUrl(Login::class)->redirect();
         }
         if (Form::isFormSubmitted('twofa')) {
@@ -39,7 +40,7 @@ class Login2FA extends View
             $token = UserToken::create($this->user);
             UserToken::setCookieValue(
                 $token->token,
-                Session::get(TwoFactorCode::SESSIONNAME_USERSTAY) ? 60 * 86400 : null
+                Cookie::get(TwoFactorCode::COOKIE_NAME_USERSTAY, encrypted: true) ? 60 * 86400 : null
             );
 
             // create system event logs
@@ -62,8 +63,7 @@ class Login2FA extends View
                 $this->user->store();
             }
             BruteForceProtection::reset('backend-login');
-            (Request::getGet('redirect') ? Url::create(Request::getGet('redirect')) : Url::getApplicationUrl(
-            ))->redirect();
+            (Request::getGet('redirect') ? Url::create(Request::getGet('redirect')) : Url::getApplicationUrl())->redirect();
         }
 
         $this->sidebarClosedInitially = true;

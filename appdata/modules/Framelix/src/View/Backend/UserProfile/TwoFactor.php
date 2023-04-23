@@ -6,10 +6,10 @@ use Framelix\Framelix\Form\Field\TwoFactorCode;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Lang;
+use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
-use Framelix\Framelix\Network\Session;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\JsonUtils;
@@ -28,7 +28,7 @@ class TwoFactor extends View
 
     public static function onJsCall(JsCall $jsCall): void
     {
-        if (!Session::get(__CLASS__ . "-pw-verified")) {
+        if (!Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {
             return;
         }
         switch ($jsCall->action) {
@@ -46,8 +46,8 @@ class TwoFactor extends View
                         RandomGenerator::CHARSET_ALPHANUMERIC_READABILITY
                     );
                 }
-                Session::set(TwoFactorCode::SESSIONNAME_SECRET, $secret);
-                Session::set(TwoFactorCode::SESSIONNAME_BACKUPCODES, $codes);
+                Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $secret, encrypted: true);
+                Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, $codes, encrypted: true);
                 ?>
                 <div style="text-align: center">
                     <div><?= Lang::get('__framelix_view_backend_userprofile_2fa_enable_info__') ?></div>
@@ -103,7 +103,7 @@ class TwoFactor extends View
                 Url::getBrowserUrl()->redirect();
             case 'getcodes':
                 Response::download(
-                    "@" . implode("\n", Session::get(TwoFactorCode::SESSIONNAME_BACKUPCODES)),
+                    "@" . implode("\n", Cookie::get(TwoFactorCode::COOKIE_NAME_BACKUPCODES, encrypted: true)),
                     "backup-codes.txt"
                 );
             case 'regenerate':
@@ -151,22 +151,24 @@ class TwoFactor extends View
     public function onRequest(): void
     {
         $this->storable = User::get();
-        if (Session::get(__CLASS__ . "-pw-verified")) {
+        if (Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {
             if (Form::isFormSubmitted('twofa-enable')) {
                 $form = self::getEnableForm();
                 $form->validate();
-                $this->storable->twoFactorSecret = Session::get(TwoFactorCode::SESSIONNAME_SECRET);
-                $this->storable->twoFactorBackupCodes = Session::get(TwoFactorCode::SESSIONNAME_BACKUPCODES);
+                $this->storable->twoFactorSecret = Cookie::get(TwoFactorCode::COOKIE_NAME_SECRET, encrypted: true);
+                $this->storable->twoFactorBackupCodes = Cookie::get(TwoFactorCode::COOKIE_NAME_BACKUPCODES,
+                    encrypted: true);
                 $this->storable->store();
-                Session::set(TwoFactorCode::SESSIONNAME_SECRET, null);
-                Session::set(TwoFactorCode::SESSIONNAME_BACKUPCODES, null);
+                Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, null, encrypted: true);
+                Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, null, encrypted: true);
                 Toast::success('__framelix_view_backend_userprofile_2fa_enabled__');
                 Url::getBrowserUrl()->redirect();
             }
             if (Form::isFormSubmitted('twofa-test')) {
                 $form = self::getEnableForm();
-                Session::set(TwoFactorCode::SESSIONNAME_SECRET, $this->storable->twoFactorSecret);
-                Session::set(TwoFactorCode::SESSIONNAME_BACKUPCODES, $this->storable->twoFactorBackupCodes);
+                Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $this->storable->twoFactorSecret, encrypted: true);
+                Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, $this->storable->twoFactorBackupCodes,
+                    encrypted: true);
                 $form->validate();
 
                 $code = Request::getPost('code');
@@ -190,7 +192,7 @@ class TwoFactor extends View
             if (!$this->storable->passwordVerify(Request::getPost('password'))) {
                 Response::stopWithFormValidationResponse(['password' => '__framelix_password_incorrect__']);
             }
-            Session::set(__CLASS__ . "-pw-verified", true);
+            Cookie::set(__CLASS__ . "-pw-verified", true, encrypted: true);
             Url::getBrowserUrl()->redirect();
         }
         $this->showContentBasedOnRequestType();
@@ -198,7 +200,7 @@ class TwoFactor extends View
 
     public function showContent(): void
     {
-        if (!Session::get(__CLASS__ . "-pw-verified")) {
+        if (!Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {
             $form = $this->getPasswordVerifyForm();
             $form->addSubmitButton('verify', '__framelix_goahead__', 'lock_open');
             $form->show();

@@ -25,6 +25,7 @@ use function ksort;
 use function php_sapi_name;
 use function time;
 
+use const FRAMELIX_MODULE;
 use const JSON_PRETTY_PRINT;
 
 /**
@@ -32,7 +33,7 @@ use const JSON_PRETTY_PRINT;
  */
 class ErrorHandler
 {
-    public const LOGFOLDER = FRAMELIX_USERDATA_FOLDER . "/_logs";
+    public const LOGFOLDER = FRAMELIX_USERDATA_FOLDER . "/" . FRAMELIX_MODULE . "/_logs";
 
     /**
      * Throwable to json
@@ -144,7 +145,7 @@ class ErrorHandler
     {
         $path = self::LOGFOLDER . "/error-" . time() . "-" . RandomGenerator::getRandomString(3, 6) . ".json";
         if (!is_dir(self::LOGFOLDER)) {
-            mkdir(self::LOGFOLDER);
+            mkdir(self::LOGFOLDER, recursive: true);
             clearstatcache();
         }
         file_put_contents($path, json_encode($logData, JSON_PRETTY_PRINT));

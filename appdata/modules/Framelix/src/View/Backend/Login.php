@@ -12,10 +12,10 @@ use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Field\TwoFactorCode;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Lang;
+use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
-use Framelix\Framelix\Network\Session;
 use Framelix\Framelix\Storable\BruteForceProtection;
 use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Storable\User;
@@ -50,7 +50,7 @@ class Login extends View
                     }
                 }
                 $jsCall->result = ['getArgs' => (array)$webAuthn->getGetArgs($credentialIds)];
-                Session::set('fido2-login-challenge', (string)$webAuthn->getChallenge());
+                Cookie::set('fido2-login-challenge', (string)$webAuthn->getChallenge(), encrypted: true);
                 break;
             case 'webauthn-login':
                 $webAuthn = Fido2::getWebAuthnInstance();
@@ -72,7 +72,7 @@ class Login extends View
                             base64_decode($jsCall->parameters["authenticatorData"] ?? ''),
                             base64_decode($jsCall->parameters["signature"] ?? ''),
                             $userWebAuthn->authData['credentialPublicKey'],
-                            ByteBuffer::fromHex(Session::get('fido2-login-challenge') ?? ''),
+                            ByteBuffer::fromHex(Cookie::get('fido2-login-challenge', encrypted: true) ?? ''),
                         );
                         break;
                     }
@@ -121,10 +121,10 @@ class Login extends View
             if ($user && $user->passwordVerify(Request::getPost('password'))) {
                 if ($user->twoFactorSecret) {
                     // if 2fa, redirect to 2fa verify page
-                    Session::set(TwoFactorCode::SESSIONNAME_USERID, $user->id);
-                    Session::set(TwoFactorCode::SESSIONNAME_USERSTAY, Request::getPost('stay'));
-                    Session::set(TwoFactorCode::SESSIONNAME_SECRET, $user->twoFactorSecret);
-                    Session::set(TwoFactorCode::SESSIONNAME_BACKUPCODES, $user->twoFactorBackupCodes);
+                    Cookie::set(TwoFactorCode::COOKIE_NAME_USERID, $user->id, encrypted: true);
+                    Cookie::set(TwoFactorCode::COOKIE_NAME_USERSTAY, Request::getPost('stay'), encrypted: true);
+                    Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $user->twoFactorSecret, encrypted: true);
+                    Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, $user->twoFactorBackupCodes, encrypted: true);
                     \Framelix\Framelix\View::getUrl(Login2FA::class)->setParameter(
                         'redirect',
                         Request::getGet('redirect')
