@@ -96,17 +96,17 @@ if [ "$PUSH" == "1" ] ; then
     fi
 
     docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:edge
+    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$BUILD_VERSION
+    docker push $DOCKER_REPO:$BUILD_VERSION
+    docker push $DOCKER_REPO:edge
 
     if [ "$PRE_VERSION" == "" ]; then
       # production tags
-      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$BUILD_VERSION
       docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
       docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
 
-      docker push $DOCKER_REPO:$BUILD_VERSION
       docker push $DOCKER_REPO:$MINOR_VERSION
       docker push $DOCKER_REPO:$MAJOR_VERSION
     fi
-    docker push $DOCKER_REPO:edge
   fi
 fi

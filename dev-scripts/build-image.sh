@@ -19,6 +19,8 @@ if [ "$BUILD_VERSION" == "0" ]; then
   exit 1
 fi
 
+echo "Version selected: $BUILD_VERSION"
+
 source $SCRIPTDIR/stop-container.sh
 docker image rm $DOCKER_TAGNAME_LOCAL
 docker build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $SCRIPTDIR/..

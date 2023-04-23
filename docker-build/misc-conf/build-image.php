@@ -50,4 +50,7 @@ if (preg_match("~^[0-9]+\.[0-9]+\.[0-9]+~i", $version)) {
     echo "Done.\n\n";
 
     echo "Production build process completed.\n\n";
+} elseif ($version !== 'dev' && $version !== 'master') {
+    echo "Missing proper -v parameter, given: $version, but must be dev/master or tag name";
+    exit(1);
 }
