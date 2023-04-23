@@ -14,6 +14,9 @@ jobs:
   framelix-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Test
+        run:  echo "ref_name=${{ github.base_ref }}" && exit 1
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
