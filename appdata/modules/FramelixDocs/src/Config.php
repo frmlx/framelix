@@ -17,6 +17,8 @@ class Config
             FRAMELIX_USERDATA_FOLDER . "/sqlite_" . FRAMELIX_MODULE . ".db"
         );
         \Framelix\Framelix\Config::$languagesAvailable = ['en'];
+        \Framelix\Framelix\Config::$backendLogoFilePath = __DIR__."/../public/images/logo.jpg";
+
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "docs");
         $bundle->addFile("vendor-frontend/scss/docs.scss");
 
