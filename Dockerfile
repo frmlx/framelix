@@ -58,9 +58,6 @@ RUN crontab $FRAMELIX_SYSTEMDIR/cronjobs
 # create some useful-scripts symlinks
 RUN chmod +x $FRAMELIX_SYSTEMDIR/useful-scripts/* && ln -s $FRAMELIX_SYSTEMDIR/useful-scripts/* /usr/bin
 
-# copy appdata files directly into the image
-COPY tmp/appdata_dev $FRAMELIX_APPDATA
-
 # install composer and npm stuff
 RUN framelix_composer_install; framelix_npm_modules_install; framelix_composer_modules_install
 

@@ -7,7 +7,7 @@ cecho b "Build Docker Image for $DOCKER_TAGNAME_LOCAL"
 echo "Available command line flags:"
 echo "-v : Version of build: dev/master, or tagname"
 
-export BUILD_VERSION=0
+BUILD_VERSION=0
 while getopts "v:" opt; do
   case $opt in
   v) BUILD_VERSION=$OPTARG ;;
@@ -18,8 +18,6 @@ if [ "$BUILD_VERSION" == "0" ]; then
   cecho r "-v parameter is required"
   exit 1
 fi
-
-exit 0
 
 source $SCRIPTDIR/stop-container.sh
 docker image rm $DOCKER_TAGNAME_LOCAL
