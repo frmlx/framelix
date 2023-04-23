@@ -23,4 +23,4 @@ jobs:
         run: cp dev-scripts/.env_git_tests dev-scripts/.env
 
       - name: Build and deploy image
-        run: bash dev-scripts/docker-hub.sh -v "$GITHUB_REF_NAME" -p
+        run: bash dev-scripts/docker-hub.sh -v "${{ env.GITHUB_REF_NAME }}" -p
