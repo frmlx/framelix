@@ -3,7 +3,7 @@
 namespace Form\Field;
 
 use Framelix\Framelix\Form\Field\TwoFactorCode;
-use Framelix\Framelix\Network\Session;
+use Framelix\Framelix\Network\Cookie;
 use Framelix\FramelixTests\TestCase;
 use RobThree\Auth\TwoFactorAuth;
 
@@ -17,8 +17,8 @@ final class TwoFactorCodeTest extends TestCase
         $field = new TwoFactorCode();
         $field->name = $field::class;
         $this->callFormFieldDefaultMethods($field);
-        Session::set(TwoFactorCode::SESSIONNAME_SECRET, $secret);
-        Session::set(TwoFactorCode::SESSIONNAME_BACKUPCODES, ['ABCDEFGHIJ']);
+        Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $secret, encrypted: true);
+        Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, ['ABCDEFGHIJ'], encrypted: true);
 
         $this->assertIsString($field->validate());
 
