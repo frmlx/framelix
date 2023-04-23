@@ -3,14 +3,12 @@ ARG OS_IMAGE=ubuntu:22.04
 # CHECK OUT MORE AVAILABLE IMAGES FROM https://hub.docker.com/_/ubuntu
 FROM $OS_IMAGE
 
-ARG FRAMELIX_BUILD_TYPE=dev
 ARG FRAMELIX_BUILD_VERSION=dev
 
 ENV FRAMELIX_APPDATA="/framelix/appdata"
 ENV FRAMELIX_USERDATA="/framelix/userdata"
 ENV FRAMELIX_SYSTEMDIR="/framelix/system"
 ENV FRAMELIX_MODULES=""
-ENV FRAMELIX_BUILD_TYPE=$FRAMELIX_BUILD_TYPE
 ENV FRAMELIX_BUILD_VERSION=$FRAMELIX_BUILD_VERSION
 
 RUN mkdir -p $FRAMELIX_APPDATA $FRAMELIX_SYSTEMDIR /run/php
@@ -67,7 +65,7 @@ COPY tmp/appdata_dev $FRAMELIX_APPDATA
 RUN framelix_composer_install; framelix_npm_modules_install; framelix_composer_modules_install
 
 # some additional build steps (to include appdata, etc...) for dev/production builds
-RUN php -f $FRAMELIX_SYSTEMDIR/build-image.php "$FRAMELIX_BUILD_TYPE" "$FRAMELIX_BUILD_VERSION"
+RUN php -f $FRAMELIX_SYSTEMDIR/build-image.php "$FRAMELIX_BUILD_VERSION"
 
 # let's go
 RUN chmod +x "$FRAMELIX_SYSTEMDIR/entrypoint.sh"

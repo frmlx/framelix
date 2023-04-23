@@ -1,21 +1,11 @@
 name: Build and Deploy Docker Image
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        required: true
-        type: choice
-        description: What build do you do? prod = uses latest tag, dev = uses master
-        options:
-          - dev
-          - prod
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Test
-        run:  echo "ref_name=$GITHUB_REF_NAME" && exit 1
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -32,4 +22,4 @@ jobs:
         run: cp dev-scripts/.env_git_tests dev-scripts/.env
 
       - name: Build and deploy image
-        run: bash dev-scripts/docker-hub.sh -t ${{ github.event.inputs.version }} -p
+        run: bash dev-scripts/docker-hub.sh -v '$GITHUB_REF_NAME' -p

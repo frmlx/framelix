@@ -10,36 +10,42 @@ echo "  * Deletes all local userdata and db volume"
 echo "  * Runs all tests"
 echo "  * If all success, be able to push to docker"
 echo "Available command line flags:"
-echo "-t : Type of build: dev, prod"
+echo "-v : Version of build: dev/master, or tagname"
 echo "-p : Push to docker hub (If not set, it only build and tests the image, a dry run, so to speak)"
-echo "-s : Skip rebuild (Does take the current existing $DOCKER_TAGNAME_LOCAL image)"
 echo ""
 
-BUILD_TYPE=0
+BUILD_VERSION=0
 PUSH=0
-SKIP_REBUILD=0
-while getopts "spt:" opt; do
+while getopts "pv:" opt; do
   case $opt in
-  t) BUILD_TYPE=$OPTARG ;;
+  v) BUILD_VERSION=$OPTARG ;;
   p) PUSH=1 ;;
-  s) SKIP_REBUILD=1 ;;
   esac
 done
 
-if [ "$BUILD_TYPE" == "0" ]; then
-  cecho r "-t parameter is required"
-  exit 1
+# master is equal to dev (master comes from github)
+if [ "$BUILD_VERSION" == "master" ]; then
+  BUILD_VERSION=dev
 fi
 
-if [ "$SKIP_REBUILD" != "1" ]; then
-  # remove all images of framelix locally
-  docker rmi $(docker images | grep "$DOCKER_REPO") > /dev/null 2>&1
-
-  bash $SCRIPTDIR/build-image.sh -t $BUILD_TYPE
-  if [ "$?" != "0" ]; then
-    cecho r "Build failed"
+# check if version is already in docker hub
+if [ "$BUILD_VERSION" != "dev" ]; then
+  docker pull $DOCKER_REPO:$BUILD_VERSION > /dev/null
+  if [ "$?" == "0" ]; then
+    cecho r "Docker Image Tag '$BUILD_VERSION' already exist in docker hub. Use a new version number."
     exit 1
   fi
+fi
+
+# remove all images of framelix locally
+docker rmi $(docker images | grep "$DOCKER_REPO") > /dev/null 2>&1
+
+# build image
+bash $SCRIPTDIR/build-image.sh -v $BUILD_VERSION
+
+if [ "$?" != "0" ]; then
+  cecho r "Build failed"
+  exit 1
 fi
 
 bash $SCRIPTDIR/start-container.sh
@@ -74,35 +80,30 @@ fi
 
 bash $SCRIPTDIR/stop-container.sh
 
-if [ "$BUILD_TYPE" == "dev" ]; then
-  docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:dev
-elif [ "$BUILD_TYPE" == "prod" ] ; then
-  docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:latest
-  docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$VERSION
-  docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
-  docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
-fi
-
 if [ "$PUSH" == "1" ] ; then
-  if [ "$BUILD_TYPE" == "dev" ]; then
+  if [ "$BUILD_VERSION" == "dev" ]; then
     docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:dev
     docker push  $DOCKER_REPO:dev
-  elif [ "$BUILD_TYPE" == "prod" ] ; then
-    docker pull $DOCKER_REPO:$VERSION > /dev/null
-    if [ "$?" == "0" ]; then
-      cecho r "Docker Image Tag '$VERSION' already exist in docker hub. Use a new version number."
-      exit 1
+  else
+
+    MAJOR_VERSION=$(echo $BUILD_VERSION| cut -d'.' -f 1)
+    MINOR_VERSION=$(echo $BUILD_VERSION| cut -d'.' -f 1,2)
+    PRE_VERSION=$(echo $BUILD_VERSION| cut -d'-' -f 2,2)
+
+    # the current version is no pre version, so unset pre version
+    if [ "$PRE_VERSION" == "$BUILD_VERSION" ]; then
+      PRE_VERSION=""
     fi
 
     docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:edge
 
     if [ "$PRE_VERSION" == "" ]; then
       # production tags
-      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$VERSION
+      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$BUILD_VERSION
       docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
       docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
 
-      docker push $DOCKER_REPO:$VERSION
+      docker push $DOCKER_REPO:$BUILD_VERSION
       docker push $DOCKER_REPO:$MINOR_VERSION
       docker push $DOCKER_REPO:$MAJOR_VERSION
     fi

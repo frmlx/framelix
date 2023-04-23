@@ -32,7 +32,7 @@ class SetupCoreDev extends View
         <?php
         $this->showCodeBlock('
         cp dev-scripts/.env_template dev-scripts/.env
-        bash dev-scripts/build-image.sh -t dev
+        bash dev-scripts/build-image.sh -v dev
         bash dev-scripts/start-container.sh
         bash dev-scripts/run-tests -t install-deps # Install test dependencies
         bash dev-scripts/run-tests -t phpstan # PHP Stan Static Code Analysis 

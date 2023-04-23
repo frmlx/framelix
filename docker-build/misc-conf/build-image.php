@@ -1,7 +1,6 @@
 <?php
 
-$buildType = $_SERVER['argv'][1];
-$version = $_SERVER['argv'][2];
+$version = $_SERVER['argv'][1];
 
 function runCmd(string $cmd): void
 {
@@ -12,7 +11,8 @@ function runCmd(string $cmd): void
     }
 }
 
-if ($buildType === 'prod') {
+// a specific tag, include source into container (production builds)
+if (preg_match("~^[0-9]+\.[0-9]+\.[0-9]+~i", $version)) {
     $tmpFolder = "/tmp/framelix-tag-$version";
     $modulesFolder = "/framelix/appdata/modules";
     echo "## Running build requirements for production build\n\n";
@@ -37,8 +37,11 @@ if ($buildType === 'prod') {
     // replace version number
     $coreFile = "/framelix/appdata/modules/Framelix/src/Framelix.php";
     $coreFileData = file_get_contents($coreFile);
-    $coreFileData = str_replace('public const VERSION = "dev";', 'public const VERSION = "' . $version . '";',
-        $coreFileData);
+    $coreFileData = str_replace(
+        'public const VERSION = "dev";',
+        'public const VERSION = "' . $version . '";',
+        $coreFileData
+    );
     file_put_contents($coreFile, $coreFileData);
 
     echo "# Running npm install and composer install for modules integrated into the image\n";
