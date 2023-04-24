@@ -47,7 +47,7 @@ class Depreciation extends StorableMeta
             if ($yearSplitRequired) {
                 $tableCell = new TableCell();
                 $tableCell->button = true;
-                $tableCell->buttonIcon = "paid";
+                $tableCell->buttonIcon = "0023";
                 $tableCell->buttonTooltip = "__framelixdemo_storable_depreciation_createoutgoing__";
                 $tableCell->buttonTheme = "primary";
                 $tableCell->buttonHref = View::getUrl(Outgoings::class)->setParameter(

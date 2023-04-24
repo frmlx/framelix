@@ -81,7 +81,7 @@ class Invoices extends View
                 $field->getVisibilityCondition()->equal('type', 'custom');
                 $form->addField($field);
 
-                $form->addSubmitButton('pdf-download', '__framelixdemo_storable_invoice_download__', 'picture_as_pdf');
+                $form->addSubmitButton('pdf-download', '__framelixdemo_storable_invoice_download__', '709');
                 $form->executeAfterAsyncSubmit = /** @lang JavaScript */
                     'await FramelixModal.destroyAll()';
                 $form->show();

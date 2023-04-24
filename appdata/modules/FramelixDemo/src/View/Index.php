@@ -99,7 +99,7 @@ class Index extends View
             <br/>
             <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'resetpw') ?>"
                              theme="primary"
-                             icon="restart_alt"
+                             icon="785"
                              target="none">Reset password
             </framelix-button>
             <?php

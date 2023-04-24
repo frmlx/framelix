@@ -18,7 +18,7 @@ class DemoApplication extends View
             from it.
             It uses best-practice for Framelix features and try to teach you things as you go through the interface.
         </p>
-        <framelix-button block href="<?= Config::$demoAppUrl ?>" target="_blank" icon="rocket" theme="primary">Let's
+        <framelix-button block href="<?= Config::$demoAppUrl ?>" target="_blank" icon="70c" theme="primary">Let's
             check out the demo application here
         </framelix-button>
         <p>

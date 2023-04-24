@@ -1,5 +1,6 @@
-![UnitTestsBadge](https://github.com/NullixAT/framelix/actions/workflows/tests.yml/badge.svg) ![CoverageBadge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brainfoolong/2e4ba189fbb1a23bff14e73cb893bc3e/raw/framelix-unit-tests-coverage-data.json)
-![PlaywrightBadge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brainfoolong/91cdcb4629cfb14f8c00ab5ea4e485ec/raw/framelix-playwright-tests.json)
+[![UnitTestsBadge](https://github.com/NullixAT/framelix/actions/workflows/tests.yml/badge.svg)](https://github.com/NullixAT/framelix/actions/workflows/tests.yml) 
+[![CoverageBadge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brainfoolong/2e4ba189fbb1a23bff14e73cb893bc3e/raw/framelix-unit-tests-coverage-data.json)](https://github.com/NullixAT/framelix/actions/workflows/tests.yml) 
+[![PlaywrightBadge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brainfoolong/91cdcb4629cfb14f8c00ab5ea4e485ec/raw/framelix-playwright-tests.json)](https://github.com/NullixAT/framelix/actions/workflows/tests.yml)
 [![SlackJoin](https://framelix.com/slack-badge.svg)](https://framelix.com/getstarted/issues)
 
 # Framelix - A rich featured, Full-Stack PHP Framework

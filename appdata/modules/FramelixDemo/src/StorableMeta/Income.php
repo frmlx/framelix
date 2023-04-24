@@ -37,7 +37,7 @@ class Income extends StorableMeta
         $property->valueCallable = function () {
             $tableCell = new TableCell();
             $tableCell->button = true;
-            $tableCell->buttonIcon = "content_copy";
+            $tableCell->buttonIcon = "78a";
             $tableCell->buttonTooltip = "__framelixdemo_storable_income_copy__";
             $tableCell->buttonTheme = "primary";
             $tableCell->buttonHref = View::getUrl(Incomes::class)->setParameter('copy', $this->storable);
@@ -53,7 +53,7 @@ class Income extends StorableMeta
             if ($this->storable->invoice) {
                 $tableCell = new TableCell();
                 $tableCell->button = true;
-                $tableCell->buttonIcon = "receipt";
+                $tableCell->buttonIcon = "73a";
                 $tableCell->buttonTooltip = "__framelixdemo_storable_income_download_invoice__";
                 $tableCell->buttonTheme = "error";
                 $tableCell->buttonHref = $this->storable->invoice->attachment?->getDownloadUrl();

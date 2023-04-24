@@ -218,7 +218,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         }
         foreach ($this->htmlCodeSnippets as $key => $row) {
             $codeLanguage = "html";
-            $buttonsHtml = '<framelix-button class="run-html-code" theme="primary" icon="touch_app">Show rendered html from the code bellow</framelix-button>';
+            $buttonsHtml = '<framelix-button class="run-html-code" theme="primary" icon="733">Show rendered html from the code bellow</framelix-button>';
             Buffer::start();
             if ($row['description']) {
                 echo '<p>' . $row['description'] . '</p>';
@@ -266,7 +266,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         }
         foreach ($this->jsCodeSnippets as $key => $row) {
             $codeLanguage = "js";
-            $buttonsHtml = '<framelix-button class="run-js-code" theme="primary" icon="touch_app">Run the code bellow</framelix-button>';
+            $buttonsHtml = '<framelix-button class="run-js-code" theme="primary" icon="789">Run the code bellow</framelix-button>';
             Buffer::start();
             if ($row['description']) {
                 echo '<p>' . $row['description'] . '</p>';
@@ -325,7 +325,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                     View::class,
                     'phpCode',
                     ['callable' => $row['method']]
-                ) . '" theme="primary" icon="touch_app" target="modal">Run the code bellow</framelix-button>';
+                ) . '" theme="primary" icon="789" target="modal">Run the code bellow</framelix-button>';
             Buffer::start();
             if ($row['description']) {
                 echo '<p>' . $row['description'] . '</p>';
@@ -375,14 +375,14 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
     public function getAnchoredTitle(string $id, string $title, string $type = "h1"): string
     {
         $this->titles[$id] = $title;
-        return '<' . $type . ' id="anchor-' . $id . '" class="anchor-title"><a class="material-icons" title="Permalink to ' . HtmlUtils::escape(
+        return '<' . $type . ' id="anchor-' . $id . '" class="anchor-title"><a title="Permalink to ' . HtmlUtils::escape(
                 '"' . $title . '"'
-            ) . '" href="#anchor-' . $id . '">link</a><span>' . $title . '</span></' . $type . '>';
+            ) . '" href="#anchor-' . $id . '">' . HtmlUtils::getFramelixIcon('737') . '</a><span>' . $title . '</span></' . $type . '>';
     }
 
     public function getLinkToExternalPage(string $link, ?string $text = null): string
     {
-        return '<span class="external-link"><span class="material-icons">open_in_new</span> <a href="' . $link . '" rel="nofollow" target="_blank">' . HtmlUtils::escape(
+        return '<span class="external-link">' . HtmlUtils::getFramelixIcon('773') . ' <a href="' . $link . '" rel="nofollow" target="_blank">' . HtmlUtils::escape(
                 $text ?? $link
             ) . '</a></span>';
     }
@@ -414,7 +414,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         if ($extension === "jpg" || $extension === "jpeg" || $extension === "png" || $extension === "webp" || $extension === "svg") {
             return '<div class="docs-image"><img src="' . $url . '" alt="' . $basename . '"></div>';
         }
-        return '<span class="external-link"><a href="' . $url . '" download><span class="material-icons">download</span> Download ' . $basename . '</a></span>';
+        return '<span class="external-link"><a href="' . $url . '" download>' . HtmlUtils::getFramelixIcon('709') . ' Download ' . $basename . '</a></span>';
     }
 
     /**
@@ -439,7 +439,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 $tags[] = '[Missing] <script>console.error(' . JsonUtils::encode($relativePath . " not exist") . ')</script>';
                 continue;
             }
-            $tags[] = '<framelix-button small icon="visibility" theme="transparent" jscall-url="' . JsCall::getUrl(
+            $tags[] = '<framelix-button small icon="733" theme="transparent" jscall-url="' . JsCall::getUrl(
                     View::class,
                     'show-source',
                     ['path' => $relativePath]
@@ -474,9 +474,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         }
         $newCode = rtrim(implode("\n", $lines));
         $html = '<div class="code-block"><div class="buttons">' . $additionalButtonsHtml;
-        $html .= '<framelix-button small theme="transparent" icon="content_paste_go" onclick="FramelixDocs.codeBlockAction(this, \'clipboard\')">Copy to clipboard</framelix-button>';
+        $html .= '<framelix-button small theme="transparent" icon="798" onclick="FramelixDocs.codeBlockAction(this, \'clipboard\')">Copy to clipboard</framelix-button>';
         if ($downloadFilename) {
-            $html .= '<framelix-button small theme="transparent" icon="download" onclick=\'FramelixDocs.codeBlockAction(this, "download", ' . JsonUtils::encode(
+            $html .= '<framelix-button small theme="transparent" icon="709" onclick=\'FramelixDocs.codeBlockAction(this, "download", ' . JsonUtils::encode(
                     $downloadFilename
                 ) . ')\'>Download as file</framelix-button>';
         }

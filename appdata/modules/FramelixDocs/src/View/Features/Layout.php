@@ -87,7 +87,7 @@ class Layout extends View
             /** @lang HTML */
             '
             <framelix-button theme="error"
-                             icon="warning"
+                             icon="759"
                              confirm-message="Are you sure?"
                              jscall-url="' . JsCall::getUrl(__CLASS__, 'info') . '"
                              target="attached"

@@ -28,7 +28,7 @@ class Fixation extends StorableMeta
         $property->valueCallable = function () {
             $tableCell = new TableCell();
             $tableCell->button = true;
-            $tableCell->buttonIcon = "download";
+            $tableCell->buttonIcon = "709";
             $tableCell->buttonHref = $this->storable->attachment?->getDownloadUrl() ?? null;
             $tableCell->buttonTooltip = "__framelix_download_file__";
             return $tableCell;

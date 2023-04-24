@@ -2,11 +2,6 @@
 
 namespace Framelix\FramelixDemo\View;
 
-use Framelix\FramelixDemo\Config;
-use Framelix\FramelixDemo\Storable\Fixation;
-use Framelix\FramelixDemo\Storable\Income;
-use Framelix\FramelixDemo\Storable\Invoice;
-use Framelix\FramelixDemo\Storable\Outgoing;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Form\Field\Date;
 use Framelix\Framelix\Form\Form;
@@ -18,6 +13,11 @@ use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\NumberUtils;
 use Framelix\Framelix\Utils\SpreadsheetWrapper;
 use Framelix\Framelix\View\Backend\View;
+use Framelix\FramelixDemo\Config;
+use Framelix\FramelixDemo\Storable\Fixation;
+use Framelix\FramelixDemo\Storable\Income;
+use Framelix\FramelixDemo\Storable\Invoice;
+use Framelix\FramelixDemo\Storable\Outgoing;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
@@ -304,7 +304,7 @@ class Reports extends View
 
             if ($dateRange['type'] === 'custom') {
                 $form = $this->getForm();
-                $form->addSubmitButton('report-charts', '__framelixdemo_view_reports_generate__', 'leaderboard');
+                $form->addSubmitButton('report-charts', '__framelixdemo_view_reports_generate__', '727');
                 $form->show();
             }
 
@@ -386,10 +386,10 @@ class Reports extends View
                 }
 
                 ?>
-                <framelix-button href="<?= $this->getSelfUrl()->setParameter('dateFrom', $dateFrom)->setParameter(
-                    'dateTo',
-                    $dateTo
-                )->setParameter('excel', 1) ?>"
+                <framelix-button href="<?= $this->getSelfUrl()
+                    ->setParameter('dateFrom', $dateFrom)
+                    ->setParameter('dateTo', $dateTo)
+                    ->setParameter('excel', 1) ?>"
                                  theme="success"><?= Lang::get(
                         '__framelixdemo_view_reports_generate_excel__'
                     ) ?></framelix-button>
@@ -402,7 +402,7 @@ class Reports extends View
                         $comparedTitle = '';
                         $diffLabel = '';
                         $diffLabelTooltip = '';
-                        $icon = 'south';
+                        $icon = '707';
                         $color = '--color-error-text';
                         if (isset($dateFromPrev) && isset($dateToPrev)) {
                             $comparedTitle = Lang::get(
@@ -442,7 +442,7 @@ class Reports extends View
                             }
                             $diffLabelTooltip = '__framelixdemo_view_report_' . $diffType . '_' . $rowType . '__';
                             if ($diffType === 'better') {
-                                $icon = 'north';
+                                $icon = '706';
                                 $color = '--color-success-text';
                             }
                         }
@@ -455,7 +455,7 @@ class Reports extends View
                                     ?>
                                     <div class="report-amount-diff" style="color: var(<?= $color ?>)">
                                         <div class="report-amount-diff-info"><?= Lang::get($diffLabelTooltip) ?></div>
-                                        <div class="material-icons"><?= $icon ?></div>
+                                        <?= HtmlUtils::getFramelixIcon($icon) ?>
                                         <?= $diffLabel ?>
                                         <div class="report-amount-diff-period">
                                             <?= $comparedTitle ?>
@@ -549,7 +549,7 @@ class Reports extends View
             flex-basis: 50%;
             font-size: 20px;
           }
-          .report-amount-diff .material-icons {
+          .report-amount-diff framelix-icon {
             font-size: 60px;
             display: block;
           }

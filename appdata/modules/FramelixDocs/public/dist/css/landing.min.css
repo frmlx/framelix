@@ -210,22 +210,24 @@ nav {
 }
 
 @font-face {
-  font-family: "Material Icons";
-  font-style: normal;
-  font-weight: 700;
-  src: url(../../../_Framelix/fonts/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzazHD_dY43zj-jCxv3fzvRNU22ZXGJpEpjC_1p-p_4MrImHCIJIZrDBIG-ej.woff2) format("woff2");
+  font-family: "microns";
+  src: url(../../../_Framelix/fonts/microns.woff2) format("woff2");
 }
-.material-icons {
-  font-family: "Material Icons";
-  font-weight: normal;
+.framelix-icon,
+framelix-icon {
+  display: inline;
+  font-family: microns, sans-serif;
   font-style: normal;
-  line-height: 1;
-  letter-spacing: normal;
+  font-variant: normal;
   text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: normal;
+  letter-spacing: normal;
   display: inline-block;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
   -webkit-font-feature-settings: "liga";
-  -webkit-font-smoothing: antialiased;
 }

@@ -201,7 +201,7 @@ class Setup extends View
             At first you need a docker-compose.yml. Click the button bellow to generate one
         </p>
         <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'create-config') ?>" theme="primary"
-                         icon="draft_orders" target="modal">Click here to create your docker-compose.yml
+                         icon="798" target="modal">Click here to create your docker-compose.yml
         </framelix-button>
 
         <?= $this->getAnchoredTitle('start', 'Start container') ?>

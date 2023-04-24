@@ -34,7 +34,7 @@ class Reset extends View
                          confirm-message="<?= Lang::get('__framelix_sure__') ?>"
                          theme="primary"
                          target="none"
-                         icon="restart_alt"><?= Lang::get('__framelixdemo_view_reset__') ?></framelix-button>
+                         icon="785"><?= Lang::get('__framelixdemo_view_reset__') ?></framelix-button>
         <?php
     }
 }

@@ -44,7 +44,7 @@ class DefaultLogin extends View
         }
         $table->show();
         ?>
-        <framelix-button href="<?= \Framelix\Framelix\View::getUrl(Login::class) ?>" block icon="login" theme="primary">
+        <framelix-button href="<?= \Framelix\Framelix\View::getUrl(Login::class) ?>" block icon="70b" theme="primary">
             Login now
         </framelix-button>
         <?php

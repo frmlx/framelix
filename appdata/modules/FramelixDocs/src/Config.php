@@ -25,7 +25,7 @@ class Config
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "landing");
         $bundle->pageAutoInclude = false;
         $bundle->addFile("vendor-frontend/scss/landing.scss");
-        $bundle->addFile("../Framelix/vendor-frontend/scss/general/material-icons.scss");
+        $bundle->addFile("../Framelix/vendor-frontend/scss/general/icon-font.scss");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "vendor");
         $bundle->compile = false;

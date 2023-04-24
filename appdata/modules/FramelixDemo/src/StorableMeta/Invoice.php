@@ -41,7 +41,7 @@ class Invoice extends StorableMeta
             $property->valueCallable = function () {
                 $tableCell = new TableCell();
                 $tableCell->button = true;
-                $tableCell->buttonIcon = "content_copy";
+                $tableCell->buttonIcon = "78a";
                 $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_offfertoinvoice__";
                 $tableCell->buttonTheme = "primary";
                 $tableCell->buttonHref = View::getUrl(Invoices::class)->setParameter(
@@ -60,7 +60,7 @@ class Invoice extends StorableMeta
         $property->valueCallable = function () {
             $tableCell = new TableCell();
             $tableCell->button = true;
-            $tableCell->buttonIcon = "file_copy";
+            $tableCell->buttonIcon = "78a";
             $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_copy__";
             $tableCell->buttonTheme = "success";
             $tableCell->buttonHref = View::getUrl(Invoices::class)->setParameter(
@@ -78,7 +78,7 @@ class Invoice extends StorableMeta
         $property->valueCallable = function () {
             $tableCell = new TableCell();
             $tableCell->button = true;
-            $tableCell->buttonIcon = "print";
+            $tableCell->buttonIcon = "73e";
             $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_download__";
             $tableCell->buttonTheme = "error";
             if (!$this->storable->attachment) {
@@ -103,7 +103,7 @@ class Invoice extends StorableMeta
                 if (!$this->storable->income && $this->storable->datePaid) {
                     $tableCell = new TableCell();
                     $tableCell->button = true;
-                    $tableCell->buttonIcon = "paid";
+                    $tableCell->buttonIcon = "78c";
                     $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_createincome__";
                     $tableCell->buttonTheme = "primary";
                     $tableCell->buttonHref = View::getUrl(Incomes::class)->setParameter('fromInvoice', $this->storable);

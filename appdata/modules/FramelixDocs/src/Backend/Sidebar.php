@@ -37,11 +37,11 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 {
     public function showContent(): void
     {
-        echo '<div style="text-align: center"><b style="font-size: 1.3rem">Version: ' . \Framelix\Framelix\Framelix::VERSION . '</b><br/><a style="font-size: 0.8em" href="'.View::getUrl(Setup::class).'#anchor-older-docs">Here is how to access older versions</a></div><div class="framelix-spacer"></div>';
+        echo '<div style="text-align: center"><b style="font-size: 1.3rem">Version: ' . \Framelix\Framelix\Framelix::VERSION . '</b><br/><a style="font-size: 0.8em" href="' . View::getUrl(Setup::class) . '#anchor-older-docs">Here is how to access older versions</a></div><div class="framelix-spacer"></div>';
         $this->addLink(Index::class, "Back to Landing Page", target: "_blank");
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Get started', 'start', forceOpened: true);
+        $this->startGroup('Get started', forceOpened: true);
         $this->addLink(Welcome::class, "Welcome");
         $this->addLink(Setup::class, ['Setup up for development', 'Usually where you should start']);
         $this->addLink(SetupCoreDev::class, ['Setup up for core development', 'Helping us with Framelix itself']);
@@ -49,18 +49,18 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(Issues::class, ['Questions / Issues?', 'Ask, chat, discuss!']);
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Basics', 'info', forceOpened: true);
+        $this->startGroup('Basics', forceOpened: true);
         $this->addLink(Config::class, ['Configuration', 'Things like DB connections, secrets, etc...']);
         $this->addLink(Database::class, ['Database/Storables', 'Learn about relations between DB and Storables']);
         $this->addLink(Modules::class, ['Modules', 'The internal structure of Framelix']);
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Database', 'database', forceOpened: true);
+        $this->startGroup('Database', forceOpened: true);
         $this->addLink(Storables::class, ['Storables', 'Powerful management of your data']);
         $this->addLink(SchemeGenerator::class, ['Scheme Builder', 'Never need to worry about DB Scheme']);
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Features', 'motion_blur', forceOpened: true);
+        $this->startGroup('Features', forceOpened: true);
         $this->addLink(Layout::class, ['Default Layout', 'Fast, responsive, slick']);
         $this->addLink(ModalWindow::class, ['Modal/Dialog Window', 'Draw some content over the page']);
         $this->addLink(InlinePopup::class, ['Inline Popups and Dropdowns', 'Like a tooltip']);
@@ -74,12 +74,12 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
         $this->addLink(DefaultLogin::class, ['Login and User features', 'Authentication, 2-Factor, Profile, etc...']);
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Core Development', 'hub', forceOpened: true);
+        $this->startGroup('Core Development', forceOpened: true);
         $this->addLink(Docker::class, ['Docker Image', 'The thing that serves all of Framelix']);
         $this->addLink(Framelix::class, ['Framelix', 'Hack into the core']);
         $this->showHtmlForLinkData();
 
-        $this->startGroup('Framelix Background', 'background_replace', forceOpened: true);
+        $this->startGroup('Framelix Background', forceOpened: true);
         $this->addLink(Idea::class, ['The idea', 'Motivation and philosophy of Framelix']);
         $this->addLink(Terminology::class, ['Terminology', 'How things are named in Framelix']);
         $this->addLink(CodingStandards::class, ['Coding Standards', 'Rules for us and you']);

@@ -14,26 +14,26 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 {
     public function showContent(): void
     {
-        $this->addLink(Outgoings::class, icon: "chevron_left");
-        $this->addLink(Incomes::class, icon: "chevron_right");
+        $this->addLink(Outgoings::class, icon: "704");
+        $this->addLink(Incomes::class, icon: "705");
         $this->addLink(
             Invoices::class,
             '__framelixdemo_view_invoice_category_1__',
-            icon: "receipt",
+            icon: "73a",
             urlParameters: ['category' => 1]
         );
         $this->addLink(
             Invoices::class,
             '__framelixdemo_view_invoice_category_2__',
-            icon: "description",
+            icon: "73a",
             urlParameters: ['category' => 2]
         );
-        $this->addLink(Depreciation::class, icon: "receipt_long");
-        $this->addLink(Fixations::class, icon: "push_pin");
-        $this->addLink(Reports::class, icon: "leaderboard");
+        $this->addLink(Depreciation::class, icon: "72f");
+        $this->addLink(Fixations::class);
+        $this->addLink(Reports::class, icon: "726");
         $this->showHtmlForLinkData();
 
-        $this->addLink(Reset::class, icon: "chevron_left");
+        $this->addLink(Reset::class, icon: "704");
         $this->showHtmlForLinkData();
 
     }

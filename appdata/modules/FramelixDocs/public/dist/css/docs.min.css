@@ -55,8 +55,8 @@
   opacity: 0.1;
   order: 1;
 }
-.framelix-content-inner .external-link .material-icons,
-.framelix-modal-inner .external-link .material-icons {
+.framelix-content-inner .external-link framelix-icon,
+.framelix-modal-inner .external-link framelix-icon {
   opacity: 0.5;
   text-decoration: none;
   position: relative;
