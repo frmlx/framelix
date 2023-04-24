@@ -26,14 +26,14 @@
   --line-height: 1.4;
   --sidebar-opened-max-width: min(80vw, 300px);
   --sidebar-width: var(--sidebar-opened-max-width);
-  --sidebar-bg: var(--color-page-bg-stencil);
-  --sidebar-bg-entry: var(--color-page-bg-stencil-strong);
-  --sidebar-bg-entry-hover: var(--color-page-bg-stencil-stronger);
+  --sidebar-bg: var(--color-page-bg-stencil-weak);
+  --sidebar-bg-entry: var(--color-page-bg-stencil);
+  --sidebar-bg-entry-hover: var(--color-page-bg-stencil-strong);
 }
 
 html body {
   overflow: hidden;
-  --color-page-bg: var(--color-page-bg-stencil-weak);
+  background: var(--color-page-bg);
 }
 
 html[data-layout="2"] .framelix-page {
@@ -522,9 +522,8 @@ html[data-screen-size=s][data-sidebar-status=opened] .framelix-content-inner {
 .framelix-content-inner-inner {
   flex: 1 1 auto;
   padding: 20px;
-  background: var(--color-page-bg-stencil-weak);
-  background: var(--color-page-bg-stencil-weak);
   box-sizing: border-box;
+  background: var(--color-page-bg);
 }
 
 html:not([data-layout="2"]) .framelix-content-inner-inner::after {
@@ -544,6 +543,7 @@ html[data-layout="2"] .framelix-content-inner-inner {
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.01);
   transition: 0.2s;
   box-sizing: border-box;
+  border-radius: var(--border-radius);
 }
 html[data-layout="2"] .framelix-content-inner-inner:focus-within {
   box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.2);

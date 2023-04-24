@@ -12,7 +12,7 @@
   --color-border-strong: #222;
   --color-border-subtle: #aaa;
   --color-page-bg-hue: 0;
-  --color-page-bg: #f5f7fb;
+  --color-page-bg: hsl(var(--color-primary-hue), 43%, 97%);
   --color-page-bg-stencil-weak: white;
   --color-page-bg-stencil: hsl(var(--color-primary-hue), 31%, 94%);
   --color-page-bg-stencil-strong: hsl(var(--color-primary-hue), 31%, 90%);
@@ -99,11 +99,11 @@
     --color-success-text: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 70%);
     --color-warning-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 70%);
     --color-error-text: hsl(var(--color-warning-hue), calc(var(--color-contrast-modifier) + 70%), 70%);
-    --color-border-strong: #777;
-    --color-border-subtle: #444;
-    --color-page-bg: #111;
-    --color-page-bg-stencil-weak: #1c1c1c;
-    --color-page-bg-stencil: hsl(0, 0%, 18%);
+    --color-border-strong: hsl(0, 0%, 47%);
+    --color-border-subtle: hsl(0, 0%, 27%);
+    --color-page-bg: hsl(0, 0%, 5%);
+    --color-page-bg-stencil-weak: hsl(0, 0%, 8%);
+    --color-page-bg-stencil: hsl(0, 0%, 15%);
     --color-page-bg-stencil-strong: hsl(0, 0%, 21%);
     --color-page-bg-stencil-stronger: hsl(0, 0%, 25%);
     --color-page-text: white;
@@ -117,7 +117,7 @@
     --color-alert-error-text: white;
     --color-alert-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
     --color-alert-primary-text: white;
-    --color-toast-default-bg: #333;
+    --color-toast-default-bg: hsl(0, 0%, 17%);
     --color-toast-default-text: white;
     --color-toast-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 20%);
     --color-toast-success-text: white;
@@ -127,7 +127,7 @@
     --color-toast-error-text: white;
     --color-toast-primary-bg: #333;
     --color-toast-primary-text: white;
-    --color-button-default-bg: #333;
+    --color-button-default-bg: hsl(0, 0%, 17%);
     --color-button-default-text: white;
     --color-button-success-bg: hsl(var(--color-success-hue), calc(var(--color-contrast-modifier) + 70%), 30%);
     --color-button-success-text: white;
@@ -153,7 +153,7 @@
     --color-popup-error-text: hsl(var(--color-error-hue), calc(var(--color-contrast-modifier) + 70%), 80%);
     --color-popup-primary-bg: var(--color-page-bg-stencil-weak);
     --color-popup-primary-text: white;
-    --color-input-background: #333;
+    --color-input-background: hsl(0, 0%, 17%);
     --color-input-text: white;
     --color-input-border: none;
     --color-table-zebra: rgba(255, 255, 255, 0.05) ;
