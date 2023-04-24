@@ -223,34 +223,4 @@ class Framelix
         });
     }
 
-    /**
-     * Create minimal initial user config files to be able to use the application
-     * Used in setup via web interface as well
-     * Will throw an error if config file aready exist
-     * @param string $module
-     * @param string $defaultSalt
-     * @param string $applicationHost
-     * @param string $applicationUrlPrefix
-     */
-    public static function createInitialUserConfig(
-        string $module,
-        string $defaultSalt,
-        string $applicationHost,
-        string $applicationUrlPrefix
-    ): void {
-        $userConfigFile = Config::getUserConfigFilePath($module);
-        if (file_exists($userConfigFile)) {
-            throw new FatalError("Config file already exists");
-        }
-        $fileContents = [
-            "<?php",
-            "// this file contains overrides and custom configuration for all default settings",
-            "// this file should contain data that varies from instance to instance (like server vs. local development)",
-            "// database connections, urls, salts and all that sensible stuff belongs to here",
-            "\\Framelix\\Framelix\\Config::addSalt('" . $defaultSalt . "');",
-            "\\Framelix\\Framelix\\Config::\$applicationHost = '" . $applicationHost . "';",
-            "\\Framelix\\Framelix\\Config::\$applicationUrlPrefix = '" . $applicationUrlPrefix . "';"
-        ];
-        file_put_contents($userConfigFile, implode("\n", $fileContents));
-    }
 }

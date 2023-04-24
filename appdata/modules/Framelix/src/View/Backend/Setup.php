@@ -11,7 +11,6 @@ use Framelix\Framelix\Form\Field\Password;
 use Framelix\Framelix\Form\Field\Text;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Form;
-use Framelix\Framelix\Framelix;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
@@ -110,7 +109,7 @@ class Setup extends View
                 Config::$applicationUrlPrefix = $url->urlData['path'];
                 Config::$salts['default'] = RandomGenerator::getRandomString(64, 70);
 
-                Framelix::createInitialUserConfig(
+                Config::createInitialUserConfig(
                     FRAMELIX_MODULE,
                     Config::$salts["default"],
                     Config::$applicationHost,

@@ -64,7 +64,7 @@ class StorableArray extends StorableExtended
      */
     public static function getValue(Storable $parent, string $key, bool $clearCache = false): mixed
     {
-        return static::getValues($parent, $clearCache)[$key];
+        return static::getValues($parent, $clearCache)[$key] ?? null;
     }
 
     /**
@@ -128,9 +128,9 @@ class StorableArray extends StorableExtended
      */
     public static function deleteValues(Storable $parent): int
     {
-        unset(self::$cache[static::class][$parent->id]);
         $objects = static::getForParent($parent);
         self::deleteMultiple($objects);
+        unset(self::$cache[static::class][$parent->id]);
         return count($objects);
     }
 

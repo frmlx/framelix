@@ -54,13 +54,13 @@ class StorableFile extends StorableExtended
     public const THUMBNAIL_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
 
     /**
-     * Extensions that can be viewed safely in todays browsers
+     * Extensions that can be viewed safely in today's browsers
      * @var string[]
      */
     public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'apng', 'png', 'webp', 'bmp', 'svg'];
 
     /**
-     * Extensions that can be viewed safely in todays browsers
+     * Extensions that can be viewed safely in today's' browsers
      * @var string[]
      */
     public const VIDEO_EXTENSIONS = ['mp4', 'webm'];

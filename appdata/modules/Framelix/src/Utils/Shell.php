@@ -94,7 +94,7 @@ class Shell
                 $newOutput .= '<span style="';
                 foreach ($codes as $code) {
                     if (isset(self::$cliColorCodes[$code])) {
-                        $newOutput .= self::$cliColorCodes[$code] . "; ";
+                        $newOutput .= self::$cliColorCodes[$code] . " ";
                     }
                 }
                 $newOutput .= '">';
@@ -148,15 +148,5 @@ class Shell
     public function getOutputText(): string
     {
         return implode("\n", $this->output);
-    }
-
-    /**
-     * Get output as html formated string
-     * @param bool $nl2br convertNewLines into <br/>
-     * @return string
-     */
-    public function getOutputHtmlFormated(bool $nl2br = false): string
-    {
-        return self::convertCliOutputToHtml($this->output, $nl2br);
     }
 }
