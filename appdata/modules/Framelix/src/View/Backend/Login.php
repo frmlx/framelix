@@ -160,7 +160,7 @@ class Login extends View
     public function showContent(): void
     {
         $form = $this->getForm();
-        $form->addSubmitButton('login', '__framelix_login_submit__', 'login');
+        $form->addSubmitButton('login', '__framelix_login_submit__');
         $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ButtonColor::PRIMARY);
         $form->show();
         ?>

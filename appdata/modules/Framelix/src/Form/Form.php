@@ -235,7 +235,7 @@ class Form implements JsonSerializable
     public function addButton(
         string $actionId,
         string $buttonText,
-        ?string $buttonIcon = 'open_in_new',
+        ?string $buttonIcon = '70c',
         ButtonColor $buttonColor = ButtonColor::DEFAULT,
         ?string $buttonTooltip = null
     ): void {
@@ -260,7 +260,7 @@ class Form implements JsonSerializable
     public function addLoadUrlButton(
         Url $url,
         string $buttonText = '__framelix_stop_edit__',
-        ?string $buttonIcon = 'open_in_new',
+        ?string $buttonIcon = '70c',
         ButtonColor $buttonColor = ButtonColor::DEFAULT,
         ?string $buttonTooltip = null
     ): void {
@@ -285,7 +285,7 @@ class Form implements JsonSerializable
     public function addSubmitButton(
         string $submitFieldName = 'save',
         string $buttonText = '__framelix_save__',
-        ?string $buttonIcon = 'save',
+        ?string $buttonIcon = '718',
         ButtonColor $buttonColor = ButtonColor::SUCCESS,
         ?string $buttonTooltip = null
     ): void {

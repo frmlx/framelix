@@ -23,7 +23,7 @@ class FramelixCustomElementAlert extends FramelixCustomElement {
 
     this.innerHTML = text
     if (hidable) {
-      $(this).children().first().append(`<framelix-button theme="transparent" icon="clear" title="__framelix_alert_hide__" small></framelix-button>`)
+      $(this).children().first().append(`<framelix-button theme="transparent" icon="719" title="__framelix_alert_hide__" small></framelix-button>`)
     }
 
     if (bgcolor) {

@@ -61,7 +61,7 @@ class FramelixToast {
           <div class="framelix-toast-counter"><span class="framelix-toast-count" title="__framelix_toast_count__"></span></div>
           <div class="framelix-toast-message"></div>
           <div class="framelix-toast-close">
-            <framelix-button theme="transparent" icon="clear"></framelix-button>
+            <framelix-button theme="transparent" icon="719"></framelix-button>
           </div>
         </div>
     </div>`)

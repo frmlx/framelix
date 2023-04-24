@@ -3,10 +3,12 @@
 namespace Framelix\Framelix\Utils;
 
 use Framelix\Framelix\Exception\FatalError;
+use Framelix\Framelix\Html\HtmlAttributes;
 use Framelix\Framelix\Url;
 
 use function html_entity_decode;
 use function htmlentities;
+use function is_array;
 use function nl2br;
 use function str_ends_with;
 
@@ -15,6 +17,24 @@ use function str_ends_with;
  */
 class HtmlUtils
 {
+    /**
+     * Display html tag to display a framelix icon
+     * @param int|string $codePoint Icon list can be found at Framelix/node_modules/microns/icons.json or at link see bellow
+     * @param HtmlAttributes|array|null $attributes
+     * @return string
+     * @link https://www.s-ings.com/projects/microns-icon-font/
+     */
+    public static function getFramelixIcon(
+        int|string $codePoint,
+        HtmlAttributes|array|null $attributes = null
+    ): string {
+        if (is_array($attributes)) {
+            $attributes = HtmlAttributes::create($attributes);
+        }
+        $attributes?->addClass('framelix-icon');
+        return '<framelix-icon ' . ($attributes ? (string)$attributes : '') . ' icon="' . $codePoint . '">&#xe' . $codePoint . ';</framelix-icon>';
+    }
+
     /**
      * Get include tag for given url
      * @param Url $url

@@ -20,8 +20,9 @@
   }
 }
 :root {
+  --framelix-backend-font: "Arial", sans-serif;
   --font: var(--framelix-backend-font);
-  --font-size: 16px;
+  --font-size: 15px;
   --line-height: 1.4;
   --sidebar-opened-max-width: min(80vw, 300px);
   --sidebar-width: var(--sidebar-opened-max-width);
@@ -88,7 +89,7 @@ html[data-sidebar-status=opened] {
 }
 
 .framelix-sidebar {
-  font-size: calc(var(--font-size) - 2px);
+  font-size: calc(var(--font-size) - 1px);
   display: flex;
   flex: 1 1 auto;
   min-width: var(--sidebar-width);
@@ -325,8 +326,8 @@ html[data-sidebar-status=opened] {
 .framelix-sidebar-collapsable-title:hover {
   background-color: var(--sidebar-bg-entry-hover);
 }
-.framelix-sidebar-link:any-link:hover .framelix-sidebar-main-icon .material-icons,
-.framelix-sidebar-collapsable-title:hover .framelix-sidebar-main-icon .material-icons {
+.framelix-sidebar-link:any-link:hover .framelix-sidebar-main-icon framelix-icon,
+.framelix-sidebar-collapsable-title:hover .framelix-sidebar-main-icon framelix-icon {
   transform: translateX(2px);
 }
 .framelix-sidebar-link:any-link.framelix-sidebar-link-active,
@@ -344,7 +345,8 @@ html[data-sidebar-status=opened] {
   min-height: 26px;
   color: white;
 }
-.framelix-sidebar-main-icon .material-icons {
+.framelix-sidebar-main-icon framelix-icon {
+  width: 20px;
   transition: 0.2s;
   font-size: 18px;
   display: flex;
@@ -411,8 +413,8 @@ html[data-sidebar-status=opened] {
 }
 
 .framelix-sidebar-collapsable .framelix-sidebar-collapsable-title::after {
-  content: "expand_more";
-  font-family: "Material Icons", sans-serif;
+  content: "\e707";
+  font-family: "microns", sans-serif;
   transform: rotate(-90deg);
   transition: 0.3s;
   align-self: center;

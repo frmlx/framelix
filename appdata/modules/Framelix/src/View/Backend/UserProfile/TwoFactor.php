@@ -207,7 +207,7 @@ class TwoFactor extends View
     {
         if (!Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {
             $form = $this->getPasswordVerifyForm();
-            $form->addSubmitButton('verify', '__framelix_goahead__', 'lock_open');
+            $form->addSubmitButton('verify', '__framelix_goahead__');
             $form->show();
             return;
         }
@@ -220,15 +220,15 @@ class TwoFactor extends View
             <div class="framelix-responsive-grid-3">
                 <framelix-button theme="success"
                                  data-action="disable"
-                                 icon="power_off">__framelix_view_backend_userprofile_2fa_disable__
+                                 icon="789">__framelix_view_backend_userprofile_2fa_disable__
                 </framelix-button>
                 <framelix-button theme="primary"
                                  data-action="test"
-                                 icon="bug_report">__framelix_view_backend_userprofile_2fa_test__
+                                 icon="75a">__framelix_view_backend_userprofile_2fa_test__
                 </framelix-button>
                 <framelix-button theme="error"
                                  data-action="regenerate"
-                                 icon="emergency">__framelix_view_backend_userprofile_2fa_regenerate_codes__
+                                 icon="78a">__framelix_view_backend_userprofile_2fa_regenerate_codes__
                 </framelix-button>
             </div>
             <?php

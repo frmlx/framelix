@@ -177,7 +177,7 @@ class FramelixTabs {
       const row = this.tabs[tabId]
       if (firstTabId === null) firstTabId = tabId
       const fullPath = basePath + ':' + tabId
-      const btn = $(`<framelix-button class="framelix-tab-button" theme="light" icon="expand_more"></framelix-button>`)
+      const btn = $(`<framelix-button class="framelix-tab-button" theme="light" icon="705"></framelix-button>`)
       btn.attr('data-id', tabId)
       if (row.tabColor) {
         btn.attr('bgcolor', row.tabColor)

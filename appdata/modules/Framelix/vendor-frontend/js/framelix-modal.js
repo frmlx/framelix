@@ -128,7 +128,7 @@ class FramelixModal {
     html.append(content)
     if (!options.maxWidth) options.maxWidth = 600
     options.bodyContent = html
-    options.footerContent = '<framelix-button icon="check">__framelix_ok__</framelix-button>'
+    options.footerContent = '<framelix-button icon="718">__framelix_ok__</framelix-button>'
     const modal = FramelixModal.show(options)
     const buttons = modal.footerContainer.find('framelix-button')
     buttons.on('click', function () {
@@ -159,8 +159,8 @@ class FramelixModal {
 
     html.append($('<div>').append(input))
     let footerContainer = `
-        <framelix-button icon="clear" theme="light">__framelix_cancel__</framelix-button>
-        <framelix-button data-success="1" icon="check" theme="success" style="flex-grow: 4">__framelix_ok__</framelix-button>
+        <framelix-button icon="719" theme="light">__framelix_cancel__</framelix-button>
+        <framelix-button data-success="1" icon="718" theme="success" style="flex-grow: 4">__framelix_ok__</framelix-button>
     `
 
     const close = function (success) {
@@ -202,8 +202,8 @@ class FramelixModal {
     const html = $(`<div style="text-align: center;"></div>`)
     html.html(content)
     const bottom = $(`
-      <framelix-button theme="light" icon="clear">__framelix_cancel__</framelix-button>
-      <framelix-button theme="success" data-success="1" icon="check" style="flex-grow: 4">__framelix_ok__</framelix-button>
+      <framelix-button theme="light" icon="719">__framelix_cancel__</framelix-button>
+      <framelix-button theme="success" data-success="1" icon="718" style="flex-grow: 4">__framelix_ok__</framelix-button>
     `)
     if (!options.maxWidth) options.maxWidth = 600
     options.bodyContent = html
@@ -352,7 +352,7 @@ class FramelixModal {
     this.container = $(`<dialog class="framelix-modal">
         <div class="framelix-modal-inner">
             <div class="framelix-modal-close">
-              <framelix-button icon="clear" title="__framelix_close__"></framelix-button>
+              <framelix-button icon="719" title="__framelix_close__"></framelix-button>
             </div>
             <div class="framelix-modal-content" role="document">
                 <div class="framelix-modal-header hidden"></div>

@@ -43,7 +43,7 @@ abstract class StorableExtended extends Storable
         ];
         $html = '';
         if ($this->createTime->getTimestamp() !== $this->updateTime->getTimestamp()) {
-            $html = '<span class="material-icons" title="__framelix_modified_timestamp_updated__">edit</span>';
+            $html = HtmlUtils::getFramelixIcon('731', ['title' => '__framelix_modified_timestamp_updated__']);
             $tooltip[] = Lang::get('__framelix_modified_timestamp_updateuser__', [
                 HtmlUtils::escape($this->updateUser->email ?? Lang::get("__framelix_unknown_user__")),
                 $this->updateTime->getHtmlString()

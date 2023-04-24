@@ -47,7 +47,7 @@ class TableCell implements JsonSerializable
     public bool $button = false;
 
     /**
-     * Icon theme, primary, success, warning, error, light
+     * Icon, see <framelix-icon> for more information
      * @var string|null
      */
     public ?string $buttonIcon = null;

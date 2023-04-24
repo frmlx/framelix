@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "microns";
+  src: url(../../../_Framelix/fonts/microns.woff2) format('woff2');
+}
+
+.framelix-icon,
+framelix-icon {
+  display: inline;
+  font-family: microns, sans-serif;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: normal;
+  letter-spacing: normal;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+}

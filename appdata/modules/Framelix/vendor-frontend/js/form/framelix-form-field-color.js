@@ -54,7 +54,7 @@ class FramelixFormFieldColor extends FramelixFormField {
         <input type="text" maxlength="7" tabindex="0" ${this.disabled ? 'disabled' : ''}>  
         <label>
             <input type="color" tabindex="0" ${this.disabled ? 'disabled' : ''}>
-            <span class="material-icons framelix-form-field-container-color-pick">colorize</span>
+            <framelix-icon class="framelix-form-field-container-color-pick" icon="7a5"></framelix-icon>
         </label>
       </div>
     `)

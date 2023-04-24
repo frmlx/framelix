@@ -84,10 +84,10 @@ class ForgotPassword extends View
     {
         if ($this->token) {
             $form = $this->getFormNewPassword();
-            $form->addSubmitButton('reset', '__framelix_save__', 'login');
+            $form->addSubmitButton('reset');
         } else {
             $form = $this->getFormSendMail();
-            $form->addSubmitButton('send', '__framelix_view_backend_forgotpassword_sendmail__', 'login');
+            $form->addSubmitButton('send', '__framelix_view_backend_forgotpassword_sendmail__');
         }
         $form->show();
     }

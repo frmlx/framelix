@@ -6,7 +6,7 @@
 .framelix-form-field-captcha .framelix-form-field-captcha-verified .framelix-loading {
   margin-right: 10px;
 }
-.framelix-form-field-captcha .framelix-form-field-captcha-verified .material-icons {
+.framelix-form-field-captcha .framelix-form-field-captcha-verified framelix-icon {
   font-size: 16px;
   margin-right: 10px;
   color: var(--color-success-hue);
@@ -282,7 +282,7 @@ html[data-screen-size=s] .framelix-mediabrowser-left-window {
 html[data-screen-size=s] .framelix-mediabrowser-actions > .framelix-mediabrowser-view {
   min-width: 100%;
 }
-.framelix-mediabrowser-actions > .framelix-mediabrowser-view .material-icons {
+.framelix-mediabrowser-actions > .framelix-mediabrowser-view framelix-icon {
   font-size: 24px;
 }
 
@@ -680,8 +680,8 @@ input[type=checkbox]:focus-within {
 }
 input[type=radio]:after,
 input[type=checkbox]:after {
-  content: "radio_button_unchecked";
-  font-family: "Material Icons", sans-serif;
+  content: "\e756";
+  font-family: "microns", sans-serif;
   line-height: 1;
   display: block;
   font-size: 12px;
@@ -692,7 +692,8 @@ input[type=checkbox]:checked {
 }
 input[type=radio]:checked:after,
 input[type=checkbox]:checked:after {
-  content: "check";
+  content: "\e718";
+  font-size: 20px;
 }
 
 .framelix-form {

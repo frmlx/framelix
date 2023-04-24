@@ -405,7 +405,7 @@ class FramelixFormFieldMediaBrowser extends FramelixFormField {
   async renderInternal () {
     const self = this
     await super.renderInternal()
-    const btn = $('<framelix-button theme="primary" icon="perm_media">__framelix_mediabrowser_open__</framelix-button>')
+    const btn = $('<framelix-button theme="primary" icon="78b">__framelix_mediabrowser_open__</framelix-button>')
     this.field.append(btn)
     this.selectionInfo = $('<div class="framelix-mediabrowser-selected-info"></div>')
     this.field.append(this.selectionInfo)

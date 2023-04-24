@@ -109,7 +109,7 @@ class MPdfBase extends View
     {
         $form = $this->getOptionsForm();
         $this->setOptionsFormFields($form);
-        $form->addSubmitButton('go', '__framelix_ok__', 'east');
+        $form->addSubmitButton('go', '__framelix_ok__', '705');
         $form->show();
     }
 

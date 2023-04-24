@@ -45,7 +45,7 @@ class UpdateDatabase extends View
     public function showContent(): void
     {
         $form = $this->getForm();
-        $form->addSubmitButton("update", "__framelix_view_backend_dev_updatedatabase_updatenow__", "upgrade");
+        $form->addSubmitButton("update", "__framelix_view_backend_dev_updatedatabase_updatenow__");
         $form->show();
     }
 

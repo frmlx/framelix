@@ -411,7 +411,7 @@ class FramelixFormFieldSelect extends FramelixFormField {
     if (!this.disabled) {
       if (this.showResetButton === true || (this.showResetButton === null && !this.required)) {
         pickerEl.append(
-          $('<framelix-button data-action="unset" icon="clear" title="__framelix_form_select_unset__" theme="transparent" textcolor="red"></framelix-button>').on('click', function (ev) {
+          $('<framelix-button data-action="unset" icon="719" title="__framelix_form_select_unset__" theme="transparent" textcolor="red"></framelix-button>').on('click', function (ev) {
             ev.stopPropagation()
             self.destroyDropdown()
             self.setValue(null, true)
@@ -419,7 +419,7 @@ class FramelixFormFieldSelect extends FramelixFormField {
         )
       }
       if (this.dropdown) {
-        const dropdownBtn = $(`<framelix-button data-action="open" title="__framelix_form_select_open__" icon="expand_more" theme="transparent"  textcolor="var(--color-page-text)"></framelix-button>`).on('click', function (ev) {
+        const dropdownBtn = $(`<framelix-button data-action="open" title="__framelix_form_select_open__" icon="711" theme="transparent"  textcolor="var(--color-page-text)"></framelix-button>`).on('click', function (ev) {
           ev.stopPropagation()
           self.toggleDropdown()
         })

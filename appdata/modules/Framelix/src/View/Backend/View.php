@@ -15,6 +15,7 @@ use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
+use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\View\LayoutView;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -96,12 +97,12 @@ abstract class View extends LayoutView
 
             $field = new Toggle();
             $field->name = "darkMode";
-            $field->label = Lang::get('__framelix_darkmode__') . ' <span class="material-icons">dark_mode</span>';
+            $field->label = Lang::get('__framelix_darkmode__') . HtmlUtils::getFramelixIcon('790');
             $form->addField($field);
 
             $field = new Html();
             $field->name = "resetAlerts";
-            $field->defaultValue = '<framelix-button class="framelix_reset_alerts" icon="restart_alt">__framelix_reset_alerts__</framelix-button>';
+            $field->defaultValue = '<framelix-button class="framelix_reset_alerts" icon="785">__framelix_reset_alerts__</framelix-button>';
             $form->addField($field);
 
             $form->show();
@@ -139,7 +140,6 @@ abstract class View extends LayoutView
     {
         $appIsSetup = Config::doesUserConfigFileExist();
         $this->includeCompiledFileBundle("Framelix", "scss", "backend");
-        $this->includeCompiledFileBundle("Framelix", "scss", "backend-fonts");
         $this->includeCompiledFileBundle("Framelix", "js", "backend");
         $this->includeDefaultCompilerFileBundles(FRAMELIX_MODULE);
         $mainSidebarClass = "Framelix\\" . FRAMELIX_MODULE . "\\Backend\\Sidebar";
@@ -213,7 +213,7 @@ abstract class View extends LayoutView
                     <?php
                     if ($this->showSidebar) {
                         ?>
-                        <framelix-button class="framelix-sidebar-toggle" icon="menu"
+                        <framelix-button class="framelix-sidebar-toggle" icon="73f"
                                          theme="transparent"></framelix-button>
                         <?php
                     }
@@ -227,7 +227,7 @@ abstract class View extends LayoutView
                                          jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>"
                                          target="modal"
                                          modal-options='{"maxWidth":500}'
-                                         icon="people"
+                                         icon="739"
                                          title="__framelix_backend_user_settings__"></framelix-button>
                         <?php
                     }

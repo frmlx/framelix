@@ -208,7 +208,7 @@ class MediaBrowser extends Field
                     } else {
                         $result = '';
                         if (!$disabled) {
-                            $result .= '<framelix-button small icon="sort" data-action="edit-selection-info">__framelix_mediabrowser_edit_selection_info__</framelix-button>&nbsp;';
+                            $result .= '<framelix-button small icon="70f" data-action="edit-selection-info">__framelix_mediabrowser_edit_selection_info__</framelix-button>&nbsp;';
                         }
                         $result .= Lang::get(
                             '__framelix_mediabrowser_selectioninfo__',
@@ -216,7 +216,7 @@ class MediaBrowser extends Field
                         );
                     }
                     if (!$disabled) {
-                        $result = '<framelix-button small theme="error" icon="delete" data-action="unset-selection" title="__framelix_mediabrowser_selection_unset__"></framelix-button>&nbsp;' . $result;
+                        $result = '<framelix-button small theme="732" icon="delete" data-action="unset-selection" title="__framelix_mediabrowser_selection_unset__"></framelix-button>&nbsp;' . $result;
                     }
                 }
                 $maxThumbs = (int)($jsCall->parameters['selectionInfoMaxThumbs'] ?? 0);
@@ -250,7 +250,7 @@ class MediaBrowser extends Field
                 }
                 ?>
                 <framelix-button block data-action="rename" data-id="<?= $file ?>"
-                                 data-name='<?= JsonUtils::encode($file->filename) ?>' theme="light" icon="edit"
+                                 data-name='<?= JsonUtils::encode($file->filename) ?>' theme="light" icon="731"
                                  data-store-url="<?= JsCall::getUrl(
                                      __CLASS__,
                                      'edit-file-save',
@@ -260,7 +260,7 @@ class MediaBrowser extends Field
                 </framelix-button>
                 <framelix-button block data-action="delete"
                                  data-confirm-message="<?= Lang::get('__framelix_delete_sure__') ?>" theme="error"
-                                 icon="delete"
+                                 icon="732"
                                  data-delete-url="<?= JsCall::getUrl(
                                      __CLASS__,
                                      'delete-file',
@@ -292,7 +292,7 @@ class MediaBrowser extends Field
                 }
                 ?>
                 <framelix-button block data-action="rename" data-id="<?= $folder ?>"
-                                 data-name='<?= JsonUtils::encode($folder->name) ?>' theme="light" icon="edit"
+                                 data-name='<?= JsonUtils::encode($folder->name) ?>' theme="light" icon="731"
                                  data-store-url="<?= JsCall::getUrl(
                                      __CLASS__,
                                      'edit-folder-save',
@@ -304,7 +304,7 @@ class MediaBrowser extends Field
                                  data-confirm-message="<?= Lang::get('__framelix_delete_sure__') ?><br/><?= Lang::get(
                                      '__framelix_mediabrowser_selectioninfo__',
                                      [$files, $folders]
-                                 ) ?>" theme="error" icon="delete"
+                                 ) ?>" theme="error" icon="732"
                                  data-delete-url="<?= JsCall::getUrl(
                                      __CLASS__,
                                      'delete-folder',
@@ -353,7 +353,7 @@ class MediaBrowser extends Field
                             $uploadField->multiple = true;
                             $uploadField->show();
                             ?>
-                            <framelix-button theme="primary" icon="add"
+                            <framelix-button theme="primary" icon="716"
                                              data-action="createfolder"><?= Lang::get(
                                     '__framelix_mediabrowser_createfolder__'
                                 ) ?></framelix-button>
@@ -361,9 +361,9 @@ class MediaBrowser extends Field
                         }
                         ?>
                         <label class="framelix-mediabrowser-view">
-                            <span class="material-icons">zoom_out</span>
+                            <?= HtmlUtils::getFramelixIcon('746') ?>
                             <input type="range" min="0.1" max="1" value="0.1" step="0.1">
-                            <span class="material-icons">zoom_in</span>
+                            <?= HtmlUtils::getFramelixIcon('745') ?>
                         </label>
                     </div>
                     <?= '<div class="framelix-mediabrowser-scrollbody">' ?>
@@ -410,13 +410,13 @@ class MediaBrowser extends Field
                                 if ($multiple) {
                                     $action1 = new TableCell();
                                     $action1->button = true;
-                                    $action1->buttonIcon = 'check';
+                                    $action1->buttonIcon = '718';
                                     $action1->buttonTooltip = '__framelix_mediabrowser_select__';
                                     $action1->buttonAttributes = HtmlAttributes::create(['data-action' => 'select']);
                                 }
                                 $action2 = new TableCell();
                                 $action2->button = true;
-                                $action2->buttonIcon = 'edit';
+                                $action2->buttonIcon = '731';
                                 $action2->buttonTooltip = '__framelix_edit__';
                                 $action2->buttonAttributes = HtmlAttributes::create(['data-action' => 'edit-folder']);
                             }
@@ -444,9 +444,9 @@ class MediaBrowser extends Field
                                 if (!$disabled && $folder->id) {
                                     ?>
                                     <div class="framelix-mediabrowser-entry-actions">
-                                        <framelix-button block icon="check" data-action="select"
+                                        <framelix-button block icon="718" data-action="select"
                                                          title="__framelix_mediabrowser_select__"></framelix-button>
-                                        <framelix-button block icon="edit"
+                                        <framelix-button block icon="731"
                                                          title="__framelix_edit__"
                                                          data-action="edit-folder"></framelix-button>
                                     </div>
@@ -468,12 +468,13 @@ class MediaBrowser extends Field
                             if (!$disabled) {
                                 $action1 = new TableCell();
                                 $action1->button = true;
-                                $action1->buttonIcon = 'check';
+                                $action1->buttonIcon = '718';
                                 $action1->buttonTooltip = '__framelix_mediabrowser_select__';
                                 $action1->buttonAttributes = HtmlAttributes::create(['data-action' => 'select']);
+
                                 $action2 = new TableCell();
                                 $action2->button = true;
-                                $action2->buttonIcon = 'edit';
+                                $action2->buttonIcon = '731';
                                 $action2->buttonTooltip = '__framelix_edit__';
                                 $action2->buttonAttributes = HtmlAttributes::create(['data-action' => 'edit-file']);
                             }
@@ -496,9 +497,9 @@ class MediaBrowser extends Field
                                 if (!$disabled) {
                                     ?>
                                     <div class="framelix-mediabrowser-entry-actions">
-                                        <framelix-button icon="check" data-action="select"
+                                        <framelix-button icon="716" data-action="select"
                                                          title="__framelix_mediabrowser_select__"></framelix-button>
-                                        <framelix-button icon="edit"
+                                        <framelix-button icon="731"
                                                          title="__framelix_edit__"
                                                          data-action="edit-file"></framelix-button>
                                     </div>
@@ -548,7 +549,7 @@ class MediaBrowser extends Field
         <div class="framelix-mediabrowser-tree-entry">
             <framelix-button theme="light" class="framelix-mediabrowser-tree-label"
                              data-active="<?= $currentFolder === $folder ?>"
-                             icon="folder" data-action="openfolder"
+                             icon="777" data-action="openfolder"
                              data-id="<?= $folder ?>"><?= $label ? Lang::get(
                     $label
                 ) : ($folder->name ?? 0) ?></framelix-button>

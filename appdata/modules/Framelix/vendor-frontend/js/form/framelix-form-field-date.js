@@ -195,14 +195,14 @@ class FramelixFormFieldDate extends FramelixFormFieldText {
 
     const container = $(`<div class="framelix-form-field-date-popup">
         <div class="framelix-form-field-date-popup-monthpicker">
-            <framelix-button theme="transparent" icon="chevron_left" data-action="month_switch" data-dir="-1"></framelix-button>
+            <framelix-button theme="transparent" icon="704" data-action="month_switch" data-dir="-1"></framelix-button>
             <div class="framelix-form-field-date-popup-monthpicker-select"></div>
-            <framelix-button theme="transparent" icon="chevron_right" data-action="month_switch" data-dir="1"></framelix-button>
+            <framelix-button theme="transparent" icon="705" data-action="month_switch" data-dir="1"></framelix-button>
         </div>
         <div class="framelix-form-field-date-popup-calendar"></div>
         <div class="framelix-form-field-date-popup-actions">
-            <framelix-button theme="primary" icon="delete" data-action="delete">Löschen</framelix-button>
-            <framelix-button theme="primary" icon="update" data-action="today">Heute</framelix-button>
+            <framelix-button theme="primary" icon="719" data-action="delete">Löschen</framelix-button>
+            <framelix-button theme="primary" icon="72a" data-action="today">Heute</framelix-button>
         </div>
     </div>`)
 
@@ -288,7 +288,7 @@ class FramelixFormFieldDate extends FramelixFormFieldText {
     })
 
     if (this.showDatepickerBtn) {
-      this.datepickerBtn = $(`<framelix-button icon="calendar_month" theme="primary"></framelix-button>`)
+      this.datepickerBtn = $(`<framelix-button icon="72a" theme="primary"></framelix-button>`)
       this.field.attr('data-field-with-button', '1')
       this.field.append(this.datepickerBtn)
       this.datepickerBtn.on('click', function () {

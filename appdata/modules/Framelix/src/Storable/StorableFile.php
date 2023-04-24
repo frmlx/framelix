@@ -302,9 +302,9 @@ class StorableFile extends StorableExtended
             return $this->getRawTextString();
         }
         $cell = new TableCell();
-        $cell->stringValue = '<a href="' . $downloadUrl . '" title="__framelix_downloadfile__" download class="framelix-storable-file-download"><span class="material-icons">download</span><span>' . HtmlUtils::escape(
-                $this->filename
-            ) . '</span></a>';
+        $cell->stringValue = '<a href="' . $downloadUrl . '" title="__framelix_downloadfile__" download class="framelix-storable-file-download">' .
+            HtmlUtils::getFramelixIcon('709') . ' <span>' .
+            HtmlUtils::escape($this->filename) . '</span></a>';
         return $cell;
     }
 

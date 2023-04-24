@@ -13,7 +13,7 @@ class FramelixFormFieldPassword extends FramelixFormFieldText {
     await super.renderInternal()
     const self = this
     this.field.attr('data-field-with-button', '1')
-    this.field.append(`<framelix-button theme="primary" title="__framelix_form_password_toggle__" icon="visibility"></framelix-button>`)
+    this.field.append(`<framelix-button theme="primary" title="__framelix_form_password_toggle__" icon="733"></framelix-button>`)
     this.field.find('framelix-button').on('click keydown', function (ev) {
       if (ev.key === ' ' || ev.key === 'Enter' || !ev.key) {
         self.input.attr('type', self.input.attr('type') === self.type ? 'text' : 'password')

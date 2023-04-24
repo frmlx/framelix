@@ -275,7 +275,7 @@ datalist {
   align-items: center;
   white-space: nowrap;
 }
-.framelix-modified-timestamp .material-icons {
+.framelix-modified-timestamp framelix-icon {
   opacity: 0.4;
   margin-left: 5px;
 }
@@ -304,7 +304,7 @@ datalist {
   align-items: center;
   max-width: 200px;
 }
-.framelix-storable-file-download .material-icons {
+.framelix-storable-file-download framelix-icon {
   font-size: 80%;
 }
 .framelix-storable-file-download span:last-child {
@@ -655,7 +655,7 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
   border-top-right-radius: var(--border-radius);
   gap: 10px;
 }
-.framelix-quick-search .framelix-quick-search-input .material-icons {
+.framelix-quick-search .framelix-quick-search-input framelix-icon {
   align-self: center;
   font-size: 24px;
 }
@@ -834,6 +834,7 @@ html[data-touch="1"] .framelix-table > table > tfoot > tr > th[data-flag-icon="1
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  font-size: 0.9rem;
 }
 .framelix-tabs .framelix-tab-button .icon {
   background: hsla(var(--color-primary-hue), 50%, 50%, 0.1);
@@ -972,24 +973,26 @@ html[data-screen-size=s] .framelix-tab-buttons {
 }
 
 @font-face {
-  font-family: "Material Icons";
-  font-style: normal;
-  font-weight: 700;
-  src: url(../../../_Framelix/fonts/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzazHD_dY43zj-jCxv3fzvRNU22ZXGJpEpjC_1p-p_4MrImHCIJIZrDBIG-ej.woff2) format("woff2");
+  font-family: "microns";
+  src: url(../../../_Framelix/fonts/microns.woff2) format("woff2");
 }
-.material-icons {
-  font-family: "Material Icons";
-  font-weight: normal;
+.framelix-icon,
+framelix-icon {
+  display: inline;
+  font-family: microns, sans-serif;
   font-style: normal;
-  line-height: 1;
-  letter-spacing: normal;
+  font-variant: normal;
   text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: normal;
+  letter-spacing: normal;
   display: inline-block;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
   -webkit-font-feature-settings: "liga";
-  -webkit-font-smoothing: antialiased;
 }
 
 framelix-alert {
@@ -1083,7 +1086,7 @@ framelix-button .icon {
   box-sizing: border-box;
   cursor: pointer;
 }
-framelix-button .icon .material-icons {
+framelix-button .icon framelix-icon {
   flex: 1 1 auto;
   line-height: inherit;
 }

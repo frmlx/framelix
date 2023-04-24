@@ -333,7 +333,7 @@ class Table implements JsonSerializable
             $cell->button = true;
             $cell->buttonTooltip = "__framelix_deleteentry__";
             $cell->buttonTheme = "light";
-            $cell->buttonIcon = "delete";
+            $cell->buttonIcon = "732";
             $cell->buttonTarget = "none";
             $cell->buttonTextColor = "var(--color-error-text)";
             $cell->buttonJscallUrl = $deleteUrl;

@@ -307,7 +307,7 @@ class FramelixForm {
   addButton (
     actionId,
     buttonText,
-    buttonIcon = 'open_in_new',
+    buttonIcon = '70c',
     buttonColor = 'dark',
     buttonTooltip = null
   ) {
@@ -332,7 +332,7 @@ class FramelixForm {
   addLoadUrlButton (
     url,
     buttonText,
-    buttonIcon = 'open_in_new',
+    buttonIcon = '70c',
     buttonColor = 'dark',
     buttonTooltip = null
   ) {
@@ -633,7 +633,7 @@ class FramelixForm {
             const rowContainer = field.container.parent()
             if (!groupStartField) {
               groupStartField = field
-              rowContainer.before(`<div class="framelix-form-field-group" data-id="${id}" data-storage-key="${storageKey}" data-state="${state ? 1 : 0}" data-remember="${row.rememberState ? '1' : '0'}"><framelix-button theme="light" icon="chevron_right">${row.label}</framelix-button></div>`)
+              rowContainer.before(`<div class="framelix-form-field-group" data-id="${id}" data-storage-key="${storageKey}" data-state="${state ? 1 : 0}" data-remember="${row.rememberState ? '1' : '0'}"><framelix-button theme="light" icon="705">${row.label}</framelix-button></div>`)
             }
             rowContainer.toggleClass('framelix-form-field-group-hidden', !state)
             rowContainer.attr('data-field-group-id', id)

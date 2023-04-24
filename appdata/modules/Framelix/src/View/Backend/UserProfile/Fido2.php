@@ -128,7 +128,7 @@ class Fido2 extends View
         }
         if (!Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {
             $form = $this->getPasswordVerifyForm();
-            $form->addSubmitButton('verify', '__framelix_goahead__', 'lock_open');
+            $form->addSubmitButton('verify', '__framelix_goahead__');
             $form->show();
             return;
         }

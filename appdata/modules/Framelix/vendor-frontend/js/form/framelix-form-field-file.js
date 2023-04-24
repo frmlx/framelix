@@ -129,7 +129,7 @@ class FramelixFormFieldFile extends FramelixFormField {
     let fileId = file.name
     const container = $(`<div class="framelix-form-field-file-file">
         <div class="framelix-form-field-file-file-label">
-            <framelix-button theme="light" class="framelix-form-field-file-file-remove" title="__framelix_form_file_delete_queue__" icon="clear"></framelix-button>
+            <framelix-button theme="light" class="framelix-form-field-file-file-remove" title="__framelix_form_file_delete_queue__" icon="719"></framelix-button>
             <div class="framelix-form-field-file-file-label-text">
                 ${file.url ? '<a href="' + file.url + '">' + filename + '</a>' : filename}
             </div>
@@ -218,7 +218,7 @@ class FramelixFormFieldFile extends FramelixFormField {
     await super.renderInternal()
     const self = this
     this.field.html(`      
-        <framelix-button block class="framelix-form-field-file-button" icon="file_upload">${this.buttonLabel}</framelix-button>
+        <framelix-button block class="framelix-form-field-file-button" icon="708">${this.buttonLabel}</framelix-button>
         <label style="display: none"><input type="file" ${this.disabled ? 'disabled' : ''}></label>
         <div class="framelix-form-field-file-files"></div>
     `)

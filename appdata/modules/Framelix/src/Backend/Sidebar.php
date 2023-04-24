@@ -16,6 +16,7 @@ use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\FileUtils;
+use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\View;
 
 use function get_class;
@@ -56,7 +57,7 @@ abstract class Sidebar
      */
     public function startGroup(
         string|array $label,
-        string $icon = "menu",
+        string $icon = "73f",
         ?string $badgeText = null,
         bool $forceOpened = false
     ): void {
@@ -75,7 +76,7 @@ abstract class Sidebar
      * @param string|Url $url Could be a view class name or a direct URL
      * @param string|string[]|null $label The label, if null then use the page title if a view class as $url is given
      *  Array of labels make first value normal font size and all other labels separate rows with smaller font size
-     * @param string $icon The icon
+     * @param string|int $icon The icon code (Used by HtmlUtils::getMicronIconTag
      * @param string $target The link target
      * @param array|null $urlParameters Additional url parameters to add to
      * @param array|null $viewUrlParameters Additional view url parameters. Only required when view has a custom url with regex placeholders
@@ -84,7 +85,7 @@ abstract class Sidebar
     public function addLink(
         string|Url $url,
         string|array|null $label = null,
-        string $icon = "adjust",
+        string|int $icon = 757,
         string $target = "_self",
         ?array $urlParameters = null,
         ?array $viewUrlParameters = null,
@@ -162,13 +163,13 @@ abstract class Sidebar
      */
     public function showDefaultSidebarEnd(): void
     {
-        $this->startGroup("__framelix_edituser_sidebar_title__", "people");
-        $this->addLink(View\Backend\User\Index::class, null, "add");
-        $this->addLink(View\Backend\User\Search::class, null, "manage_search");
+        $this->startGroup("__framelix_edituser_sidebar_title__", "739");
+        $this->addLink(View\Backend\User\Index::class, null, "716");
+        $this->addLink(View\Backend\User\Search::class, null, "744");
         $this->showHtmlForLinkData(order: 500);
 
         // get system values
-        $this->startGroup("__framelix_systemvalues__", "dns");
+        $this->startGroup("__framelix_systemvalues__", "787");
         $storableFiles = FileUtils::getFiles(
             FileUtils::getModuleRootPath(FRAMELIX_MODULE) . "/src/Storable/SystemValue",
             "~\.php$~",
@@ -181,35 +182,34 @@ abstract class Sidebar
             if ($systemValue->isReadable()) {
                 $this->addLink(
                     $systemValue->getDetailsUrl(),
-                    ClassUtils::getLangKey($systemValue),
-                    "radio_button_unchecked"
+                    ClassUtils::getLangKey($systemValue)
                 );
             }
         }
         $this->showHtmlForLinkData(true, 501);
 
-        $this->startGroup("__framelix_view_backend_logs__", "storage");
+        $this->startGroup("__framelix_view_backend_logs__", "788");
         $this->addLink(View\Backend\Logs\ErrorLogs::class);
         $this->addLink(View\Backend\Logs\SystemEventLogs::class);
         $this->showHtmlForLinkData(order: 503);
 
-        $this->startGroup("__framelix_developer_options__", "developer_mode");
-        $this->addLink(View\Backend\Dev\Update::class, null, "system_update");
-        $this->addLink(View\Backend\Dev\LangEditor::class, null, "g_translate");
+        $this->startGroup("__framelix_developer_options__", "74f");
+        $this->addLink(View\Backend\Dev\Update::class, null, "70c");
+        $this->addLink(View\Backend\Dev\LangEditor::class, null, "786");
         $this->showHtmlForLinkData(order: 505);
 
         if (User::get()) {
             $this->addLink(
                 View\Backend\UserProfile\Index::class,
                 ['__framelix_view_backend_userprofile_index__', User::get()->email],
-                "person"
+                "738"
             );
             $this->showHtmlForLinkData(order: 506);
         }
         if (!User::get()) {
-            $this->addLink(View\Backend\Login::class, "__framelix_view_backend_login__", "login");
+            $this->addLink(View\Backend\Login::class, "__framelix_view_backend_login__", "701");
         }
-        $this->addLink(View\Backend\Logout::class, "__framelix_logout__", "logout");
+        $this->addLink(View\Backend\Logout::class, "__framelix_logout__", "700");
         $this->showHtmlForLinkData(order: 507);
 
         $versionInfo = [];
@@ -297,7 +297,7 @@ abstract class Sidebar
                 echo '<div class="framelix-sidebar-collapsable-title">';
             }
             ?>
-            <span class="framelix-sidebar-main-icon"><span class="material-icons"><?= $linkData['icon'] ?></span></span>
+            <span class="framelix-sidebar-main-icon"><?= HtmlUtils::getFramelixIcon($linkData['icon']) ?></span>
             <span
                 class="framelix-sidebar-label"><?= $linkData['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $linkData['badgeText'] . '</span>' : '' ?><?= Lang::get(
                     $linkData['label']
@@ -329,7 +329,7 @@ abstract class Sidebar
             ?>
             <a href="<?= $url ?>" target="<?= $row['target'] ?>"
                class="framelix-sidebar-link <?= $activeKey === $key ? 'framelix-sidebar-link-active' : '' ?>">
-                <span class="framelix-sidebar-main-icon"><span class="material-icons"><?= $row['icon'] ?></span></span>
+                <span class="framelix-sidebar-main-icon"><?= HtmlUtils::getFramelixIcon($row['icon']) ?></span>
                 <div
                     class="framelix-sidebar-label"><?= $row['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $row['badgeText'] . '</span>' : '' ?><?= $row['label'] ?></div>
             </a>

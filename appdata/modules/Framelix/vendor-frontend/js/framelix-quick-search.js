@@ -183,8 +183,8 @@ class FramelixQuickSearch {
     this.searchField = $(`<div class="framelix-quick-search-input-editable" contenteditable="true" data-placeholder="${await FramelixLang.get(this.placeholder)}" spellcheck="false"></div>`)
     this.container.html(`
       <div class="framelix-quick-search-input">
-        <framelix-button theme="light" class="framelix-quick-search-help" title="__framelix_quick_search_help__" icon="help" style="cursor:help;"></framelix-button>
-        <span class="material-icons">search</span>
+        <framelix-button theme="light" class="framelix-quick-search-help" title="__framelix_quick_search_help__" icon="780" style="cursor:help;"></framelix-button>
+        <framelix-icon icon="744"></framelix-icon>
       </div>
       <div class="framelix-quick-search-options hidden"></div>
       <div class="framelix-quick-search-result"></div>

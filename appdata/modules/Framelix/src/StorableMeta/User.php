@@ -34,7 +34,7 @@ class User extends StorableMeta
         $property->valueCallable = function () {
             $tableCell = new TableCell();
             $tableCell->button = true;
-            $tableCell->buttonIcon = "people";
+            $tableCell->buttonIcon = "739";
             $tableCell->buttonTooltip = "__framelix_simulateuser__";
             $tableCell->buttonHref = View::getUrl(View\Backend\User\Index::class)->setParameter(
                 'simulateUser',

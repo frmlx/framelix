@@ -361,15 +361,14 @@ abstract class StorableMeta implements JsonSerializable
         if ($this->storable->isEditable()) {
             $form->addSubmitButton(
                 "store",
-                $this->storable->id ? "__framelix_save_edited__" : "__framelix_save_new__",
-                $this->storable->id ? "save_as" : "save"
+                $this->storable->id ? "__framelix_save_edited__" : "__framelix_save_new__"
             );
         }
         if (Url::getBrowserUrl()->hasParameterWithValue($this->storable)) {
             $form->addLoadUrlButton(
                 Url::getBrowserUrl()->removeParameterByValue($this->storable),
                 "__framelix_stop_edit__",
-                "close",
+                "719",
                 buttonTooltip: '__framelix_stop_edit_tooltip__'
             );
         }

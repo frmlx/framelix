@@ -20,7 +20,7 @@ class FramelixCustomElementButton extends FramelixCustomElement {
     this.toggleAttribute('haslabel', this.originalHtml.trim().length >= 1)
     if (!this.hasAttribute('raw')) {
       let html = ''
-      if (icon) html += '<div class="icon"><div class="material-icons">' + icon + '</div></div>'
+      if (icon) html += '<div class="icon"><framelix-icon icon="' + icon + '"></framelix-icon></div>'
       const text = await FramelixLang.get(this.originalHtml.trim())
       if (text.length) html += '<label class="label">' + text + '</label>'
       this.innerHTML = html

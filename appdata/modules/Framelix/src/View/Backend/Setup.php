@@ -142,7 +142,7 @@ class Setup extends View
     public function showContent(): void
     {
         $form = $this->getForm();
-        $form->addSubmitButton('setup', '__framelix_setup_finish_setup__', 'check');
+        $form->addSubmitButton('setup', '__framelix_setup_finish_setup__');
         $form->show();
         ?>
         <script>

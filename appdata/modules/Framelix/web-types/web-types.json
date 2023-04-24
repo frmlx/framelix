@@ -416,6 +416,32 @@
             "file": "../custom-elements/framelix-custom-element-time.js",
             "offset": 0
           }
+        },
+        {
+          "name": "framelix-icon",
+          "description": "An icon. Check https://www.s-ings.com/projects/microns-icon-font/ for all available icons.",
+          "attributes": [
+            {
+              "name": "icon",
+              "description": "The icon code point (Without E, only the hex number).",
+              "required": true,
+              "value": {
+                "type": "string"
+              }
+            },
+
+            {
+              "name": "size",
+              "description": "Optional icon font size. Default is font size from surrounding element.",
+              "value": {
+                "type": "string"
+              }
+            }
+          ],
+          "source": {
+            "file": "../custom-elements/framelix-custom-element-icon.js",
+            "offset": 0
+          }
         }
       ]
     }

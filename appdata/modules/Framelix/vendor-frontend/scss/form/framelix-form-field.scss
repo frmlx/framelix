@@ -154,8 +154,8 @@ input[type='checkbox'] {
   }
 
   &:after {
-    content: "radio_button_unchecked";
-    font-family: "Material Icons", sans-serif;
+    content: "\e756";
+    font-family: "microns", sans-serif;
     line-height: 1;
     display: block;
     font-size: 12px;
@@ -165,7 +165,8 @@ input[type='checkbox'] {
     background-color: var(--color-input-checkbox-checked);
 
     &:after {
-      content: "check";
+      content: "\e718";
+      font-size: 20px;
     }
   }
 }

@@ -13,6 +13,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 use SensitiveParameter;
 
 use function file_exists;
+use function filesize;
 use function set_time_limit;
 
 use const FRAMELIX_MODULE;
@@ -310,9 +311,6 @@ class Config
 
         self::$environmentConfig = JsonUtils::readFromFile("/framelix/system/environment.json");
 
-        // register the other module
-        Framelix::registerModule(FRAMELIX_MODULE);
-
         self::addAvailableUserRole('admin', '__framelix_user_role_admin__');
         self::addAvailableUserRole('dev', '__framelix_user_role_dev__');
         self::addAvailableUserRole('usermanagement', '__framelix_edituser_sidebar_title__');
@@ -377,11 +375,21 @@ class Config
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "backend");
         $bundle->pageAutoInclude = false;
-        $bundle->addFolder('vendor-frontend/scss/backend', true, ["framelix-backend-fonts.scss"]);
+        $bundle->addFolder('vendor-frontend/scss/backend', true);
 
-        $bundle = self::createCompilerFileBundle("Framelix", "scss", "backend-fonts");
-        $bundle->pageAutoInclude = false;
-        $bundle->addFile("vendor-frontend/scss/backend/framelix-backend-fonts.scss");
+        // register the other module
+        Framelix::registerModule(FRAMELIX_MODULE);
+
+        // copy font file in case of an update
+        if (Config::$devMode) {
+            $fontFileSrc = __DIR__ . "/../node_modules/microns/fonts/microns.woff2";
+            $fontFileDst = __DIR__ . "/../public/fonts/microns.woff2";
+            if (file_exists($fontFileSrc)) {
+                if (!file_exists($fontFileDst) || filesize($fontFileSrc) !== filesize($fontFileDst)) {
+                    copy($fontFileSrc, $fontFileDst);
+                }
+            }
+        }
     }
 
     /**

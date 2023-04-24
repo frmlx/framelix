@@ -513,7 +513,7 @@ class FramelixTable {
           if (rowGroup === 'tbody') {
             cellValue = new FramelixTableCell()
             cellValue.button = true
-            cellValue.buttonIcon = 'swap_vert'
+            cellValue.buttonIcon = '70f'
             cellValue.buttonTooltip = '__framelix_table_dragsort__'
             cellValue = cellValue.getHtmlString()
           }
@@ -635,7 +635,7 @@ class FramelixTable {
       if (self.storableSort) {
         if (self.container.children('.framelix-table-savesort').length) return
         FramelixToast.info(await FramelixLang.get('__framelix_table_savesort_tooltip__'))
-        const btn = $(`<framelix-button theme="primary" class="framelix-table-savesort" icon="save">__framelix_table_savesort__</framelix-button>`)
+        const btn = $(`<framelix-button theme="primary" class="framelix-table-savesort" icon="718">__framelix_table_savesort__</framelix-button>`)
         self.container.append(btn)
         btn.on('click', async function () {
           Framelix.showProgressBar(1)

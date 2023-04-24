@@ -16,6 +16,7 @@ use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
+use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\View\Backend\View;
 
@@ -245,7 +246,7 @@ class LangEditor extends View
             }
             $field->label = '';
             if ($language !== 'en') {
-                $field->label = '<span class="material-icons" style="position:relative; top:2px; color:' . ($hashEqual ? 'var(--color-success-text)' : 'var(--color-error-text)') . '">' . ($hashEqual ? 'check' : 'error') . '</span> ';
+                $field->label = '<span style="position:relative; top:2px; color:' . ($hashEqual ? 'var(--color-success-text)' : 'var(--color-error-text)') . '">' . HtmlUtils::getFramelixIcon(($hashEqual ? '718' : '719')) . '</span> ';
                 $value = $row['desc'];
                 if (!str_contains($value, "\n")) {
                     $value = str_replace(["<br/>", "<br />"], "\n", $value);
