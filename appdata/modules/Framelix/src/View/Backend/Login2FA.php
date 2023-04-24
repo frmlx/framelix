@@ -29,8 +29,10 @@ class Login2FA extends View
             Url::getApplicationUrl()->redirect();
         }
         $this->user = User::getById(Cookie::get(TwoFactorCode::COOKIE_NAME_USERID, encrypted: true));
-        if (!$this->user || $this->user->twoFactorSecret !== Cookie::get(TwoFactorCode::COOKIE_NAME_SECRET,
-                encrypted: true)) {
+        if (!$this->user || $this->user->twoFactorSecret !== Cookie::get(
+                TwoFactorCode::COOKIE_NAME_SECRET,
+                encrypted: true
+            )) {
             \Framelix\Framelix\View::getUrl(Login::class)->redirect();
         }
         if (Form::isFormSubmitted('twofa')) {
@@ -63,7 +65,8 @@ class Login2FA extends View
                 $this->user->store();
             }
             BruteForceProtection::reset('backend-login');
-            (Request::getGet('redirect') ? Url::create(Request::getGet('redirect')) : Url::getApplicationUrl())->redirect();
+            (Request::getGet('redirect') ? Url::create(Request::getGet('redirect')) : Url::getApplicationUrl(
+            ))->redirect();
         }
 
         $this->sidebarClosedInitially = true;

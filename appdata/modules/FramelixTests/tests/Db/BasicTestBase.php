@@ -288,5 +288,6 @@ abstract class BasicTestBase extends TestCaseDbTypes
     {
         $this->expectNotToPerformAssertions();
         $this->getDb()->query("DROP TABLE IF EXISTS `condition_tests`");
+        $this->getDb()->disconnect();
     }
 }

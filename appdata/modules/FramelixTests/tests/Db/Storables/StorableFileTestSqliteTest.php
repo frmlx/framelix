@@ -2,7 +2,7 @@
 
 namespace Db\Storables;
 
-final class StorableFileTestSqliteTest extends StorableFileTestBase
+final class StorableFileTestSqliteTest extends StorableFolderTestBase
 {
 
 }

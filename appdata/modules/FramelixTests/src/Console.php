@@ -2,8 +2,7 @@
 
 namespace Framelix\FramelixTests;
 
-use Framelix\Framelix\Framelix;
-use Framelix\Framelix\Utils\Shell;
+use Framelix\Framelix\Config;
 
 use function file_exists;
 
@@ -20,7 +19,7 @@ class Console extends \Framelix\Framelix\Console
     {
         $userConfigFile = \Framelix\Framelix\Config::getUserConfigFilePath();
         if (!file_exists($userConfigFile)) {
-            Framelix::createInitialUserConfig(
+            Config::createInitialUserConfig(
                 FRAMELIX_MODULE,
                 'test',
                 '127.0.0.1:' . \Framelix\Framelix\Config::$environmentConfig["moduleAccessPoints"][FRAMELIX_MODULE]['port'],

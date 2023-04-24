@@ -120,8 +120,10 @@ class Fido2 extends View
     public function showContent(): void
     {
         if (Url::getBrowserUrl()->getHost() === '127.0.0.1') {
-            echo '<framelix-alert class="framelix-alert" theme="error">' . Lang::get('__framelix_view_backend_userprofile_fido2_domainunsupported__',
-                    ['domain' => Url::getBrowserUrl()->getHost(), 'use' => 'localhost']) . '</framelix-alert>';
+            echo '<framelix-alert class="framelix-alert" theme="error">' . Lang::get(
+                    '__framelix_view_backend_userprofile_fido2_domainunsupported__',
+                    ['domain' => Url::getBrowserUrl()->getHost(), 'use' => 'localhost']
+                ) . '</framelix-alert>';
             return;
         }
         if (!Cookie::get(__CLASS__ . "-pw-verified", encrypted: true)) {

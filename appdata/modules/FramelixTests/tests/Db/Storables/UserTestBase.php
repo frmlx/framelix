@@ -18,6 +18,7 @@ abstract class UserTestBase extends TestCaseDbTypes
         $user->setPassword("blub");
         $user->store();
         $user->addRole("foo");
+        $user->addRole("foo");
         $user->addRole("bar");
         $this->assertSame(1, $user->id);
 
@@ -63,6 +64,7 @@ abstract class UserTestBase extends TestCaseDbTypes
         $this->assertTrue(User::hasRole(false, null));
         $this->assertTrue(User::hasRole("*"));
         $user->removeRole('foo');
+        $user->removeRole('foo');
         $this->assertFalse(User::hasRole(',foo'));
         $this->assertTrue(User::hasRole('bar'));
 
@@ -73,5 +75,9 @@ abstract class UserTestBase extends TestCaseDbTypes
 
         $this->assertStorableDefaultGetters($user);
         $this->assertStorableDefaultGetters($token);
+
+        $user->delete();
+
+        $this->assertNull($user->id);
     }
 }

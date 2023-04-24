@@ -1,5 +1,6 @@
 <?php
 
+use Framelix\Framelix\Config;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\LazySearchCondition;
@@ -137,18 +138,20 @@ abstract class StorableMetaTestBase extends TestCaseDbTypes
     {
         $storable = new TestStorableSystemValue();
         $storable->name = 'test';
-        $meta = new \Framelix\FramelixTests\StorableMeta\TestStorableSystemValue($storable);
+        $meta = new \Framelix\Framelix\StorableMeta\SystemValue($storable);
         $this->assertInstanceOf(Table::class, $meta->getTable([$storable]));
     }
 
     public function testSystemEventLogMeta(): void
     {
-        $storable = new SystemEventLog();
-        $storable->category = $storable::CATEGORY_STORABLE_CREATED;
-        $storable->message = "test";
-        $storable->params = ['test'];
-        $meta = new StorableMeta\SystemEventLog($storable);
-        $this->assertInstanceOf(Table::class, $meta->getTable([$storable]));
+        Config::$enabledBuiltInSystemEventLogs[SystemEventLog::CATEGORY_STORABLE_CREATED] = 1;
+        $storable = new TestStorableSystemValue();
+        $storable->name = 'test';
+        $storable->sort = 1;
+        $storable->flagActive = true;
+        $storable->store();
+        $meta = new StorableMeta\SystemEventLog(new SystemEventLog());
+        $this->assertInstanceOf(Table::class, $meta->getTable(SystemEventLog::getByCondition(limit: 5)));
     }
 
     public function testUserMeta(): void

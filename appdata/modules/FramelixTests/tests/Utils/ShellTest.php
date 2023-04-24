@@ -2,6 +2,8 @@
 
 namespace Utils;
 
+use Framelix\Framelix\Console;
+use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\Shell;
 use Framelix\FramelixTests\TestCase;
 
@@ -25,5 +27,12 @@ final class ShellTest extends TestCase
         );
         // testing execution
         $this->assertSame(['123'], Shell::prepare('echo 123')->execute()->output);
+
+        Buffer::start();
+        Console::error("error\ntest");
+        Console::success("success\ntest");
+        $bufferData = Buffer::get();
+        $this->assertStringContainsString('<span', Shell::convertCliOutputToHtml($bufferData, false));
+        $this->assertStringContainsString('<br />', Shell::convertCliOutputToHtml($bufferData, true));
     }
 }

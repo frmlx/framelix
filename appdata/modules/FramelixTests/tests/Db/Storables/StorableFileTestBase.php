@@ -48,6 +48,13 @@ abstract class StorableFileTestBase extends TestCaseDbTypes
         $storableFile2 = new TestStorableFile();
         $storableFile2->filename = "test.txt";
         $storableFile2->store(false, "test");
+
+        $storableFile3 = new TestStorableFile();
+        $storableFile3->filename = "test.jpg";
+        $storableFile3->store(false, "test");
+        $this->assertStringContainsString('<framelix-image', $storableFile3->getImageTag(true, true, 1000, 1200, true, true));
+
+
         $this->assertInstanceOf(Url::class, $storableFile->getDownloadUrl());
         $this->assertIsString($storableFile->getHtmlString());
         $this->assertSame('test', $storableFile->getFiledata());

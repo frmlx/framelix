@@ -23,6 +23,9 @@ abstract class SystemValueTestBase extends TestCaseDbTypes
         $storable2->flagActive = true;
         $storable2->sort = 2;
         $storable2->store();
+        $this->assertTrue($storable2->isReadable());
+        $this->assertTrue($storable2->isEditable());
+        $this->assertTrue($storable2->isDeletable());
 
         $storable3 = new TestStorableSystemValue();
         $storable3->name = "name4";

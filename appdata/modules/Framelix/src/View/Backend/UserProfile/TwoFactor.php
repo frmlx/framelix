@@ -156,8 +156,10 @@ class TwoFactor extends View
                 $form = self::getEnableForm();
                 $form->validate();
                 $this->storable->twoFactorSecret = Cookie::get(TwoFactorCode::COOKIE_NAME_SECRET, encrypted: true);
-                $this->storable->twoFactorBackupCodes = Cookie::get(TwoFactorCode::COOKIE_NAME_BACKUPCODES,
-                    encrypted: true);
+                $this->storable->twoFactorBackupCodes = Cookie::get(
+                    TwoFactorCode::COOKIE_NAME_BACKUPCODES,
+                    encrypted: true
+                );
                 $this->storable->store();
                 Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, null, encrypted: true);
                 Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, null, encrypted: true);
@@ -167,8 +169,11 @@ class TwoFactor extends View
             if (Form::isFormSubmitted('twofa-test')) {
                 $form = self::getEnableForm();
                 Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $this->storable->twoFactorSecret, encrypted: true);
-                Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, $this->storable->twoFactorBackupCodes,
-                    encrypted: true);
+                Cookie::set(
+                    TwoFactorCode::COOKIE_NAME_BACKUPCODES,
+                    $this->storable->twoFactorBackupCodes,
+                    encrypted: true
+                );
                 $form->validate();
 
                 $code = Request::getPost('code');
