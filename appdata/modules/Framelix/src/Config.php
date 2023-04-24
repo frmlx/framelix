@@ -9,11 +9,11 @@ use Framelix\Framelix\Html\CompilerFileBundle;
 use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\JsonUtils;
+use Framelix\Framelix\Utils\Shell;
 use JetBrains\PhpStorm\ExpectedValues;
 use SensitiveParameter;
 
 use function file_exists;
-use function filesize;
 use function set_time_limit;
 
 use const FRAMELIX_MODULE;
@@ -380,14 +380,13 @@ class Config
         // register the other module
         Framelix::registerModule(FRAMELIX_MODULE);
 
-        // copy font file in case of an update
-        if (Config::$devMode) {
-            $fontFileSrc = __DIR__ . "/../node_modules/microns/fonts/microns.woff2";
-            $fontFileDst = __DIR__ . "/../public/fonts/microns.woff2";
-            if (file_exists($fontFileSrc)) {
-                if (!file_exists($fontFileDst) || filesize($fontFileSrc) !== filesize($fontFileDst)) {
-                    copy($fontFileSrc, $fontFileDst);
-                }
+        // create symlinks that are required
+        $symlinks = [
+            __DIR__ . "/../node_modules/microns/fonts/microns.woff2" => __DIR__ . "/../public/fonts/microns.woff2"
+        ];
+        foreach ($symlinks as $src => $dest) {
+            if (!file_exists($dest)) {
+                Shell::prepare('ln -s {*}', [$src, $dest])->execute();
             }
         }
     }
