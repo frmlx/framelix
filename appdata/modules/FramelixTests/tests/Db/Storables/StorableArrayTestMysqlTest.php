@@ -2,7 +2,7 @@
 
 namespace Db\Storables;
 
-final class StorableArrayTestMysqlTest extends StorableArrayTest
+final class StorableArrayTestMysqlTest extends StorableArrayTestBase
 {
 
 }

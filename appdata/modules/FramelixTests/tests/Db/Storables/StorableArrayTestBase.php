@@ -6,7 +6,7 @@ use Framelix\Framelix\Storable\StorableArray;
 use Framelix\FramelixTests\Storable\TestStorableSystemValue;
 use Framelix\FramelixTests\TestCaseDbTypes;
 
-abstract class StorableArrayTest extends TestCaseDbTypes
+abstract class StorableArrayTestBase extends TestCaseDbTypes
 {
     public function test(): void
     {
