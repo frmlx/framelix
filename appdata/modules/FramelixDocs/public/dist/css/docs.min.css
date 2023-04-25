@@ -61,7 +61,6 @@
   align-items: center;
   gap: 10px;
   word-break: break-word;
-  color: var(--accent-heavy);
 }
 .framelix-content-inner .anchor-title a:any-link,
 .framelix-modal-inner .anchor-title a:any-link {

@@ -33,20 +33,21 @@ class Docker extends View
             occurs, the image will be rebuilt and uploaded to docker.
         </p>
         <?php
-        echo $this->getAnchoredTitle('building', 'Building in general');
+        echo $this->getAnchoredTitle('build', 'Build and deploy');
         ?>
         <p>
-            Images are built only locally and pushed from local to Docker hub by hand. There is no fully automated
-            workflow for that right now.
+            The images are designed to be built with our Github workflow that build, verify, test and publish the image
+            to the docker hub. Only valid images are valid to be pushed to docker. This process is completely automated
+            and is triggered manually.
         </p>
         <p>
-            The script to build an image locally is <code>bash dev-scripts/build-image.sh</code>. It accepts a parameter
-            to define which version you are building.
+            The script to build an image locally is <code>bash dev-scripts/build-image.sh</code>.
+            It accepts a parameter to define which version you are building.
             If you do development, you go with the <code>dev</code> version.
         </p>
         <p>
-            The script to push a container is <code>bash dev-scripts/docker-hub.sh</code>. It has various parameters
-            which are shown when you call the script without any of that parameters.
+            The script to push a container is <code>bash dev-scripts/docker-hub.sh</code>.
+            It has various parameters which are shown when you call the script without any of that parameters.
             The docker hub push logic requires and forces a rebuild of the image locally, running all tests on that
             image and only if everything is successfull, pushes the image to docker.
         </p>
