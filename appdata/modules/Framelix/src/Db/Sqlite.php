@@ -10,9 +10,12 @@ use Throwable;
 
 use function explode;
 use function implode;
+use function sleep;
 use function str_replace;
 use function strpos;
 use function substr;
+
+use const SQLITE_LOCKED;
 
 class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
 {
@@ -24,6 +27,12 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
      * @var string
      */
     public string $path;
+
+    /**
+     * Internal retry count for locked db retries
+     * @var int
+     */
+    private int $retryCount = 0;
 
     /**
      * @inheritDoc
@@ -78,8 +87,16 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
             if (!$this->lastResult) {
                 throw new FatalError($this->connection->lastErrorMsg());
             }
+            $this->retryCount = 0;
         } catch (Throwable $e) {
-            $errorMessage = "Sqlite Error: " . $e->getMessage();
+            $errorMessage = "Sqlite Error (" . $this->connection->lastErrorCode() . "): " . $e->getMessage();
+            if ($this->retryCount++ <= 3 && $this->connection->lastErrorCode() === SQLITE_LOCKED) {
+                // try reconnect and retry query
+                $this->disconnect();
+                sleep(1);
+                $this->connect();
+                return $this->execRaw($query);
+            }
             if (Config::$devMode) {
                 $errorMessage .= " in query: " . $query;
             }
@@ -102,7 +119,16 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
             if (!$this->lastResult) {
                 throw new FatalError("No Sqlite Result: " . $this->connection->lastErrorMsg());
             }
+            $this->retryCount = 0;
         } catch (Throwable $e) {
+            $errorMessage = "Sqlite Error (" . $this->connection->lastErrorCode() . "): " . $e->getMessage();
+            if ($this->retryCount++ <= 3 && $this->connection->lastErrorCode() === SQLITE_LOCKED) {
+                // try reconnect and retry query
+                $this->disconnect();
+                sleep(1);
+                $this->connect();
+                return $this->queryRaw($query);
+            }
             $errorMessage = "Sqlite Error: " . $e->getMessage();
             if (Config::$devMode) {
                 $errorMessage .= " in query: " . $query;
