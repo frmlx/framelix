@@ -143,7 +143,7 @@ class FramelixPopup {
    *    click-outside close self when user click outside of the popup
    *    click-inside close self when user click inside the popup
    *    click close self when user click anywhere on the page
-   *    mouseleave-target closes when user leave target element with mouse
+   *    mouseleave-target closes when user leave target element with mouse (also implicit using "click" on it because usually this lead to some other content modification)
    *    focusout-popup closes when user has focused popup and then leaves the popup focus
    *    manual can only be closed programmatically with FramelixPopup.destroyInstance()
    * @property {string|HTMLElement=} [color='default'] Popup color
@@ -275,7 +275,7 @@ class FramelixPopup {
       }
     }, 100)
     if (options.closeMethods.indexOf('mouseleave-target') > -1) {
-      $(target).one('mouseleave touchend', function () {
+      $(target).one('mouseleave touchend mousedown', function () {
         // mouseleave could happen faster than the instance exists, so add it to allow destroy() to work properly
         FramelixPopup.instances[instance.id] = instance
         instance.destroy()

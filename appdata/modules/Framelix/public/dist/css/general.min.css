@@ -1000,7 +1000,7 @@ framelix-alert {
   margin-bottom: 5px;
   background: var(--color-alert-default-bg);
   color: var(--color-alert-default-text);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   border-bottom: 2px solid rgba(calc(var(--is-dark-mode) * 255), calc(var(--is-dark-mode) * 255), calc(var(--is-dark-mode) * 255), 0.1);
   display: flex;
   flex-direction: column;
@@ -1016,6 +1016,7 @@ framelix-alert header {
 }
 framelix-alert header > .text {
   flex: 1 1 auto;
+  align-self: center;
 }
 framelix-alert article {
   padding: 10px;
@@ -1025,6 +1026,7 @@ framelix-alert article {
 }
 framelix-alert article > .text {
   flex: 1 1 auto;
+  align-self: center;
 }
 framelix-alert[theme=default] {
   background: var(--color-alert-default-bg);

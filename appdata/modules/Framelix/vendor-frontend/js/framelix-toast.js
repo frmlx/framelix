@@ -217,7 +217,7 @@ class FramelixToast {
     FramelixToast.countContainer.text('+' + queueCount)
     FramelixToast.closeButton
       .attr('title', queueCount > 0 ? '__framelix_toast_next__' : '__framelix_close__')
-      .attr('icon', queueCount > 0 ? 'navigate_next' : 'clear')
+      .attr('icon', queueCount > 0 ? '713' : '719')
   }
 }
 
