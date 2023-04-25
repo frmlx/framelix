@@ -65,7 +65,6 @@ class ErrorHandler
             'traceSimple' => explode("\n", $e->getTraceAsString()),
             'traceExtended' => $e->getTrace(),
             'additionalData' => [
-                'user' => User::get() ? User::get()->email . " #" . User::get() : null,
                 'server' => $server,
                 'post' => $post,
                 'session' => $session,
