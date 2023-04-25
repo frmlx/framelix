@@ -15,8 +15,8 @@
   --color-border-subtle: #aaa;
 
   --color-page-bg-hue: 0;
-  --color-page-bg: hsl(var(--color-primary-hue), 43%, 97%);
-  --color-page-bg-stencil-weak: white;
+  --color-page-bg: white;
+  --color-page-bg-stencil-weak: hsl(var(--color-primary-hue), 43%, 97%);
   --color-page-bg-stencil: hsl(var(--color-primary-hue), 31%, 94%);
   --color-page-bg-stencil-strong: hsl(var(--color-primary-hue), 31%, 90%);
   --color-page-bg-stencil-stronger: hsl(var(--color-primary-hue), 31%, 85%);

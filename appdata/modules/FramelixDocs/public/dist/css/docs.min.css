@@ -1,3 +1,13 @@
+:root {
+  --accent-light: hsl(344, 100%, 20%);
+  --accent-heavy: hsl(344, 100%, 50%);
+}
+
+[data-color-scheme=dark] {
+  --accent-light: hsl(344, 100%, 90%);
+  --accent-heavy: hsl(344, 100%, 60%);
+}
+
 .framelix-content-inner .docs-page,
 .framelix-modal-inner .docs-page {
   display: flex;
@@ -41,19 +51,24 @@
 .framelix-modal-inner .docs-right-nav a:any-link:hover {
   text-decoration: underline;
 }
+.framelix-content-inner a:any-link,
+.framelix-modal-inner a:any-link {
+  color: var(--accent-light);
+}
 .framelix-content-inner .anchor-title,
 .framelix-modal-inner .anchor-title {
   display: flex;
   align-items: center;
   gap: 10px;
   word-break: break-word;
-  color: hsl(var(--color-primary-hue), 100%, 60%);
-  text-shadow: hsl(0, 100%, calc(var(--is-light-mode) * 100%)) 1px 1px 0, hsla(var(--color-primary-hue), 100%, 40%, 0.5) 1px 1px 4px;
+  color: var(--accent-heavy);
 }
 .framelix-content-inner .anchor-title a:any-link,
 .framelix-modal-inner .anchor-title a:any-link {
-  opacity: 0.1;
+  opacity: 0.3;
   order: 1;
+  color: inherit;
+  text-decoration: none;
 }
 .framelix-content-inner .external-link framelix-icon,
 .framelix-modal-inner .external-link framelix-icon {
@@ -61,11 +76,6 @@
   text-decoration: none;
   position: relative;
   top: 3px;
-}
-.framelix-content-inner .anchor-title a:any-link,
-.framelix-modal-inner .anchor-title a:any-link {
-  color: inherit;
-  text-decoration: none;
 }
 .framelix-content-inner blockquote,
 .framelix-modal-inner blockquote {
@@ -79,8 +89,8 @@
 .framelix-modal-inner code {
   font-family: monospace;
   font-size: 0.9rem;
-  color: var(--color-primary-text);
-  background-color: var(--color-page-bg-stencil-strong);
+  color: var(--accent-light);
+  background-color: var(--color-page-bg-stencil);
   padding: 0 5px;
   border-radius: var(--border-radius);
 }
