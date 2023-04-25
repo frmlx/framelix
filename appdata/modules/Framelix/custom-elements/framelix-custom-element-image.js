@@ -66,6 +66,7 @@ class FramelixCustomElementImage extends FramelixCustomElement {
       }
     }
 
+    console.log("show")
     if (!lazy) {
       show()
     } else {

@@ -1157,3 +1157,12 @@ framelix-button[disabled] {
 framelix-button[disabled] * {
   cursor: not-allowed !important;
 }
+
+framelix-image {
+  min-width: 1px;
+  min-height: 1px;
+  display: inline-block;
+}
+framelix-image img {
+  max-width: 100%;
+}

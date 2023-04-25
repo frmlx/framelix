@@ -101,7 +101,7 @@ class Layout extends View
         $demoFiles = SimpleDemoFile::getByCondition();
         $html = '';
         foreach ($demoFiles as $demoFile) {
-            $html .= $demoFile->getImageTag() . "\n";
+            $html .= '<h2>' . $demoFile->filename . '</h2>' . $demoFile->getImageTag();
         }
 
         echo $this->getAnchoredTitle('images', 'Smart Images');
