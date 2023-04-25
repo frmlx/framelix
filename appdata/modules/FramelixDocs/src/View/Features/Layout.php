@@ -4,9 +4,14 @@ namespace Framelix\FramelixDocs\View\Features;
 
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Network\JsCall;
+use Framelix\Framelix\Utils\HtmlUtils;
+use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\FramelixDocs\Storable\SimpleDemoFile;
 use Framelix\FramelixDocs\View\Index;
 use Framelix\FramelixDocs\View\View;
+
+use function count;
+use function substr;
 
 class Layout extends View
 {
@@ -101,7 +106,7 @@ class Layout extends View
         $demoFiles = SimpleDemoFile::getByCondition();
         $html = '';
         foreach ($demoFiles as $demoFile) {
-            $html .= '<h2>' . $demoFile->filename . '</h2>' . $demoFile->getImageTag();
+            $html .= '<h2>' . $demoFile->filename . "</h2>\n" . $demoFile->getImageTag() . "\n\n";
         }
 
         echo $this->getAnchoredTitle('images', 'Smart Images');
@@ -113,6 +118,35 @@ class Layout extends View
         );
         $this->showHtmlExecutableSnippetsCodeBlock();
 
+        echo $this->getAnchoredTitle('icons', 'Icons (Microns)');
+
+        ?>
+        <p>
+            Framelix have a small icons font integrated, for the most commonly used icons.
+            It is small (7kb) compared to, for example, Material Icons (>150kb).
+            The icon set we use is called
+            <?= $this->getLinkToExternalPage('https://www.s-ings.com/projects/microns-icon-font/', 'Microns') ?> and is
+            also Open-Source. Thanks to the creator of this slick small icon set.<br/>
+        </p>
+        <p>
+            You can use that icons with our handy custom tag <code><?= HtmlUtils::escape(
+                    '<framelix-icon icon="CODE"></framelix-icon>'
+                ) ?></code>.
+        </p>
+
+            <?php
+            $icons = JsonUtils::readFromFile(__DIR__ . "/../../../../Framelix/node_modules/microns/icons.json");
+            echo '<p>Here are all icons (<b>' . count($icons) . '</b> in total)</p>';
+            echo '<div class="microns">';
+            foreach ($icons as $row) {
+                $code = substr($row['code'], 1);
+                echo '<div class="micron-card" title="Click to copy icon code (<b>' . $code . '</b>) for that icon  into clipboard" data-code="' .
+                    $code . '"><framelix-icon icon="' . $code . '"></framelix-icon></div>';
+            }
+            echo '</div>';
+            ?>
+        <?php
+
         echo $this->getAnchoredTitle('localtime', 'Local times in frontend');
         $this->addHtmlExecutableSnippet(
             'Time Tag',
@@ -122,6 +156,33 @@ class Layout extends View
         );
         $this->showHtmlExecutableSnippetsCodeBlock();
         ?>
+        <style>
+          .microns {
+            gap: 5px;
+            display: flex;
+            flex-wrap: wrap;
+          }
+          .micron-card {
+            width: 30px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            cursor: pointer;
+            font-size: 1.3rem;
+          }
+          .micron-card:hover {
+            background: var(--color-page-bg-stencil-strong);
+          }
+        </style>
+        <script>
+          $(document).on('click', '.micron-card', function () {
+            navigator.clipboard.writeText($(this).attr('data-code')).then(function () {
+              FramelixToast.success('Text copied to clipboard')
+            }, function (err) {
+            })
+          })
+        </script>
         <?php
     }
 }

@@ -1,11 +1,11 @@
 :root {
-  --accent-light: hsl(344, 100%, 20%);
-  --accent-heavy: hsl(344, 100%, 50%);
+  --accent-light: hsl(204, 100%, 20%);
+  --accent-heavy: hsl(204, 100%, 50%);
 }
 
 [data-color-scheme='dark'] {
-  --accent-light: hsl(344, 100%, 90%);
-  --accent-heavy: hsl(344, 100%, 60%);
+  --accent-light: hsl(204, 100%, 90%);
+  --accent-heavy: hsl(204, 100%, 60%);
 }
 
 .framelix-content-inner,
@@ -28,7 +28,7 @@
       display: block;
       content: "";
       height: 1px;
-      background: var(--color-page-bg-stencil);
+      background: var(--color-page-bg-stencil-weak);
     }
   }
 
