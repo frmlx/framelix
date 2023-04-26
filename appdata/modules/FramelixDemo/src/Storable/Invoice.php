@@ -2,9 +2,6 @@
 
 namespace Framelix\FramelixDemo\Storable;
 
-use Framelix\FramelixDemo\Storable\SystemValue\IncomeCategory;
-use Framelix\FramelixDemo\Storable\SystemValue\InvoiceCreator;
-use Framelix\FramelixDemo\View\Invoices;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Storable\StorableArray;
@@ -13,6 +10,9 @@ use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\NumberUtils;
 use Framelix\Framelix\View;
+use Framelix\FramelixDemo\Storable\SystemValue\IncomeCategory;
+use Framelix\FramelixDemo\Storable\SystemValue\InvoiceCreator;
+use Framelix\FramelixDemo\View\Invoices;
 
 use function sprintf;
 

@@ -17,12 +17,12 @@ class Console extends \Framelix\Framelix\Console
      */
     public static function appWarmup(): int
     {
-        $userConfigFile = \Framelix\Framelix\Config::getUserConfigFilePath();
+        $userConfigFile = Config::getUserConfigFilePath();
         if (!file_exists($userConfigFile)) {
             Config::createInitialUserConfig(
                 FRAMELIX_MODULE,
                 'test',
-                '127.0.0.1:' . \Framelix\Framelix\Config::$environmentConfig["moduleAccessPoints"][FRAMELIX_MODULE]['port'],
+                '127.0.0.1:' . Config::$environmentConfig["moduleAccessPoints"][FRAMELIX_MODULE]['port'],
                 ''
             );
         }

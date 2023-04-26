@@ -26,7 +26,8 @@ class Cronjobs extends View
         <p>
             As the job runs every 5 minutes, you surely need a way to say that it should do something only once a day,
             or every 3 hours, and so on.
-            For this, we have a <?= $this->getSourceFileLinkTag([Mutex::class]) ?> which basically hold a <code>Mutex</code>
+            For this, we have a <?= $this->getSourceFileLinkTag([Mutex::class]) ?> which basically hold a
+            <code>Mutex</code>
             for a given time period and then releases the Mutex automatically after that time.
         </p>
         <p>

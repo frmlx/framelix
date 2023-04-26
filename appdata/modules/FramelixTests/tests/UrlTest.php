@@ -2,7 +2,6 @@
 
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Exception\Redirect;
-use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\TestCase;
@@ -133,8 +132,10 @@ final class UrlTest extends TestCase
         }, [], Redirect::class);
 
         FileUtils::getUserdataFilepath("test", true);
-        $this->assertInstanceOf(Url::class,
-            Url::getUrlToPublicFile(FRAMELIX_USERDATA_FOLDER . "/FramelixTests/public"));
+        $this->assertInstanceOf(
+            Url::class,
+            Url::getUrlToPublicFile(FRAMELIX_USERDATA_FOLDER . "/FramelixTests/public")
+        );
         $this->assertInstanceOf(
             Url::class,
             Url::getUrlToPublicFile(__DIR__ . "/../../Framelix/public/img/logo.svg")

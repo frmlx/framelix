@@ -14,7 +14,8 @@ class Database extends View
     {
         ?>
         <p>
-            Framelix is built for SQL databases. Full <?=$this->getLinkToInternalPage(Storables::class, 'Storables')?> support including ORM features are only available for MySQL and SQLite.
+            Framelix is built for SQL databases. Full <?= $this->getLinkToInternalPage(Storables::class, 'Storables') ?>
+            support including ORM features are only available for MySQL and SQLite.
             However, Framelix support other SQL DB engines with basic features (Such as executing queries, fetch and
             insert/update/delete).
             For a quick and tiny application, SQLite is the easiest way, as it requires no additional services.

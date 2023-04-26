@@ -39,9 +39,10 @@ class Index extends \Framelix\Framelix\View
         <div class="page">
             <div class="content-max-width">
                 <nav>
-                    <a href="/welcome" class="button" target="_blank"><?=HtmlUtils::getFramelixIcon('787')?> Goto
+                    <a href="/welcome" class="button" target="_blank"><?= HtmlUtils::getFramelixIcon('787') ?> Goto
                         Docs</a>
-                    <a href="https://github.com/NullixAT/framelix" class="button" target="_blank"><?=HtmlUtils::getFramelixIcon('74f')?> Source at GitHub</a>
+                    <a href="https://github.com/NullixAT/framelix" class="button"
+                       target="_blank"><?= HtmlUtils::getFramelixIcon('74f') ?> Source at GitHub</a>
                 </nav>
             </div>
             <div class="content-max-width welcome">
@@ -57,7 +58,7 @@ class Index extends \Framelix\Framelix\View
 
                 <br/><br/>
                 <a href="/welcome" style="display: block; font-size:var(--font-size-big)"
-                   class="button swap-colors"><?=HtmlUtils::getFramelixIcon('76a')?> Dive in and get started now!</a>
+                   class="button swap-colors"><?= HtmlUtils::getFramelixIcon('76a') ?> Dive in and get started now!</a>
             </div>
         </div>
 

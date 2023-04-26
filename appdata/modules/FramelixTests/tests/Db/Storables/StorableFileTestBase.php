@@ -52,7 +52,10 @@ abstract class StorableFileTestBase extends TestCaseDbTypes
         $storableFile3 = new TestStorableFile();
         $storableFile3->filename = "test.jpg";
         $storableFile3->store(false, "test");
-        $this->assertStringContainsString('<framelix-image', $storableFile3->getImageTag(true, true, 1000, 1200, true, true));
+        $this->assertStringContainsString(
+            '<framelix-image',
+            $storableFile3->getImageTag(true, true, 1000, 1200, true, true)
+        );
 
 
         $this->assertInstanceOf(Url::class, $storableFile->getDownloadUrl());

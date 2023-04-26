@@ -26,10 +26,16 @@ class Tables extends View
             ]);
         }
         $table->initialSort = ["+id"];
-        $table->addColumnFlag('id', Table::COLUMNFLAG_SMALLFONT,
-            Table::COLUMNFLAG_SMALLWIDTH); // to make the column smaller font
-        $table->addColumnFlag('timestamp', Table::COLUMNFLAG_SMALLFONT,
-            Table::COLUMNFLAG_SMALLWIDTH); // to make the column smaller font
+        $table->addColumnFlag(
+            'id',
+            Table::COLUMNFLAG_SMALLFONT,
+            Table::COLUMNFLAG_SMALLWIDTH
+        ); // to make the column smaller font
+        $table->addColumnFlag(
+            'timestamp',
+            Table::COLUMNFLAG_SMALLFONT,
+            Table::COLUMNFLAG_SMALLWIDTH
+        ); // to make the column smaller font
         $table->show();
     }
 
@@ -108,17 +114,23 @@ class Tables extends View
             code.
         </p>
         <?php
-        $this->addPhpExecutableMethod([__CLASS__, "basicTable"], "Basic Table",
+        $this->addPhpExecutableMethod([__CLASS__, "basicTable"],
+            "Basic Table",
             "A pretty basic table just displayed some rows with sortable headers and some columns format overriden.");
-        $this->addPhpExecutableMethod([__CLASS__, "dragSort"], "Drag & Drop Sort",
-            "Use your mouse to drag and drop rows. In javascript you can listen to that events and do something after sort have changed.");
-        $this->addPhpExecutableMethod([__CLASS__, "checkboxes"], "Selectable checkboxes",
+        $this->addPhpExecutableMethod([__CLASS__, "dragSort"],
+            "Drag & Drop Sort",
+            "Use your mouse to drag and drop rows. In javascript you can listen to that events and do something after sort have changed."
+        );
+        $this->addPhpExecutableMethod([__CLASS__, "checkboxes"],
+            "Selectable checkboxes",
             "Adds checkboxes to the rows, so an user can select rows.");
         $this->showPhpExecutableMethodsCodeBlock();
         ?>
         <p>
             You can read out more features, flags and functions directly from source
-            at <?= $this->getSourceFileLinkTag(['Framelix/vendor-frontend/js/framelix-table.js', 'Framelix/src/Html/Table.php']) ?>.
+            at <?= $this->getSourceFileLinkTag(
+                ['Framelix/vendor-frontend/js/framelix-table.js', 'Framelix/src/Html/Table.php']
+            ) ?>.
         </p>
         <?php
     }

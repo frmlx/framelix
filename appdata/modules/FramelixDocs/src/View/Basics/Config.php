@@ -2,7 +2,6 @@
 
 namespace Framelix\FramelixDocs\View\Basics;
 
-use Framelix\Framelix\Framelix;
 use Framelix\FramelixDocs\View\View;
 
 class Config extends View
@@ -50,7 +49,8 @@ class Config extends View
         <p>
             Configuration files are loaded in the order of the modules that are registered.
             At really first, <code>Framelix</code> will be registered.
-            After that, the <code>FRAMELIX_MODULE</code> will be registered (Which is the module the URL is mapped to in the docker .env).<br/>
+            After that, the <code>FRAMELIX_MODULE</code> will be registered (Which is the module the URL is mapped to in
+            the docker .env).<br/>
             You can register more modules by calling <code>Framelix::registerModule</code> in your own Config class.
         </p>
         <?php

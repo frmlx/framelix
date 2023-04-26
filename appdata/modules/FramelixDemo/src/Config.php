@@ -6,7 +6,6 @@ use Framelix\Framelix\Form\Field\Text;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixDemo\View\Index;
-use Framelix\FramelixDemo\View\Outgoings;
 
 use const FRAMELIX_MODULE;
 

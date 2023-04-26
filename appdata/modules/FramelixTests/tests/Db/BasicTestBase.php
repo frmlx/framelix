@@ -2,26 +2,13 @@
 
 namespace Db;
 
-use Framelix\Framelix\Console;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
-use Framelix\Framelix\Db\Mysql;
-use Framelix\Framelix\Db\SchemeBuilderRequirementsInterface;
 use Framelix\Framelix\Db\Sql;
-use Framelix\Framelix\Db\Sqlite;
-use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
-use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\TestCaseDbTypes;
 use ReflectionClass;
 
-use function file_exists;
-use function file_get_contents;
 use function fopen;
-use function json_encode;
-use function unlink;
-
-use const FRAMELIX_TMP_FOLDER;
-use const FRAMELIX_USERDATA_FOLDER;
 
 abstract class BasicTestBase extends TestCaseDbTypes
 {

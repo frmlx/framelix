@@ -25,7 +25,8 @@ class Framelix extends View
             <li>Framelix - This is the core which is just the Framelix Framework itself. Everything you modify here, is
                 used by every other module.
             </li>
-            <li>FramelixDemo - A complete application (An accounting software demo). This show many use-cases of how you can use Framelix in action.
+            <li>FramelixDemo - A complete application (An accounting software demo). This show many use-cases of how you
+                can use Framelix in action.
             </li>
             <li>FramelixDocs - This module contains the docs you are currently reading. So when you do changes in
                 Framelix, you also should update the docs according to your changes.

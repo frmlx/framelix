@@ -13,7 +13,6 @@ use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\NumberUtils;
 
 use function is_numeric;
-use function var_dump;
 
 class Outgoing extends StorableMeta
 {

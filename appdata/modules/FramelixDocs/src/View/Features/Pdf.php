@@ -30,8 +30,10 @@ class Pdf extends View
         ?>
         <p>
             Framelix have
-            integrated <?= $this->getLinkToExternalPage('https://mpdf.github.io/',
-                'MPDF') ?>, a tool to generate PDF files.
+            integrated <?= $this->getLinkToExternalPage(
+                'https://mpdf.github.io/',
+                'MPDF'
+            ) ?>, a tool to generate PDF files.
         </p>
         <p>
             We have a view wrapped around it, with most common
@@ -39,7 +41,8 @@ class Pdf extends View
         </p>
         <?php
 
-        $this->addPhpExecutableMethod([__CLASS__, "download"], "Basic PDF",
+        $this->addPhpExecutableMethod([__CLASS__, "download"],
+            "Basic PDF",
             "A basic PDF file out of some HTML code.");
         $this->showPhpExecutableMethodsCodeBlock();
         ?>

@@ -2,7 +2,6 @@
 
 namespace Framelix\FramelixDemo\View;
 
-use Framelix\FramelixDemo\Storable\Outgoing;
 use Framelix\Framelix\Form\Field\Hidden;
 use Framelix\Framelix\Form\Field\Number;
 use Framelix\Framelix\Form\Form;
@@ -11,6 +10,7 @@ use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\View\Backend\View;
+use Framelix\FramelixDemo\Storable\Outgoing;
 
 class Depreciation extends View
 {

@@ -13,6 +13,7 @@ use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Storable\UserWebAuthn;
 use Framelix\Framelix\StorableMeta;
+use Framelix\Framelix\StorableMeta\SystemValue;
 use Framelix\Framelix\Time;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
@@ -67,7 +68,13 @@ abstract class StorableMetaTestBase extends TestCaseDbTypes
         $meta->lazySearchConditionDefault->addColumn('longText', 'longText', 'string');
         $this->callMethodsGeneric(
             $meta,
-            ['createFromUrl', 'getTable', 'getTableWithStorableSorting', 'showSearchAndTableInTabs', 'createPropertyForStorableArray']
+            [
+                'createFromUrl',
+                'getTable',
+                'getTableWithStorableSorting',
+                'showSearchAndTableInTabs',
+                'createPropertyForStorableArray'
+            ]
         );
         $this->assertInstanceOf(QuickSearch::class, $meta->getQuickSearch());
         $this->assertInstanceOf(
@@ -138,7 +145,7 @@ abstract class StorableMetaTestBase extends TestCaseDbTypes
     {
         $storable = new TestStorableSystemValue();
         $storable->name = 'test';
-        $meta = new \Framelix\Framelix\StorableMeta\SystemValue($storable);
+        $meta = new SystemValue($storable);
         $this->assertInstanceOf(Table::class, $meta->getTable([$storable]));
     }
 

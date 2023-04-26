@@ -15,6 +15,8 @@ class BrowserTestView extends View
     public function onRequest(): void
     {
         header('x-auth: ' . Request::getHeader('HTTP_AUTHORIZATION'));
-        echo JsonUtils::encode(['get' => $_GET, 'post' => $_POST, 'body' => Request::getBody(), 'method' => $_SERVER['REQUEST_METHOD']]);
+        echo JsonUtils::encode(
+            ['get' => $_GET, 'post' => $_POST, 'body' => Request::getBody(), 'method' => $_SERVER['REQUEST_METHOD']]
+        );
     }
 }

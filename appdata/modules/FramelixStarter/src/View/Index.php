@@ -2,7 +2,9 @@
 
 namespace Framelix\FramelixStarter\View;
 
-class Index extends \Framelix\Framelix\View\Backend\View
+use Framelix\Framelix\View\Backend\View;
+
+class Index extends View
 {
     protected string $pageTitle = 'Framelix Starter Page';
 

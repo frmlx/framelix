@@ -35,6 +35,5 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 
         $this->addLink(Reset::class, icon: "704");
         $this->showHtmlForLinkData();
-
     }
 }

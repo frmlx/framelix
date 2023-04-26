@@ -134,17 +134,17 @@ class Layout extends View
                 ) ?></code>.
         </p>
 
-            <?php
-            $icons = JsonUtils::readFromFile(__DIR__ . "/../../../../Framelix/node_modules/microns/icons.json");
-            echo '<p>Here are all icons (<b>' . count($icons) . '</b> in total)</p>';
-            echo '<div class="microns">';
-            foreach ($icons as $row) {
-                $code = substr($row['code'], 1);
-                echo '<div class="micron-card" title="Click to copy icon code (<b>' . $code . '</b>) for that icon  into clipboard" data-code="' .
-                    $code . '"><framelix-icon icon="' . $code . '"></framelix-icon></div>';
-            }
-            echo '</div>';
-            ?>
+        <?php
+        $icons = JsonUtils::readFromFile(__DIR__ . "/../../../../Framelix/node_modules/microns/icons.json");
+        echo '<p>Here are all icons (<b>' . count($icons) . '</b> in total)</p>';
+        echo '<div class="microns">';
+        foreach ($icons as $row) {
+            $code = substr($row['code'], 1);
+            echo '<div class="micron-card" title="Click to copy icon code (<b>' . $code . '</b>) for that icon  into clipboard" data-code="' .
+                $code . '"><framelix-icon icon="' . $code . '"></framelix-icon></div>';
+        }
+        echo '</div>';
+        ?>
         <?php
 
         echo $this->getAnchoredTitle('localtime', 'Local times in frontend');

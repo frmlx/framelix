@@ -12,7 +12,6 @@ class TestStorableSystemValue extends SystemValue
 {
     public static function setupStorableMeta(\Framelix\Framelix\StorableMeta\SystemValue $meta): void
     {
-
     }
 
     public function isDeletable(): bool

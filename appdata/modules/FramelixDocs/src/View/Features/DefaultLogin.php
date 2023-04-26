@@ -30,7 +30,8 @@ class DefaultLogin extends View
             To login, choose a user from the list bellow and goto the login page (Link at the end).
         </p>
         <blockquote>
-            After you have logged in, you will see new available links in the sidebar at the very bottom. For the protected user area.
+            After you have logged in, you will see new available links in the sidebar at the very bottom. For the
+            protected user area.
         </blockquote>
         <?php
         $users = User::getByCondition();

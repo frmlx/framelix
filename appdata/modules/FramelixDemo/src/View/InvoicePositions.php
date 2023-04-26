@@ -2,12 +2,12 @@
 
 namespace Framelix\FramelixDemo\View;
 
-use Framelix\FramelixDemo\Storable\Invoice;
-use Framelix\FramelixDemo\Storable\InvoicePosition;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\View\Backend\View;
+use Framelix\FramelixDemo\Storable\Invoice;
+use Framelix\FramelixDemo\Storable\InvoicePosition;
 
 class InvoicePositions extends View
 {

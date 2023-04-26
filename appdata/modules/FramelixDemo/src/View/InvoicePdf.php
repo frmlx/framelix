@@ -2,16 +2,14 @@
 
 namespace Framelix\FramelixDemo\View;
 
-use Framelix\FramelixDemo\Config;
-use Framelix\FramelixDemo\Storable\Invoice;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Storable\StorableArray;
 use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\Utils\NumberUtils;
 use Framelix\Framelix\View\MPdfBase;
-
-use function var_dump;
+use Framelix\FramelixDemo\Config;
+use Framelix\FramelixDemo\Storable\Invoice;
 
 class InvoicePdf extends MPdfBase
 {
@@ -157,7 +155,9 @@ class InvoicePdf extends MPdfBase
         }
 
         if ($this->storable->flagReverseCharge) {
-            $this->pdf->WriteHTML(nl2br(Lang::get('__framelixdemo_storable_invoice_flagreversecharge__')) . '<br/><br/>');
+            $this->pdf->WriteHTML(
+                nl2br(Lang::get('__framelixdemo_storable_invoice_flagreversecharge__')) . '<br/><br/>'
+            );
         }
 
         if ($textAfterPositions) {

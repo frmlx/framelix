@@ -36,8 +36,10 @@ class ExcelSpreadsheet extends View
         ?>
         <p>
             Framelix have
-            integrated <?= $this->getLinkToExternalPage('https://phpspreadsheet.readthedocs.io/en/latest/',
-                'PhpSpreadsheet') ?>, a tool to generate spreadsheet files (for Excel, OpenOffice, etc...)
+            integrated <?= $this->getLinkToExternalPage(
+                'https://phpspreadsheet.readthedocs.io/en/latest/',
+                'PhpSpreadsheet'
+            ) ?>, a tool to generate spreadsheet files (for Excel, OpenOffice, etc...)
         </p>
         <p>
             We have a small wrapper around it, for most common
@@ -45,8 +47,10 @@ class ExcelSpreadsheet extends View
         </p>
         <?php
 
-        $this->addPhpExecutableMethod([__CLASS__, "download"], "Basic spreadsheet",
-            "A basic spreadsheet file out of a PHP array. Notice that the timestamp in the data is UTC, as all times are default UTC, except times displayed in the frontend with the proper HTML Tag (which are user device based).");
+        $this->addPhpExecutableMethod([__CLASS__, "download"],
+            "Basic spreadsheet",
+            "A basic spreadsheet file out of a PHP array. Notice that the timestamp in the data is UTC, as all times are default UTC, except times displayed in the frontend with the proper HTML Tag (which are user device based)."
+        );
         $this->showPhpExecutableMethodsCodeBlock();
     }
 }

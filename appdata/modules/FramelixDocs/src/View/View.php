@@ -377,12 +377,16 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         $this->titles[$id] = $title;
         return '<' . $type . ' id="anchor-' . $id . '" class="anchor-title"><a title="Permalink to ' . HtmlUtils::escape(
                 '"' . $title . '"'
-            ) . '" href="#anchor-' . $id . '">' . HtmlUtils::getFramelixIcon('737') . '</a><span>' . $title . '</span></' . $type . '>';
+            ) . '" href="#anchor-' . $id . '">' . HtmlUtils::getFramelixIcon(
+                '737'
+            ) . '</a><span>' . $title . '</span></' . $type . '>';
     }
 
     public function getLinkToExternalPage(string $link, ?string $text = null): string
     {
-        return '<span class="external-link">' . HtmlUtils::getFramelixIcon('773') . ' <a href="' . $link . '" rel="nofollow" target="_blank">' . HtmlUtils::escape(
+        return '<span class="external-link">' . HtmlUtils::getFramelixIcon(
+                '773'
+            ) . ' <a href="' . $link . '" rel="nofollow" target="_blank">' . HtmlUtils::escape(
                 $text ?? $link
             ) . '</a></span>';
     }
@@ -414,7 +418,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         if ($extension === "jpg" || $extension === "jpeg" || $extension === "png" || $extension === "webp" || $extension === "svg") {
             return '<div class="docs-image"><img src="' . $url . '" alt="' . $basename . '"></div>';
         }
-        return '<span class="external-link"><a href="' . $url . '" download>' . HtmlUtils::getFramelixIcon('709') . ' Download ' . $basename . '</a></span>';
+        return '<span class="external-link"><a href="' . $url . '" download>' . HtmlUtils::getFramelixIcon(
+                '709'
+            ) . ' Download ' . $basename . '</a></span>';
     }
 
     /**
@@ -436,7 +442,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 );
             }
             if (!file_exists(FRAMELIX_APPDATA_FOLDER . "/modules/$relativePath")) {
-                $tags[] = '[Missing] <script>console.error(' . JsonUtils::encode($relativePath . " not exist") . ')</script>';
+                $tags[] = '[Missing] <script>console.error(' . JsonUtils::encode(
+                        $relativePath . " not exist"
+                    ) . ')</script>';
                 continue;
             }
             $tags[] = '<framelix-button small icon="733" theme="transparent" jscall-url="' . JsCall::getUrl(

@@ -15,7 +15,8 @@ class Issues extends View
             ?>
             <div>
                 To join, please open this link<br/>
-                <a href="https://join.slack.com/t/nullixat/shared_invite/zt-12elbg5rk-bZPR118cV1vzSw3pCWIUsw" target="_blank">https://join.slack.com/t/nullixat/shared_invite/zt-12elbg5rk-bZPR118cV1vzSw3pCWIUsw</a>
+                <a href="https://join.slack.com/t/nullixat/shared_invite/zt-12elbg5rk-bZPR118cV1vzSw3pCWIUsw"
+                   target="_blank">https://join.slack.com/t/nullixat/shared_invite/zt-12elbg5rk-bZPR118cV1vzSw3pCWIUsw</a>
             </div>
             <?php
         }
@@ -31,8 +32,10 @@ class Issues extends View
         </p>
         <?= $this->getAnchoredTitle('github', 'Forums (Recommended)') ?>
         <p>
-            <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions',
-                'Github Discussions') ?>
+            <?= $this->getLinkToExternalPage(
+                'https://github.com/NullixAT/framelix/discussions',
+                'Github Discussions'
+            ) ?>
             - There as a forums/discussion board where you can join.
         </p>
         <?= $this->getAnchoredTitle('slack', 'Slack') ?>
@@ -40,7 +43,8 @@ class Issues extends View
             <img src="/slack-badge.svg" height="20" alt="Slack Members"><br/>
             We also have a Slack channel. Click the button bellow to join.
         </p>
-        <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'slack') ?>" icon="730" theme="primary" target="modal">
+        <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'slack') ?>" icon="730" theme="primary"
+                         target="modal">
             Join our Slack channel now
         </framelix-button>
         <?php

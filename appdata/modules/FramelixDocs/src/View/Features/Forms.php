@@ -29,7 +29,8 @@ class Forms extends View
 
         $form = new Form();
         $form->id = 'demo';
-        $form->submitUrl = Url::create(); // this will submit the form to the invisible ajax request url that created this modal
+        $form->submitUrl = Url::create(
+        ); // this will submit the form to the invisible ajax request url that created this modal
         // default submit url is the url you see in the browser url bar
         // it is not required to set this in your code probably, it is just for this complex demo showcases
 
@@ -47,7 +48,8 @@ class Forms extends View
     {
         $form = new Form();
         $form->id = 'demo';
-        $form->submitUrl = Url::create(); // this will submit the form to the invisible ajax request url that created this modal
+        $form->submitUrl = Url::create(
+        ); // this will submit the form to the invisible ajax request url that created this modal
         // default submit url is the url you see in the browser url bar
         // it is not required to set this in your code probably, it is just for this complex demo showcases
 
@@ -135,9 +137,11 @@ class Forms extends View
         </p>
         <?php
 
-        $this->addPhpExecutableMethod([__CLASS__, "basicForm"], "Basic Form",
+        $this->addPhpExecutableMethod([__CLASS__, "basicForm"],
+            "Basic Form",
             "Pretty simple form with a few fields. Nothing special.");
-        $this->addPhpExecutableMethod([__CLASS__, "advancedForm"], "Advanced Form",
+        $this->addPhpExecutableMethod([__CLASS__, "advancedForm"],
+            "Advanced Form",
             "A more advanced form, with a way more fields, validations and techniques used.");
         $this->showPhpExecutableMethodsCodeBlock();
     }

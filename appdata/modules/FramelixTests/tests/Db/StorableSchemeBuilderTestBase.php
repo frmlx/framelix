@@ -14,7 +14,6 @@ use Framelix\FramelixTests\TestCaseDbTypes;
 use function count;
 use function in_array;
 use function print_r;
-use function var_dump;
 
 abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
 {

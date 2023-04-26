@@ -89,8 +89,10 @@ class ModalWindow extends View
             comments for that.
         </p>
         <?php
-        $this->addSourceFile(FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/vendor-frontend/js/framelix-modal.js",
-            'FramelixModalShowOptions');
+        $this->addSourceFile(
+            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/vendor-frontend/js/framelix-modal.js",
+            'FramelixModalShowOptions'
+        );
         $this->showSourceFiles();
         ?>
         <p>

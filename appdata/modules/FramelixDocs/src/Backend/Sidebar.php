@@ -37,7 +37,9 @@ class Sidebar extends \Framelix\Framelix\Backend\Sidebar
 {
     public function showContent(): void
     {
-        echo '<div style="text-align: center"><b style="font-size: 1.3rem">Version: ' . \Framelix\Framelix\Framelix::VERSION . '</b><br/><a style="font-size: 0.8em" href="' . View::getUrl(Setup::class) . '#anchor-older-docs">Here is how to access older versions</a></div><div class="framelix-spacer"></div>';
+        echo '<div style="text-align: center"><b style="font-size: 1.3rem">Version: ' . \Framelix\Framelix\Framelix::VERSION . '</b><br/><a style="font-size: 0.8em" href="' . View::getUrl(
+                Setup::class
+            ) . '#anchor-older-docs">Here is how to access older versions</a></div><div class="framelix-spacer"></div>';
         $this->addLink(Index::class, "Back to Landing Page", target: "_blank");
         $this->showHtmlForLinkData();
 

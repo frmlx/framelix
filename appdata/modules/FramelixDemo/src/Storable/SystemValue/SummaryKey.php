@@ -2,14 +2,14 @@
 
 namespace Framelix\FramelixDemo\Storable\SystemValue;
 
-use Framelix\FramelixDemo\Console;
-use Framelix\FramelixDemo\Storable\Income;
-use Framelix\FramelixDemo\Storable\Outgoing;
 use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\SystemValue;
 use Framelix\Framelix\Storable\User;
+use Framelix\FramelixDemo\Console;
+use Framelix\FramelixDemo\Storable\Income;
+use Framelix\FramelixDemo\Storable\Outgoing;
 
 /**
  * Summary Key
@@ -71,6 +71,7 @@ class SummaryKey extends SystemValue
     {
         return Console::$cleanupMode ?? false;
     }
+
     public function isEditable(): bool
     {
         return Console::$cleanupMode ?? User::hasRole('admin');

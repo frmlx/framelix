@@ -30,7 +30,8 @@ class SetupCoreDev extends View
             <li>Change to that directory and run the following commands</li>
         </ol>
         <?php
-        $this->showCodeBlock('
+        $this->showCodeBlock(
+            '
         cp dev-scripts/.env_template dev-scripts/.env
         bash dev-scripts/build-image.sh -v dev
         bash dev-scripts/start-container.sh
@@ -38,7 +39,8 @@ class SetupCoreDev extends View
         bash dev-scripts/run-tests -t phpstan # PHP Stan Static Code Analysis 
         bash dev-scripts/run-tests -t playwright # Playwright End-to-End tests
         bash dev-scripts/run-tests -t phpunit # PHP Unit Tests
-        ');
+        '
+        );
         ?>
         <p>
             This will create 4 available apps/ports on your host.
@@ -62,8 +64,10 @@ class SetupCoreDev extends View
         ?>
         <p>
             First and foremost, when you want to create new features, please first
-            consider <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions',
-                'creating a discussion on Github') ?>. Maybe someone else is already working on similar things.
+            consider <?= $this->getLinkToExternalPage(
+                'https://github.com/NullixAT/framelix/discussions',
+                'creating a discussion on Github'
+            ) ?>. Maybe someone else is already working on similar things.
         </p>
         <p>
             As Framelix is a Full-Stack container, there are many things where you can develop. Improving the docker

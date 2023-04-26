@@ -2,8 +2,6 @@
 
 namespace Framelix\FramelixDemo\Storable;
 
-use Framelix\FramelixDemo\Storable\SystemValue\OutgoingCategory;
-use Framelix\FramelixDemo\View\Outgoings;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\Db\Mysql;
 use Framelix\Framelix\Db\StorableSchema;
@@ -12,6 +10,8 @@ use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\NumberUtils;
 use Framelix\Framelix\View;
+use Framelix\FramelixDemo\Storable\SystemValue\OutgoingCategory;
+use Framelix\FramelixDemo\View\Outgoings;
 
 use function round;
 

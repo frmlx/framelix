@@ -156,12 +156,13 @@ class Setup extends View
             $form->addField($field);
 
             $versionNumber = substr(Framelix::VERSION, 0, 1);
-            $version = $versionNumber !== 'd' ? $versionNumber : 'dev';
+            $version = $versionNumber !== 'd' ? Framelix::VERSION : 'dev';
             $field = new Select();
             $field->required = true;
             $field->name = "var[imagename]";
             $field->label = "Framelix Version";
             $field->addOption('nullixat/framelix:' . $version, 'nullixat/framelix:' . $version);
+            $field->addOption('nullixat/framelix:edge', 'nullixat/framelix:edge (Latest, maybe unstable, release)');
             $field->defaultValue = 'nullixat/framelix:' . $version;
             $form->addField($field);
 

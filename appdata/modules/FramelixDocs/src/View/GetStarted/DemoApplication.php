@@ -14,7 +14,8 @@ class DemoApplication extends View
         ?>
         <p>
             We know, learning a new Framework is not that easy at first.
-            To get the hang of it, we have created a complete <code>Demo Application</code> that you can inspect and try out to learn
+            To get the hang of it, we have created a complete <code>Demo Application</code> that you can inspect and try
+            out to learn
             from it.
             It uses best-practice for Framelix features and try to teach you things as you go through the interface.
         </p>

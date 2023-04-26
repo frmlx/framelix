@@ -41,12 +41,12 @@ final class JsonUtilsTest extends TestCase
         $this->assertSame('framelix', JsonUtils::getPackageJson("Framelix")['name']);
         $this->assertSame(null, JsonUtils::getPackageJson(null));
 
-        $this->assertExceptionOnCall(function (){
+        $this->assertExceptionOnCall(function () {
             // split unicode char in half will result in corrupt byte
             JsonUtils::encode(substr('ö', 0, 1));
         });
 
-        $this->assertExceptionOnCall(function (){
+        $this->assertExceptionOnCall(function () {
             // split unicode char in half will result in corrupt byte
             JsonUtils::decode(substr('ö', 0, 1));
         });

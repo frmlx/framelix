@@ -2,6 +2,8 @@
 
 namespace Framelix\FramelixDocs\View;
 
+use Framelix\FramelixDocs\Console;
+
 class AppWarmup extends \Framelix\Framelix\View
 {
     protected string|bool $accessRole = "*";
@@ -11,6 +13,6 @@ class AppWarmup extends \Framelix\Framelix\View
     {
         // just run the app warmup command - required for unit tests
         \Framelix\Framelix\Console::appWarmup();
-        \Framelix\FramelixDocs\Console::appWarmup();
+        Console::appWarmup();
     }
 }

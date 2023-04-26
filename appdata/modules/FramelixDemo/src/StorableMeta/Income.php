@@ -2,8 +2,6 @@
 
 namespace Framelix\FramelixDemo\StorableMeta;
 
-use Framelix\Framelix\Utils\ArrayUtils;
-use Framelix\FramelixDemo\View\Incomes;
 use Framelix\Framelix\Db\LazySearchCondition;
 use Framelix\Framelix\Form\Field\File;
 use Framelix\Framelix\Form\Field\Select;
@@ -13,7 +11,9 @@ use Framelix\Framelix\Html\TableCell;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\StorableMeta;
+use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\View;
+use Framelix\FramelixDemo\View\Incomes;
 
 use function is_numeric;
 

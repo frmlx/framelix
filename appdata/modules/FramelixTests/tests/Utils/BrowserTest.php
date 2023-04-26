@@ -25,8 +25,10 @@ final class BrowserTest extends TestCase
         $this->assertSame('', $browser->getResponseJson());
         $browser->sendRequest();
         $this->assertSame('{"get":[],"post":[],"body":null,"method":"GET"}', $browser->getResponseText());
-        $this->assertSame(JsonUtils::decode('{"get":[],"post":[],"body":null,"method":"GET"}'),
-            $browser->getResponseJson());
+        $this->assertSame(
+            JsonUtils::decode('{"get":[],"post":[],"body":null,"method":"GET"}'),
+            $browser->getResponseJson()
+        );
         $this->assertSame(200, $browser->getResponseCode());
         $this->assertSame('Basic dGVzdDpmb28=', $browser->responseHeaders['x-auth'] ?? null);
 
@@ -41,8 +43,10 @@ final class BrowserTest extends TestCase
         foreach ($testMethods as $testMethod) {
             $browser->requestMethod = $testMethod;
             $browser->sendRequest();
-            $this->assertSame(JsonUtils::decode('{"get":[],"post":[],"body":null,"method":"' . strtoupper($testMethod) . '"}'),
-                $browser->getResponseJson());
+            $this->assertSame(
+                JsonUtils::decode('{"get":[],"post":[],"body":null,"method":"' . strtoupper($testMethod) . '"}'),
+                $browser->getResponseJson()
+            );
         }
     }
 }

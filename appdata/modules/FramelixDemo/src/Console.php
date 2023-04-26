@@ -180,8 +180,10 @@ class Console extends \Framelix\Framelix\Console
 
         $invoiceHeader = new StorableFile();
         $invoiceHeader->setDefaultRelativePath(false);
-        $invoiceHeader->store(file: UploadedFile::createFromFile(__DIR__ . "/../misc/invoice-header.png"),
-            copy: true);
+        $invoiceHeader->store(
+            file: UploadedFile::createFromFile(__DIR__ . "/../misc/invoice-header.png"),
+            copy: true
+        );
 
         $invoiceCreator = new InvoiceCreator();
         $invoiceCreator->invoiceHeader = $invoiceHeader;
@@ -302,8 +304,14 @@ class Console extends \Framelix\Framelix\Console
         $attachment = new StorableFile();
         $attachment->assignedStorable = $assignedStorable;
         $attachment->setDefaultRelativePath(false);
-        $attachment->store(file: UploadedFile::createFromFile(__DIR__ . "/../misc/" . (rand(0,
-                1) ? 'you-got-a-framelix-pdf.pdf' : 'you-got-a-framelix-spreadsheet.xlsx')),
-            copy: true);
+        $attachment->store(
+            file: UploadedFile::createFromFile(
+            __DIR__ . "/../misc/" . (rand(
+                0,
+                1
+            ) ? 'you-got-a-framelix-pdf.pdf' : 'you-got-a-framelix-spreadsheet.xlsx')
+        ),
+            copy: true
+        );
     }
 }

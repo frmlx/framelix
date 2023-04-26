@@ -27,10 +27,14 @@ class Welcome extends View
             discover here, are the same that you can use directly in your own application.
         </p>
         <p>
-            All code of Framelix is <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix',
-                'Open-Source on Github') ?>,
-            including <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix/tree/master/appdata/modules/FramelixTests',
-                'this docs itself') ?>.
+            All code of Framelix is <?= $this->getLinkToExternalPage(
+                'https://github.com/NullixAT/framelix',
+                'Open-Source on Github'
+            ) ?>,
+            including <?= $this->getLinkToExternalPage(
+                'https://github.com/NullixAT/framelix/tree/master/appdata/modules/FramelixTests',
+                'this docs itself'
+            ) ?>.
         </p>
         <?= $this->getAnchoredTitle('start', 'How to start development?'); ?>
         <p>

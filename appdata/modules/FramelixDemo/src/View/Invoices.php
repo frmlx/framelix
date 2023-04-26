@@ -2,7 +2,6 @@
 
 namespace Framelix\FramelixDemo\View;
 
-use Framelix\FramelixDemo\Storable\Invoice;
 use Framelix\Framelix\Date;
 use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Form\Field\Text;
@@ -13,8 +12,7 @@ use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\View\Backend\View;
-
-use function var_dump;
+use Framelix\FramelixDemo\Storable\Invoice;
 
 class Invoices extends View
 {

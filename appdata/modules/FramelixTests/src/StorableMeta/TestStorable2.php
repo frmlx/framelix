@@ -75,7 +75,10 @@ class TestStorable2 extends StorableMeta
         $property = $this->createProperty("date");
         $property->addDefaultField();
 
-        $property = $this->createPropertyForStorableArray("test", \Framelix\FramelixTests\Storable\TestStorable2::class);
+        $property = $this->createPropertyForStorableArray(
+            "test",
+            \Framelix\FramelixTests\Storable\TestStorable2::class
+        );
         $property->setLabel("test");
 
         // to test coverage for invalid property type

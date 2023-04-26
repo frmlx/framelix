@@ -43,14 +43,18 @@ abstract class LazySearchConditionTestBase extends TestCaseDbTypes
         $condition->addColumn("testDateTime", "testDateTime", null, DateTime::class);
         $this->assertSame('1', $condition->getPreparedCondition($db, "*"));
         $this->assertSame('1', $condition->getPreparedCondition($db, "**"));
-        $expectedString = "(`testString` LIKE " . $db->escapeValue("%12.10.2020%") . " OR `testDate` = " . $db->escapeValue(
+        $expectedString = "(`testString` LIKE " . $db->escapeValue(
+                "%12.10.2020%"
+            ) . " OR `testDate` = " . $db->escapeValue(
                 "2020-10-12"
             ) . " OR `testDateTime` = " . $db->escapeValue("2020-10-11") . ")";
         $this->assertEqualQuery(
             $expectedString,
             $condition->getPreparedCondition($db, "12.10.2020")
         );
-        $expectedString = $db->prepareQuery('(`testInt` > 5 OR `testFloat` > 5 OR `testString` LIKE ' . $db->escapeValue('%>5%') . ')');
+        $expectedString = $db->prepareQuery(
+            '(`testInt` > 5 OR `testFloat` > 5 OR `testString` LIKE ' . $db->escapeValue('%>5%') . ')'
+        );
         $this->assertEqualQuery(
             $expectedString,
             $condition->getPreparedCondition($db, ">5")
