@@ -13,6 +13,7 @@ use Framelix\Framelix\Utils\Shell;
 use JetBrains\PhpStorm\ExpectedValues;
 use SensitiveParameter;
 
+use function dirname;
 use function file_exists;
 use function set_time_limit;
 
@@ -382,11 +383,12 @@ class Config
 
         // create symlinks that are required
         $symlinks = [
-            __DIR__ . "/../node_modules/microns/fonts/microns.woff2" => __DIR__ . "/../public/fonts/microns.woff2"
+            "../../node_modules/microns/fonts/microns.woff2" => __DIR__ . "/../public/fonts/microns.woff2"
         ];
         foreach ($symlinks as $src => $dest) {
             if (!file_exists($dest)) {
-                Shell::prepare('ln -s {*}', [$src, $dest])->execute();
+                $shell = Shell::prepare('cd {0} && ln -s {1} {2}', [dirname($dest), $src, $dest]);
+                $shell->execute();
             }
         }
     }
