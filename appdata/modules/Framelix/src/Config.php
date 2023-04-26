@@ -380,17 +380,6 @@ class Config
 
         // register the other module
         Framelix::registerModule(FRAMELIX_MODULE);
-
-        // create symlinks that are required
-        $symlinks = [
-            "../../node_modules/microns/fonts/microns.woff2" => __DIR__ . "/../public/fonts/microns.woff2"
-        ];
-        foreach ($symlinks as $src => $dest) {
-            if (!file_exists($dest)) {
-                $shell = Shell::prepare('cd {0} && ln -s {1} {2}', [dirname($dest), $src, $dest]);
-                $shell->execute();
-            }
-        }
     }
 
     /**

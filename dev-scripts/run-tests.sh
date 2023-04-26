@@ -72,6 +72,8 @@ if [ $TESTTYPE == "playwright" ]; then
 
   docker $DOCKER_EXECPARAMS_PW "mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright test $TESTFILE"
 
+  RESULT=$?
+
   if [ "$TESTFILE" == "" ]; then
     docker $DOCKER_EXECPARAMS_APP "framelix_php /framelix/appdata/hooks/after-playwright.php"
   fi
