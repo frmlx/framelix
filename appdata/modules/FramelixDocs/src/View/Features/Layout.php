@@ -135,7 +135,7 @@ class Layout extends View
         </p>
 
         <?php
-        $icons = JsonUtils::readFromFile(__DIR__ . "/../../../../Framelix/node_modules/microns/icons.json");
+        $icons = JsonUtils::readFromFile(__DIR__ . "/../../../../Framelix/public/fonts/microns/icons.json");
         echo '<p>Here are all icons (<b>' . count($icons) . '</b> in total)</p>';
         echo '<div class="microns">';
         foreach ($icons as $row) {
