@@ -246,7 +246,9 @@ class LangEditor extends View
             }
             $field->label = '';
             if ($language !== 'en') {
-                $field->label = '<span style="position:relative; top:2px; color:' . ($hashEqual ? 'var(--color-success-text)' : 'var(--color-error-text)') . '">' . HtmlUtils::getFramelixIcon(($hashEqual ? '718' : '719')) . '</span> ';
+                $field->label = '<span style="position:relative; top:2px; color:' . ($hashEqual ? 'var(--color-success-text)' : 'var(--color-error-text)') . '">' . HtmlUtils::getFramelixIcon(
+                        ($hashEqual ? '718' : '719')
+                    ) . '</span> ';
                 $value = $row['desc'];
                 if (!str_contains($value, "\n")) {
                     $value = str_replace(["<br/>", "<br />"], "\n", $value);

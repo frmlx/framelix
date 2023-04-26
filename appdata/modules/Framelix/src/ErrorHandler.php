@@ -7,7 +7,6 @@ use Framelix\Framelix\Exception\Redirect;
 use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
-use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\Email;
 use Framelix\Framelix\Utils\JsonUtils;
