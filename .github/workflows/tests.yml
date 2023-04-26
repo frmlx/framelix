@@ -32,6 +32,7 @@ jobs:
         run: bash dev-scripts/run-tests.sh -t playwright && echo "MESSAGE=$(cat userdata/playwright/badge-message.txt)" >> $GITHUB_ENV && echo "COLOR=$(cat userdata/playwright/badge-color.txt)" >> $GITHUB_ENV
 
       - name: Upload userdata after playwright tests to GitHub
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: userdata-after-playwright
@@ -42,6 +43,7 @@ jobs:
         run: bash dev-scripts/run-tests.sh -t phpunit && echo "COVERAGE=$(cat userdata/clover-coverage.txt)" >> $GITHUB_ENV
 
       - name: Upload userdata after phpunit tests to GitHub
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: userdata-after-phpunit
