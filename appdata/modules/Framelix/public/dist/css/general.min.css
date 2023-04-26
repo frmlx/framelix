@@ -974,7 +974,7 @@ html[data-screen-size=s] .framelix-tab-buttons {
 
 @font-face {
   font-family: "microns";
-  src: url(../../../_Framelix/fonts/microns.woff2) format("woff2");
+  src: url(../../../_Framelix/fonts/microns/microns.woff2) format("woff2");
 }
 .framelix-icon,
 framelix-icon {
