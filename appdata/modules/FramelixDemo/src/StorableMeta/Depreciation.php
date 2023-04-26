@@ -2,7 +2,6 @@
 
 namespace Framelix\FramelixDemo\StorableMeta;
 
-use Framelix\FramelixDemo\View\Outgoings;
 use Framelix\Framelix\Db\LazySearchCondition;
 use Framelix\Framelix\Form\Field\File;
 use Framelix\Framelix\Html\QuickSearch;
@@ -12,6 +11,7 @@ use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\StorableMeta;
 use Framelix\Framelix\View;
+use Framelix\FramelixDemo\View\Outgoings;
 
 use function date;
 
@@ -47,7 +47,7 @@ class Depreciation extends StorableMeta
             if ($yearSplitRequired) {
                 $tableCell = new TableCell();
                 $tableCell->button = true;
-                $tableCell->buttonIcon = "0023";
+                $tableCell->buttonIcon = "705";
                 $tableCell->buttonTooltip = "__framelixdemo_storable_depreciation_createoutgoing__";
                 $tableCell->buttonTheme = "primary";
                 $tableCell->buttonHref = View::getUrl(Outgoings::class)->setParameter(
