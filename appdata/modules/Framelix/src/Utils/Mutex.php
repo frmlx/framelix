@@ -5,8 +5,8 @@ namespace Framelix\Framelix\Utils;
 use Throwable;
 
 use function file_exists;
-use function file_get_contents;
 use function file_put_contents;
+use function filemtime;
 use function sleep;
 use function time;
 use function unlink;
@@ -50,7 +50,7 @@ class Mutex
         if (!file_exists($file)) {
             return 0;
         }
-        $time = (int)file_get_contents($file);
+        $time = (int)filemtime($file);
         if ($maxLifetime > 0) {
             $lifetimeRemains = $time - (time() - $maxLifetime);
             return $lifetimeRemains > 0 ? $lifetimeRemains : 0;
