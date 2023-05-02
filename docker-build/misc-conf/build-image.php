@@ -20,7 +20,7 @@ if (preg_match("~^[0-9]+\.[0-9]+\.[0-9]+~i", $version)) {
     runCmd("rm -rf $tmpFolder");
     runCmd("mkdir -p $tmpFolder");
     runCmd(
-        "curl https://github.com/framelix/framelix/archive/refs/tags/$version.zip -L --output $tmpFolder/package.zip"
+        "curl https://github.com/frmlx/framelix/archive/refs/tags/$version.zip -L --output $tmpFolder/package.zip"
     );
     echo "Done.\n\n";
 
