@@ -10,7 +10,7 @@ class Docker extends View
 
     public function showContent(): void
     {
-        echo $this->getAnchoredTitle('welcome', 'Docker Image (nullixat/framelix)');
+        echo $this->getAnchoredTitle('welcome', 'Docker Image (framelix/framelix)');
         ?>
         <p>
             Framelix has docker images on the Docker Hub. There are different production tags for major, minor and

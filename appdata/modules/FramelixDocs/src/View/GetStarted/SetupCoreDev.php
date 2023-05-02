@@ -23,7 +23,7 @@ class SetupCoreDev extends View
         <p>
         <ol>
             <li>First, fork the repository
-                on <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix') ?>.
+                on <?= $this->getLinkToExternalPage('https://github.com/frmlx/framelix') ?>.
             </li>
             <li>Clone your forked repository somewhere to your host <code>git clone
                     https://github.com/{username}/framelix</code>
@@ -65,7 +65,7 @@ class SetupCoreDev extends View
         <p>
             First and foremost, when you want to create new features, please first
             consider <?= $this->getLinkToExternalPage(
-                'https://github.com/NullixAT/framelix/discussions',
+                'https://github.com/frmlx/framelix/discussions',
                 'creating a discussion on Github'
             ) ?>. Maybe someone else is already working on similar things.
         </p>
@@ -76,7 +76,7 @@ class SetupCoreDev extends View
         </p>
         <p>
             It is best, to just generally
-            always <?= $this->getLinkToExternalPage('https://github.com/NullixAT/framelix/discussions', 'ask') ?> when
+            always <?= $this->getLinkToExternalPage('https://github.com/frmlx/framelix/discussions', 'ask') ?> when
             you're stuck. This is kind of a new Framework. A general rule of thumb is not established yet. Just come
             over and discuss with us.
         </p>

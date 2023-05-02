@@ -161,9 +161,9 @@ class Setup extends View
             $field->required = true;
             $field->name = "var[imagename]";
             $field->label = "Framelix Version";
-            $field->addOption('nullixat/framelix:' . $version, 'nullixat/framelix:' . $version);
-            $field->addOption('nullixat/framelix:edge', 'nullixat/framelix:edge (Latest, maybe unstable, release)');
-            $field->defaultValue = 'nullixat/framelix:' . $version;
+            $field->addOption('framelix/framelix:' . $version, 'framelix/framelix:' . $version);
+            $field->addOption('framelix/framelix:edge', 'framelix/framelix:edge (Latest, maybe unstable, release)');
+            $field->defaultValue = 'framelix/framelix:' . $version;
             $form->addField($field);
 
             $form->addSubmitButton(buttonText: 'Generate docker-compose.yml');

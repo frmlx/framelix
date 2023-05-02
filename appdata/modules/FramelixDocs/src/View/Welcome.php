@@ -28,11 +28,11 @@ class Welcome extends View
         </p>
         <p>
             All code of Framelix is <?= $this->getLinkToExternalPage(
-                'https://github.com/NullixAT/framelix',
+                'https://github.com/frmlx/framelix',
                 'Open-Source on Github'
             ) ?>,
             including <?= $this->getLinkToExternalPage(
-                'https://github.com/NullixAT/framelix/tree/master/appdata/modules/FramelixTests',
+                'https://github.com/frmlx/framelix/tree/master/appdata/modules/FramelixTests',
                 'this docs itself'
             ) ?>.
         </p>

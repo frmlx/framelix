@@ -33,7 +33,7 @@ class Issues extends View
         <?= $this->getAnchoredTitle('github', 'Forums (Recommended)') ?>
         <p>
             <?= $this->getLinkToExternalPage(
-                'https://github.com/NullixAT/framelix/discussions',
+                'https://github.com/frmlx/framelix/discussions',
                 'Github Discussions'
             ) ?>
             - There as a forums/discussion board where you can join.

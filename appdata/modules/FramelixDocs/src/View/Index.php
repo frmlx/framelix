@@ -41,7 +41,7 @@ class Index extends \Framelix\Framelix\View
                 <nav>
                     <a href="/welcome" class="button" target="_blank"><?= HtmlUtils::getFramelixIcon('787') ?> Goto
                         Docs</a>
-                    <a href="https://github.com/NullixAT/framelix" class="button"
+                    <a href="https://github.com/frmlx/framelix" class="button"
                        target="_blank"><?= HtmlUtils::getFramelixIcon('74f') ?> Source at GitHub</a>
                 </nav>
             </div>
@@ -93,7 +93,7 @@ class Index extends \Framelix\Framelix\View
                             Never worry about updating PHP, Nginx and other libraries. We do this for you.
                             All you have to do is to pull the new image and restart your container.
                         </p>
-                        <a href="https://hub.docker.com/r/nullixat/framelix" class="button" target="_blank">Docker
+                        <a href="https://hub.docker.com/r/framelix/framelix" class="button" target="_blank">Docker
                             Hub</a>
                     </div>
                 </div>
@@ -115,7 +115,7 @@ class Index extends \Framelix\Framelix\View
                         <p>
                             Open-Source, MIT licensed, period. Use it wherever and however you want.
                         </p>
-                        <a href="https://github.com/NullixAT/framelix" class="button" target="_blank">GitHub</a>
+                        <a href="https://github.com/frmlx/framelix" class="button" target="_blank">GitHub</a>
                     </div>
                 </div>
                 <div>
