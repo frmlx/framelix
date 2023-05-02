@@ -16,7 +16,6 @@ jobs:
       - name: Checkout framelix repository
         uses: actions/checkout@v3
         with:
-          repository: frmlx/framelix
           ref: ${{ github.ref_name }}
 
       - name: Create .env file

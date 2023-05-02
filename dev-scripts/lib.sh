@@ -6,7 +6,7 @@ ROOTDIR="$BASEDIR/.."
 
 source $BASEDIR/.env
 
-DOCKER_REPO=nullixat/framelix
+DOCKER_REPO=framelix/framelix
 DOCKER_TAGNAME_LOCAL=$DOCKER_REPO:local
 
 cecho() {
