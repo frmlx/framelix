@@ -156,6 +156,28 @@ abstract class LayoutView extends View
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <title><?= $this->getPageTitle(true) ?></title>
             <script>
+              ;(function () {
+                const customElementsSupport = typeof window.customElements !== 'undefined'
+                const resizeObserverSupport = typeof ResizeObserver !== 'undefined'
+                const lazyLoadingImg = typeof document.createElement('img').loading !== 'undefined'
+                const dialogSupport = typeof document.createElement('dialog').open === 'boolean'
+                // check for minimal supported browsers, if unsupported then stop any further execution
+                // which effectively excludes IE and all legacy edge versions
+                // requires at least chrome 77 (2021), firefox 98 (2022) or safari 15.4 (back to iphone 6s/macos 10.15)
+                if (!customElementsSupport || !resizeObserverSupport || !lazyLoadingImg || !dialogSupport) {
+                  (function showError () {
+                    if (!document.body) {
+                      setTimeout(showError, 200)
+                      return
+                    }
+                    document.body.innerHTML = '<div style="padding:20px; font-family: Arial, sans-serif; font-size: 24px"><?=Lang::get(
+                        '__framelix_browser_unsupported__'
+                    )?></div>'
+                  })()
+                }
+              })()
+            </script>
+            <script>
               class FramelixInit {
                 /** @type {function[]} */
                 static early = []
@@ -170,18 +192,6 @@ abstract class LayoutView extends View
               FramelixInit.initialized = new Promise(function (resolve) {
                 FramelixInit.initializedResolve = resolve
               })
-
-              ;(function () {
-                // check for minimal supported browsers, of unsupported than stop any further execution
-                // which effectively excludes IE and all legacy edge versions
-                if (typeof window.customElements === 'undefined' || typeof ResizeObserver === 'undefined') {
-                  setTimeout(function () {
-                    document.body.innerHTML = '<div style="padding:20px; font-family: Arial, sans-serif; font-size: 24px"><?=Lang::get(
-                        '__framelix_browser_unsupported__'
-                    )?></div>'
-                  }, 200)
-                }
-              })()
             </script>
             <?= HtmlUtils::getIncludeTagForUrl(
                 Config::getCompilerFileBundle(
