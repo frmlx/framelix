@@ -23,11 +23,11 @@ if (cmdParams.options.compile) {
   if (cmdParams.type === 'js') {
     fileDataCombined = babelCore.transform(fileDataCombined, {
       'comments': false,
-      'plugins': [__dirname + '/../node_modules/@babel/plugin-proposal-class-properties'],
       'presets': [[__dirname + '/../node_modules/@babel/preset-env', {
         'targets': {
-          'chrome': '67',
-          'firefox': '70'
+          'chrome': '77',
+          'firefox': '98',
+          'safari': '15'
         }
       }]],
     }).code
