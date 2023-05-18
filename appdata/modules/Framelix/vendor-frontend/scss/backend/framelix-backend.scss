@@ -142,6 +142,10 @@ html[data-sidebar-status='opened'] {
 
   &.framelix-sidebar-link-active {
     background-color: var(--sidebar-bg-entry-hover);
+
+    .framelix-sidebar-main-icon {
+      color: var(--accent-heavy)
+    }
   }
 }
 

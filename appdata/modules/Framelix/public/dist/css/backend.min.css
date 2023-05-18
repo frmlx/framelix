@@ -154,6 +154,10 @@ html[data-sidebar-status=opened] {
 .framelix-sidebar-collapsable-title.framelix-sidebar-link-active {
   background-color: var(--sidebar-bg-entry-hover);
 }
+.framelix-sidebar-link:any-link.framelix-sidebar-link-active .framelix-sidebar-main-icon,
+.framelix-sidebar-collapsable-title.framelix-sidebar-link-active .framelix-sidebar-main-icon {
+  color: var(--accent-heavy);
+}
 
 .framelix-sidebar-main-icon {
   flex: 0 1 auto;
