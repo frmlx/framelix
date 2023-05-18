@@ -120,186 +120,6 @@ html[data-sidebar-status=opened] {
   margin-bottom: 10px;
 }
 
-.framelix-sidebar-entry:nth-child(30n+1) {
-  --sidebar-active-container-bg-color: hsl(150, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(150, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(150, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+2) {
-  --sidebar-active-container-bg-color: hsl(200, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(200, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(200, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+3) {
-  --sidebar-active-container-bg-color: hsl(250, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(250, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(250, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+4) {
-  --sidebar-active-container-bg-color: hsl(300, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(300, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(300, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+5) {
-  --sidebar-active-container-bg-color: hsl(350, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(350, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(350, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+6) {
-  --sidebar-active-container-bg-color: hsl(400, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(400, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(400, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+7) {
-  --sidebar-active-container-bg-color: hsl(450, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(450, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(450, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+8) {
-  --sidebar-active-container-bg-color: hsl(500, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(500, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(500, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+9) {
-  --sidebar-active-container-bg-color: hsl(550, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(550, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(550, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+10) {
-  --sidebar-active-container-bg-color: hsl(600, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(600, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(600, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+11) {
-  --sidebar-active-container-bg-color: hsl(650, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(650, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(650, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+12) {
-  --sidebar-active-container-bg-color: hsl(700, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(700, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(700, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+13) {
-  --sidebar-active-container-bg-color: hsl(750, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(750, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(750, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+14) {
-  --sidebar-active-container-bg-color: hsl(800, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(800, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(800, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+15) {
-  --sidebar-active-container-bg-color: hsl(850, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(850, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(850, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+16) {
-  --sidebar-active-container-bg-color: hsl(900, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(900, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(900, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+17) {
-  --sidebar-active-container-bg-color: hsl(950, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(950, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(950, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+18) {
-  --sidebar-active-container-bg-color: hsl(1000, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1000, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1000, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+19) {
-  --sidebar-active-container-bg-color: hsl(1050, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1050, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1050, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+20) {
-  --sidebar-active-container-bg-color: hsl(1100, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1100, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1100, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+21) {
-  --sidebar-active-container-bg-color: hsl(1150, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1150, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1150, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+22) {
-  --sidebar-active-container-bg-color: hsl(1200, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1200, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1200, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+23) {
-  --sidebar-active-container-bg-color: hsl(1250, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1250, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1250, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+24) {
-  --sidebar-active-container-bg-color: hsl(1300, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1300, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1300, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+25) {
-  --sidebar-active-container-bg-color: hsl(1350, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1350, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1350, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+26) {
-  --sidebar-active-container-bg-color: hsl(1400, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1400, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1400, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+27) {
-  --sidebar-active-container-bg-color: hsl(1450, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1450, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1450, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+28) {
-  --sidebar-active-container-bg-color: hsl(1500, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1500, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1500, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+29) {
-  --sidebar-active-container-bg-color: hsl(1550, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1550, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1550, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
-.framelix-sidebar-entry:nth-child(30n+30) {
-  --sidebar-active-container-bg-color: hsl(1600, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-  --sidebar-active-container-bg-color-container-icon: hsl(1600, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-  --sidebar-active-container-bg-color-container-icon-sub: hsl(1600, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-}
-
 .framelix-sidebar-link:any-link,
 .framelix-sidebar-collapsable-title {
   font-weight: bold;
@@ -316,10 +136,10 @@ html[data-sidebar-status=opened] {
   overflow: hidden;
   justify-content: start;
   border-radius: var(--border-radius);
+  background: var(--sidebar-bg);
   gap: 10px;
   padding: 0;
   margin: 0 0 1px;
-  background-color: var(--sidebar-bg-entry);
   box-shadow: none;
 }
 .framelix-sidebar-link:any-link:hover,
@@ -332,8 +152,7 @@ html[data-sidebar-status=opened] {
 }
 .framelix-sidebar-link:any-link.framelix-sidebar-link-active,
 .framelix-sidebar-collapsable-title.framelix-sidebar-link-active {
-  color: white;
-  background-color: var(--sidebar-active-container-bg-color);
+  background-color: var(--sidebar-bg-entry-hover);
 }
 
 .framelix-sidebar-main-icon {
@@ -343,7 +162,6 @@ html[data-sidebar-status=opened] {
   display: flex;
   align-items: center;
   min-height: 26px;
-  color: white;
 }
 .framelix-sidebar-main-icon framelix-icon {
   width: 20px;
@@ -352,6 +170,7 @@ html[data-sidebar-status=opened] {
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0.6;
 }
 
 .framelix-sidebar-label {
@@ -412,6 +231,9 @@ html[data-sidebar-status=opened] {
   border-radius: var(--border-radius);
 }
 
+.framelix-sidebar-collapsable .framelix-sidebar-collapsable-title {
+  border-bottom: 2px solid rgba(0, 0, 0, 0);
+}
 .framelix-sidebar-collapsable .framelix-sidebar-collapsable-title::after {
   content: "\e707";
   font-family: "microns", sans-serif;
@@ -427,14 +249,14 @@ html[data-sidebar-status=opened] {
 .framelix-sidebar-collapsable .framelix-sidebar-collapsable-container .framelix-sidebar-link {
   font-weight: normal;
 }
-.framelix-sidebar-collapsable .framelix-sidebar-collapsable-container .framelix-sidebar-link .framelix-sidebar-main-icon {
-  background-color: var(--sidebar-active-container-bg-color-container-icon-sub);
-}
 html[data-screen-size=l] .framelix-sidebar-collapsable .framelix-sidebar-collapsable-container .framelix-sidebar-link .framelix-sidebar-main-icon {
   min-height: 20px;
 }
 .framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-collapsable-container, .framelix-sidebar-collapsable[data-force-opened="1"] .framelix-sidebar-collapsable-container {
   display: block;
+}
+.framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-collapsable-title, .framelix-sidebar-collapsable[data-force-opened="1"] .framelix-sidebar-collapsable-title {
+  border-bottom: 2px solid var(--sidebar-bg-entry-hover);
 }
 .framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-collapsable-title::after,
 .framelix-sidebar-collapsable.framelix-sidebar-collapsable-active .framelix-sidebar-link-active::after, .framelix-sidebar-collapsable[data-force-opened="1"] .framelix-sidebar-collapsable-title::after,
@@ -443,6 +265,9 @@ html[data-screen-size=l] .framelix-sidebar-collapsable .framelix-sidebar-collaps
 }
 .framelix-sidebar-collapsable[data-force-opened="1"] .framelix-sidebar-collapsable-title {
   cursor: default;
+}
+.framelix-sidebar-collapsable[data-force-opened="1"] .framelix-sidebar-collapsable-title:hover {
+  background: inherit;
 }
 .framelix-sidebar-collapsable[data-force-opened="1"] .framelix-sidebar-collapsable-title::after {
   display: none;

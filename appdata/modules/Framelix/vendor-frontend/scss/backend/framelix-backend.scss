@@ -109,13 +109,6 @@ html[data-sidebar-status='opened'] {
   margin-bottom: 10px;
 }
 
-@for $i from 1 through 30 {
-  .framelix-sidebar-entry:nth-child(30n + #{$i}) {
-    --sidebar-active-container-bg-color: hsl(#{$i * 50 + 100}, 35%, calc(var(--is-dark-mode) * -20% + 60%));
-    --sidebar-active-container-bg-color-container-icon: hsl(#{$i * 50 + 100}, 35%, calc(var(--is-dark-mode) * -20% + 65%));
-    --sidebar-active-container-bg-color-container-icon-sub: hsl(#{$i * 50 + 100}, 35%, calc(var(--is-dark-mode) * -40% + 65%));
-  }
-}
 
 .framelix-sidebar-link:any-link,
 .framelix-sidebar-collapsable-title {
@@ -133,10 +126,10 @@ html[data-sidebar-status='opened'] {
   overflow: hidden;
   justify-content: start;
   border-radius: var(--border-radius);
+  background: var(--sidebar-bg);
   gap: 10px;
   padding: 0;
   margin: 0 0 1px;
-  background-color: var(--sidebar-bg-entry);
   box-shadow: none;
 
   &:hover {
@@ -148,8 +141,7 @@ html[data-sidebar-status='opened'] {
   }
 
   &.framelix-sidebar-link-active {
-    color: white;
-    background-color: var(--sidebar-active-container-bg-color);
+    background-color: var(--sidebar-bg-entry-hover);
   }
 }
 
@@ -160,7 +152,6 @@ html[data-sidebar-status='opened'] {
   display: flex;
   align-items: center;
   min-height: 26px;
-  color: white;
 
   framelix-icon {
     width: 20px;
@@ -169,6 +160,7 @@ html[data-sidebar-status='opened'] {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.6;
   }
 }
 
@@ -235,6 +227,7 @@ html[data-sidebar-status='opened'] {
 
 .framelix-sidebar-collapsable {
   .framelix-sidebar-collapsable-title {
+    border-bottom: 2px solid rgba(0, 0, 0, 0);
 
     &::after {
       content: "\e707";
@@ -258,8 +251,6 @@ html[data-sidebar-status='opened'] {
         html[data-screen-size='l'] & {
           min-height: 20px;
         }
-
-        background-color: var(--sidebar-active-container-bg-color-container-icon-sub);
       }
     }
   }
@@ -269,6 +260,10 @@ html[data-sidebar-status='opened'] {
 
     .framelix-sidebar-collapsable-container {
       display: block;
+    }
+
+    .framelix-sidebar-collapsable-title {
+      border-bottom: 2px solid var(--sidebar-bg-entry-hover);
     }
 
     .framelix-sidebar-collapsable-title,
@@ -282,6 +277,10 @@ html[data-sidebar-status='opened'] {
   &[data-force-opened='1'] {
     .framelix-sidebar-collapsable-title {
       cursor: default;
+
+      &:hover {
+        background: inherit;
+      }
     }
 
     .framelix-sidebar-collapsable-title::after {
