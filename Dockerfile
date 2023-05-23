@@ -17,7 +17,7 @@ RUN export DEBIAN_FRONTEND=noninteractive &&  \
     apt update && apt install software-properties-common gnupg curl -y --no-install-recommends
 
 # add node source
-ADD https://deb.nodesource.com/setup_19.x /root/nodesource_setup.sh
+ADD https://deb.nodesource.com/setup_lts.x /root/nodesource_setup.sh
 RUN bash /root/nodesource_setup.sh && rm /root/nodesource_setup.sh
 
 RUN export DEBIAN_FRONTEND=noninteractive &&  \

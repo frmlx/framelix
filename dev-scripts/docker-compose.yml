@@ -34,7 +34,7 @@ services:
       timeout: 5s
       retries: 5
   playwright:
-    image: mcr.microsoft.com/playwright:v1.33.0-focal
+    image: mcr.microsoft.com/playwright
     restart: on-failure
     volumes:
       - ../appdata:/framelix/appdata
