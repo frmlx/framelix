@@ -145,6 +145,12 @@ class Form implements JsonSerializable
     protected ?array $fieldGroups = null;
 
     /**
+     * Make a form read only, effectively forces all fields to be disabled and remove action buttons row
+     * @var bool
+     */
+    public bool $readOnly = false;
+
+    /**
      * Check if the form with the given id is submitted
      * @param string $formId
      * @return bool
@@ -231,13 +237,16 @@ class Form implements JsonSerializable
      * @param string|null $buttonIcon
      * @param ButtonColor $buttonColor
      * @param string|null $buttonTooltip
+     * @param bool $ignoreReadOnly If true and $readOnly of form is also true, this button will still be kept visible,
+     *    Buttons without this flag will be hidden when the form is readOnly
      */
     public function addButton(
         string $actionId,
         string $buttonText,
         ?string $buttonIcon = '70c',
         ButtonColor $buttonColor = ButtonColor::DEFAULT,
-        ?string $buttonTooltip = null
+        ?string $buttonTooltip = null,
+        bool $ignoreReadOnly = false
     ): void {
         $this->buttons[] = [
             'type' => 'action',
@@ -245,7 +254,8 @@ class Form implements JsonSerializable
             'color' => $buttonColor,
             'buttonText' => Lang::get($buttonText),
             'buttonIcon' => $buttonIcon,
-            'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null
+            'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
+            'ignoreReadOnly' => $ignoreReadOnly
         ];
     }
 
@@ -256,13 +266,16 @@ class Form implements JsonSerializable
      * @param string|null $buttonIcon
      * @param ButtonColor $buttonColor
      * @param string|null $buttonTooltip
+     * @param bool $ignoreReadOnly Same as in self::addButton
+     * @see self::addButton()
      */
     public function addLoadUrlButton(
         Url $url,
         string $buttonText = '__framelix_stop_edit__',
         ?string $buttonIcon = '70c',
         ButtonColor $buttonColor = ButtonColor::DEFAULT,
-        ?string $buttonTooltip = null
+        ?string $buttonTooltip = null,
+        bool $ignoreReadOnly = false
     ): void {
         $this->buttons[] = [
             'type' => 'url',
@@ -270,7 +283,8 @@ class Form implements JsonSerializable
             'color' => $buttonColor,
             'buttonText' => Lang::get($buttonText),
             'buttonIcon' => $buttonIcon,
-            'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null
+            'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
+            'ignoreReadOnly' => $ignoreReadOnly
         ];
     }
 
@@ -281,13 +295,16 @@ class Form implements JsonSerializable
      * @param string|null $buttonIcon
      * @param ButtonColor $buttonColor
      * @param string|null $buttonTooltip
+     * @param bool $ignoreReadOnly Same as in self::addButton
+     * @see self::addButton()
      */
     public function addSubmitButton(
         string $submitFieldName = 'save',
         string $buttonText = '__framelix_save__',
         ?string $buttonIcon = '718',
         ButtonColor $buttonColor = ButtonColor::SUCCESS,
-        ?string $buttonTooltip = null
+        ?string $buttonTooltip = null,
+        bool $ignoreReadOnly = false
     ): void {
         $this->buttons[] = [
             'type' => 'submit',
@@ -295,7 +312,8 @@ class Form implements JsonSerializable
             'color' => $buttonColor,
             'buttonText' => Lang::get($buttonText),
             'buttonIcon' => $buttonIcon,
-            'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null
+            'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
+            'ignoreReadOnly' => $ignoreReadOnly
         ];
     }
 

@@ -170,3 +170,9 @@ input[type='checkbox'] {
     }
   }
 }
+
+@media print {
+  .framelix-form-field[data-disabled="1"] * {
+    --color-input-background: white !important;
+  }
+}

@@ -542,6 +542,20 @@ html[data-color-scheme=dark] .framelix-form-field-time ::-webkit-calendar-picker
   width: 34px;
 }
 
+@media print {
+  .framelix-form-field-toggle .framelix-form-field-input,
+  .framelix-form-field-toggle .framelix-form-field-input input {
+    color: black !important;
+    width: 36px !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    background: white !important;
+  }
+  .framelix-form-field-toggle .framelix-form-field-input:not(:checked),
+  .framelix-form-field-toggle .framelix-form-field-input input:not(:checked) {
+    color: transparent !important;
+  }
+}
 .framelix-form-field-twofactorcode .framelix-form-field-twofactorcode-label {
   margin-bottom: 5px;
 }
@@ -696,6 +710,11 @@ input[type=checkbox]:checked:after {
   font-size: 20px;
 }
 
+@media print {
+  .framelix-form-field[data-disabled="1"] * {
+    --color-input-background: white !important;
+  }
+}
 .framelix-form {
   margin-bottom: 20px;
 }
@@ -749,4 +768,11 @@ input[type=checkbox]:checked:after {
 }
 .framelix-form-submitting .framelix-form-submit-status {
   opacity: 1;
+}
+
+@media print {
+  :root {
+    --color-input-border: 1px solid #000000 !important;
+    --color-input-background: white !important;
+  }
 }

@@ -156,6 +156,12 @@ class FramelixForm {
   fieldGroups = null
 
   /**
+   * Make a form read only, effectively set all fields to disabled and remove action buttons row
+   * @type {boolean}
+   */
+  readOnly = false
+
+  /**
    * A function with custom validation rules
    * If set must return true on success, string on error
    * @type {function|null}
@@ -605,6 +611,9 @@ class FramelixForm {
     for (let name in this.fields) {
       const field = this.fields[name]
       field.form = this
+      if (this.readOnly) {
+        field.disabled = true
+      }
       const row = $('<div class="framelix-form-field-row"></div>').append(field.container)
       row.attr('data-types', field.container.attr('data-types'))
       this.form.append(row)
@@ -650,12 +659,14 @@ class FramelixForm {
     bottomRow.attr('id', 'framelix-form-row-bottom-' + this.id)
     this.container.append(bottomRow)
 
-    if (FramelixObjectUtils.hasKeys(this.buttons)) {
-      const buttonsRow = $(`<div class="framelix-form-buttons"></div>`)
-      bottomRow.append(buttonsRow)
-
+    const buttonsCount = FramelixObjectUtils.countKeys(this.buttons)
+    const buttonsRow = $(`<div class="framelix-form-buttons" data-buttons="${buttonsCount}"></div>`)
+    bottomRow.append(buttonsRow)
+    if (buttonsCount) {
       for (let i in this.buttons) {
         const buttonData = this.buttons[i]
+        if (this.readOnly && !buttonData.ignoreReadOnly) continue
+
         const button = $(`<framelix-button>`)
         button.attr('theme', buttonData.color)
         button.attr('data-type', buttonData.type)

@@ -29,3 +29,18 @@
     }
   }
 }
+
+@media print {
+  .framelix-form-field-toggle .framelix-form-field-input,
+  .framelix-form-field-toggle .framelix-form-field-input input {
+    color: black !important;
+    width: 36px !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    background: white !important;
+
+    &:not(:checked) {
+      color: transparent !important;
+    }
+  }
+}
