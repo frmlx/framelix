@@ -23,3 +23,25 @@ jobs:
 
       - name: Build and deploy image
         run: bash dev-scripts/docker-hub.sh -v "${{ github.ref_name }}" -p
+
+      - name: Upload userdata after deploy
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: userdata-after-phpunit
+          path: ./userdata
+          retention-days: 5
+
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          dest: './logs'
+
+      - name: Upload docker logs to GitHub
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-logs
+          path: ./logs
+          retention-days: 5
