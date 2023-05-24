@@ -46,7 +46,7 @@ class Request
         // @codeCoverageIgnoreStart
         if (!ArrayUtils::keyExists(self::$requestBodyData, "data")) {
             self::$requestBodyData['data'] = null;
-            if (!str_starts_with(Request::getHeader('content_type'), "application/json")) {
+            if (!str_starts_with(Request::getHeader('content_type') ?? '', "application/json")) {
                 return null;
             }
             self::$requestBodyData['data'] = JsonUtils::readFromFile("php://input");
