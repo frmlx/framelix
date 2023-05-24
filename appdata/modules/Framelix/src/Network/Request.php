@@ -7,6 +7,7 @@ use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\JsonUtils;
 
 use function preg_replace;
+use function str_starts_with;
 use function strtoupper;
 use function substr;
 
@@ -45,7 +46,7 @@ class Request
         // @codeCoverageIgnoreStart
         if (!ArrayUtils::keyExists(self::$requestBodyData, "data")) {
             self::$requestBodyData['data'] = null;
-            if (Request::getHeader('content_type') !== 'application/json') {
+            if (!str_starts_with(Request::getHeader('content_type'), "application/json")) {
                 return null;
             }
             self::$requestBodyData['data'] = JsonUtils::readFromFile("php://input");
