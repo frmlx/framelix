@@ -55,6 +55,12 @@ abstract class LayoutView extends View
     protected string $headHtmlAfterInit = '';
 
     /**
+     * The robots meta tag
+     * @var string
+     */
+    protected string $metaRobots = 'noindex';
+
+    /**
      * If set, then use call this function instead of showContent()
      * @var callable|null
      */
@@ -153,6 +159,7 @@ abstract class LayoutView extends View
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="robots" content="<?= $this->metaRobots ?>">
             <title><?= $this->getPageTitle(true) ?></title>
             <script>
               ;(function () {
