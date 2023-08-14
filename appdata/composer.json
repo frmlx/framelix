@@ -1,7 +1,7 @@
 {
     "require-dev": {
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^10.2",
         "jetbrains/phpstorm-attributes": "^1.0"
     }
 }
