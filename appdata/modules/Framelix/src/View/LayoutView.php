@@ -10,6 +10,7 @@ use Framelix\Framelix\Html\PhpToJsData;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
+use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\FileUtils;
@@ -56,9 +57,11 @@ abstract class LayoutView extends View
 
     /**
      * The robots meta tag
+     * More information about robots here:
+     * https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
      * @var string
      */
-    protected string $metaRobots = 'noindex';
+    protected string $metaRobots = 'none';
 
     /**
      * If set, then use call this function instead of showContent()
@@ -125,6 +128,7 @@ abstract class LayoutView extends View
      */
     public function showDefaultPageStartHtml(): void
     {
+        Response::header('X-Robots-Tag: ' . $this->metaRobots);
         $distUrls = [];
         foreach (Config::$compilerFileBundles as $bundle) {
             $file = $bundle->getGeneratedBundleFilePath();
