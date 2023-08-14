@@ -128,7 +128,9 @@ abstract class LayoutView extends View
      */
     public function showDefaultPageStartHtml(): void
     {
-        Response::header('X-Robots-Tag: ' . $this->metaRobots);
+        if ($this->metaRobots) {
+            Response::header('X-Robots-Tag: ' . $this->metaRobots);
+        }
         $distUrls = [];
         foreach (Config::$compilerFileBundles as $bundle) {
             $file = $bundle->getGeneratedBundleFilePath();
@@ -163,7 +165,11 @@ abstract class LayoutView extends View
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <meta name="robots" content="<?= $this->metaRobots ?>">
+            <?php
+            if ($this->metaRobots) {
+                echo '<meta name="robots" content="' . $this->metaRobots . '">';
+            }
+            ?>
             <title><?= $this->getPageTitle(true) ?></title>
             <script>
               ;(function () {

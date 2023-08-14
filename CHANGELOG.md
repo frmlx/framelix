@@ -43,12 +43,6 @@ Generally, as v3 wasn't really public used or available, this should not be cons
 
 * ✏️ basically a complete new docker image with a lot of optimization compared to v3
 
-#### 📚 Installed server applications are now:
-
-* Nginx: nginx version: nginx/1.23.4
-* PHP: 8.2.4
-* NodeJS: v19.9.0
-
 # [3.1.1 - 2023-02-13]
 
 * integrated playwright installation into docker build and entrypoint runner (as already done with phpunit tests)
