@@ -24,7 +24,7 @@ RUN export DEBIAN_FRONTEND=noninteractive &&  \
     add-apt-repository ppa:ondrej/php -y &&  \
     add-apt-repository ppa:ondrej/nginx-mainline -y && \
     apt update && \
-    apt install ca-certificates cron nginx nodejs php8.2-xdebug php8.2-cli php8.2-fpm php8.2-common php8.2-mysql php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml php8.2-bcmath php8.2-sqlite3 php8.2-pgsql 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
+    apt install ca-certificates cron nginx nodejs php8.3-xdebug php8.3-cli php8.3-fpm php8.3-common php8.3-mysql php8.3-zip php8.3-gd php8.3-mbstring php8.3-curl php8.3-xml php8.3-bcmath php8.3-sqlite3 php8.3-pgsql 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
     rm /etc/php/*/*/conf.d/*-xdebug.ini && \
     apt upgrade -y
 
@@ -39,8 +39,8 @@ RUN mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage
 COPY docker-build/misc-conf/imagemagick-policy.xml /etc/ImageMagick-6/policy.xml
 
 # php
-COPY docker-build/php-config/php.ini /etc/php/8.2/cli/php.ini
-COPY docker-build/php-config/php.ini /etc/php/8.2/fpm/php.ini
+COPY docker-build/php-config/php.ini /etc/php/8.3/cli/php.ini
+COPY docker-build/php-config/php.ini /etc/php/8.3/fpm/php.ini
 COPY docker-build/php-config/fpm-pool.conf $FRAMELIX_SYSTEMDIR/fpm-pool.conf
 
 # nginx

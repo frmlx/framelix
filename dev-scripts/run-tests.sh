@@ -26,7 +26,7 @@ cecho y "[i] Running tests"
 
 if [ $TESTTYPE == "install-deps" ]; then
   cecho b "# Install/Update composer and npm dependencies"
-  docker $DOCKER_EXECPARAMS_APP "framelix_npm_modules_install && framelix_composer_modules_install && cd /framelix/appdata/playwright && npm install -y"
+  docker $DOCKER_EXECPARAMS_APP "framelix_npm_modules_install && framelix_composer_modules_install && cd /framelix/appdata/playwright && npx install -y"
   exit $?
 fi
 
@@ -70,7 +70,7 @@ if [ $TESTTYPE == "playwright" ]; then
     TESTFILE="/framelix/appdata/playwright/tests/$TESTFILE.spec.ts"
   fi
 
-  docker $DOCKER_EXECPARAMS_PW "mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright test $TESTFILE"
+  docker $DOCKER_EXECPARAMS_PW "mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright install && npx playwright test $TESTFILE"
 
   RESULT=$?
 
