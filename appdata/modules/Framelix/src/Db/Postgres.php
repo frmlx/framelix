@@ -16,7 +16,9 @@ use function pg_query;
 
 class Postgres extends Sql
 {
+
     public ?Connection $connection = null;
+
     public bool|Result $lastResult = false;
 
     /**
@@ -72,9 +74,16 @@ class Postgres extends Sql
             return;
         }
         try {
-            $this->connection = pg_connect(
-                "host={$this->host} " . ($this->port ? 'port=' . (int)$this->port : '') . " dbname={$this->database} user={$this->username} password='{$this->password}' options='--client_encoding=UTF8'"
+            // it hurts, but must ignore errors with @ as pg_connect will throw a warning which cannot be catched properly
+            // will result in warnings in tests
+            // however, errors will be properly catched with pg_last_error()
+            $this->connection = @pg_connect(
+              "host={$this->host} " . ($this->port ? 'port=' . (int)$this->port : '') . " dbname={$this->database} user={$this->username} password='{$this->password}' options='--client_encoding=UTF8'"
             );
+            $error = pg_last_error($this->connection);
+            if ($error) {
+                throw new FatalError($error);
+            }
             $this->connected = true;
         } catch (Throwable $e) {
             throw new FatalError($e->getMessage());
@@ -102,7 +111,20 @@ class Postgres extends Sql
     public function queryRaw(string $query): bool|Result
     {
         try {
-            $this->lastResult = pg_query($this->connection, $query);
+            // it hurts, but must ignore errors with @ as pg_query will throw a warning which cannot be catched properly
+            // will result in warnings in tests
+            // however, errors will be properly catched with pg_last_error()
+            $this->lastResult = @pg_query($this->connection, $query);
+            if ($this->lastResult) {
+                $error = pg_result_error($this->lastResult);
+                if ($error) {
+                    throw new FatalError($error);
+                }
+            }
+            $error = pg_last_error($this->connection);
+            if ($error) {
+                throw new FatalError($error);
+            }
         } catch (Throwable $e) {
             $errorMessage = "Postgres Error: " . $e->getMessage();
             if (Config::$devMode) {
@@ -134,9 +156,9 @@ class Postgres extends Sql
      * @inheritDoc
      */
     public function fetchArray(
-        string $query,
-        ?array $parameters = null,
-        ?int $limit = null
+      string $query,
+      ?array $parameters = null,
+      ?int $limit = null
     ): array {
         $fetch = [];
         $this->query($query, $parameters);
@@ -153,10 +175,10 @@ class Postgres extends Sql
      * @inheritDoc
      */
     public function fetchAssoc(
-        string $query,
-        ?array $parameters = null,
-        ?string $valueAsArrayIndex = null,
-        ?int $limit = null
+      string $query,
+      ?array $parameters = null,
+      ?string $valueAsArrayIndex = null,
+      ?int $limit = null
     ): array {
         $fetch = [];
         $this->query($query, $parameters);
@@ -164,7 +186,7 @@ class Postgres extends Sql
             if (is_string($valueAsArrayIndex)) {
                 if (!isset($row[$valueAsArrayIndex])) {
                     throw new FatalError(
-                        "Field '$valueAsArrayIndex' does not exist in SQL Result or is null"
+                      "Field '$valueAsArrayIndex' does not exist in SQL Result or is null"
                     );
                 }
                 $fetch[$row[$valueAsArrayIndex]] = $row;
@@ -177,4 +199,5 @@ class Postgres extends Sql
         }
         return $fetch;
     }
+
 }

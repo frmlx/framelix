@@ -85,10 +85,10 @@ class UploadedFile
     }
 
     /**
-     * Get filedata
+     * Get file contents
      * @return string
      */
-    public function getFileData(): string
+    public function getFileContents(): string
     {
         return file_get_contents($this->path);
     }

@@ -28,9 +28,9 @@ use function str_replace;
 
 abstract class Sql
 {
-    public const TYPE_MYSQL = 1;
-    public const TYPE_SQLITE = 2;
-    public const TYPE_POSTGRES = 3;
+    public const int TYPE_MYSQL = 1;
+    public const int TYPE_SQLITE = 2;
+    public const int TYPE_POSTGRES = 3;
 
     public static array $typeMap = [
         self::TYPE_MYSQL => ['class' => Mysql::class],
@@ -126,7 +126,7 @@ abstract class Sql
     /**
      * Execute the raw query without any framework modification
      * @param string $query
-     * @return bool|mysqli_result
+     * @return mixed
      */
     abstract public function queryRaw(string $query): mixed;
 

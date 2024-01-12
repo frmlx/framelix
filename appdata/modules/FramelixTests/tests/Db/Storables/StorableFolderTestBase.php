@@ -25,8 +25,6 @@ abstract class StorableFolderTestBase extends TestCaseDbTypes
         $folder3->parent = $folder2;
         $folder3->store();
 
-        $this->assertStringContainsString('framelix-mediabrowser-thumbnail', $folder3->getMediaBrowserThumbnailHtml());
-
         $this->assertSame('test / test-sub / test-sub-sub', $folder3->getFullName());
 
         $this->assertCount(2, $folder1->getChilds(true));

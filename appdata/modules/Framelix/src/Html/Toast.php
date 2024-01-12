@@ -93,7 +93,7 @@ class Toast
 
     /**
      * Get all messages that are cached in the user session
-     * @param bool $flushQueue If true, than delete the cached messages from the session after this call
+     * @param bool $flushQueue If true, then delete the cached messages from the session after this call
      * @return array
      */
     public static function getQueueMessages(bool $flushQueue): array

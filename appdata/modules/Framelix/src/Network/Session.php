@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Network;
 
+use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
@@ -21,6 +22,7 @@ use const FRAMELIX_MODULE;
  */
 class Session
 {
+
     /**
      * How long should sessions been kept on disk
      */
@@ -28,7 +30,7 @@ class Session
 
     /**
      * The session name
-     * Each session name have it's own file
+     * Each session name have its own file
      * @var string
      */
     public static string $sessionName = "fsid_" . FRAMELIX_MODULE;
@@ -36,63 +38,48 @@ class Session
     private static array $cache = [];
 
     /**
-     * Cleanup sessions that are older than than max lifetime
+     * Cleanup sessions that are older than max lifetime
+     * @param DateTime|null $dateNow If set, use another reference date (default is today)
      * @return void
      */
-    public static function cleanup(): void
+    public static function cleanup(?DateTime $dateNow = null): void
     {
         $sessionBaseFolder = FileUtils::getUserdataFilepath("sessions", false, autoCreateFolder: false);
         if (is_dir($sessionBaseFolder)) {
             $folders = scandir($sessionBaseFolder);
-            $date = date("ymd");
+            $date = DateTime::create($dateNow ?? 'now')->format('ymd');
             foreach ($folders as $folder) {
                 if (str_starts_with($folder, ".") || strlen($folder) !== 6) {
                     continue;
                 }
                 $dateFolder = (int)$folder;
                 if (($date - $dateFolder) > self::MAX_LIFETIME_DAYS) {
-                    FileUtils::deleteDirectory($sessionBaseFolder, $folder);
+                    FileUtils::deleteDirectory($sessionBaseFolder . "/" . $folder);
                 }
             }
         }
     }
 
     /**
-     * Get session file path
-     * @param bool $readOnly
-     * @return string|null Return the path if exist
+     * Clear all session values
      */
-    public static function getSessionFilePath(bool $readOnly): ?string
+    public static function clear(): void
     {
-        $cacheKey = self::$sessionName . "_path_" . (int)$readOnly;
-        if (array_key_exists($cacheKey, self::$cache)) {
-            return self::$cache[$cacheKey];
+        unset(self::$cache[self::$sessionName . '_data']);
+        $path = self::getSessionFilePath();
+        if ($path && is_file($path)) {
+            unlink($path);
         }
-        self::$cache[$cacheKey] = null;
-        $date = date("ymd");
-        if ($readOnly) {
-            $sessionId = self::$sessionName . "_" . Cookie::get(self::$sessionName);
-            if (!Cookie::get(self::$sessionName)) {
-                return self::$cache[$cacheKey];
-            }
-            $path = FileUtils::getUserdataFilepath("sessions/$date/$sessionId.json", false, autoCreateFolder: false);
-            if (is_file($path)) {
-                self::$cache[$cacheKey] = $path;
-            }
-            return self::$cache[$cacheKey];
-        }
-        $sessionId = Cookie::get(self::$sessionName);
-        if (!$sessionId) {
-            $sessionId = RandomGenerator::getRandomString(64);
-            do {
-                $path = FileUtils::getUserdataFilepath("sessions/$date/" . self::$sessionName . "_$sessionId.json",
-                    false);
-            } while (is_file($path));
-            Cookie::set(self::$sessionName, $sessionId);
-        }
-        self::$cache[$cacheKey] = FileUtils::getUserdataFilepath("sessions/$date/" . self::$sessionName . "_$sessionId.json",
-            false);
-        return self::$cache[$cacheKey];
+    }
+
+    /**
+     * Get the whole session data array
+     * @return array|null
+     */
+    public static function getAll(): ?array
+    {
+        self::prepare(false);
+        return self::$cache[self::$sessionName . '_data'] ?? null;
     }
 
     /**
@@ -102,10 +89,7 @@ class Session
      */
     public static function get(string $name): mixed
     {
-        if (!self::getSessionFilePath(true)) {
-            return null;
-        }
-        self::loadSessionDataIntoCache();
+        self::prepare(false);
         return self::$cache[self::$sessionName . '_data'][$name] ?? null;
     }
 
@@ -115,27 +99,64 @@ class Session
      * @param mixed $value Null will unset the key, can be any json serializable value
      */
     public static function set(
-        string $name,
-        mixed $value
+      string $name,
+      mixed $value
     ): void {
-        self::loadSessionDataIntoCache();
+        self::prepare(true);
         if ($value === null) {
             unset(self::$cache[self::$sessionName . '_data'][$name]);
         } else {
             self::$cache[self::$sessionName . '_data'][$name] = $value;
         }
-        JsonUtils::writeToFile(self::getSessionFilePath(false), self::$cache[self::$sessionName . '_data']);
+        JsonUtils::writeToFile(
+          self::getSessionFilePath(null, true),
+          self::$cache[self::$sessionName . '_data']
+        );
     }
 
-    private static function loadSessionDataIntoCache(): void
+    /**
+     * Get the sessions file path
+     * @param string|null $sessionId If null, it will try to get the saved cookie session id
+     * @param bool $createFolderIfNotExist
+     * @return string|null
+     */
+    public static function getSessionFilePath(?string $sessionId = null, bool $createFolderIfNotExist = false): ?string
     {
-        if (array_key_exists(self::$sessionName . '_data', self::$cache)) {
+        $sessionId = $sessionId ?? Cookie::get(self::$sessionName);
+        if(!$sessionId){
+            return null;
+        }
+        $date = date("ymd");
+        $sessionFilename = self::$sessionName . "_" . $sessionId . ".json";
+        return FileUtils::getUserdataFilepath(
+          "sessions/$date/$sessionFilename",
+          false,
+          autoCreateFolder: $createFolderIfNotExist
+        );
+    }
+
+    private static function prepare(bool $setSessionCookie): void
+    {
+        $sessionId = Cookie::get(self::$sessionName);
+        // no saved session id, skip
+        if (!$sessionId && !$setSessionCookie) {
             return;
         }
-        self::$cache[self::$sessionName . '_data'] = [];
-        $path = self::getSessionFilePath(false);
-        if (is_file($path)) {
-            self::$cache[self::$sessionName . '_data'] = JsonUtils::readFromFile($path);
+        if (!$sessionId) {
+            $sessionId = RandomGenerator::getRandomString(64);
+            do {
+                $path = self::getSessionFilePath($sessionId, true);
+            } while (is_file($path));
+            Cookie::set(self::$sessionName, $sessionId);
+        }
+        $cacheKey = self::$sessionName . '_data';
+        if (!array_key_exists($cacheKey, self::$cache)) {
+            self::$cache[$cacheKey] = [];
+            $path = self::getSessionFilePath($sessionId, true);
+            if (is_file($path)) {
+                self::$cache[$cacheKey] = JsonUtils::readFromFile($path);
+            }
         }
     }
+
 }

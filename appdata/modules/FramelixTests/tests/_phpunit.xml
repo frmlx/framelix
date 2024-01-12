@@ -4,7 +4,8 @@
          executionOrder="depends,defects" beStrictAboutOutputDuringTests="true" beStrictAboutChangesToGlobalState="true"
          processIsolation="true" failOnRisky="true" failOnWarning="true" cacheDirectory=".phpunit.cache"
          beStrictAboutCoverageMetadata="true"
-         cacheResult="false">
+         cacheResult="false"
+         displayDetailsOnTestsThatTriggerWarnings="true">
     <testsuites>
         <testsuite name="default">
             <directory>..</directory>

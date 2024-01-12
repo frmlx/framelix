@@ -25,6 +25,7 @@ use const SCANDIR_SORT_ASCENDING;
  */
 class FileUtils
 {
+
     /**
      * Write given contents to a file path
      * Advantage over file_put_contents is, that it will retry when file is blocked for some reason
@@ -59,10 +60,10 @@ class FileUtils
      * @return string
      */
     public static function getUserdataFilepath(
-        ?string $filePath,
-        bool $public,
-        string $module = FRAMELIX_MODULE,
-        bool $autoCreateFolder = true
+      ?string $filePath,
+      bool $public,
+      string $module = FRAMELIX_MODULE,
+      bool $autoCreateFolder = true
     ): string {
         $userdataFolder = FRAMELIX_USERDATA_FOLDER . "/$module/" . ($public ? "public" : "private") . "/" . $filePath;
         $dir = dirname($userdataFolder);
@@ -112,7 +113,6 @@ class FileUtils
         return self::normalizePath(substr($path, strlen($base) + 1));
     }
 
-
     /**
      * Get files in a directory and return flat file list with absolute paths
      * @param string $directory
@@ -123,14 +123,14 @@ class FileUtils
      * @return string[]
      */
     public static function getFiles(
-        string $directory,
-        ?string $regex = null,
-        bool $recursive = false,
-        bool $includeDirectoriesPaths = false,
-        int $sortOrder = SCANDIR_SORT_ASCENDING
+      string $directory,
+      ?string $regex = null,
+      bool $recursive = false,
+      bool $includeDirectoriesPaths = false,
+      int $sortOrder = SCANDIR_SORT_ASCENDING
     ): array {
         $files = [];
-        if (!is_dir($directory)) {
+        if (!$directory || !is_dir($directory)) {
             return $files;
         }
         $directory = self::normalizePath($directory);
@@ -152,6 +152,28 @@ class FileUtils
             }
         }
         return $files;
+    }
+
+    /**
+     * Delete array of given absolute file path
+     * @param array $files Array of folders and files
+     * @param bool $deleteDirectories If true and $files contains directory paths, delete the directory recursively
+     * @return void
+     */
+    public static function deleteFiles(array $files, bool $deleteDirectories): void
+    {
+        foreach ($files as $file) {
+            if (!$file) {
+                continue;
+            }
+            if (is_file($file)) {
+                unlink($file);
+                continue;
+            }
+            if ($deleteDirectories && is_dir($file)) {
+                self::deleteDirectory($file);
+            }
+        }
     }
 
     /**
@@ -179,4 +201,5 @@ class FileUtils
         }
         rmdir($directory);
     }
+
 }

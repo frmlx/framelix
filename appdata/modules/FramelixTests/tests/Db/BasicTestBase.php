@@ -236,7 +236,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
         $db = $this->getDb();
 
         $this->assertExceptionOnCall(function () use ($db) {
-            $db->queryRaw('foo');
+            $db->queryRaw('SELECT QUACK FROM DUCK');
         });
 
         $this->assertExceptionOnCall(function () use ($db) {

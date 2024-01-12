@@ -60,8 +60,8 @@ abstract class StorableFileTestBase extends TestCaseDbTypes
 
         $this->assertInstanceOf(Url::class, $storableFile->getDownloadUrl());
         $this->assertIsString($storableFile->getHtmlString());
-        $this->assertSame('test', $storableFile->getFiledata());
-        $this->assertSame('test', $storableFile2->getFiledata());
+        $this->assertSame('test', $storableFile->getFileContents());
+        $this->assertSame('test', $storableFile2->getFileContents());
         $storableFile->delete();
         $storableFile2->delete();
         $this->assertNull($storableFile2->getDownloadUrl());
@@ -78,7 +78,7 @@ abstract class StorableFileTestBase extends TestCaseDbTypes
         $uploadedFile = UploadedFile::createFromSubmitData("test.txt")[0];
         $storableFile->store(false, $uploadedFile);
         $storableFile->store(false, "foobar2");
-        $this->assertSame('foobar2', $storableFile->getFiledata());
+        $this->assertSame('foobar2', $storableFile->getFileContents());
 
         // only update metadata without file changes
         $storableFile->filename = "foo";
@@ -86,7 +86,7 @@ abstract class StorableFileTestBase extends TestCaseDbTypes
 
         $storableFile->delete();
 
-        $this->assertNull($storableFile->getFiledata());
+        $this->assertNull($storableFile->getFileContents());
 
         $storableFile = new TestStorableFile();
         FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);

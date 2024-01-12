@@ -3,6 +3,7 @@
 namespace Html;
 
 use Framelix\Framelix\Html\Toast;
+use Framelix\Framelix\Network\Session;
 use Framelix\FramelixTests\TestCase;
 
 final class ToastTest extends TestCase
@@ -24,5 +25,6 @@ final class ToastTest extends TestCase
         $this->assertTrue(Toast::hasError());
         $this->assertCount(4, Toast::getQueueMessages(true));
         $this->assertCount(0, Toast::getQueueMessages(true));
+        Session::clear();
     }
 }

@@ -77,20 +77,22 @@ final class FileUtilsTest extends TestCase
         mkdir($testFolder . "/test");
         file_put_contents($testFolder . "/test.txt", "1");
         file_put_contents($testFolder . "/test/test.txt", "1");
+        $files = FileUtils::getFiles($testFolder, null, true, true);
         $this->assertFilelist(
             [
                 "fileutils-test-tmp/test",
                 "fileutils-test-tmp/test/test.txt",
                 "fileutils-test-tmp/test.txt",
             ],
-            FileUtils::getFiles($testFolder, null, true, true),
+            $files,
             FRAMELIX_TMP_FOLDER
         );
-        FileUtils::deleteDirectory($testFolder);
+        FileUtils::deleteFiles($files, true);
         $this->assertFilelist(
             [],
             FileUtils::getFiles($testFolder, null, true, true)
         );
+        FileUtils::deleteDirectory($testFolder);
         $this->assertTrue(!is_dir($testFolder));
     }
 

@@ -22,14 +22,14 @@ final class UploadedFileTest extends TestCase
         $this->addSimulatedFile("test.txt", "foobar", false);
         $uploadedFiles = UploadedFile::createFromSubmitData("test.txt");
         $this->assertCount(1, $uploadedFiles);
-        $this->assertSame("foobar", $uploadedFiles[0]->getFileData());
+        $this->assertSame("foobar", $uploadedFiles[0]->getFileContents());
         $this->assertSame("txt", $uploadedFiles[0]->getExtension());
 
         $this->addSimulatedFile("test", "foobar", true);
         $uploadedFiles = UploadedFile::createFromSubmitData("test");
         $this->assertCount(2, $uploadedFiles);
-        $this->assertSame("foobar", $uploadedFiles[0]->getFileData());
-        $this->assertSame("foobar", $uploadedFiles[1]->getFileData());
+        $this->assertSame("foobar", $uploadedFiles[0]->getFileContents());
+        $this->assertSame("foobar", $uploadedFiles[1]->getFileContents());
         $this->assertNull($uploadedFiles[0]->getExtension());
 
         $this->removeSimulatedFile("test.txt");

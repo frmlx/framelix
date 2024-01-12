@@ -32,7 +32,7 @@ use const JSON_PRETTY_PRINT;
  */
 class ErrorHandler
 {
-    public const LOGFOLDER = FRAMELIX_USERDATA_FOLDER . "/" . FRAMELIX_MODULE . "/_logs";
+    public const string LOGFOLDER = FRAMELIX_USERDATA_FOLDER . "/" . FRAMELIX_MODULE . "/_logs";
 
     /**
      * Throwable to json
@@ -240,7 +240,7 @@ class ErrorHandler
     {
         // check if error was suppressed with @
         // ugly but possible and done by some 3rd party libraries
-        if (!(bool)(error_reporting() & $errno)) {
+        if (!(error_reporting() & $errno)) {
             return true;
         }
         throw new FatalError($errstr);

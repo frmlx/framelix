@@ -57,7 +57,6 @@ abstract class FileTestBase extends TestCaseDbTypes
         $field->name = "storableFileOptional";
         $this->addSimulatedFile($field->name, 'test', false);
         $field->storableFileBase = new TestStorableFile();
-        $field->storableFileBase->setDefaultRelativePath(false);
         $field->setOnlyImages();
         $field->setOnlyVideos();
         $files = $field->store($storable);
@@ -86,7 +85,6 @@ abstract class FileTestBase extends TestCaseDbTypes
         $field->name = "storableFileArrayOptional";
         $this->addSimulatedFile($field->name, 'test', true);
         $field->storableFileBase = new TestStorableFile();
-        $field->storableFileBase->setDefaultRelativePath(false);
         $field->setOnlyImages();
         $field->setOnlyVideos();
         $files = $field->store($storable);

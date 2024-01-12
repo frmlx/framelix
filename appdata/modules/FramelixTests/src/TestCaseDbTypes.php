@@ -34,9 +34,9 @@ abstract class TestCaseDbTypes extends TestCase
         }
         switch ($this->currentDbType) {
             case Sql::TYPE_POSTGRES:
-                $connection = pg_connect("host=postgres  user=postgres password=app");
+                $connection = pg_connect("host=postgres user=postgres password=app");
                 try {
-                    pg_query($connection, 'CREATE DATABASE unittests');
+                    @pg_query($connection, 'CREATE DATABASE unittests');
                 } catch (Throwable $e) {
                 }
                 pg_close($connection);

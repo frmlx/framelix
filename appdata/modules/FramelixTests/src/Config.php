@@ -21,15 +21,12 @@ class Config
         \Framelix\Framelix\Config::$devMode = true;
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "js", "test-folder");
-        $bundle->pageAutoInclude = false;
         $bundle->addFolder('vendor-frontend/js', true);
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "js", "test-path");
-        $bundle->pageAutoInclude = false;
         $bundle->addFile('vendor-frontend/js/framelix-unit-test-jstest.js');
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "js", "test-nocompile");
-        $bundle->pageAutoInclude = false;
         $bundle->compile = false;
         $bundle->addFile('vendor-frontend/js/framelix-unit-test-jstest.js');
 
@@ -38,16 +35,13 @@ class Config
             "js",
             "test-nocompile-ignorefile"
         );
-        $bundle->pageAutoInclude = false;
         $bundle->compile = false;
         $bundle->addFolder('vendor-frontend/js', true, ["vendor-frontend/js/framelix-unit-test-jstest2.js"]);
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "scss", "test-folder");
-        $bundle->pageAutoInclude = false;
         $bundle->addFolder('vendor-frontend/scss', true);
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixTests", "scss", "test-path");
-        $bundle->pageAutoInclude = false;
         $bundle->addFile('vendor-frontend/scss/framelix-unit-test-scsstest.scss');
 
         if (defined('PHPUNIT_TESTS')) {
