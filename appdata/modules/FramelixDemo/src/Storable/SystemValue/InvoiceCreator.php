@@ -45,13 +45,11 @@ class InvoiceCreator extends SystemValue
         $property = $meta->createProperty("invoiceHeader");
         $property->field = new File();
         $property->field->storableFileBase = new StorableFile();
-        $property->field->storableFileBase->setDefaultRelativePath(false);
         $property->field->allowedFileTypes = ".jpg, .png";
 
         $property = $meta->createProperty("invoiceFooter");
         $property->field = new File();
         $property->field->storableFileBase = new StorableFile();
-        $property->field->storableFileBase->setDefaultRelativePath(false);
         $property->field->allowedFileTypes = ".jpg, .png";
 
         $property = $meta->createProperty("vatId");

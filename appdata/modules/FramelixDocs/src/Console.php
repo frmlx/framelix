@@ -76,8 +76,7 @@ class Console extends \Framelix\Framelix\Console
         }
         $arr = [];
         for ($i = 1; $i <= 2; $i++) {
-            $obj = new  SimpleDemoFile();
-            $obj->setDefaultRelativePath(true);
+            $obj = new SimpleDemoFile();
             $obj->store(false, UploadedFile::createFromFile(__DIR__ . "/../public/images/demo-$i.jpg"), true);
             $arr[] = $obj;
         }

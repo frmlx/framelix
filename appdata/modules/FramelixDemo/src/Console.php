@@ -179,7 +179,6 @@ class Console extends \Framelix\Framelix\Console
         $summaryKey->store();
 
         $invoiceHeader = new StorableFile();
-        $invoiceHeader->setDefaultRelativePath(false);
         $invoiceHeader->store(
             file: UploadedFile::createFromFile(__DIR__ . "/../misc/invoice-header.png"),
             copy: true
@@ -303,7 +302,6 @@ class Console extends \Framelix\Framelix\Console
     {
         $attachment = new StorableFile();
         $attachment->assignedStorable = $assignedStorable;
-        $attachment->setDefaultRelativePath(false);
         $attachment->store(
             file: UploadedFile::createFromFile(
             __DIR__ . "/../misc/" . (rand(

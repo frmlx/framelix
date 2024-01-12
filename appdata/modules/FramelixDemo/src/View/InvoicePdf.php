@@ -200,7 +200,6 @@ EUR' . $this->storable->net . '
             $this->output("invoice-" . $type . "-" . $this->storable->invoiceNr . ".pdf");
         }
         $attachment = new StorableFile();
-        $attachment->setDefaultRelativePath(false);
         $attachment->assignedStorable = $this->storable;
         if ($type === 'original') {
             $attachment->filename = "invoice-original-" . $this->storable->invoiceNr . ".pdf";

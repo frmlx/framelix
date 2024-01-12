@@ -67,7 +67,6 @@ class Depreciation extends StorableMeta
         $property->field = new File();
         $property->field->multiple = true;
         $property->field->storableFileBase = new StorableFile();
-        $property->field->storableFileBase->setDefaultRelativePath(false);
 
         $property = $this->createProperty("date");
         $property->addDefaultField();

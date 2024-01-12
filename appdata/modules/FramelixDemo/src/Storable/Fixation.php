@@ -77,7 +77,6 @@ class Fixation extends StorableExtended
 
         $attachment = new StorableFile();
         $attachment->assignedStorable = $fixation;
-        $attachment->setDefaultRelativePath(false);
         $attachment->filename = "fixation-" . $fixation->dateFrom->getRawTextString(
             ) . "-" . $fixation->dateTo->getRawTextString() . ".xlsx";
         $attachment->store(false, file_get_contents($tmpFile));
