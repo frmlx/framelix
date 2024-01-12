@@ -3,6 +3,7 @@
 namespace Framelix\Framelix\Utils;
 
 use Framelix\Framelix\Exception\FatalError;
+use Framelix\Framelix\Html\CompilerFileBundle;
 use Framelix\Framelix\Html\HtmlAttributes;
 use Framelix\Framelix\Url;
 
@@ -33,6 +34,30 @@ class HtmlUtils
         }
         $attributes?->addClass('framelix-icon');
         return '<framelix-icon ' . ($attributes ? (string)$attributes : '') . ' icon="' . $codePoint . '">&#xe' . $codePoint . ';</framelix-icon>';
+    }
+
+    /**
+     * Get include tags for given compiler bundles
+     * @param CompilerFileBundle[] $bundles
+     * @return string
+     */
+    public static function getIncludeTagsForBundles(array $bundles): string
+    {
+        $html = '';
+        foreach ($bundles as $bundle) {
+            $html .= self::getIncludeTagForBundle($bundle) . "\n";
+        }
+        return $html;
+    }
+
+    /**
+     * Get include tag for given compiler bundle
+     * @param CompilerFileBundle $bundle
+     * @return string
+     */
+    public static function getIncludeTagForBundle(CompilerFileBundle $bundle): string
+    {
+        return self::getIncludeTagForUrl($bundle->getGeneratedBundleUrl());
     }
 
     /**

@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const babelCore = require('@babel/core')
 const sass = require('sass')
 
@@ -11,12 +12,13 @@ if (cmdParams.type === 'js' && cmdParams.options.jsStrict && cmdParams.options.c
 for (let i = 0; i < cmdParams.files.length; i++) {
   let fileData = fs.readFileSync(cmdParams.files[i]).toString()
   if (cmdParams.type === 'js') {
-    // remove sourcemapping as we don't want that
+    // remove sourcemapping, we don't want that
     fileData = fileData.replace(/^\/\/# sourceMappingURL=.*$/im, '')
     // remove use strict from seperate files because it's added at the top
     fileData = fileData.replace(/^'use strict'|^\"use strict\"/im, '')
+    // add semicolons as they will be sometimes required when they are missing the source
   }
-  fileDataCombined += fileData + '\n\n'
+  fileDataCombined += ';' + fileData + ';\n\n'
 }
 
 if (cmdParams.options.compile) {
@@ -34,6 +36,10 @@ if (cmdParams.options.compile) {
   } else {
     fileDataCombined = sass.compileString(fileDataCombined).css.toString()
   }
+}
+const dir = path.dirname(cmdParams.distFilePath)
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir)
 }
 fs.writeFileSync(cmdParams.distFilePath, fileDataCombined)
 console.log(cmdParams.distFilePath + ' successfully compiled')

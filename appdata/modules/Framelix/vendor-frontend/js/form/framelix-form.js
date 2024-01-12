@@ -444,7 +444,7 @@ class FramelixForm {
    * Update field visibility
    */
   updateFieldVisibility () {
-    const formValues = FormDataJson.toJson(this.form, { 'flatList': true, 'includeDisabled': true })
+    const formValues = FormDataJson.toJson(this.form[0], { 'flatList': true, 'includeDisabled': true })
     let formValuesFlatIndexed = {}
     for (let i = 0; i < formValues.length; i++) {
       formValuesFlatIndexed[formValues[i][0]] = formValues[i][1]
@@ -781,9 +781,9 @@ class FramelixForm {
     self.setSubmitStatus(true)
     let formData
     if (this.submitAsyncRaw) {
-      formData = JSON.stringify(FormDataJson.toJson(this.form, { 'includeDisabled': true }))
+      formData = JSON.stringify(FormDataJson.toJson(this.form[0], { 'includeDisabled': true }))
     } else {
-      let values = FormDataJson.toJson(this.form, { 'flatList': true, 'includeDisabled': true })
+      let values = FormDataJson.toJson(this.form[0], { 'flatList': true, 'includeDisabled': true })
       formData = new FormData()
       for (let i = 0; i < values.length; i++) {
         formData.append(values[i][0], values[i][1])

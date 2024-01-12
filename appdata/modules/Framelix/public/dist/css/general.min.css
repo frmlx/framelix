@@ -69,7 +69,7 @@
   --color-popup-primary-bg: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 90%);
   --color-popup-primary-text: hsl(var(--color-primary-hue), calc(var(--color-contrast-modifier) + 70%), 5%);
   --color-input-background: white;
-  --color-input-border: 1px solid #ddd;
+  --input-border: 1px solid #ddd;
   --color-input-text: var(--color-page-text);
   --color-input-checkbox-background: var(--color-input-background);
   --color-input-checkbox-checked: var(--color-button-primary-bg);
@@ -155,7 +155,7 @@
     --color-popup-primary-text: white;
     --color-input-background: hsl(0, 0%, 17%);
     --color-input-text: white;
-    --color-input-border: none;
+    --input-border: none;
     --color-table-zebra: rgba(255, 255, 255, 0.05) ;
   }
 }

@@ -100,7 +100,7 @@ class StringUtils
         }
         $string = str_replace($s, $r, $string);
         $string = preg_replace("~[^a-z0-9\. \-_]~i", "-", $string);
-        return preg_replace("~-{2,}~i", "-", $string);
+        return trim(preg_replace("~-{2,}~i", "-", $string), "-. ");
     }
 
     /**

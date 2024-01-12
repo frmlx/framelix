@@ -8,7 +8,6 @@ use Framelix\Framelix\Network\Response;
 use Stringable;
 use Throwable;
 
-use function clearstatcache;
 use function file_exists;
 use function is_object;
 use function json_encode;
@@ -56,8 +55,7 @@ class JsonUtils
      */
     public static function writeToFile(string $path, mixed $data, bool $prettyPrint = false): void
     {
-        file_put_contents($path, self::encode($data, $prettyPrint));
-        clearstatcache();
+        FileUtils::writeToFile($path, self::encode($data, $prettyPrint));
     }
 
     /**

@@ -141,7 +141,7 @@ html[data-color-scheme=dark] .framelix-form-field-datetime ::-webkit-calendar-pi
 }
 .framelix-form-field-editor .tox-tinymce {
   border-radius: var(--border-radius);
-  border: 1px solid var(--color-input-border);
+  border: var(--input-border);
 }
 
 .framelix-form-field-file {
@@ -153,7 +153,7 @@ html[data-color-scheme=dark] .framelix-form-field-datetime ::-webkit-calendar-pi
   flex-direction: column;
   gap: 5px;
 }
-.dragging .framelix-form-field-file {
+.dragging-files .framelix-form-field-file {
   border: 0;
   background: hsla(var(--color-success-hue), 50%, 50%, 0.2);
   box-shadow: hsl(var(--color-success-hue), 50%, 50%) 0 0 10px;
@@ -206,205 +206,6 @@ html[data-color-scheme=dark] .framelix-form-field-datetime ::-webkit-calendar-pi
 
 .framelix-form-field-row[data-types=FramelixFormFieldHidden] {
   display: none;
-}
-
-.framelix-mediabrowser-modal {
-  height: 80vh;
-  display: flex;
-  gap: 20px;
-}
-.framelix-mediabrowser-modal .framelix-mediabrowser-selected-info {
-  min-height: 70px;
-}
-.framelix-mediabrowser-modal [data-selected] framelix-button[data-action=select] {
-  background: var(--color-button-primary-bg);
-  color: var(--color-button-primary-text);
-}
-
-.framelix-mediabrowser-selected-info {
-  margin-top: 10px;
-}
-
-.framelix-mediabrowser-left-window {
-  overflow: hidden;
-  overflow-y: auto;
-  flex: 1 1 auto;
-  min-width: 280px;
-  max-width: 280px;
-  padding-right: 20px;
-  border-right: 2px solid var(--color-border-subtle);
-}
-html[data-screen-size=s] .framelix-mediabrowser-left-window {
-  display: none;
-}
-.framelix-mediabrowser-left-window .framelix-mediabrowser-tree-label {
-  display: flex;
-  width: 100%;
-  justify-content: flex-start;
-  margin-bottom: 2px;
-}
-.framelix-mediabrowser-left-window .framelix-mediabrowser-tree-label[data-active="1"] {
-  background: var(--color-button-warning-bg);
-  color: var(--color-button-warning-text);
-}
-
-.framelix-mediabrowser-tree-childs {
-  margin-left: 10px;
-}
-
-.framelix-mediabrowser-right-window {
-  flex: 1 1 auto;
-  padding-right: 10px;
-  display: flex;
-  flex-direction: column;
-}
-
-.framelix-mediabrowser-actions {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-.framelix-mediabrowser-actions > framelix-button {
-  flex: 1 1 auto;
-}
-.framelix-mediabrowser-actions > .framelix-form-field {
-  margin: 0;
-  padding: 0;
-  flex: 1 1 auto;
-}
-.framelix-mediabrowser-actions > .framelix-mediabrowser-view {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-html[data-screen-size=s] .framelix-mediabrowser-actions > .framelix-mediabrowser-view {
-  min-width: 100%;
-}
-.framelix-mediabrowser-actions > .framelix-mediabrowser-view framelix-icon {
-  font-size: 24px;
-}
-
-.framelix-mediabrowser-scrollbody {
-  flex: 1 1 auto;
-  display: flex;
-  overflow: hidden;
-  overflow-y: auto;
-}
-
-.framelix-mediabrowser-files {
-  flex: 1 1 auto;
-  gap: 10px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  align-content: flex-start;
-  flex-wrap: wrap;
-}
-
-.framelix-mediabrowser-files-table {
-  flex: 1 1 auto;
-}
-.framelix-mediabrowser-files-table tr {
-  cursor: pointer;
-}
-.framelix-mediabrowser-files-table td[data-column-name=thumbnail] {
-  min-width: 50px;
-  max-width: 50px;
-  min-height: 20px;
-  background-repeat: no-repeat;
-  background-color: var(--color-page-bg-stencil-strong);
-  background-size: contain;
-  background-position: center;
-}
-
-.framelix-mediabrowser-thumbnail {
-  flex: 1 1 auto;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: var(--color-page-bg-stencil-strong);
-  width: 100%;
-  min-height: 20px;
-}
-
-.framelix-mediabrowser-selected-thumbnails {
-  margin-top: 10px;
-}
-.framelix-mediabrowser-selected-thumbnails .framelix-mediabrowser-thumbnail {
-  margin-right: 5px;
-  margin-bottom: 5px;
-  float: left;
-  min-width: 50px;
-  min-height: 50px;
-  max-width: 50px;
-  max-height: 50px;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  text-align: center;
-}
-.framelix-mediabrowser-selected-thumbnails .framelix-mediabrowser-thumbnail-more {
-  font-size: 90%;
-  text-align: center;
-  background: none;
-}
-
-.framelix-mediabrowser-edit-sort {
-  display: flex;
-  margin-bottom: 2px;
-  cursor: move;
-  gap: 10px;
-  align-items: center;
-}
-.framelix-mediabrowser-edit-sort:hover {
-  background: var(--color-page-bg-stencil);
-}
-.framelix-mediabrowser-edit-sort .framelix-mediabrowser-thumbnail {
-  min-width: 90px;
-  min-height: 90px;
-  max-width: 90px;
-  max-height: 90px;
-}
-.framelix-mediabrowser-edit-sort .framelix-form-field-input {
-  max-width: 60px;
-}
-
-.framelix-mediabrowser-entry {
-  text-align: center;
-  width: calc(100% * 1 / var(--entries-per-row) - 10px);
-  max-width: 100%;
-  border-radius: var(--border-radius);
-  background: var(--color-page-bg-stencil);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.framelix-mediabrowser-entry .framelix-mediabrowser-thumbnail {
-  aspect-ratio: 16/9;
-}
-.framelix-mediabrowser-entry .framelix-mediabrowser-label {
-  padding: 8px;
-  font-size: 90%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.framelix-mediabrowser-entry .framelix-mediabrowser-entry-actions {
-  display: flex;
-  gap: 5px;
-  background: var(--color-button-default-bg);
-  color: var(--color-button-default-text);
-  align-items: center;
-}
-.framelix-mediabrowser-entry .framelix-mediabrowser-entry-actions framelix-button {
-  flex: 1 1 auto;
-  margin: 0;
-}
-.framelix-mediabrowser-entry:hover {
-  background: var(--color-page-bg-stencil-strong);
 }
 
 .framelix-form-field-search .framelix-form-field-search-input {
@@ -653,7 +454,7 @@ html[data-color-scheme=dark] .framelix-form-field-time ::-webkit-calendar-picker
   border: 0;
   background: var(--color-input-background);
   border-radius: var(--border-radius);
-  border: var(--color-input-border);
+  border: var(--input-border);
   box-sizing: border-box;
   width: 100%;
   color: var(--color-input-text);
@@ -772,7 +573,7 @@ input[type=checkbox]:checked:after {
 
 @media print {
   :root {
-    --color-input-border: 1px solid #000000 !important;
+    --input-border: 1px solid #000000 !important;
     --color-input-background: white !important;
   }
 }

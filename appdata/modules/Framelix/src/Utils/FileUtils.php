@@ -2,8 +2,11 @@
 
 namespace Framelix\Framelix\Utils;
 
+use Throwable;
+
 use function array_merge;
 use function dirname;
+use function file_put_contents;
 use function is_dir;
 use function preg_match;
 use function realpath;
@@ -13,6 +16,7 @@ use function str_replace;
 use function strlen;
 use function substr;
 use function unlink;
+use function usleep;
 
 use const SCANDIR_SORT_ASCENDING;
 
@@ -21,6 +25,31 @@ use const SCANDIR_SORT_ASCENDING;
  */
 class FileUtils
 {
+    /**
+     * Write given contents to a file path
+     * Advantage over file_put_contents is, that it will retry when file is blocked for some reason
+     * @param string $path
+     * @param string $contents
+     * @param int $retries
+     */
+    public static function writeToFile(string $path, string $contents, int $retries = 3): void
+    {
+        $retry = 1;
+        $error = null;
+        while ($retry++ <= $retries) {
+            try {
+                file_put_contents($path, $contents);
+                clearstatcache();
+                return;
+            } catch (Throwable $e) {
+                $error = $e;
+                // wait 10ms
+                usleep(1000 * 10);
+            }
+        }
+        throw $error;
+    }
+
     /**
      * Get a filepath to the userdata directory, doesn't matter if the file exist
      * @param string|null $filePath The relative filepath starting from the dedicated userdata folder

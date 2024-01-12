@@ -9,7 +9,7 @@
     gap: 5px;
   }
 
-  .dragging & {
+  .dragging-files & {
     border: 0;
     background: hsla(var(--color-success-hue), 50%, 50%, 0.2);
     box-shadow: hsl(var(--color-success-hue), 50%, 50%) 0 0 10px;

@@ -245,55 +245,6 @@
     "__framelix_logout__": [
         "Logout"
     ],
-    "__framelix_mediabrowser_createfolder__": [
-        "Create folder"
-    ],
-    "__framelix_mediabrowser_edit_selection_info__": [
-        "Sort selected files"
-    ],
-    "__framelix_mediabrowser_edit_selection_info_sort__": [
-        "Drag and drop the files to sort them or just change the sort number to fast move them"
-    ],
-    "__framelix_mediabrowser_filename__": [
-        "Filename"
-    ],
-    "__framelix_mediabrowser_foldername__": [
-        "Foldername"
-    ],
-    "__framelix_mediabrowser_noselection__": [
-        "No files selected"
-    ],
-    "__framelix_mediabrowser_open__": [
-        "Open Media Browser"
-    ],
-    "__framelix_mediabrowser_rename__": [
-        "Rename"
-    ],
-    "__framelix_mediabrowser_rootfolder__": [
-        "Root folder"
-    ],
-    "__framelix_mediabrowser_select__": [
-        "Select entry"
-    ],
-    "__framelix_mediabrowser_selection_more__": [
-        "And {0} more..."
-    ],
-    "__framelix_mediabrowser_selection_unset__": "Unset selected files",
-    "__framelix_mediabrowser_selectioninfo__": [
-        "Selection contains {0} files in {1} different folders"
-    ],
-    "__framelix_mediabrowser_selectioninfo_single__": [
-        "File {0} selected"
-    ],
-    "__framelix_mediabrowser_upload_done__": [
-        "File {0} successfully saved"
-    ],
-    "__framelix_mediabrowser_upload_extension_blocked__": [
-        "Upload skipped for file {0} because only following files types are allowed: {1}"
-    ],
-    "__framelix_mediabrowser_upload_failed__": [
-        "Upload failed for file {0}: {1}"
-    ],
     "__framelix_meta_searchandtable_entries__": [
         "Entries"
     ],
@@ -653,6 +604,9 @@
     "__framelix_user_role_dev__": [
         "Developer"
     ],
+    "__framelix_user_role_system__": [
+        "System"
+    ],
     "__framelix_view_backend_dev_langeditor__": [
         "Translation editor"
     ],
@@ -717,19 +671,19 @@
     "__framelix_view_backend_login__": [
         "Login"
     ],
-    "__framelix_view_backend_logs__": [
-        "Logs"
+    "__framelix_view_backend_system__": [
+        "System"
     ],
-    "__framelix_view_backend_logs_clear__": [
+    "__framelix_view_backend_system_logs_clear__": [
         "Delete all logs"
     ],
-    "__framelix_view_backend_logs_errorlogs__": [
+    "__framelix_view_backend_system_errorlogs__": [
         "Error logs"
     ],
-    "__framelix_view_backend_logs_nologs__": [
+    "__framelix_view_backend_system_logs_nologs__": [
         "Here are no logs"
     ],
-    "__framelix_view_backend_logs_systemeventlogs__": [
+    "__framelix_view_backend_system_systemeventlogs__": [
         "System event logs"
     ],
     "__framelix_view_backend_setup__": [

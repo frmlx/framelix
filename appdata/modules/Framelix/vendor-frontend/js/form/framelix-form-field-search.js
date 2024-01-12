@@ -50,7 +50,7 @@ class FramelixFormFieldSearch extends FramelixFormField {
    * @return {string[]|string|null}
    */
   getValue () {
-    const values = FormDataJson.toJson(this.field.find('.framelix-form-field-search-selected-options'), {
+    const values = FormDataJson.toJson(this.field.find('.framelix-form-field-search-selected-options')[0], {
       'includeDisabled': true,
       'flatList': true
     })

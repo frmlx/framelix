@@ -30,6 +30,8 @@ use function str_starts_with;
 use function strlen;
 use function unlink;
 
+use function var_dump;
+
 use const FRAMELIX_MODULE;
 use const STR_PAD_LEFT;
 
@@ -40,7 +42,7 @@ use const STR_PAD_LEFT;
  */
 class Console
 {
-    public const CONSOLE_SCRIPT = __DIR__ . "/../console.php";
+    public const CONSOLE_SCRIPT = "framelix_console";
 
     /**
      * Do not output anything when using ::error, ::warn, ::success, ::line
@@ -177,8 +179,9 @@ class Console
             $parameters = [];
         }
         array_unshift($parameters, $methodName);
+        array_unshift($parameters, "all");
         array_unshift($parameters, self::CONSOLE_SCRIPT);
-        $shell = Shell::prepare("php {*}", $parameters);
+        $shell = Shell::prepare("{*}", $parameters);
         $shell->execute();
         return $shell;
     }

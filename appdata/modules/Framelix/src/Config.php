@@ -314,16 +314,11 @@ class Config
 
         self::addAvailableUserRole('admin', '__framelix_user_role_admin__');
         self::addAvailableUserRole('dev', '__framelix_user_role_dev__');
+        self::addAvailableUserRole('system', '__framelix_user_role_system__');
         self::addAvailableUserRole('usermanagement', '__framelix_edituser_sidebar_title__');
 
-        $bundle = self::createCompilerFileBundle("Framelix", "js", "form");
-        $bundle->addFile('vendor-frontend/js/form/framelix-form.js');
-        $bundle->addFile('vendor-frontend/js/form/framelix-form-field.js');
-        $bundle->addFile('vendor-frontend/js/form/framelix-form-field-text.js');
-        $bundle->addFile('vendor-frontend/js/form/framelix-form-field-select.js');
-        $bundle->addFolder('vendor-frontend/js/form', true);
-
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-vendor-native");
+        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->compile = false;
         $bundle->addFile('node_modules/cash-dom/dist/cash.min.js');
         $bundle->addFile('vendor-frontend/cashjs/cash-improvements.js');
@@ -333,23 +328,29 @@ class Config
         $bundle->addFile('node_modules/@popperjs/core/dist/umd/popper.min.js');
         $bundle->addFile('node_modules/swiped-events/dist/swiped-events.min.js');
 
+        $bundle = self::createCompilerFileBundle("Framelix", "js", "form");
+        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->addFile('vendor-frontend/js/form/framelix-form.js');
+        $bundle->addFile('vendor-frontend/js/form/framelix-form-field.js');
+        $bundle->addFile('vendor-frontend/js/form/framelix-form-field-text.js');
+        $bundle->addFile('vendor-frontend/js/form/framelix-form-field-select.js');
+        $bundle->addFolder('vendor-frontend/js/form', true);
+
         $bundle = self::createCompilerFileBundle("Framelix", "js", "sortablejs");
         $bundle->compile = false;
-        $bundle->pageAutoInclude = false;
         $bundle->addFile('node_modules/sortablejs/Sortable.min.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "qrcodejs");
         $bundle->compile = false;
-        $bundle->pageAutoInclude = false;
         $bundle->addFolder('vendor-frontend/qrcodejs', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-early");
-        $bundle->pageAutoInclude = false;
         $bundle->addFile('vendor-frontend/js/framelix-local-storage.js');
         $bundle->addFile('vendor-frontend/js/framelix-session-storage.js');
         $bundle->addFile('vendor-frontend/js/framelix-device-detection.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general");
+        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->addFolder('vendor-frontend/js', false, [
             "framelix-table-sort-serviceworker.js",
             "framelix-device-detection.js",
@@ -359,23 +360,24 @@ class Config
         $bundle->addFile('custom-elements/framelix-custom-element.js');
         $bundle->addFolder('custom-elements', true);
 
-        $bundle = self::createCompilerFileBundle("Framelix", "js", "table-sorter");
-        $bundle->pageAutoInclude = false;
+        $bundle = self::createCompilerFileBundle("Framelix", "js", "table-sorter-serviceworker");
         $bundle->addFile('vendor-frontend/js/framelix-table-sort-serviceworker.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "backend");
-        $bundle->pageAutoInclude = false;
+        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->addFolder('vendor-frontend/js/backend', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "general");
+        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->addFolder('vendor-frontend/scss/general', false);
         $bundle->addFolder('custom-elements', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "form");
+        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->addFolder('vendor-frontend/scss/form', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "backend");
-        $bundle->pageAutoInclude = false;
+        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->addFolder('vendor-frontend/scss/backend', true);
 
         // register the other module

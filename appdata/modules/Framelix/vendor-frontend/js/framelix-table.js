@@ -269,7 +269,7 @@ class FramelixTable {
 
     return new Promise(function (resolve) {
       if (!FramelixTable.sorterWorker) {
-        FramelixTable.sorterWorker = new Worker(FramelixConfig.compiledFileUrls['Framelix']['js']['table-sorter'])
+        FramelixTable.sorterWorker = new Worker(FramelixConfig.compiledFileUrls['Framelix']['js']['table-sorter-serviceworker'])
       }
       FramelixTable.sorterWorker.onmessage = async function (e) {
         if (self.rows.tbody) {

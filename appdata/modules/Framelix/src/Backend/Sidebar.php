@@ -188,9 +188,9 @@ abstract class Sidebar
         }
         $this->showHtmlForLinkData(true, 501);
 
-        $this->startGroup("__framelix_view_backend_logs__", "788");
-        $this->addLink(View\Backend\Logs\ErrorLogs::class);
-        $this->addLink(View\Backend\Logs\SystemEventLogs::class);
+        $this->startGroup("__framelix_view_backend_system__", "788");
+        $this->addLink(View\Backend\System\ErrorLogs::class);
+        $this->addLink(View\Backend\System\SystemEventLogs::class);
         $this->showHtmlForLinkData(order: 503);
 
         $this->startGroup("__framelix_developer_options__", "74f");

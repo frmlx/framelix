@@ -48,14 +48,17 @@ class Framelix {
     // listen for global drag/drop
     $(document).on('dragstart dragover', function (ev) {
       html.toggleClass('dragging', true)
+      html.toggleClass('dragging-files', ev.dataTransfer.types.indexOf('Files') > -1)
       clearTimeout(dragTimeout)
       dragTimeout = setTimeout(function () {
         html.toggleClass('dragging', false)
+        html.toggleClass('dragging-files', false)
       }, 1000)
     })
     $(document).on('drop dragend', function () {
       clearTimeout(dragTimeout)
       html.toggleClass('dragging', false)
+      html.toggleClass('dragging-files', false)
     })
     // listen for space trigger click
     $(document).on('keydown', '.framelix-space-click', function (ev) {

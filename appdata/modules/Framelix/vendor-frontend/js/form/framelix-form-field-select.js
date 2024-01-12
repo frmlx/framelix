@@ -134,7 +134,7 @@ class FramelixFormFieldSelect extends FramelixFormField {
    * @return {string[]|string|null}
    */
   getValue () {
-    const values = FormDataJson.toJson(this.optionsContainer, {
+    const values = FormDataJson.toJson(this.optionsContainer[0], {
       'includeDisabled': true,
       'flatList': true
     })

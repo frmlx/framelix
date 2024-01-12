@@ -3,7 +3,7 @@
 (function () {
   const htmlOriginal = $.fn.html
   $.fn.html = function (param) {
-    if (param instanceof HTMLElement || param instanceof $ || typeof param === 'string' && (param.includes('<script') || param.startsWith('<'))) {
+    if (param instanceof HTMLElement || param instanceof $ || typeof param === 'string' && (param.startsWith('<') || param.includes('<script'))) {
       return this.empty().append(param)
     }
     if(typeof param === 'undefined' || param === null){

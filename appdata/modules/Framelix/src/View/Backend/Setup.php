@@ -101,6 +101,7 @@ class Setup extends View
                 $user->setPassword(Request::getPost('password'));
                 $user->store();
                 $user->addRole("admin");
+                $user->addRole("system");
                 if (Config::$devMode) {
                     $user->addRole("dev");
                 }

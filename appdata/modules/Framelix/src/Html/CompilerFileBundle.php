@@ -7,17 +7,19 @@ use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
 use JetBrains\PhpStorm\ExpectedValues;
 
+use function array_values;
 use function file_exists;
+use function is_file;
 
 class CompilerFileBundle
 {
 
     /**
-     * Automatically include into views
-     * If false you need to add it by hand with $view->includeCompiledFile()
-     * @var bool
+     * Automatically include into backend views that inherit from given view class
+     * If null you need to add it by hand with HtmlUtils::getIncludeTagForBundle
+     * @var string|null
      */
-    public bool $pageAutoInclude = true;
+    public ?string $includeInBackendView = null;
 
     /**
      * Compile the bundle with babel/sass
@@ -54,7 +56,7 @@ class CompilerFileBundle
     public function getGeneratedBundleUrl(): Url
     {
         $file = $this->getGeneratedBundleFilePath();
-        if (!file_exists($file)) {
+        if (!is_file($file)) {
             throw new FatalError("DistFile $file not exist");
         }
         return Url::getUrlToPublicFile($file);
@@ -88,5 +90,53 @@ class CompilerFileBundle
             "type" => "file",
             "path" => $relativeFilePath
         ];
+    }
+
+    /**
+     * Get array of all real files that needed to compile into the bundle
+     * @return array
+     */
+    public function getFiles(): array
+    {
+        $files = [];
+        foreach ($this->entries as $row) {
+            if ($this->type === 'scss') {
+                $bootstrapFile = FileUtils::getModuleRootPath($this->module) . "/vendor-frontend/scss/_compiler-bootstrap.scss";
+                if (is_file($bootstrapFile)) {
+                    $files[] = $bootstrapFile;
+                }
+            }
+            if ($row['type'] === 'file') {
+                $files[] = FileUtils::getModuleRootPath($this->module) . "/" . $row['path'];
+            } elseif ($row['type'] === 'folder') {
+                $path = FileUtils::getModuleRootPath($this->module) . "/" . $row['path'];
+                $extensions = $this->type === 'js' ? 'js' : "(css|scss)";
+                $folderFiles = FileUtils::getFiles(
+                    $path,
+                    "~\.$extensions$~",
+                    $row['recursive'] ?? false
+                );
+                if (isset($row['ignoreFilenames'])) {
+                    foreach ($folderFiles as $key => $file) {
+                        if (in_array(basename($file), $row['ignoreFilenames'])) {
+                            unset($folderFiles[$key]);
+                        }
+                    }
+                }
+                $files = array_merge(
+                    $files,
+                    $folderFiles
+                );
+            }
+        }
+        // remove dupes
+        $compileFiles = [];
+        foreach ($files as $file) {
+            $file = realpath($file);
+            if ($file && !isset($compileFiles[$file])) {
+                $compileFiles[$file] = $file;
+            }
+        }
+        return array_values($compileFiles);
     }
 }

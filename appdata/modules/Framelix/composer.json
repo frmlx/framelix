@@ -1,11 +1,11 @@
 {
     "require": {
-        "robthree/twofactorauth": "^2.0",
-        "lbuchs/webauthn": "^1.1",
+        "robthree/twofactorauth": "^2.1",
+        "lbuchs/webauthn": "^2.1",
         "mpdf/qrcode": "^1.2",
-        "phpoffice/phpspreadsheet": "^1.28",
-        "mpdf/mpdf": "^8.1",
-        "phpmailer/phpmailer": "^6.8",
-        "brainfoolong/cryptojs-aes-php": "^2.1"
+        "phpoffice/phpspreadsheet": "^1.29",
+        "mpdf/mpdf": "^8.2",
+        "phpmailer/phpmailer": "^6.9",
+        "brainfoolong/cryptojs-aes-php": "^2.3"
     }
 }

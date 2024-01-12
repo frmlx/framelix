@@ -11,6 +11,8 @@ use Framelix\Framelix\Network\UploadedFile;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\HtmlUtils;
+use Framelix\Framelix\Utils\ImageUtils;
+use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\Framelix\View;
 
@@ -18,22 +20,18 @@ use function ceil;
 use function clearstatcache;
 use function copy;
 use function dirname;
-use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function filesize;
 use function in_array;
 use function is_dir;
+use function is_file;
 use function is_string;
 use function mkdir;
-use function strlen;
 use function strrpos;
 use function strtolower;
 use function substr;
 use function unlink;
-
-use const FRAMELIX_MODULE;
-use const FRAMELIX_USERDATA_FOLDER;
 
 /**
  * A storable file to store on disk
@@ -67,6 +65,7 @@ class StorableFile extends StorableExtended
 
     /**
      * All available thumb sizes
+     * Can be override in child class
      * @var int[]
      */
     public array $thumbSizes = [
@@ -77,6 +76,12 @@ class StorableFile extends StorableExtended
         2000,
         3000
     ];
+
+    /**
+     * Cached metadata
+     * @var array|null
+     */
+    private ?array $metadata = null;
 
     /**
      * Max files in a single subfolder
@@ -93,23 +98,21 @@ class StorableFile extends StorableExtended
      */
     protected array $keepFileExtensions = ['jpg', 'jpeg', 'gif', 'png', 'apng', 'svg', 'webp', 'mp4', 'webm'];
 
+    /**
+     * Get the absolute path to the userdata folder where the files for this storable should be stored
+     * @param bool $public Use public folder, instead of private
+     * @return string
+     */
+    public static function getUserdataFolderPath(bool $public = false): string
+    {
+        return FileUtils::getUserdataFilepath("storablefile", $public);
+    }
+
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
         parent::setupStorableSchema($selfStorableSchema);
         $selfStorableSchema->properties['filesize']->databaseType = 'bigint';
         $selfStorableSchema->properties['filesize']->unsigned = true;
-    }
-
-    /**
-     * Set default relative path
-     * @param bool $public
-     * @param string $module
-     * @return void
-     */
-    public function setDefaultRelativePath(bool $public, string $module = FRAMELIX_MODULE): void
-    {
-        $folder = FileUtils::getUserdataFilepath("storablefile", $public, $module);
-        $this->relativePathOnDisk = substr($folder, strlen(FRAMELIX_USERDATA_FOLDER . "/"));
     }
 
     public function isVideo(): bool
@@ -125,26 +128,6 @@ class StorableFile extends StorableExtended
     public function isImage(): bool
     {
         return in_array($this->extension, self::IMAGE_EXTENSIONS);
-    }
-
-    public function getMediaBrowserThumbnailHtml(): string
-    {
-        $str = '<div class="framelix-mediabrowser-thumbnail"
-                                     style="background-image: url(' . Url::getUrlToPublicFile(
-                __DIR__ . "/../../public/img/mediabrowser_file.svg"
-            ) . ')"></div>';
-        if ($this->isImage()) {
-            $str = '<div class="framelix-mediabrowser-thumbnail">' . $this->getImageTag(
-                    false,
-                    setParent: true
-                ) . '</div>';
-        } elseif ($this->isVideo()) {
-            $str = '<div class="framelix-mediabrowser-thumbnail"
-                                     style="background-image: url(' . Url::getUrlToPublicFile(
-                    __DIR__ . "/../../public/img/mediabrowser_video.svg"
-                ) . ')"></div>';
-        }
-        return $str;
     }
 
     /**
@@ -230,7 +213,7 @@ class StorableFile extends StorableExtended
         $url = Url::getUrlToPublicFile($file, $antiCacheParameter);
         if ($thumbSize && $this->isThumbnailable()) {
             $thumbPath = $this->getThumbPath($thumbSize);
-            if (file_exists($thumbPath)) {
+            if ($thumbPath && is_file($thumbPath)) {
                 return Url::getUrlToPublicFile($thumbPath, $antiCacheParameter);
             }
             $url = View::getUrl(
@@ -247,14 +230,18 @@ class StorableFile extends StorableExtended
 
     /**
      * Get thumbnail path
+     * It is not guarenteed that this file exist on disk when the path is returned
      * @param int $thumbSize
-     * @return string
+     * @return string|null Does return null when file is not saved in database
      */
-    public function getThumbPath(int $thumbSize): string
+    public function getThumbPath(int $thumbSize): ?string
     {
-        $file = $this->getPath();
-        $basename = basename($file);
-        return dirname($file) . "/t-" . $thumbSize . "-" . $basename;
+        if (!$this->id && !$this->relativePathOnDisk) {
+            return null;
+        }
+        $path = $this::getUserdataFolderPath() . "/" . $this->relativePathOnDisk;
+        $basename = basename($path);
+        return dirname($path) . "/t-" . $thumbSize . "-" . $basename;
     }
 
 
@@ -265,24 +252,97 @@ class StorableFile extends StorableExtended
      */
     public function getPath(bool $fileCheck = true): ?string
     {
-        $path = FRAMELIX_USERDATA_FOLDER . "/" . $this->relativePathOnDisk;
-        if ($fileCheck && !file_exists($path)) {
+        if (!$this->relativePathOnDisk) {
+            return null;
+        }
+        $path = $this::getUserdataFolderPath() . "/" . $this->relativePathOnDisk;
+        if ($fileCheck && !is_file($path)) {
             return null;
         }
         return $path;
     }
 
     /**
-     * Get filedata
+     * Get file contents as string
      * @return string|null
      */
-    public function getFiledata(): ?string
+    public function getFileContents(): ?string
     {
         $path = $this->getPath();
         if ($path) {
             return file_get_contents($path);
         }
         return null;
+    }
+
+    /**
+     * Get metadata to given file and create metadata file if not yet exist
+     * @return array{image:array{width:int, height: int}}|null
+     */
+    public function getMetadata(): ?array
+    {
+        if ($this->metadata !== null) {
+            return $this->metadata;
+        }
+        $metaFile = $this->getPath() . ".meta.json";
+        if (!is_file($metaFile)) {
+            $this->createMetadataFile();
+        }
+        $this->metadata = JsonUtils::readFromFile($metaFile);
+        return $this->metadata;
+    }
+
+    /**
+     * Return the image size for this file, if it is an image for what we can calculate size
+     * @param int|null $thumbnailSize If set, return calculated size for the thumbnail of this length
+     * @return array{width:int, height: int}|null
+     */
+    public function getImageSize(?int $thumbnailSize = null): ?array
+    {
+        if (!$this->isThumbnailable()) {
+            return null;
+        }
+        $imageSize = $this->getMetadata()['image'] ?? null;
+        if (!$imageSize) {
+            return null;
+        }
+        if ($thumbnailSize) {
+            $width = $imageSize['width'];
+            $height = $imageSize['height'];
+            if ($width > $height) {
+                $thumbnailWidth = $thumbnailSize;
+                $thumbnailHeight = ceil($height / $width * $thumbnailSize);
+            } elseif ($width < $height) {
+                $thumbnailHeight = $thumbnailSize;
+                $thumbnailWidth = ceil($width / $height * $thumbnailSize);
+            } else {
+                $thumbnailWidth = $thumbnailSize;
+                $thumbnailHeight = $thumbnailSize;
+            }
+            return ['width' => $thumbnailWidth, 'height' => $thumbnailHeight];
+        }
+        return $imageSize;
+    }
+
+    public function createMetadataFile(): void
+    {
+        $metaFile = $this->getPath(false) . ".meta.json";
+        $this->metadata = [];
+        $path = $this->getPath();
+        if ($path && $this->isImage()) {
+            $imageData = ImageUtils::getImageData($path);
+            if ($imageData) {
+                $width = $imageData['width'];
+                $height = $imageData['height'];
+                $this->metadata = [
+                    "image" => [
+                        "width" => $width,
+                        "height" => $height
+                    ]
+                ];
+            }
+        }
+        JsonUtils::writeToFile($metaFile, $this->metadata);
     }
 
     public function getRawTextString(): string
@@ -322,7 +382,7 @@ class StorableFile extends StorableExtended
                 "Storable #" . $this . " (" . $this->getRawTextString() . ") is not editable"
             );
         }
-        if ($file instanceof UploadedFile && !file_exists($file->path)) {
+        if ($file instanceof UploadedFile && !is_file($file->path)) {
             throw new FatalError(
                 "Couldn't store StorableFile because uploaded file does not exist"
             );
@@ -337,11 +397,6 @@ class StorableFile extends StorableExtended
         }
         if (!$this->filename) {
             throw new FatalError("You need to set a filename");
-        }
-        if (!$this->relativePathOnDisk) {
-            throw new FatalError(
-                "You need to set a relativePathOnDisk to a folder starting from /framelix/userdata/"
-            );
         }
         $lastPoint = strrpos($this->filename, ".");
         $this->filename = substr($this->filename, -190);
@@ -361,20 +416,19 @@ class StorableFile extends StorableExtended
                 $fileNr = $lastFile->fileNr + 1;
             }
             $extensionOnDisk = (in_array($this->extension, $this->keepFileExtensions) ? $this->extension : 'txt');
-            $folderName = ceil($fileNr / $this->maxFilesPerFolder) * $this->maxFilesPerFolder;
-            $originFolder = $this->relativePathOnDisk;
+            $folderNameCounter = ceil($fileNr / 1000) * 1000;
             while (true) {
-                $this->relativePathOnDisk = $originFolder . "/" . $folderName . "/" . RandomGenerator::getRandomString(
-                        30,
-                        40
-                    ) . "." . $extensionOnDisk;
+                $this->relativePathOnDisk =
+                    $folderNameCounter .
+                    "/" . RandomGenerator::getRandomString(30, 40) .
+                    "." . $extensionOnDisk;
                 // file not exist, break the loop
                 if (!$this->getPath()) {
                     break;
                 }
             }
 
-            $folder = dirname(FRAMELIX_USERDATA_FOLDER . "/" . $this->relativePathOnDisk);
+            $folder = dirname($this->getPath(false));
             if (!is_dir($folder)) {
                 mkdir($folder, recursive: true);
                 clearstatcache();
@@ -388,13 +442,16 @@ class StorableFile extends StorableExtended
                 throw new FatalError("Couldn't copy file to destination folder");
                 // @codeCoverageIgnoreEnd
             }
-            if (!$copy && file_exists($file->path)) {
+            if (!$copy && is_file($file->path)) {
                 unlink($file->path);
             }
             $this->filesize = $file->size;
         } elseif (is_string($file)) {
             file_put_contents($path, $file);
             $this->filesize = filesize($path);
+        }
+        if ($file) {
+            $this->createMetadataFile();
         }
         parent::store($force);
         if (!$isNew) {
@@ -405,10 +462,14 @@ class StorableFile extends StorableExtended
     public function delete(bool $force = false): void
     {
         $path = $this->getPath();
+        $metaFile = $this->getPath(false) . ".meta.json";
         parent::delete($force);
         $this->deleteThumbnailFiles();
         if ($path) {
             unlink($path);
+        }
+        if (is_file($metaFile)) {
+            unlink($metaFile);
         }
     }
 
@@ -416,7 +477,7 @@ class StorableFile extends StorableExtended
     {
         foreach ($this->thumbSizes as $thumbSize) {
             $thumbPath = $this->getThumbPath($thumbSize);
-            if (file_exists($thumbPath)) {
+            if ($thumbPath && is_file($thumbPath)) {
                 unlink($thumbPath);
             }
         }

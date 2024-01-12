@@ -10,6 +10,7 @@ use Framelix\Framelix\View;
 use function file_exists;
 use function filesize;
 use function in_array;
+use function is_file;
 use function unlink;
 
 /**
@@ -25,7 +26,7 @@ class StorableFileThumbnail extends View
     {
         $thumbSize = (int)$this->customUrlParameters['thumbSize'];
         $file = StorableFile::getById((int)$this->customUrlParameters['id'], withChilds: true);
-        if (!$file || !file_exists($file->getPath()) || !$file->isThumbnailable() || !in_array(
+        if (!$file || !is_file($file->getPath()) || !$file->isThumbnailable() || !in_array(
                 $thumbSize,
                 $file->thumbSizes
             )) {

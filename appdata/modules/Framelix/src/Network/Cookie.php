@@ -40,7 +40,7 @@ class Cookie
         if ($encrypted) {
             $value = CryptoJsAes::decrypt(base64_decode($value), CryptoUtils::hash($name));
         } else {
-            // simply ignoring any json parse errors as this value can be modified by a user
+            // simply ignoring any json parse errors as this value can be modified by the user
             try {
                 $value = JsonUtils::decode(base64_decode($value));
             } catch (Throwable $e) {

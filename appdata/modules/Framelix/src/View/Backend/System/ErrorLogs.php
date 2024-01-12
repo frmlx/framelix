@@ -1,6 +1,6 @@
 <?php
 
-namespace Framelix\Framelix\View\Backend\Logs;
+namespace Framelix\Framelix\View\Backend\System;
 
 use Framelix\Framelix\ErrorHandler;
 use Framelix\Framelix\Html\Toast;
@@ -17,7 +17,7 @@ use const SCANDIR_SORT_DESCENDING;
 
 class ErrorLogs extends View
 {
-    protected string|bool $accessRole = "admin";
+    protected string|bool $accessRole = "system";
 
     public function onRequest(): void
     {
@@ -40,12 +40,12 @@ class ErrorLogs extends View
         );
         if (!$files) {
             ?>
-            <framelix-alert>__framelix_view_backend_logs_nologs__</framelix-alert>
+            <framelix-alert>__framelix_view_backend_system_logs_nologs__</framelix-alert>
             <?php
             return;
         }
         ?>
-        <framelix-button href="<?= Url::create()->setParameter('clear', 1) ?>">__framelix_view_backend_logs_clear__
+        <framelix-button href="<?= Url::create()->setParameter('clear', 1) ?>">__framelix_view_backend_system_logs_clear__
         </framelix-button>
         <div class="framelix-spacer"></div>
         <?php

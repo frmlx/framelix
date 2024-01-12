@@ -1,47 +1,17 @@
 # [4.0.0 - TBA]
 
-⚠️ **BREAKING CHANGE** ⚠️: A lot have changed. Combined 3 repositories (tests, core, docker) to one, called `framelix`. This make
-maintenance, further development and end-user usage a lot easier. The way you must setup your docker installation have
-changed. However, a working installation of v3.x can be upgraded with a some effort.
+⚠️ **BREAKING CHANGE, but should be no problem** ⚠️: A lot have changed from 3 to 4. Combined 3 repositories (tests, core, docker) to one and refactored basically everything. As v3 was never really public stable, this should be no problem for you.
 
-### 🎯 Framelix core (backend/frontend) changes
 
-⚠️ **BREAKING CHANGE** ⚠️: All changes marked with ⚠️ are breaking changes. Database handling have also changed quite a
-lot.
-Generally, v3 is not compatible with v4 out of the box. The MariaDB service has been stripped out of the docker image.
-You have to use an other docker image for the DB Engine, which give more flexibility in the end.
-Also, previously, a default DB connection to the DB 'app' was added to the initializer.
-So the `default` database connection also not exist anymore. 
-Now you have to set it yourself.
-Also removed support for arrays in `@property` annotiations for Storables because of performance and unflexible behaviour.
+# [4.0.0-alpha.15 - TBA]
 
-Generally, as v3 wasn't really public used or available, this should not be considered a problem for any of you new users.
-
-* ➕ added property to force screen size and color scheme for layout view
-* ➕ added `$hiddenView` property to `View` to allow view to be hidden from public access
-* ➕ added `Editor` field (tinymce)
-* ➕ added `Sqlite` database connection, scheme builder and general availability
-* 🛠️ fixed minor layout glitch in small size mode
-* 🛠️ fixed many tests and core code that failed because of now better error detection of new PhpUnit
-* ✏️ ⚠️ renamed `Time` functions `timeStringToHours->toHours, timeStringToSeconds->toSeconds` and make conversion more
-  lazy (accepting more types of values)
-* ✏️ ⚠️ changed database handling as described above
-* ✏️ ⚠️ changed database handling to abstract SQL and make place for other types like sqlite
-* ✏️ changed to hidden sidebar by default for some small views (Login, ForgotPassword, etc..)
-* ✏️ changed many internals of how app is set up (reduced checks, more streamlined, easier maintenance)
-* ✏️ changed some vendor libraries to package.json and composer instead of manual installation
-* ✏️ changed backend layout to be more flexible
-* ✏️ a lot of minor code changes and cleanups
-* ❌ removed old unsupported setup vars
-* ❌ removed `Config::$appSetupDone`
-* ❌ ⚠️ removed support for arrays in `@property` annotations for Storables because of performance issues when searching
-  over it. Better use a separate `Storable` to hold the array data.
-* ️⬆️ upgraded PhpUnit to v10, PhpStan, Playwright, and various other integrated vendor libs
-* ️⬆️ upgraded several other frontend libraries (cashjs, sortablejs, popperjs, etc...)
-
-### 🐳 Docker container changes
-
-* ✏️ basically a complete new docker image with a lot of optimization compared to v3
+* refactored `Compiler and Bundler`
+* refactored `StorableFile` and added more features for images to it
+* added custom `Session` handling
+* removed deprecated `MediaBrowser` field
+* upgraded vendor libs
+* upgraded PHP to 8.3.1
+* many minor fixes and improvements
 
 # [3.1.1 - 2023-02-13]
 

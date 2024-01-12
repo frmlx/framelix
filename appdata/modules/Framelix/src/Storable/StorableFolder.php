@@ -2,7 +2,6 @@
 
 namespace Framelix\Framelix\Storable;
 
-use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
 
 /**
@@ -12,14 +11,6 @@ use Framelix\Framelix\Utils\ArrayUtils;
  */
 class StorableFolder extends StorableExtended
 {
-    public function getMediaBrowserThumbnailHtml(): string
-    {
-        return '<div class="framelix-mediabrowser-thumbnail"
-                                     style="background-image: url(' . Url::getUrlToPublicFile(
-                __DIR__ . "/../../public/img/mediabrowser_folder.svg"
-            ) . ')"></div>';
-    }
-
     /**
      * Get all childs, including folders
      * @param bool $recursive

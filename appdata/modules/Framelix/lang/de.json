@@ -327,74 +327,6 @@
         "Ausloggen",
         "0323d"
     ],
-    "__framelix_mediabrowser_createfolder__": [
-        "Ordner erstellen",
-        "5dc1e"
-    ],
-    "__framelix_mediabrowser_edit_selection_info__": [
-        "Gew\u00e4hlten Dateien sortieren",
-        "c790b"
-    ],
-    "__framelix_mediabrowser_edit_selection_info_sort__": [
-        "Drag and Drop die Dateien um sie zu sortieren. Oder \u00e4ndern Sie einfach die Sortierungsnummer um schnell an einen bestimmten Platz zu sortieren.",
-        "9b0c4"
-    ],
-    "__framelix_mediabrowser_filename__": [
-        "Dateiname",
-        "13510"
-    ],
-    "__framelix_mediabrowser_foldername__": [
-        "Ordnername",
-        "94429"
-    ],
-    "__framelix_mediabrowser_noselection__": [
-        "Keine Dateien gew\u00e4hlt",
-        "0d3c3"
-    ],
-    "__framelix_mediabrowser_open__": [
-        "Medienbrowser \u00f6ffnen",
-        "0fdaf"
-    ],
-    "__framelix_mediabrowser_rename__": [
-        "Umbenennen",
-        "904a8"
-    ],
-    "__framelix_mediabrowser_rootfolder__": [
-        "Basisordner",
-        "2a23c"
-    ],
-    "__framelix_mediabrowser_select__": [
-        "Eintrag w\u00e4hlen",
-        "30277"
-    ],
-    "__framelix_mediabrowser_selection_more__": [
-        "Und {0} mehr...",
-        "47a3a"
-    ],
-    "__framelix_mediabrowser_selection_unset__": [
-        "Selektion aufheben",
-        "72299"
-    ],
-    "__framelix_mediabrowser_selectioninfo__": [
-        "Selektion enth\u00e4lt {0} Dateien in {1} verschiedenen Ordnern",
-        "2ae90"
-    ],
-    "__framelix_mediabrowser_selectioninfo_single__": [
-        "Datei {0} gew\u00e4hlt",
-        "3a799"
-    ],
-    "__framelix_mediabrowser_upload_done__": [
-        "Datei {0} erfolgreich gespeichert",
-        "52a75"
-    ],
-    "__framelix_mediabrowser_upload_extension_blocked__": [
-        "Upload \u00fcbersprungen f\u00fcr die Datei {0} weil nur folgende Dateitypen erlaubt sind: {1}",
-        "54638"
-    ],
-    "__framelix_mediabrowser_upload_failed__": [
-        "Upload fehlgeschlagen f\u00fcr Datei {0}: {1}",
-        "f9cd9"
-    ],
     "__framelix_meta_searchandtable_entries__": [
         "Eintr\u00e4ge",
         "bc14b"
@@ -967,23 +899,23 @@
         "Login",
         "99dea"
     ],
-    "__framelix_view_backend_logs__": [
-        "Logs",
+    "__framelix_view_backend_system__": [
+        "System",
         "b2d37"
     ],
-    "__framelix_view_backend_logs_clear__": [
+    "__framelix_view_backend_system_logs_clear__": [
         "L\u00f6sche alle Logs",
         "a7dbf"
     ],
-    "__framelix_view_backend_logs_errorlogs__": [
+    "__framelix_view_backend_system_errorlogs__": [
         "Error Logs",
         "2749d"
     ],
-    "__framelix_view_backend_logs_nologs__": [
+    "__framelix_view_backend_system_logs_nologs__": [
         "Hier gibt es jetzt keine Logs",
         "932b0"
     ],
-    "__framelix_view_backend_logs_systemeventlogs__": [
+    "__framelix_view_backend_system_systemeventlogs__": [
         "Event Logs",
         "9e436"
     ],

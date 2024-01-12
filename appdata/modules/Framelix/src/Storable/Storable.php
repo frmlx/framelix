@@ -461,19 +461,24 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
 
     /**
      * Delete multiple storables
-     * @param self[]|null $storables
+     * @param self[]|self|null $storables
+     * @param bool $force Force deletion even if isDeletable() is false
      */
-    final public static function deleteMultiple(?array $storables): void
+    final public static function deleteMultiple(mixed $storables, bool $force = false): void
     {
+        if ($storables instanceof Storable) {
+            $storables->delete($force);
+            return;
+        }
         if (!is_array($storables)) {
             return;
         }
         foreach ($storables as $storable) {
             // skip everything that is no proper storable
-            if (!($storable->id) || !($storable instanceof Storable)) {
+            if (!($storable instanceof Storable) || !$storable->id) {
                 continue;
             }
-            $storable->delete();
+            $storable->delete($force);
         }
     }
 

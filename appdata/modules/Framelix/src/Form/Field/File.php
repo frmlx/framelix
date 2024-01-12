@@ -10,6 +10,7 @@ use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableFile;
 
 use function is_array;
+use function reset;
 
 /**
  * A file upload field
@@ -73,6 +74,17 @@ class File extends Field
             return null;
         }
         $uploadedFiles = UploadedFile::createFromSubmitData($this->name);
+
+        // in case we directly edit a StorableFile in a form we need to handle it different
+        if ($storable instanceof StorableFile) {
+            $uploadedFile = $uploadedFiles ? reset($uploadedFiles) : null;
+            $storable->store(file: $uploadedFile);
+            return [
+                'created' => $uploadedFile ? 1 : 0,
+                'deleted' => 0
+            ];
+        }
+
         $schemeProperty = $this->storableFileBase::getStorableSchemaProperty($storable, $this->name);
         // uploads
         $createdFiles = [];

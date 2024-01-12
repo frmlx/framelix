@@ -2,7 +2,7 @@
 
 namespace Framelix\Framelix\Html;
 
-use Framelix\Framelix\Network\Cookie;
+use Framelix\Framelix\Network\Session;
 
 /**
  * Toast messages to display in the layout
@@ -98,9 +98,9 @@ class Toast
      */
     public static function getQueueMessages(bool $flushQueue): array
     {
-        $messages = Cookie::get('framelix-toast-messages');
-        if ($flushQueue) {
-            Cookie::set('framelix-toast-messages', null);
+        $messages = Session::get('framelix-toast-messages');
+        if ($flushQueue && $messages) {
+            Session::set('framelix-toast-messages', null);
         }
         return $messages ?: [];
     }
@@ -128,13 +128,13 @@ class Toast
      */
     private static function addMessage(string $message, float|string $delaySeconds, string $type): void
     {
-        $messages = Cookie::get('framelix-toast-messages');
+        $messages = Session::get('framelix-toast-messages');
         if (!$messages) {
             $messages = [];
         }
         $row = ['message' => $message, 'type' => $type, 'delay' => $delaySeconds];
         $messages[] = $row;
         self::$messages[] = $row;
-        Cookie::set('framelix-toast-messages', $messages);
+        Session::set('framelix-toast-messages', $messages);
     }
 }

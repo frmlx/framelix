@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|1636509748",
+    "directoryListHash": "3|254081651",
     "views": {
         "Framelix\\Framelix\\View\\Api": {
             "accessRole": "*",
@@ -81,26 +81,6 @@
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/logout"
         },
-        "Framelix\\Framelix\\View\\Backend\\Logs\\ErrorLogs": {
-            "accessRole": "admin",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/logs\/errorlogs"
-        },
-        "Framelix\\Framelix\\View\\Backend\\Logs\\SystemEventLogs": {
-            "accessRole": "admin",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/logs\/systemeventlogs"
-        },
         "Framelix\\Framelix\\View\\Backend\\Setup": {
             "accessRole": "*",
             "customUrl": "~.*~",
@@ -110,6 +90,26 @@
             "hiddenView": true,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/setup"
+        },
+        "Framelix\\Framelix\\View\\Backend\\System\\ErrorLogs": {
+            "accessRole": "system",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/backend\/system\/errorlogs"
+        },
+        "Framelix\\Framelix\\View\\Backend\\System\\SystemEventLogs": {
+            "accessRole": "system",
+            "customUrl": null,
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/backend\/system\/systemeventlogs"
         },
         "Framelix\\Framelix\\View\\Backend\\SystemValue": {
             "accessRole": true,

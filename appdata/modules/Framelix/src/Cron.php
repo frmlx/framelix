@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix;
 
+use Framelix\Framelix\Network\Session;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Utils\Mutex;
@@ -15,6 +16,8 @@ class Cron extends Console
         }
         if (!Mutex::isLocked('framelix-hourly-half-day', 43200)) {
             Mutex::create('framelix-hourly-half-day');
+            // delete old sessions
+            Session::cleanup();
             // delete old logs
             foreach (Config::$enabledBuiltInSystemEventLogsKeepDays as $category => $days) {
                 $days = (int)$days;

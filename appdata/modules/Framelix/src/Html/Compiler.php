@@ -5,19 +5,19 @@ namespace Framelix\Framelix\Html;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Framelix;
+use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\Shell;
 
 use function array_combine;
-use function array_values;
 use function base64_encode;
 use function basename;
-use function file_exists;
+use function file_get_contents;
 use function filemtime;
 use function implode;
-use function in_array;
-use function realpath;
+use function is_file;
+use function md5;
 use function unlink;
 
 class Compiler
@@ -37,12 +37,16 @@ class Compiler
      */
     public static function compile(string $module, bool $forceUpdate = false): ?array
     {
+        // already compiled, skip
+        if (isset(self::$cache['compiled-' . $module])) {
+            return null;
+        }
         // no compile in production or missing module
         if (!Config::$devMode || !isset(Framelix::$registeredModules[$module])) {
             return null;
         }
-        // already compiled, skip
-        if (isset(self::$cache['compiled-' . $module])) {
+        // no compile in an async request
+        if (Request::isAsync()) {
             return null;
         }
         self::$cache['compiled-' . $module] = true;
@@ -60,59 +64,22 @@ class Compiler
         $moduleRoot = FileUtils::getModuleRootPath($module);
         $existingDistFiles = FileUtils::getFiles("$moduleRoot/public/dist", "~\.(js|css)$~", true);
         $existingDistFiles = array_combine($existingDistFiles, $existingDistFiles);
-        $metaFilePath = "$moduleRoot/public/dist/_meta.json";
-        $compilerFileBundlesJson = JsonUtils::decode(JsonUtils::encode($compilerFileBundles));
-        $metadataChanged = false;
-        if (!file_exists($metaFilePath) || JsonUtils::readFromFile($metaFilePath) !== $compilerFileBundlesJson) {
-            $forceUpdate = true;
-            $metadataChanged = true;
-        }
         $returnDistFiles = [];
         foreach ($compilerFileBundles as $bundle) {
-            $files = [];
-            if ($bundle->type === 'scss') {
-                $bootstrapFile = $moduleRoot . "/vendor-frontend/scss/_compiler-bootstrap.scss";
-                if (file_exists($bootstrapFile)) {
-                    $files[] = $bootstrapFile;
-                }
-            }
+            $compileFiles = $bundle->getFiles();
             $distFilePath = $bundle->getGeneratedBundleFilePath();
-            foreach ($bundle->entries as $row) {
-                if ($row['type'] === 'file') {
-                    $files[] = FileUtils::getModuleRootPath($module) . "/" . $row['path'];
-                } elseif ($row['type'] === 'folder') {
-                    $path = FileUtils::getModuleRootPath($module) . "/" . $row['path'];
-                    $extensions = $bundle->type === 'js' ? 'js' : "(css|scss)";
-                    $folderFiles = FileUtils::getFiles(
-                        $path,
-                        "~\.$extensions$~",
-                        $row['recursive'] ?? false
-                    );
-                    if (isset($row['ignoreFilenames'])) {
-                        foreach ($folderFiles as $key => $file) {
-                            if (in_array(basename($file), $row['ignoreFilenames'])) {
-                                unset($folderFiles[$key]);
-                            }
-                        }
-                    }
-                    $files = array_merge(
-                        $files,
-                        $folderFiles
-                    );
-                }
+            $metaFilePath = $distFilePath . ".hash.txt";
+            $metadataWrite = md5(JsonUtils::encode([
+                'bundle' => $bundle,
+                'compileFiles' => $compileFiles
+            ]));
+            if (!is_file($metaFilePath) || file_get_contents($metaFilePath) !== $metadataWrite) {
+                $forceUpdate = true;
             }
-            // remove dupes
-            $compileFiles = [];
-            foreach ($files as $file) {
-                $file = realpath($file);
-                if (!isset($compileFiles[$file])) {
-                    $compileFiles[$file] = $file;
-                }
-            }
-            $compileFiles = array_values($compileFiles);
+
             // check if there need to be an update based on filetimes
             $compilerRequired = true;
-            if (!$forceUpdate && file_exists($distFilePath)) {
+            if (!$forceUpdate && is_file($distFilePath)) {
                 $compilerRequired = false;
                 $distFileTimestamp = filemtime($distFilePath);
                 foreach ($compileFiles as $file) {
@@ -124,7 +91,7 @@ class Compiler
             }
             unset($existingDistFiles[$distFilePath]);
             // skip if no files exist
-            if (!$files) {
+            if (!$compileFiles) {
                 continue;
             }
             // skip if we are already up-to-date
@@ -153,15 +120,12 @@ class Compiler
             }
             $returnDistFiles[] = $distFilePath;
             touch($distFilePath);
+            FileUtils::writeToFile($metaFilePath, $metadataWrite);
             Toast::success(basename($distFilePath) . " compiled successfully");
         }
         // delete old files
         foreach ($existingDistFiles as $existingDistFile) {
             unlink($existingDistFile);
-        }
-        if ($metadataChanged) {
-            // write compiler data to meta file
-            JsonUtils::writeToFile($metaFilePath, $compilerFileBundlesJson);
         }
         return $returnDistFiles;
     }
