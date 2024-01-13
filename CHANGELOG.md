@@ -3,7 +3,7 @@
 ⚠️ **BREAKING CHANGE, but should be no problem** ⚠️: A lot have changed from 3 to 4. Combined 3 repositories (tests, core, docker) to one and refactored basically everything. As v3 was never really public stable, this should be no problem for you.
 
 
-# [4.0.0-alpha.15 - TBA]
+# [4.0.0-alpha.15 - 2023-10-13]
 
 * refactored `Compiler and Bundler`
 * refactored `StorableFile` and added more features for images to it
