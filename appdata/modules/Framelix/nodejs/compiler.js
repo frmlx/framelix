@@ -17,8 +17,11 @@ for (let i = 0; i < cmdParams.files.length; i++) {
     // remove use strict from seperate files because it's added at the top
     fileData = fileData.replace(/^'use strict'|^\"use strict\"/im, '')
     // add semicolons as they will be sometimes required when they are missing the source
+    fileData = ';' + fileData + ';\n\n'
+  } else {
+    fileData += '\n'
   }
-  fileDataCombined += ';' + fileData + ';\n\n'
+  fileDataCombined += fileData
 }
 
 if (cmdParams.options.compile) {

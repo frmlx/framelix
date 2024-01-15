@@ -24,6 +24,7 @@ class Config
         \Framelix\Framelix\Config::$backendLogoFilePath = __DIR__ . "/../public/images/logo.jpg";
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "docs");
+        $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
         $bundle->addFile("vendor-frontend/scss/docs.scss");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "landing");
@@ -31,16 +32,16 @@ class Config
         $bundle->addFile("../Framelix/vendor-frontend/scss/general/icon-font.scss");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "vendor");
-        $bundle->includeInBackendView = View::class;
+        $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
         $bundle->compile = false;
         $bundle->addFile("vendor-frontend/highlightjs/github-dark.css");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "js", "docs");
-        $bundle->includeInBackendView = View::class;
+        $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
         $bundle->addFile("vendor-frontend/js/docs.js");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "js", "vendor");
-        $bundle->includeInBackendView = View::class;
+        $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
         $bundle->compile = false;
         $bundle->addFile("vendor-frontend/highlightjs/highlight.min.js");
         $bundle->addFile("vendor-frontend/highlightjs/highlightjs-line-numbers.min.js");
