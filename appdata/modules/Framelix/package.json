@@ -6,7 +6,9 @@
     "@babel/preset-env": "^7.23.8",
     "@popperjs/core": "^2.11.8",
     "cash-dom": "^8.1.5",
+    "dayjs": "^1.11.10",
     "form-data-json-convert": "^2.2.1",
+    "qrcodejs": "^1.0.0",
     "sass": "^1.69.7",
     "sortablejs": "^1.15.1",
     "swiped-events": "^1.1.9"

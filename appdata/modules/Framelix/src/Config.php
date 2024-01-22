@@ -322,8 +322,10 @@ class Config
         $bundle->compile = false;
         $bundle->addFile('node_modules/cash-dom/dist/cash.min.js');
         $bundle->addFile('js/cashjs/cash-improvements.js');
-        $bundle->addFile('vendor/dayjs/dayjs.min.js');
-        $bundle->addFolder('vendor/dayjs', true);
+        $bundle->addFile('node_modules/dayjs/dayjs.min.js');
+        $bundle->addFile('node_modules/dayjs/plugin/customParseFormat.js');
+        $bundle->addFile('node_modules/dayjs/plugin/isoWeek.js');
+        $bundle->addFile('node_modules/dayjs/plugin/utc.js');
         $bundle->addFile('node_modules/form-data-json-convert/dist/form-data-json.min.js');
         $bundle->addFile('node_modules/@popperjs/core/dist/umd/popper.min.js');
         $bundle->addFile('node_modules/swiped-events/dist/swiped-events.min.js');
@@ -342,6 +344,7 @@ class Config
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "qrcodejs");
         $bundle->compile = false;
+        $bundle->addFile('node_modules/qrcodejs/qrcode.min.js');
         $bundle->addFolder('vendor/qrcodejs', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-early");
