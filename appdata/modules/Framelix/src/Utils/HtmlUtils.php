@@ -7,9 +7,11 @@ use Framelix\Framelix\Html\CompilerFileBundle;
 use Framelix\Framelix\Html\HtmlAttributes;
 use Framelix\Framelix\Url;
 
+use function filesize;
 use function html_entity_decode;
 use function htmlentities;
 use function is_array;
+use function is_file;
 use function nl2br;
 use function str_ends_with;
 
@@ -52,11 +54,16 @@ class HtmlUtils
 
     /**
      * Get include tag for given compiler bundle
+     * Does return an empty string if bundle file not exist or is empty
      * @param CompilerFileBundle $bundle
      * @return string
      */
     public static function getIncludeTagForBundle(CompilerFileBundle $bundle): string
     {
+        $path = $bundle->getGeneratedBundleFilePath();
+        if (!is_file($path) || !filesize($path)) {
+            return '';
+        }
         return self::getIncludeTagForUrl($bundle->getGeneratedBundleUrl());
     }
 

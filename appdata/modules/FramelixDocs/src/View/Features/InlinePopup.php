@@ -77,14 +77,14 @@ class InlinePopup extends View
         </p>
         <?php
         $this->addSourceFile(
-            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/vendor-frontend/js/framelix-popup.js",
+            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/js/framelix-popup.js",
             'FramelixPopupShowOptions'
         );
         $this->showSourceFiles();
         ?>
         <p>
             The complete source including other functions can be found
-            at <?= $this->getSourceFileLinkTag(['Framelix/vendor-frontend/js/framelix-popup.js']) ?>
+            at <?= $this->getSourceFileLinkTag(['Framelix/js/framelix-popup.js']) ?>
         </p>
         <?php
     }

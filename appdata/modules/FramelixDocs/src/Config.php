@@ -25,26 +25,27 @@ class Config
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "docs");
         $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
-        $bundle->addFile("vendor-frontend/scss/docs.scss");
+        $bundle->addFile("scss/docs.scss");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "landing");
-        $bundle->addFile("vendor-frontend/scss/landing.scss");
-        $bundle->addFile("../Framelix/vendor-frontend/scss/general/icon-font.scss");
+        $bundle->addFile("scss/landing.scss");
+        $bundle->addFile("../Framelix/scss/general/icon-font.scss");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "scss", "vendor");
         $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
         $bundle->compile = false;
-        $bundle->addFile("vendor-frontend/highlightjs/github-dark.css");
+        $bundle->addFile("vendor/highlightjs/default.min.css");
+        $bundle->addFile("vendor/highlightjs/atom-one-dark-reasonable.min.css");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "js", "docs");
         $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
-        $bundle->addFile("vendor-frontend/js/docs.js");
+        $bundle->addFile("js/docs.js");
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDocs", "js", "vendor");
         $bundle->includeInBackendView = \Framelix\FramelixDocs\View\View::class;
         $bundle->compile = false;
-        $bundle->addFile("vendor-frontend/highlightjs/highlight.min.js");
-        $bundle->addFile("vendor-frontend/highlightjs/highlightjs-line-numbers.min.js");
+        $bundle->addFile("vendor/highlightjs/highlight.min.js");
+        $bundle->addFile("vendor/highlightjs/highlightjs-line-numbers.min.js");
     }
 
 }

@@ -8,7 +8,6 @@ use Framelix\Framelix\Utils\FileUtils;
 use JetBrains\PhpStorm\ExpectedValues;
 
 use function array_values;
-use function file_exists;
 use function is_file;
 
 class CompilerFileBundle
@@ -101,7 +100,7 @@ class CompilerFileBundle
         $files = [];
         foreach ($this->entries as $row) {
             if ($this->type === 'scss') {
-                $bootstrapFile = FileUtils::getModuleRootPath($this->module) . "/vendor-frontend/scss/_compiler-bootstrap.scss";
+                $bootstrapFile = FileUtils::getModuleRootPath($this->module) . "/scss/_compiler-bootstrap.scss";
                 if (is_file($bootstrapFile)) {
                     $files[] = $bootstrapFile;
                 }
@@ -129,12 +128,15 @@ class CompilerFileBundle
                 );
             }
         }
-        // remove dupes
+        // remove dupes and check for missing files
         $compileFiles = [];
         foreach ($files as $file) {
-            $file = realpath($file);
-            if ($file && !isset($compileFiles[$file])) {
-                $compileFiles[$file] = $file;
+            $realFile = realpath($file);
+            if (!$realFile) {
+                throw new FatalError('Cannot find file "' . $file . '" for compiler');
+            }
+            if (!isset($compileFiles[$realFile])) {
+                $compileFiles[$realFile] = $realFile;
             }
         }
         return array_values($compileFiles);

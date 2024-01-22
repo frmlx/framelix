@@ -811,6 +811,10 @@
         "Entwickler",
         "672ca"
     ],
+    "__framelix_user_role_system__": [
+        "System",
+        "a45da"
+    ],
     "__framelix_view_backend_dev_langeditor__": [
         "\u00dcbersetzungseditor",
         "3bc96"
@@ -899,17 +903,21 @@
         "Login",
         "99dea"
     ],
+    "__framelix_view_backend_setup__": [
+        "Set 'em up!",
+        "7180f"
+    ],
     "__framelix_view_backend_system__": [
         "System",
-        "b2d37"
-    ],
-    "__framelix_view_backend_system_logs_clear__": [
-        "L\u00f6sche alle Logs",
-        "a7dbf"
+        "a45da"
     ],
     "__framelix_view_backend_system_errorlogs__": [
         "Error Logs",
         "2749d"
+    ],
+    "__framelix_view_backend_system_logs_clear__": [
+        "L\u00f6sche alle Logs",
+        "a7dbf"
     ],
     "__framelix_view_backend_system_logs_nologs__": [
         "Hier gibt es jetzt keine Logs",
@@ -918,10 +926,6 @@
     "__framelix_view_backend_system_systemeventlogs__": [
         "Event Logs",
         "9e436"
-    ],
-    "__framelix_view_backend_setup__": [
-        "Set 'em up!",
-        "7180f"
     ],
     "__framelix_view_backend_user_basic__": [
         "Basisdaten",

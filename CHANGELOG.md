@@ -1,7 +1,7 @@
-# [4.0.0 - TBA]
 
-⚠️ **BREAKING CHANGE, but should be no problem** ⚠️: A lot have changed from 3 to 4. Combined 3 repositories (tests, core, docker) to one and refactored basically everything. As v3 was never really public stable, this should be no problem for you.
+# [4.0.0-alpha.17 - TBA]
 
+* restructured src folders for js/scss
 
 # [4.0.0-alpha.16 - 2023-10-15]
 

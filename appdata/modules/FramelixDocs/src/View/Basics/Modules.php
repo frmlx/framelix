@@ -79,7 +79,7 @@ class Modules extends View
                 <b>src</b> - A folder that contains all PHP source code for the module.
             </li>
             <li>
-                <b>vendor-frontend</b> - A folder that contains all source files for the frontend code (JS/SCSS). It is
+                <b>js/scss</b> - The folders that contains JS and CSS/SCSS files for the compiler. It is
                 not available directly in the browser, it is used as source for the SCSS/JS compilers.
             </li>
             <li><b>more folders</b> - You can add as many folders as you like. If you use composer for example, you will

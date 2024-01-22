@@ -36,10 +36,10 @@ class Config
         );
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDemo", "js", "framelixdemo");
-        $bundle->addFolder("vendor-frontend/js", true);
+        $bundle->addFolder("js", true);
 
         $bundle = \Framelix\Framelix\Config::createCompilerFileBundle("FramelixDemo", "scss", "framelixdemo");
-        $bundle->addFolder("vendor-frontend/scss", true);
+        $bundle->addFolder("scss", true);
     }
 
 

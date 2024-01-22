@@ -56,7 +56,7 @@ final class CompilerTest extends TestCase
         Compiler::$cache = [];
         $this->assertCount(0, Compiler::compile(FRAMELIX_MODULE));
         Compiler::$cache = [];
-        $jsFile = __DIR__ . "/../../vendor-frontend/js/framelix-unit-test-jstest.js";
+        $jsFile = __DIR__ . "/../../js/framelix-unit-test-jstest.js";
         // compiling invalid module does nothing
         $this->assertNull(Compiler::compile("FOO"));
         // injecting a dist file that not exist in config, will trigger delete of this file

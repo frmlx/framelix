@@ -133,7 +133,7 @@ class Forms extends View
         </p>
         <p>
             You can read out more features, fields, flags and functions directly from source folders in
-            <code>Framelix/vendor-frontend/js/form</code> and <code>Framelix/src/Html/Form</code>.
+            <code>Framelix/js/form</code> and <code>Framelix/src/Html/Form</code>.
         </p>
         <?php
 

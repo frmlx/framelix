@@ -15,6 +15,7 @@ use function base64_encode;
 use function basename;
 use function file_get_contents;
 use function filemtime;
+use function filesize;
 use function implode;
 use function is_file;
 use function md5;
@@ -79,7 +80,9 @@ class Compiler
 
             // check if there need to be an update based on filetimes
             $compilerRequired = true;
-            if (!$forceUpdate && is_file($distFilePath)) {
+            if (!$compileFiles) {
+                $compilerRequired = is_file($distFilePath) && filesize($distFilePath);
+            } elseif (!$forceUpdate && is_file($distFilePath)) {
                 $compilerRequired = false;
                 $distFileTimestamp = filemtime($distFilePath);
                 foreach ($compileFiles as $file) {
@@ -90,10 +93,6 @@ class Compiler
                 }
             }
             unset($existingDistFiles[$distFilePath]);
-            // skip if no files exist
-            if (!$compileFiles) {
-                continue;
-            }
             // skip if we are already up-to-date
             if (!$compilerRequired && !$forceUpdate) {
                 continue;
