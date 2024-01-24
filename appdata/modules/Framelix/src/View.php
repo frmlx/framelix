@@ -6,6 +6,7 @@ use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Html\PhpToJsData;
 use Framelix\Framelix\Network\Request;
+use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\Buffer;
@@ -279,6 +280,8 @@ abstract class View implements JsonSerializable
         if ($tabId = Request::getHeader('HTTP_X_TAB_ID')) {
             self::$activeView->tabId = $tabId;
         }
+        // do not allow any normal html content to be cached in browser
+        Response::header('Cache-Control: no-store');
         $accessRole = self::replaceAccessRoleParameters($view->accessRole, $url);
         if (!User::hasRole($accessRole)) {
             self::$activeView->showAccessDenied();

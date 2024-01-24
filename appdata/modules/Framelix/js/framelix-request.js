@@ -77,7 +77,7 @@ class FramelixRequest {
       instance.submitRequest = new XMLHttpRequest()
       instance.submitRequest.open(method.toUpperCase(), urlPath, true, fetchOptions.username || null, fetchOptions.password || null)
       instance.submitRequest.setRequestHeader('x-requested-with', 'xmlhttprequest')
-      instance.submitRequest.setRequestHeader('Cache-Control', 'no-cache')
+      instance.submitRequest.setRequestHeader('Cache-Control', 'no-store')
       instance.submitRequest.setRequestHeader('x-browser-url', window.location.href)
       if (typeof body === 'string') {
         instance.submitRequest.setRequestHeader('content-type', 'application/json')

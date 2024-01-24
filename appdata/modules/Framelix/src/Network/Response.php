@@ -77,7 +77,7 @@ class Response
             ) . '"'
         );
         self::header('Expires: 0');
-        self::header('Cache-Control: must-revalidate');
+        self::header('Cache-Control: no-store');
         self::header('Pragma: public');
         if ($isFile) {
             readfile($fileOrData);
