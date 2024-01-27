@@ -130,8 +130,7 @@ class StorableSchema
             if ($typeIsArray) {
                 throw new FatalError(
                     'Array\'s are not supported in @property at ' . $reflectionClass->getName(
-                    ) . ' annotations of Storables. Consider using a separate storable and add a reference property in that new storable. For example the ' . User::class . ' and ' . UserRole::class
-                );
+                    ) . ' annotations of Storables. Consider using StorableArray instead.');
             }
             if (!in_array($type, ["bool", "int", "float", "double", "string", "mixed"])) {
                 $possibleClassNames[] = $namespace . "\\" . $type;
@@ -215,12 +214,6 @@ class StorableSchema
                 if ($type === 'mixed') {
                     // mixed is considered to be json of any length, so use a big data type that can hold lots of data
                     $storableSchemaProperty->databaseType = 'longtext';
-                }
-                if ($type === 'array') {
-                    // typed arrays have a special meaning and later become an extra table in the database
-                    // but the column itself hold just an integer of number of entries in the array
-                    $storableSchemaProperty->databaseType = 'int';
-                    $storableSchemaProperty->length = 11;
                 }
             }
             if (!$storableSchemaProperty->databaseType) {

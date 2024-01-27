@@ -5,7 +5,6 @@ namespace Framelix\Framelix\Utils;
 use Throwable;
 
 use function file_exists;
-use function file_get_contents;
 use function file_put_contents;
 use function filemtime;
 use function sleep;
@@ -18,10 +17,12 @@ use function unlink;
  */
 class Mutex
 {
+
     /**
      * Create a mutex for given name
      * If mutex with this name already exist, it does update the mutex start time
-     * @param string $name The name is in the namespace of the FRAMELIX_MODULE, so each module can have the same name without an interferance
+     * @param string $name The name is in the namespace of the FRAMELIX_MODULE, so each module can have the same name
+     *     without an interferance
      */
     public static function create(string $name): void
     {
@@ -41,9 +42,11 @@ class Mutex
     /**
      * Check if a mutex with given name exist
      * @param string $name
-     * @param int|null $maxLifetime Seconds from start of mutex - If set, it will return true when mutex is older than max lifetime
-     *  Should be used when you not want a deadlock if a job cant release a mutex because of errors and mutex is never released
-     * @return int 0 = not locked, -1 = inifinite locked (not maxlifetime given), > 0 Seconds how long the mutex is still locked
+     * @param int|null $maxLifetime Seconds from start of mutex - If set, it will return true when mutex is older than
+     *     max lifetime Should be used when you not want a deadlock if a job cant release a mutex because of errors and
+     *     mutex is never released
+     * @return int 0 = not locked, -1 = inifinite locked (not maxlifetime given), > 0 Seconds how long the mutex is
+     *     still locked
      */
     public static function isLocked(string $name, ?int $maxLifetime = null): int
     {
@@ -70,4 +73,5 @@ class Mutex
             unlink($file);
         }
     }
+
 }

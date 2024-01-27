@@ -319,7 +319,7 @@ class StorableFile extends StorableExtended
                 $thumbnailWidth = $thumbnailSize;
                 $thumbnailHeight = $thumbnailSize;
             }
-            return ['width' => $thumbnailWidth, 'height' => $thumbnailHeight];
+            return ['width' => (int)$thumbnailWidth, 'height' => (int)$thumbnailHeight];
         }
         return $imageSize;
     }

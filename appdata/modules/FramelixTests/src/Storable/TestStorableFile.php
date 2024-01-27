@@ -20,10 +20,9 @@ class TestStorableFile extends StorableFile
         $selfStorableSchema->connectionId = "test";
     }
 
-    public function __construct()
+    public static function getUserdataFolderPath(bool $public = false): string
     {
-        parent::__construct();
-        $this->relativePathOnDisk = "tmp/storablefiletest";
+        return parent::getUserdataFolderPath(true);
     }
 
     /**

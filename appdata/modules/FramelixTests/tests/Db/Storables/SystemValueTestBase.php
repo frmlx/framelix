@@ -7,6 +7,7 @@ use Framelix\FramelixTests\TestCaseDbTypes;
 
 abstract class SystemValueTestBase extends TestCaseDbTypes
 {
+
     public function test(): void
     {
         $this->setupDatabase(true);
@@ -48,6 +49,15 @@ abstract class SystemValueTestBase extends TestCaseDbTypes
             TestStorableSystemValue::getEntries()
         );
 
+        $this->assertSame(
+            [],
+            TestStorableSystemValue::getEntries(additionalCondition: "0")
+        );
+
         $this->assertStorableDefaultGetters($storable3);
+
+        $meta = new \Framelix\Framelix\StorableMeta\SystemValue($storable3);
+        TestStorableSystemValue::setupStorableMeta($meta);
     }
+
 }

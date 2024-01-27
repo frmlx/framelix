@@ -2,24 +2,24 @@
 
 namespace Db\Storables;
 
+use Framelix\Framelix\Html\TableCell;
 use Framelix\Framelix\Network\UploadedFile;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\Storable\TestStorableFile;
 use Framelix\FramelixTests\TestCaseDbTypes;
 
-use function mkdir;
-
 abstract class StorableFileTestBase extends TestCaseDbTypes
 {
+
     public function test(): void
     {
-        $storableFile = new TestStorableFile();
-        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
-        mkdir(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk, recursive: true);
-
+        FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("storablefile", true));
         $this->setupDatabase();
         $this->addSimulatedFile("test.txt", "foobar", false);
+
+        $uploadedPdfFile = UploadedFile::createFromFile(__DIR__ . "/../../../test-files/imageutils/test-pdf.pdf");
+        $uploadedImageFile = UploadedFile::createFromFile(__DIR__ . "/../../../test-files/imageutils/test-image.jpg");
 
         // simulate not existing file
         $this->assertExceptionOnCall(function () {
@@ -41,54 +41,55 @@ abstract class StorableFileTestBase extends TestCaseDbTypes
             $storableFile->store(false, "foobar");
         });
 
-        $storableFile = new TestStorableFile();
-        $storableFile->filename = "test.txt";
-        $storableFile->store(false, "test");
+        $storableFilePdf = new TestStorableFile();
+        $storableFilePdf->store(false, $uploadedPdfFile, true);
 
-        $storableFile2 = new TestStorableFile();
-        $storableFile2->filename = "test.txt";
-        $storableFile2->store(false, "test");
+        $storableFilePdf2 = new TestStorableFile();
+        $storableFilePdf2->store(false, $uploadedPdfFile, true);
 
-        $storableFile3 = new TestStorableFile();
-        $storableFile3->filename = "test.jpg";
-        $storableFile3->store(false, "test");
+        $storableFileImg = new TestStorableFile();
+        $storableFileImg->store(false, $uploadedImageFile, true);
         $this->assertStringContainsString(
             '<framelix-image',
-            $storableFile3->getImageTag(true, true, 1000, 1200, true, true)
+            $storableFileImg->getImageTag(true, true, 1000, 1200, true, true)
         );
 
+        $this->assertInstanceOf(Url::class, $storableFilePdf->getDownloadUrl());
+        $this->assertIsString($storableFilePdf->getHtmlString());
+        $this->assertSame($uploadedPdfFile->getFileContents(), $storableFilePdf->getFileContents());
+        $this->assertSame($uploadedPdfFile->getFileContents(), $storableFilePdf2->getFileContents());
 
-        $this->assertInstanceOf(Url::class, $storableFile->getDownloadUrl());
-        $this->assertIsString($storableFile->getHtmlString());
-        $this->assertSame('test', $storableFile->getFileContents());
-        $this->assertSame('test', $storableFile2->getFileContents());
-        $storableFile->delete();
-        $storableFile2->delete();
-        $this->assertNull($storableFile2->getDownloadUrl());
+        $this->assertIsArray($storableFilePdf->getMetadata());
+        $this->assertSame(['width' => 275, 'height' => 183], $storableFileImg->getImageSize());
+        $this->assertSame(['width' => 100, 'height' => 67], $storableFileImg->getImageSize(100));
+        $this->assertInstanceOf(TableCell::class, $storableFileImg->getHtmlTableValue());
+
+        $storableFilePdf->delete();
+        $storableFilePdf2->delete();
+        $this->assertNull($storableFilePdf2->getDownloadUrl());
         // deleted file return html string anyway
-        $this->assertIsString($storableFile->getHtmlString());
+        $this->assertIsString($storableFilePdf->getHtmlString());
 
         $this->addSimulatedFile("test.txt", "foobar", false);
         $uploadedFile = UploadedFile::createFromSubmitData("test.txt")[0];
-        $storableFile = new TestStorableFile();
-        $storableFile->store(false, $uploadedFile);
+        $storableFilePdf = new TestStorableFile();
+        $storableFilePdf->store(false, $uploadedFile);
 
         // restore to test update functionality
         $this->addSimulatedFile("test.txt", "foobar", false);
         $uploadedFile = UploadedFile::createFromSubmitData("test.txt")[0];
-        $storableFile->store(false, $uploadedFile);
-        $storableFile->store(false, "foobar2");
-        $this->assertSame('foobar2', $storableFile->getFileContents());
+        $storableFilePdf->store(false, $uploadedFile);
+        $storableFilePdf->store(false, "foobar2");
+        $this->assertSame('foobar2', $storableFilePdf->getFileContents());
 
         // only update metadata without file changes
-        $storableFile->filename = "foo";
-        $storableFile->store();
+        $storableFilePdf->filename = "foo";
+        $storableFilePdf->store();
 
-        $storableFile->delete();
+        $storableFilePdf->delete();
 
-        $this->assertNull($storableFile->getFileContents());
-
-        $storableFile = new TestStorableFile();
-        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
+        $this->assertNull($storableFilePdf->getFileContents());
+        FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("storablefile", true));
     }
+
 }
