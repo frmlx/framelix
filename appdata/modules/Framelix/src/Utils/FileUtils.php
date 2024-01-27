@@ -27,6 +27,12 @@ class FileUtils
 {
 
     /**
+     * Folders created with getTmpFolder
+     * @var array
+     */
+    private static array $tmpFolders = [];
+
+    /**
      * Write given contents to a file path
      * Advantage over file_put_contents is, that it will retry when file is blocked for some reason
      * @param string $path
@@ -49,6 +55,34 @@ class FileUtils
             }
         }
         throw $error;
+    }
+
+    /**
+     * Get a  path to a temporary folder in the userdatas space
+     * This directory is automatically deleted when the script ends
+     * @param string $module
+     * @param bool $deleteOnScriptEnd
+     * @return string
+     */
+    public static function getTmpFolder(string $module = FRAMELIX_MODULE, bool $deleteOnScriptEnd = true): string
+    {
+        do {
+            $path = self::getUserdataFilepath("tmp/" . RandomGenerator::getRandomString(20), false, $module, false);
+        } while (file_exists($path));
+        mkdir($path, 0777, true);
+        if ($deleteOnScriptEnd) {
+            if (!self::$tmpFolders) {
+                register_shutdown_function(function () {
+                    foreach (self::$tmpFolders as $folder) {
+                        if (is_dir($folder)) {
+                            self::deleteDirectory($folder);
+                        }
+                    }
+                });
+            }
+            self::$tmpFolders[] = $path;
+        }
+        return $path;
     }
 
     /**
@@ -155,7 +189,7 @@ class FileUtils
     }
 
     /**
-     * Delete array of given absolute file path
+     * Delete array of given absolute file paths
      * @param array $files Array of folders and files
      * @param bool $deleteDirectories If true and $files contains directory paths, delete the directory recursively
      * @return void
@@ -199,7 +233,9 @@ class FileUtils
                 unlink($path);
             }
         }
-        rmdir($directory);
+        if ($includeSelf) {
+            rmdir($directory);
+        }
     }
 
 }

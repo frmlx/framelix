@@ -7,6 +7,7 @@ use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\MPdfWrapper;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Utils\Buffer;
+use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\View\Backend\View;
 use JetBrains\PhpStorm\ExpectedValues;
 use Mpdf\Config\ConfigVariables;
@@ -63,12 +64,8 @@ class MPdfBase extends View
     ): void {
         $defaultConfig = (new ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
-        $tmpDir = FRAMELIX_USERDATA_FOLDER . '/tmp/mpdf';
-        if (!is_dir($tmpDir)) {
-            mkdir($tmpDir, recursive: true);
-        }
         $this->pdf = new MPdfWrapper([
-            'tempDir' => $tmpDir,
+            'tempDir' => FileUtils::getTmpFolder(),
             'fontDir' => array_merge($fontDirs, [
                 __DIR__ . "/../../vendor/mpdf/mpdf/data/font",
             ]),

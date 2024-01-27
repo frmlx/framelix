@@ -38,7 +38,7 @@ final class FileUtilsTest extends TestCase
             [
                 "fileutils-test/.gitignore",
                 "fileutils-test/test1",
-                "fileutils-test/test1.txt"
+                "fileutils-test/test1.txt",
             ],
             FileUtils::getFiles(__DIR__ . "/../../test-files/fileutils-test")
         );
@@ -52,7 +52,7 @@ final class FileUtilsTest extends TestCase
         );
         $this->assertFilelist(
             [
-                "fileutils-test/test1.txt"
+                "fileutils-test/test1.txt",
             ],
             FileUtils::getFiles(__DIR__ . "/../../test-files/fileutils-test", "~\.txt$~")
         );
@@ -96,6 +96,25 @@ final class FileUtilsTest extends TestCase
         $this->assertTrue(!is_dir($testFolder));
     }
 
+    public function testTmpFolder1(): void
+    {
+        FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("tmp", false, autoCreateFolder: false));
+        $folder = FileUtils::getTmpFolder();
+        file_put_contents($folder . "/test1.tmp", '1');
+        $this->assertCount(1, FileUtils::getFiles($folder));
+    }
+
+    /**
+     * @depends testTmpFolder1
+     */
+    public function testTmpFolder2(): void
+    {
+        $this->assertCount(
+            0,
+            FileUtils::getFiles(FileUtils::getUserdataFilepath("tmp", false, autoCreateFolder: false))
+        );
+    }
+
     /**
      * Assert a filelist to match exactly
      * @param string[] $expected
@@ -110,4 +129,5 @@ final class FileUtilsTest extends TestCase
         }
         $this->assertSame($expected, $actual);
     }
+
 }
