@@ -6,22 +6,17 @@ use Framelix\Framelix\Exception\StopExecution;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\FileUtils;
-use Framelix\FramelixTests\Storable\TestStorableFile;
 use Framelix\FramelixTests\TestCase;
 
 use function file_get_contents;
-use function file_put_contents;
 use function http_response_code;
 use function ob_get_level;
-use function unlink;
 
 final class ResponseTest extends TestCase
 {
 
     public function tests(): void
     {
-        FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("storablefile", true));
-
         Buffer::start();
         try {
             Response::download("@filecontent", "foo");
@@ -34,18 +29,14 @@ final class ResponseTest extends TestCase
         }, [], StopExecution::class);
         $this->assertSame(file_get_contents(__FILE__), Buffer::get());
 
-        $file = new TestStorableFile();
-        $file->relativePathOnDisk = "test.txt";
-        $filePath = $file->getPath(false);
+        $testFilePath = __DIR__ . "/../../test-files/imageutils/test-image.jpg";
 
         // not exist test
         Buffer::start();
-        $this->assertExceptionOnCall(function () use ($filePath) {
-            file_put_contents($filePath, "foobar");
-            Response::download($filePath);
+        $this->assertExceptionOnCall(function () use ($testFilePath) {
+            Response::download($testFilePath);
         }, [], StopExecution::class);
-        $this->assertSame("foobar", Buffer::get());
-        unlink($file->getPath());
+        $this->assertSame(file_get_contents($testFilePath), Buffer::get());
 
         // not exist test
         $this->assertExceptionOnCall(function () {
@@ -53,8 +44,8 @@ final class ResponseTest extends TestCase
         }, [], StopExecution::class);
 
         // not exist test
-        $this->assertExceptionOnCall(function () use ($file) {
-            Response::download($file);
+        $this->assertExceptionOnCall(function () {
+            Response::download("blub");
         }, [], StopExecution::class);
 
         // test form validation response
