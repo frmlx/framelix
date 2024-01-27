@@ -30,8 +30,6 @@ use function str_starts_with;
 use function strlen;
 use function unlink;
 
-use function var_dump;
-
 use const FRAMELIX_MODULE;
 use const STR_PAD_LEFT;
 

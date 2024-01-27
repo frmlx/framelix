@@ -159,7 +159,7 @@ class ColorUtils
     #[ArrayShape(["int", "int", "int"])]
     public static function hexToRgb(string $hex): array
     {
-        list($r, $g, $b) = sscanf($hex, "#%02x%02x%02x");
+        [$r, $g, $b] = sscanf($hex, "#%02x%02x%02x");
         return [(int)$r, (int)$g, (int)$b];
     }
 }

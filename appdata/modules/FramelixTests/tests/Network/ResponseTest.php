@@ -20,9 +20,7 @@ final class ResponseTest extends TestCase
 
     public function tests(): void
     {
-        $storableFile = new TestStorableFile();
-        FileUtils::deleteDirectory(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk);
-        mkdir(FRAMELIX_USERDATA_FOLDER . "/" . $storableFile->relativePathOnDisk, recursive: true);
+        FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("storablefile", true));
 
         Buffer::start();
         try {
@@ -32,8 +30,7 @@ final class ResponseTest extends TestCase
         }
         Buffer::start();
         $this->assertExceptionOnCall(function () {
-            Response::download(__FILE__, "foo", null, function () {
-            });
+            Response::download(__FILE__, "foo", null, function () {});
         }, [], StopExecution::class);
         $this->assertSame(file_get_contents(__FILE__), Buffer::get());
 
@@ -71,5 +68,7 @@ final class ResponseTest extends TestCase
         Buffer::$startBufferIndex = $oldIndex;
         $this->assertSame(200, http_response_code());
         $this->assertSame('{"toastMessages":[],"errorMessages":{"test":"Error"},"buffer":""}', Buffer::get());
+        FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("storablefile", true));
     }
+
 }

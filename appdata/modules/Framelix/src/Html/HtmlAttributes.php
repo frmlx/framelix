@@ -14,7 +14,6 @@ use function str_contains;
 use function str_replace;
 use function trim;
 
-
 class HtmlAttributes implements JsonSerializable
 {
     private ?array $styles = null;

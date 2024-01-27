@@ -9,11 +9,9 @@ use Framelix\Framelix\Html\CompilerFileBundle;
 use Framelix\Framelix\Storable\SystemEventLog;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\JsonUtils;
-use Framelix\Framelix\Utils\Shell;
 use JetBrains\PhpStorm\ExpectedValues;
 use SensitiveParameter;
 
-use function dirname;
 use function file_exists;
 use function set_time_limit;
 

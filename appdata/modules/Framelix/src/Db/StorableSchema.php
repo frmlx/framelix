@@ -3,8 +3,6 @@
 namespace Framelix\Framelix\Db;
 
 use Framelix\Framelix\Exception\FatalError;
-use Framelix\Framelix\Storable\User;
-use Framelix\Framelix\Storable\UserRole;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\Utils\PhpDocParser;

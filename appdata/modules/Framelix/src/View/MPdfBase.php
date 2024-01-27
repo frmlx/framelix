@@ -15,9 +15,6 @@ use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Mpdf\QrCode\QrCode;
 
-use function is_dir;
-use function mkdir;
-
 class MPdfBase extends View
 {
     /**

@@ -10,7 +10,6 @@ use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\QuickCast;
 use JetBrains\PhpStorm\ExpectedValues;
-use mysqli_result;
 
 use function implode;
 use function is_array;
