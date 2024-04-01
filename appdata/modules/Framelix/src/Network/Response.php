@@ -22,6 +22,7 @@ use function substr;
  */
 class Response
 {
+
     /**
      * Send http header, but only if it is possible (no headers are sent)
      * @param string $header
@@ -39,7 +40,8 @@ class Response
 
     /**
      * Initialize a file download for the browser
-     * @param string|StorableFile $fileOrData If starting with @, the parameter will be threaded as string rather than file
+     * @param string|StorableFile $fileOrData If starting with @, the parameter will be threaded as string rather than
+     *     file
      * @param string|null $filename
      * @param string|null $filetype
      * @param callable|null $afterDownload A hook after download before script execution stops
@@ -77,9 +79,9 @@ class Response
             ) . '"'
         );
         self::header('Expires: 0');
-        self::header('Cache-Control: no-store');
         self::header('Pragma: public');
         if ($isFile) {
+            self::header('Cache-Control: no-store');
             readfile($fileOrData);
         } else {
             echo $fileOrData;
@@ -101,8 +103,9 @@ class Response
         JsonUtils::output([
             'toastMessages' => Toast::getQueueMessages(true),
             'errorMessages' => $errorMessages,
-            'buffer' => Buffer::getAll()
+            'buffer' => Buffer::getAll(),
         ]);
         throw new StopExecution();
     }
+
 }
