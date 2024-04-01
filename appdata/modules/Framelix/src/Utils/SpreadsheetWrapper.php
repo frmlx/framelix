@@ -3,6 +3,7 @@
 namespace Framelix\Framelix\Utils;
 
 use Exception;
+use Framelix\Framelix\Network\Response;
 use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -21,11 +22,11 @@ use function utf8_decode;
 
 class SpreadsheetWrapper
 {
+
     /**
      * @var Spreadsheet|null
      */
     public ?Spreadsheet $spreadsheet = null;
-
 
     /**
      * Create a caritas excel instance from file
@@ -109,7 +110,8 @@ class SpreadsheetWrapper
      * Set multiple sheet values from multidimensional array
      * @param array[][][] $array
      * @param bool $autoFormat Apply automatic format for specific data types like date, numbers, strings, objects
-     * @param string|null $autoFilterRange Apply autofilter to the given cell range. eg: A1:*1 (asterisk = max column size of array)
+     * @param string|null $autoFilterRange Apply autofilter to the given cell range. eg: A1:*1 (asterisk = max column
+     *     size of array)
      * @return PhpSpreadsheet\Worksheet\Worksheet[]
      */
     public function setFromArrayMultiple(
@@ -138,7 +140,8 @@ class SpreadsheetWrapper
      * @param array[][] $array
      * @param PhpSpreadsheet\Worksheet\Worksheet|null $sheet
      * @param bool $autoFormat Apply automatic format for specific data types like date, numbers, strings, objects
-     * @param string|null $autoFilterRange Apply autofilter to the given cell range. eg: A1:*1 (asterisk = max column size of array)
+     * @param string|null $autoFilterRange Apply autofilter to the given cell range. eg: A1:*1 (asterisk = max column
+     *     size of array)
      * @return PhpSpreadsheet\Worksheet\Worksheet
      */
     public function setFromArray(
@@ -159,7 +162,7 @@ class SpreadsheetWrapper
             foreach ($firstRow as $key => $ignored) {
                 /** @var mixed $value */
                 $value = $row[$key] ?? null;
-                $cell = $sheet->getCellByColumnAndRow($cellNr, $rowNr);
+                $cell = $sheet->getCell([$cellNr, $rowNr]);
                 if ($autoFormat) {
                     if (is_array($value) || is_object($value) || is_bool($value)) {
                         $value = StringUtils::stringify($value);
@@ -200,12 +203,12 @@ class SpreadsheetWrapper
             );
             $start = PhpSpreadsheet\Cell\Coordinate::coordinateFromString($split[0]);
             $end = PhpSpreadsheet\Cell\Coordinate::coordinateFromString($split[1]);
-            $sheet->setAutoFilterByColumnAndRow(
+            $sheet->setAutoFilter([
                 PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($start[0]),
                 (int)$start[1],
                 PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($end[0]),
-                (int)$end[1]
-            );
+                (int)$end[1],
+            ]);
         }
         return $sheet;
     }
@@ -229,30 +232,22 @@ class SpreadsheetWrapper
     public function download(string $filename, bool $utf8Decoded = false): never
     {
         $writer = $this->getWriterByFilename($filename);
-        Buffer::clear();
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Content-Type: application/force-download");
-        header("Content-Type: application/octet-stream");
-        header("Content-Type: application/download");
-        header("Content-Transfer-Encoding: binary");
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
-        try {
-            if ($utf8Decoded) {
-                ob_start();
-                $writer->save("php://output");
-                $data = ob_get_contents();
-                ob_end_clean();
-                echo utf8_decode($data);
-            } else {
-                $writer->save("php://output");
+        Response::download(function () use ($writer, $utf8Decoded) {
+            try {
+                if ($utf8Decoded) {
+                    ob_start();
+                    $writer->save("php://output");
+                    $data = ob_get_contents();
+                    ob_end_clean();
+                    echo utf8_decode($data);
+                } else {
+                    $writer->save("php://output");
+                }
+            } catch (Throwable) {
+                header("Content-Type: text/plain");
+                header("Content-Transfer-Encoding: 8bit");
             }
-        } catch (Throwable) {
-            header("Content-Type: text/plain");
-            header("Content-Transfer-Encoding: 8bit");
-        }
-        die();
+        });
     }
 
     /**
@@ -278,4 +273,5 @@ class SpreadsheetWrapper
         }
         throw new Exception("Missing writer for $filename");
     }
+
 }

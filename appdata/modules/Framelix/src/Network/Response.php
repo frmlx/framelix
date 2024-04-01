@@ -40,19 +40,20 @@ class Response
 
     /**
      * Initialize a file download for the browser
-     * @param string|StorableFile $fileOrData If starting with @, the parameter will be threaded as string rather than
-     *     file
+     * @param string|StorableFile|callable $fileOrData If starting with @, the parameter will be threaded as string
+     *     rather than file
      * @param string|null $filename
      * @param string|null $filetype
      * @param callable|null $afterDownload A hook after download before script execution stops
      * @return never
      */
     public static function download(
-        string|StorableFile $fileOrData,
+        string|StorableFile|callable $fileOrData,
         ?string $filename = null,
         ?string $filetype = "application/octet-stream",
         ?callable $afterDownload = null
     ): never {
+        $isFile = false;
         if ($fileOrData instanceof StorableFile) {
             $filename = $filename ?? $fileOrData->filename;
             $isFile = true;
@@ -61,7 +62,7 @@ class Response
                 http_response_code(404);
                 throw new StopExecution();
             }
-        } else {
+        } elseif (is_string($fileOrData)) {
             $isFile = !str_starts_with($fileOrData, "@");
             if (!$isFile) {
                 $fileOrData = substr($fileOrData, 1);
@@ -83,6 +84,8 @@ class Response
         if ($isFile) {
             self::header('Cache-Control: no-store');
             readfile($fileOrData);
+        } elseif (is_callable($fileOrData)) {
+            call_user_func($fileOrData);
         } else {
             echo $fileOrData;
         }
