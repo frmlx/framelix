@@ -9,13 +9,11 @@ use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\JsonUtils;
 
 use function basename;
-use function call_user_func_array;
 use function file_exists;
 use function header;
 use function headers_sent;
 use function http_response_code;
 use function readfile;
-use function substr;
 
 /**
  * Response utilities for frequent tasks
@@ -40,8 +38,7 @@ class Response
 
     /**
      * Initialize a file download for the browser
-     * @param string|StorableFile|callable $fileOrData If starting with @, the parameter will be threaded as string
-     *     rather than file
+     * @param string|StorableFile|callable $fileOrData A string is considered a file
      * @param string|null $filename
      * @param string|null $filetype
      * @param callable|null $afterDownload A hook after download before script execution stops
@@ -53,44 +50,34 @@ class Response
         ?string $filetype = "application/octet-stream",
         ?callable $afterDownload = null
     ): never {
-        $isFile = false;
         if ($fileOrData instanceof StorableFile) {
             $filename = $filename ?? $fileOrData->filename;
-            $isFile = true;
             $fileOrData = $fileOrData->getPath();
-            if (!$fileOrData) {
+        }
+        if (is_string($fileOrData)) {
+            if (!file_exists($fileOrData)) {
                 http_response_code(404);
                 throw new StopExecution();
             }
-        } elseif (is_string($fileOrData)) {
-            $isFile = !str_starts_with($fileOrData, "@");
-            if (!$isFile) {
-                $fileOrData = substr($fileOrData, 1);
+            if (!$filename) {
+                $filename = basename($fileOrData);
             }
-        }
-        if ($isFile && !file_exists($fileOrData)) {
-            http_response_code(404);
-            throw new StopExecution();
         }
         self::header('Content-Description: File Transfer');
         self::header('Content-Type: ' . $filetype);
         self::header(
-            'Content-Disposition: attachment; filename="' . basename(
-                $isFile && !$filename ? basename($fileOrData) : $filename ?? "download.txt"
-            ) . '"'
+            'Content-Disposition: attachment; filename="' . ($filename ?? "download.txt") . '"'
         );
         self::header('Expires: 0');
         self::header('Pragma: public');
-        if ($isFile) {
+        if (is_string($fileOrData)) {
             self::header('Cache-Control: no-store');
             readfile($fileOrData);
         } elseif (is_callable($fileOrData)) {
             call_user_func($fileOrData);
-        } else {
-            echo $fileOrData;
         }
         if ($afterDownload) {
-            call_user_func_array($afterDownload, []);
+            call_user_func($afterDownload);
         }
         throw new StopExecution();
     }

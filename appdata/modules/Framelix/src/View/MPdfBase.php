@@ -17,6 +17,7 @@ use Mpdf\QrCode\QrCode;
 
 class MPdfBase extends View
 {
+
     /**
      * The x position where the address must start in case of a windowed post cuvert
      */
@@ -49,7 +50,7 @@ class MPdfBase extends View
             "dejavusansmono",
             "freesans",
             "freeserif",
-            "freemono"
+            "freemono",
         ])]
         string $defaultFont = 'helvetica',
         int $defaultFontSize = 12,
@@ -149,9 +150,7 @@ class MPdfBase extends View
      * Submit is done via post
      * @param Form $form
      */
-    public function setOptionsFormFields(Form $form): void
-    {
-    }
+    public function setOptionsFormFields(Form $form): void {}
 
     /**
      * Save the pdf to disk
@@ -189,12 +188,15 @@ class MPdfBase extends View
      */
     public function download(string $filename): never
     {
-        Response::download("@" . $this->getFiledata(), $filename);
+        Response::download(function () {
+            echo $this->getFiledata();
+        }, $filename);
     }
 
     /**
      * Show header html
-     * Available placeholders in html text: {PAGENO} (Current Page), $this->pdf->aliasNbPg (Number of total pages), $this->pdf->aliasNbPgGp
+     * Available placeholders in html text: {PAGENO} (Current Page), $this->pdf->aliasNbPg (Number of total pages),
+     * $this->pdf->aliasNbPgGp
      * @return bool Return true when the header should be drawn, false to skip the header for the current page
      */
     public function showHeaderHtml(): bool
@@ -204,7 +206,8 @@ class MPdfBase extends View
 
     /**
      * Show footer html
-     * Available placeholders in html text: {PAGENO} (Current Page), $this->pdf->aliasNbPg (Number of total pages), $this->pdf->aliasNbPgGp
+     * Available placeholders in html text: {PAGENO} (Current Page), $this->pdf->aliasNbPg (Number of total pages),
+     * $this->pdf->aliasNbPgGp
      * @return bool Return true when the footer should be drawn, false to skip the footer for the current page
      */
     public function showFooterHtml(): bool
@@ -223,4 +226,5 @@ class MPdfBase extends View
         $this->setOptionsFormFields($form);
         return $form;
     }
+
 }

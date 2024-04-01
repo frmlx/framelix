@@ -18,12 +18,6 @@ final class ResponseTest extends TestCase
     public function tests(): void
     {
         Buffer::start();
-        try {
-            Response::download("@filecontent", "foo");
-        } catch (StopExecution) {
-            $this->assertSame("filecontent", Buffer::get());
-        }
-        Buffer::start();
         $this->assertExceptionOnCall(function () {
             Response::download(__FILE__, "foo", null, function () {});
         }, [], StopExecution::class);
