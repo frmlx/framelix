@@ -3,6 +3,7 @@
 namespace Db;
 
 use Framelix\Framelix\Db\Postgres;
+use PHPUnit\Framework\Attributes\Depends;
 
 final class BasicTestPostgresTest extends BasicTestBase
 {
@@ -27,9 +28,7 @@ final class BasicTestPostgresTest extends BasicTestBase
         );
     }
 
-    /**
-     * @depends testCleanup
-     */
+    #[Depends("testCleanup")]
     public function testExceptionConnectError()
     {
         $this->assertExceptionOnCall(function () {

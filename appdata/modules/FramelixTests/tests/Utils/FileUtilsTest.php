@@ -5,6 +5,8 @@ namespace Utils;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\TestCase;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 use function basename;
 use function dirname;
 use function file_put_contents;
@@ -104,9 +106,7 @@ final class FileUtilsTest extends TestCase
         $this->assertCount(1, FileUtils::getFiles($folder));
     }
 
-    /**
-     * @depends testTmpFolder1
-     */
+    #[Depends("testTmpFolder1")]
     public function testTmpFolder2(): void
     {
         $this->assertCount(

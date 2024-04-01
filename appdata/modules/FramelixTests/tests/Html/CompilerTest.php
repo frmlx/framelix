@@ -8,6 +8,8 @@ use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\FramelixTests\TestCase;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 use function file_get_contents;
 use function file_put_contents;
 use function unlink;
@@ -28,9 +30,7 @@ final class CompilerTest extends TestCase
         $this->assertCount(0, $files);
     }
 
-    /**
-     * @depends testCleanup
-     */
+    #[Depends("testCleanup")]
     public function testBabel(): void
     {
         Config::$devMode = false;
@@ -40,9 +40,7 @@ final class CompilerTest extends TestCase
         Config::$devMode = true;
     }
 
-    /**
-     * @depends testBabel
-     */
+    #[Depends("testBabel")]
     public function tests(): void
     {
         $distFolder = __DIR__ . "/../../public/dist";
@@ -72,9 +70,7 @@ final class CompilerTest extends TestCase
         );
     }
 
-    /**
-     * @depends tests
-     */
+    #[Depends("tests")]
     public function testUrls(): void
     {
         $this->assertInstanceOf(

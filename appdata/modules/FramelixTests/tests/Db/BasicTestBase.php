@@ -6,6 +6,7 @@ use Framelix\Framelix\Date;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Db\Sql;
 use Framelix\FramelixTests\TestCaseDbTypes;
+use PHPUnit\Framework\Attributes\Depends;
 use ReflectionClass;
 
 use function fopen;
@@ -25,9 +26,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
         $this->createTestTable();
     }
 
-    /**
-     * @depends testCreate
-     */
+    #[Depends("testCreate")]
     public function testConditions()
     {
         $db = $this->getDb();
@@ -152,9 +151,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
         $db->query("DROP TABLE $table");
     }
 
-    /**
-     * @depends testConditions
-     */
+    #[Depends("testConditions")]
     public function testQueries(): void
     {
         Sql::$logExecutedQueries = true;
@@ -228,9 +225,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
         $this->assertCount(2, $db->fetchArray("SELECT text_a FROM $table", null, 2));
     }
 
-    /**
-     * @depends testQueries
-     */
+    #[Depends("testQueries")]
     public function testExceptionDbQuery()
     {
         $db = $this->getDb();
@@ -244,9 +239,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
         });
     }
 
-    /**
-     * @depends testExceptionDbQuery
-     */
+    #[Depends("testExceptionDbQuery")]
     public function testExceptionNotExistingFetchIndex()
     {
         $this->assertExceptionOnCall(function () {
@@ -255,9 +248,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
         });
     }
 
-    /**
-     * @depends testExceptionNotExistingFetchIndex
-     */
+    #[Depends("testExceptionNotExistingFetchIndex")]
     public function testExceptionUnsupportedDbValue()
     {
         $this->assertExceptionOnCall(function () {
@@ -267,10 +258,7 @@ abstract class BasicTestBase extends TestCaseDbTypes
         });
     }
 
-    /**
-     * Drop tables after execution
-     * @depends testExceptionUnsupportedDbValue
-     */
+    #[Depends("testExceptionUnsupportedDbValue")]
     public function testCleanup(): void
     {
         $this->expectNotToPerformAssertions();

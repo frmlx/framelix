@@ -3,6 +3,7 @@
 namespace Db;
 
 use Framelix\Framelix\Db\Sqlite;
+use PHPUnit\Framework\Attributes\Depends;
 
 final class BasicTestSqliteTest extends BasicTestBase
 {
@@ -27,9 +28,7 @@ final class BasicTestSqliteTest extends BasicTestBase
         );
     }
 
-    /**
-     * @depends testCreate
-     */
+    #[Depends("testCreate")]
     public function testExceptionConnectError()
     {
         $this->assertExceptionOnCall(function () {

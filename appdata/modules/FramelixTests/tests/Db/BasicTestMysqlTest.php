@@ -3,6 +3,7 @@
 namespace Db;
 
 use Framelix\Framelix\Db\Mysql;
+use PHPUnit\Framework\Attributes\Depends;
 
 final class BasicTestMysqlTest extends BasicTestBase
 {
@@ -30,9 +31,7 @@ final class BasicTestMysqlTest extends BasicTestBase
         );
     }
 
-    /**
-     * @depends testCleanup
-     */
+    #[Depends("testCleanup")]
     public function testExceptionConnectError()
     {
         $this->assertExceptionOnCall(function () {

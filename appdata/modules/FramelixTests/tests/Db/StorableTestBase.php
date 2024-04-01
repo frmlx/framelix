@@ -23,6 +23,8 @@ use Framelix\FramelixTests\Storable\TestStorable2;
 use Framelix\FramelixTests\Storable\TestStorablePrefetch;
 use Framelix\FramelixTests\TestCaseDbTypes;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 use function array_chunk;
 use function array_keys;
 use function array_reverse;
@@ -216,9 +218,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         }
     }
 
-    /**
-     * @depends testStoreAndDelete
-     */
+    #[Depends("testStoreAndDelete")]
     public function testFetch(): void
     {
         // fetch last 50 teststorables1 as they all have the same data applied
@@ -288,9 +288,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $storable->delete(true);
     }
 
-    /**
-     * @depends testFetch
-     */
+    #[Depends("testFetch")]
     public function testDepthFetch(): void
     {
         $storables = TestStorable2::getByCondition(
@@ -299,9 +297,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertGreaterThan(0, count($storables));
     }
 
-    /**
-     * @depends testDepthFetch
-     */
+    #[Depends("testDepthFetch")]
     public function testUpdate(): void
     {
         // updateTime does update by default
@@ -322,9 +318,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertEquals($upateTime, $storable->updateTime->getTimestamp());
     }
 
-    /**
-     * @depends testDepthFetch
-     */
+    #[Depends("testDepthFetch")]
     public function testFetchChildsOfAbstractStorables(): void
     {
         // fetching all from type storable are effectively all that exist
@@ -344,9 +338,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertSame($chunk, array_keys($storables));
     }
 
-    /**
-     * @depends testFetchChildsOfAbstractStorables
-     */
+    #[Depends("testFetchChildsOfAbstractStorables")]
     public function testDatatypesSetter(): void
     {
         $this->dummyValues = [
@@ -371,9 +363,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertStorablePropertyValueSetter($storable, "dateTime", [DateTime::class]);
     }
 
-    /**
-     * @depends testDatatypesSetter
-     */
+    #[Depends("testDatatypesSetter")]
     public function testDatatypesGetter(): void
     {
         $storable = TestStorable2::getByConditionOne(
@@ -394,9 +384,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertIsString($storable->getOriginalDbValueForProperty("longTextLazy"));
     }
 
-    /**
-     * @depends testDatatypesSetter
-     */
+    #[Depends("testDatatypesSetter")]
     public function testDatatypesNoPrefetch(): void
     {
         $storables = TestStorablePrefetch::getByCondition();
@@ -410,9 +398,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertExecutedQueries(count($storables));
     }
 
-    /**
-     * @depends testDatatypesNoPrefetch
-     */
+    #[Depends("testDatatypesNoPrefetch")]
     public function testDatatypesPrefetch(): void
     {
         $storables = TestStorablePrefetch::getByCondition();
@@ -431,9 +417,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertExecutedQueries($requiredPrefetchQueries);
     }
 
-    /**
-     * @depends testDatatypesPrefetch
-     */
+    #[Depends("testDatatypesPrefetch")]
     public function testDeleteAll(): void
     {
         // delete with null does nothing
@@ -443,9 +427,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $this->assertCount(0, TestStorable1::getByCondition());
     }
 
-    /**
-     * @depends testDeleteAll
-     */
+    #[Depends("testDeleteAll")]
     public function testMiscExceptions(): void
     {
         $this->assertExceptionOnCall(function () {
@@ -487,10 +469,7 @@ abstract class StorableTestBase extends TestCaseDbTypes
         }, [], Redirect::class);
     }
 
-    /**
-     * Test all framework default storables with generic and specific tests
-     * @depends testMiscExceptions
-     */
+    #[Depends("testMiscExceptions")]
     public function testDefaultStorables(): void
     {
         $storableFiles = FileUtils::getFiles(

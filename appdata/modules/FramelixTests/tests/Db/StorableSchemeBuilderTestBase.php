@@ -11,6 +11,8 @@ use Framelix\FramelixTests\StorableException\TestStorableNoType;
 use Framelix\FramelixTests\StorableException\TestStorableUnsupportedType;
 use Framelix\FramelixTests\TestCaseDbTypes;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 use function count;
 use function in_array;
 use function print_r;
@@ -43,9 +45,7 @@ abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
         $this->assertBuilderQueryCount(0, $queries, true);
     }
 
-    /**
-     * @depends testBuilderQueries
-     */
+    #[Depends("testBuilderQueries")]
     public function testBuilderQueries2(): void
     {
         $db = Sql::get('test');
@@ -67,9 +67,7 @@ abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
         $this->assertBuilderQueryCount(4, $queries, true);
     }
 
-    /**
-     * @depends testBuilderQueries2
-     */
+    #[Depends("testBuilderQueries2")]
     public function testBuilderQueries3(): void
     {
         // previously we have changed 3 columns and dropped one index
@@ -97,9 +95,7 @@ abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
         $db->query('CREATE TABLE ' . $db->quoteIdentifier('unused_table') . ' (`id` INTEGER NULL DEFAULT NULL)');
     }
 
-    /**
-     * @depends testBuilderQueries3
-     */
+    #[Depends("testBuilderQueries3")]
     public function testBuilderQueries4(): void
     {
         $db = Sql::get('test');
@@ -122,9 +118,7 @@ abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
     }
 
 
-    /**
-     * @depends testBuilderQueries3
-     */
+    #[Depends("testBuilderQueries3")]
     public function testUnsupportedDbPropertyType(): void
     {
         $this->assertExceptionOnCall(function () {
@@ -139,9 +133,7 @@ abstract class StorableSchemeBuilderTestBase extends TestCaseDbTypes
     }
 
 
-    /**
-     * @depends testUnsupportedDbPropertyType
-     */
+    #[Depends("testUnsupportedDbPropertyType")]
     public function testNoDbPropertyType(): void
     {
         $this->assertExceptionOnCall(function () {
