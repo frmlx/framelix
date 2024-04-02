@@ -148,6 +148,13 @@ echo ""
 echo "Done."
 echo ""
 
+cecho y "# Start NodeJS module servers"
+echo ""
+framelix_start_module_servers
+echo ""
+echo "Done."
+echo ""
+
 cecho y "# Server software versions now used"
 echo ""
 output=`nginx -v 2>&1`
