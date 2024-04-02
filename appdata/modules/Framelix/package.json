@@ -1,16 +1,15 @@
 {
   "name": "framelix",
   "dependencies": {
-    "@babel/core": "^7.23.7",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/preset-env": "^7.23.8",
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
     "@popperjs/core": "^2.11.8",
     "cash-dom": "^8.1.5",
     "dayjs": "^1.11.10",
     "form-data-json-convert": "^2.2.1",
     "qrcodejs": "^1.0.0",
-    "sass": "^1.69.7",
-    "sortablejs": "^1.15.1",
+    "sass": "^1.72.0",
+    "sortablejs": "^1.15.2",
     "swiped-events": "^1.1.9"
   },
   "scripts": {
