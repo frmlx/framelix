@@ -172,9 +172,10 @@ abstract class Sql
         $this->connected = false;
     }
 
+
     /**
      * Get a condition for given range overlaps a range in the database
-     * If a start time is empty/null - It will converted to 0001-01-01
+     * If a start time is empty/null - It will converted to 0000-01-01
      * If a end time is empty/null - It will be converted to 9999-12-31
      * @param mixed $dateStart
      * @param mixed $dateEnd
@@ -188,11 +189,19 @@ abstract class Sql
         string $dbFieldStart,
         string $dbFieldEnd
     ): string {
-        $dateStart = !($dateStart instanceof DateTime) ? DateTime::create($dateStart) : $dateStart;
-        $dateEnd = !($dateEnd instanceof DateTime) ? DateTime::create($dateEnd) : $dateEnd;
-        $sqlDateStart = $dateStart ? $dateStart->format('Y-m-d') : '0001-01-01';
-        $sqlDateEnd = $dateEnd ? $dateEnd->format('Y-m-d') : '9999-12-31';
-        return "('$sqlDateStart' <= DATE(COALESCE($dbFieldEnd, '9999-12-31')) AND DATE(COALESCE($dbFieldStart, '0001-01-01')) <= '$sqlDateEnd')";
+        $rangeStart = DateTime::create($dateStart ?: "0000-01-01");
+        $rangeEnd = DateTime::create($dateEnd ?: "9999-12-31");
+        if (!$rangeStart) {
+            $rangeStart = DateTime::create("0000-01-01");
+        }
+        if (!$rangeEnd) {
+            $rangeEnd = DateTime::create("9999-12-31");
+        }
+        $rangeStartDateTime = $this->escapeValue($rangeStart . " 00:00:00");
+        $rangeEndDateTime = $this->escapeValue($rangeEnd . " 23:59:59");
+        // this condition should NOT use functions for the DB fields, as they cannot use indexes later
+        // it's way more performant to check the untouched db fields against a static date and datetime value instead of using DATE() mysql function
+        return "($dbFieldEnd IS NULL || $rangeStartDateTime <= $dbFieldEnd) && ($dbFieldStart IS NULL || $dbFieldStart <= $rangeEndDateTime)";
     }
 
     /**
@@ -212,53 +221,29 @@ abstract class Sql
         string $compareMethod = "date",
         string $conditionOnEmptyDates = "1"
     ): string {
-        $dbField = "DATE($dbField)";
-        if ($compareMethod === "month") {
-            if ($this instanceof Sqlite) {
-                $dbField = "CAST(STRFTIME('%Y%m', $dbField) as UNSIGNED INTEGER)";
-            } elseif ($this instanceof Postgres) {
-                $dbField = "CAST(to_char($dbField, 'YYYYMM') as INTEGER)";
-            } else {
-                $dbField = "CAST(DATE_FORMAT($dbField, '%Y%m') as UNSIGNED INTEGER)";
-            }
-        } elseif ($compareMethod === "year") {
-            if ($this instanceof Sqlite) {
-                $dbField = "CAST(STRFTIME('%Y', $dbField) as UNSIGNED INTEGER)";
-            } elseif ($this instanceof Postgres) {
-                $dbField = "CAST(to_char($dbField, 'YYYY') as INTEGER)";
-            } else {
-                $dbField = "YEAR($dbField)";
-            }
+        $rangeStart = DateTime::create($rangeStart);
+        $rangeEnd = DateTime::create($rangeEnd);
+        switch ($compareMethod) {
+            case 'month':
+                $rangeStart?->setDayOfMonth(1);
+                $rangeEnd?->setDayOfMonth(-1);
+                break;
+            case 'year':
+                $rangeStart?->setMonth(1)?->setDayOfMonth(1);
+                $rangeEnd?->setMonth(12)?->setDayOfMonth(-1);
+                break;
         }
+        // this conditions should NOT use functions for the DB field, as they cannot use indexes later
+        // it's way more performant to check the untouched db field against a static date and datetime value instead of using DATE() mysql function
         $condition = [];
         if ($rangeStart) {
-            $rangeStart = DateTime::create($rangeStart);
-            if ($rangeStart) {
-                if ($compareMethod === "month") {
-                    $compareValue = (int)$rangeStart->format("Ym");
-                } elseif ($compareMethod === "year") {
-                    $compareValue = (int)$rangeStart->getYear();
-                } else {
-                    $compareValue = $rangeStart->format('Y-m-d');
-                }
-                $condition[] = "$dbField >= " . $this->escapeValue($compareValue);
-            }
+            $condition[] = "($dbField >= " . $this->escapeValue($rangeStart . " 00:00:00") . ")";
         }
         if ($rangeEnd) {
-            $rangeEnd = DateTime::create($rangeEnd);
-            if ($rangeEnd) {
-                if ($compareMethod === "month") {
-                    $compareValue = (int)$rangeEnd->format("Ym");
-                } elseif ($compareMethod === "year") {
-                    $compareValue = $rangeEnd->getYear();
-                } else {
-                    $compareValue = $rangeEnd->format('Y-m-d');
-                }
-                $condition[] = "$dbField <= " . $this->escapeValue($compareValue);
-            }
+            $condition[] = "($dbField <= " . $this->escapeValue($rangeEnd . " 23:59:59") . ")";
         }
         if ($condition) {
-            return "(" . implode(" AND ", $condition) . ")";
+            return "(" . implode(" && ", $condition) . ")";
         } else {
             return "($conditionOnEmptyDates)";
         }
@@ -267,7 +252,7 @@ abstract class Sql
     /**
      * Get a condition that check if date in php is inside given date range database
      * @param mixed $date
-     * @param string $dbFieldStart If null in DB it will converted to 0001-01-01
+     * @param string $dbFieldStart If null in DB it will converted to 0000-01-01
      * @param string $dbFieldEnd If null in DB it will converted to 9999-12-31
      * @param string $compareMethod date, month, year
      * @return string
@@ -279,45 +264,24 @@ abstract class Sql
         #[ExpectedValues(values: ["date", "month", "year"])]
         string $compareMethod = "date"
     ): string {
-        $dbFieldStart = "DATE(COALESCE($dbFieldStart, '0001-01-01'))";
-        $dbFieldEnd = "DATE(COALESCE($dbFieldEnd, '9999-12-31'))";
-        $compareValue = DateTime::create($date);
+        $rangeStart = DateTime::create($date);
+        $rangeEnd = DateTime::create($date);
         switch ($compareMethod) {
             case 'month':
-                if ($this instanceof Sqlite) {
-                    $dbFieldStart = "CAST(STRFTIME('%Y%m', $dbFieldStart) as UNSIGNED INTEGER)";
-                    $dbFieldEnd = "CAST(STRFTIME('%Y%m', $dbFieldEnd) as UNSIGNED INTEGER)";
-                } elseif ($this instanceof Postgres) {
-                    $dbFieldStart = "CAST(to_char($dbFieldStart, 'YYYYMM') as INTEGER)";
-                    $dbFieldEnd = "CAST(to_char($dbFieldEnd, 'YYYYMM') as INTEGER)";
-                } else {
-                    $dbFieldStart = "CAST(DATE_FORMAT($dbFieldStart, '%Y%m') as UNSIGNED INTEGER)";
-                    $dbFieldEnd = "CAST(DATE_FORMAT($dbFieldEnd, '%Y%m') as UNSIGNED INTEGER)";
-                }
-                $compareValue = (int)$compareValue->format("Ym");
+                $rangeStart->setDayOfMonth(1);
+                $rangeEnd->setDayOfMonth(-1);
                 break;
             case 'year':
-                if ($this instanceof Sqlite) {
-                    $dbFieldStart = "CAST(STRFTIME('%Y', $dbFieldStart) as UNSIGNED INTEGER)";
-                    $dbFieldEnd = "CAST(STRFTIME('%Y', $dbFieldEnd) as UNSIGNED INTEGER)";
-                } elseif ($this instanceof Postgres) {
-                    $dbFieldStart = "CAST(to_char($dbFieldStart, 'YYYY') as INTEGER)";
-                    $dbFieldEnd = "CAST(to_char($dbFieldEnd, 'YYYY') as INTEGER)";
-                } else {
-                    $dbFieldStart = "YEAR($dbFieldStart)";
-                    $dbFieldEnd = "YEAR($dbFieldEnd)";
-                }
-                $compareValue = (int)$compareValue->format("Y");
+                $rangeStart->setMonth(1)->setDayOfMonth(1);
+                $rangeEnd->setMonth(12)->setDayOfMonth(-1);
                 break;
-            default:
-                $compareValue = $compareValue->format('Y-m-d');
         }
-        return "('$compareValue' BETWEEN $dbFieldStart AND $dbFieldEnd)";
+        return self::getConditionDateRangeOverlaps($rangeStart, $rangeEnd, $dbFieldStart, $dbFieldEnd);
     }
 
     /**
      * Escape any value for database usage
-     * @param mixed $value *
+     * @param mixed $value
      * @param string|null $fixedCast Force a cast to string|int|bool when escaping to fix issues when different type to db will result in loss performance
      *  Attention: NULL will stay as is, array values (each value separately) will be cast as well
      * @return string|int|float

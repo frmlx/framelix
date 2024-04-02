@@ -106,6 +106,9 @@ class DateTime extends \DateTime implements StorablePropertyInterface
      */
     public static function create(mixed $value): ?DateTime
     {
+        if (!$value) {
+            return null;
+        }
         if ($value instanceof self) {
             return clone $value;
         }
