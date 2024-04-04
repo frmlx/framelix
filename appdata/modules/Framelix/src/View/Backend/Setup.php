@@ -52,27 +52,29 @@ class Setup extends View
                 $configLine = null;
                 if (!isset(Config::$sqlConnections[FRAMELIX_MODULE])) {
                     if (Request::getPost('mysql')) {
-                        $configLine = '\Framelix\Framelix\Config::addMysqlConnection(FRAMELIX_MODULE, "' . Request::getPost(
-                                'mysql_database'
-                            ) . '", "' . Request::getPost('mysql_host') . '", "' . Request::getPost(
-                                'mysql_username'
-                            ) . '", "' . Request::getPost('mysql_password') . '", ' . (int)Request::getPost(
-                                'mysql_port'
-                            ) . ');';
+                        $databaseName = Request::getPost('mysql_database');
+                        $databaseHost = Request::getPost('mysql_host');
+                        $databaseUser = Request::getPost('mysql_username');
+                        $databasePw = Request::getPost('mysql_password');
+                        $databasePort = (int)Request::getPost('mysql_port');
+                        $configLine = '\Framelix\Framelix\Config::addMysqlConnection(FRAMELIX_MODULE, "' . $databaseName . '", "' . $databaseHost . '", "' . $databaseUser . '", "' . $databasePw . '", ' . $databasePort . ');';
                         // create database if not yet exists
                         $mysqli = new mysqli(
-                            Request::getPost('mysql_host'), Request::getPost('mysql_username'),
-                            Request::getPost('mysql_password'), null, (int)Request::getPost('mysql_port')
+                            $databaseHost,
+                            $databaseUser,
+                            $databasePw,
+                            null,
+                            $databasePort
                         );
-                        $mysqli->query('CREATE DATABASE IF NOT EXISTS `' . FRAMELIX_MODULE . '`');
+                        $mysqli->query('CREATE DATABASE IF NOT EXISTS `' . $databaseName . '`');
                         $mysqli->close();
                         Config::addMysqlConnection(
                             FRAMELIX_MODULE,
-                            Request::getPost('mysql_database'),
-                            Request::getPost('mysql_host'),
-                            Request::getPost('mysql_username'),
-                            Request::getPost('mysql_password'),
-                            (int)Request::getPost('mysql_port'),
+                            $databaseName,
+                            $databaseHost,
+                            $databaseUser,
+                            $databasePw,
+                            $databasePort,
                         );
                     } else {
                         $configLine = '\Framelix\Framelix\Config::addSqliteConnection(FRAMELIX_MODULE, "' . Request::getPost(
