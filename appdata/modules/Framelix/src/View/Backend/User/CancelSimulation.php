@@ -15,9 +15,12 @@ class CancelSimulation extends View
     public function onRequest(): void
     {
         $token = UserToken::getByCookie();
-        $token->simulatedUser = null;
-        $token->store();
-        Toast::success('__framelix_simulateuser_canceled__');
+        if ($token->simulatedUser) {
+            $token->simulatedUser = null;
+            $token->store();
+            Toast::success('__framelix_simulateuser_canceled__');
+        }
         Url::create(Request::getGet('redirect') ?? Url::getApplicationUrl())->redirect();
     }
+
 }
