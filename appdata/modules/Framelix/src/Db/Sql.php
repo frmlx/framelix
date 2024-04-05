@@ -27,14 +27,17 @@ use function str_replace;
 
 abstract class Sql
 {
+
     public const int TYPE_MYSQL = 1;
+
     public const int TYPE_SQLITE = 2;
+
     public const int TYPE_POSTGRES = 3;
 
     public static array $typeMap = [
         self::TYPE_MYSQL => ['class' => Mysql::class],
         self::TYPE_SQLITE => ['class' => Sqlite::class],
-        self::TYPE_POSTGRES => ['class' => Postgres::class]
+        self::TYPE_POSTGRES => ['class' => Postgres::class],
     ];
 
     /**
@@ -172,7 +175,6 @@ abstract class Sql
         $this->connected = false;
     }
 
-
     /**
      * Get a condition for given range overlaps a range in the database
      * If a start time is empty/null - It will converted to 0000-01-01
@@ -197,8 +199,10 @@ abstract class Sql
         if (!$rangeEnd) {
             $rangeEnd = DateTime::create("9999-12-31");
         }
-        $rangeStartDateTime = $this->escapeValue($rangeStart . " 00:00:00");
-        $rangeEndDateTime = $this->escapeValue($rangeEnd . " 23:59:59");
+        $rangeStart?->setTime(0, 0, 0);
+        $rangeEnd?->setTime(23, 59, 59);
+        $rangeStartDateTime = $this->escapeValue($rangeStart);
+        $rangeEndDateTime = $this->escapeValue($rangeEnd);
         // this condition should NOT use functions for the DB fields, as they cannot use indexes later
         // it's way more performant to check the untouched db fields against a static date and datetime value instead of using DATE() mysql function
         return "($dbFieldEnd IS NULL || $rangeStartDateTime <= $dbFieldEnd) && ($dbFieldStart IS NULL || $dbFieldStart <= $rangeEndDateTime)";
@@ -210,7 +214,8 @@ abstract class Sql
      * @param mixed $rangeEnd If not set or invalid it will not be checked
      * @param string $dbField The date field in the database
      * @param string $compareMethod date, month, year
-     * @param string $conditionOnEmptyDates If both $rangeStart and $rangeEnd is invalid, then this condition will be returned instead
+     * @param string $conditionOnEmptyDates If both $rangeStart and $rangeEnd is invalid, then this condition will be
+     *     returned instead
      * @return string
      */
     public function getConditionDbDateInPhpRange(
@@ -233,14 +238,16 @@ abstract class Sql
                 $rangeEnd?->setMonth(12)?->setDayOfMonth(-1);
                 break;
         }
+        $rangeStart?->setTime(0, 0, 0);
+        $rangeEnd?->setTime(23, 59, 59);
         // this conditions should NOT use functions for the DB field, as they cannot use indexes later
         // it's way more performant to check the untouched db field against a static date and datetime value instead of using DATE() mysql function
         $condition = [];
         if ($rangeStart) {
-            $condition[] = "($dbField >= " . $this->escapeValue($rangeStart . " 00:00:00") . ")";
+            $condition[] = "($dbField >= " . $this->escapeValue($rangeStart) . ")";
         }
         if ($rangeEnd) {
-            $condition[] = "($dbField <= " . $this->escapeValue($rangeEnd . " 23:59:59") . ")";
+            $condition[] = "($dbField <= " . $this->escapeValue($rangeEnd) . ")";
         }
         if ($condition) {
             return "(" . implode(" && ", $condition) . ")";
@@ -282,8 +289,9 @@ abstract class Sql
     /**
      * Escape any value for database usage
      * @param mixed $value
-     * @param string|null $fixedCast Force a cast to string|int|bool when escaping to fix issues when different type to db will result in loss performance
-     *  Attention: NULL will stay as is, array values (each value separately) will be cast as well
+     * @param string|null $fixedCast Force a cast to string|int|bool when escaping to fix issues when different type to
+     *     db will result in loss performance Attention: NULL will stay as is, array values (each value separately)
+     *     will be cast as well
      * @return string|int|float
      */
     public function escapeValue(
@@ -514,4 +522,5 @@ abstract class Sql
         }
         return $str;
     }
+
 }
