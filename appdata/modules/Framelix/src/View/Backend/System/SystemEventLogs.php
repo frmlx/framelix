@@ -44,7 +44,8 @@ class SystemEventLogs extends View
             return;
         }
         ?>
-        <framelix-button href="<?= Url::create()->setParameter('clear', 1) ?>">__framelix_view_backend_system_logs_clear__
+        <framelix-button href="<?= Url::create()->setParameter('clear', 1) ?>">
+            __framelix_view_backend_system_logs_clear__
         </framelix-button>
         <div class="framelix-spacer"></div>
         <?php

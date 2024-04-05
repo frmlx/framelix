@@ -127,8 +127,7 @@ class StorableSchema
             $typeIsArray = str_ends_with($type, "[]");
             if ($typeIsArray) {
                 throw new FatalError(
-                    'Array\'s are not supported in @property at ' . $reflectionClass->getName(
-                    ) . ' annotations of Storables. Consider using StorableArray instead.');
+                    'Array\'s are not supported in @property at ' . $reflectionClass->getName() . ' annotations of Storables. Consider using StorableArray instead.');
             }
             if (!in_array($type, ["bool", "int", "float", "double", "string", "mixed"])) {
                 $possibleClassNames[] = $namespace . "\\" . $type;

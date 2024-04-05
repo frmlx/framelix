@@ -150,7 +150,9 @@ class MPdfBase extends View
      * Submit is done via post
      * @param Form $form
      */
-    public function setOptionsFormFields(Form $form): void {}
+    public function setOptionsFormFields(Form $form): void
+    {
+    }
 
     /**
      * Save the pdf to disk

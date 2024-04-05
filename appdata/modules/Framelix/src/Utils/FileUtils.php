@@ -94,10 +94,10 @@ class FileUtils
      * @return string
      */
     public static function getUserdataFilepath(
-      ?string $filePath,
-      bool $public,
-      string $module = FRAMELIX_MODULE,
-      bool $autoCreateFolder = true
+        ?string $filePath,
+        bool $public,
+        string $module = FRAMELIX_MODULE,
+        bool $autoCreateFolder = true
     ): string {
         $userdataFolder = FRAMELIX_USERDATA_FOLDER . "/$module/" . ($public ? "public" : "private") . "/" . $filePath;
         $dir = dirname($userdataFolder);
@@ -157,11 +157,11 @@ class FileUtils
      * @return string[]
      */
     public static function getFiles(
-      string $directory,
-      ?string $regex = null,
-      bool $recursive = false,
-      bool $includeDirectoriesPaths = false,
-      int $sortOrder = SCANDIR_SORT_ASCENDING
+        string $directory,
+        ?string $regex = null,
+        bool $recursive = false,
+        bool $includeDirectoriesPaths = false,
+        int $sortOrder = SCANDIR_SORT_ASCENDING
     ): array {
         $files = [];
         if (!$directory || !is_dir($directory)) {

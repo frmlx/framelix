@@ -99,8 +99,8 @@ class Session
      * @param mixed $value Null will unset the key, can be any json serializable value
      */
     public static function set(
-      string $name,
-      mixed $value
+        string $name,
+        mixed $value
     ): void {
         self::prepare(true);
         if ($value === null) {
@@ -109,8 +109,8 @@ class Session
             self::$cache[self::$sessionName . '_data'][$name] = $value;
         }
         JsonUtils::writeToFile(
-          self::getSessionFilePath(null, true),
-          self::$cache[self::$sessionName . '_data']
+            self::getSessionFilePath(null, true),
+            self::$cache[self::$sessionName . '_data']
         );
     }
 
@@ -123,15 +123,15 @@ class Session
     public static function getSessionFilePath(?string $sessionId = null, bool $createFolderIfNotExist = false): ?string
     {
         $sessionId = $sessionId ?? Cookie::get(self::$sessionName);
-        if(!$sessionId){
+        if (!$sessionId) {
             return null;
         }
         $date = date("ymd");
         $sessionFilename = self::$sessionName . "_" . $sessionId . ".json";
         return FileUtils::getUserdataFilepath(
-          "sessions/$date/$sessionFilename",
-          false,
-          autoCreateFolder: $createFolderIfNotExist
+            "sessions/$date/$sessionFilename",
+            false,
+            autoCreateFolder: $createFolderIfNotExist
         );
     }
 

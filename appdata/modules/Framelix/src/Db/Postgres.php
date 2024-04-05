@@ -78,7 +78,7 @@ class Postgres extends Sql
             // will result in warnings in tests
             // however, errors will be properly catched with pg_last_error()
             $this->connection = @pg_connect(
-              "host={$this->host} " . ($this->port ? 'port=' . (int)$this->port : '') . " dbname={$this->database} user={$this->username} password='{$this->password}' options='--client_encoding=UTF8'"
+                "host={$this->host} " . ($this->port ? 'port=' . (int)$this->port : '') . " dbname={$this->database} user={$this->username} password='{$this->password}' options='--client_encoding=UTF8'"
             );
             $error = pg_last_error($this->connection);
             if ($error) {
@@ -156,9 +156,9 @@ class Postgres extends Sql
      * @inheritDoc
      */
     public function fetchArray(
-      string $query,
-      ?array $parameters = null,
-      ?int $limit = null
+        string $query,
+        ?array $parameters = null,
+        ?int $limit = null
     ): array {
         $fetch = [];
         $this->query($query, $parameters);
@@ -175,10 +175,10 @@ class Postgres extends Sql
      * @inheritDoc
      */
     public function fetchAssoc(
-      string $query,
-      ?array $parameters = null,
-      ?string $valueAsArrayIndex = null,
-      ?int $limit = null
+        string $query,
+        ?array $parameters = null,
+        ?string $valueAsArrayIndex = null,
+        ?int $limit = null
     ): array {
         $fetch = [];
         $this->query($query, $parameters);
@@ -186,7 +186,7 @@ class Postgres extends Sql
             if (is_string($valueAsArrayIndex)) {
                 if (!isset($row[$valueAsArrayIndex])) {
                     throw new FatalError(
-                      "Field '$valueAsArrayIndex' does not exist in SQL Result or is null"
+                        "Field '$valueAsArrayIndex' does not exist in SQL Result or is null"
                     );
                 }
                 $fetch[$row[$valueAsArrayIndex]] = $row;

@@ -48,15 +48,15 @@ class ImageUtils
         $extension = end($pathParts);
 
         $shell = Shell::prepare(
-          'convert {*}',
-          [
-            $srcPath . ($extension == "gif" ? '[0]' : ''),
-            '-resize',
-            "{$maxWidth}x{$maxHeight}>",
-            '-quality',
-            '85',
-            $dstPath,
-          ]
+            'convert {*}',
+            [
+                $srcPath . ($extension == "gif" ? '[0]' : ''),
+                '-resize',
+                "{$maxWidth}x{$maxHeight}>",
+                '-quality',
+                '85',
+                $dstPath,
+            ]
         );
         $shell->execute();
         return $shell;
@@ -72,10 +72,10 @@ class ImageUtils
      * @return Shell Return the shell command that have been executed
      */
     public static function convertPdfToImage(
-      string $pdfPath,
-      string $imagePath,
-      bool $trimWhitespaceAround,
-      int $density = 280
+        string $pdfPath,
+        string $imagePath,
+        bool $trimWhitespaceAround,
+        int $density = 280
     ): Shell {
         $cmd = "convert -density $density {0} ";
         if ($trimWhitespaceAround) {
@@ -98,9 +98,9 @@ class ImageUtils
      * @return bool
      */
     public static function compareImages(
-      string $imagePathExpected,
-      string $imagePathActual,
-      float $threshold = 0
+        string $imagePathExpected,
+        string $imagePathActual,
+        float $threshold = 0
     ): bool {
         $imageDataExpected = self::getImageData($imagePathExpected);
         $imageDataActual = self::getImageData($imagePathActual);

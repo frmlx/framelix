@@ -138,8 +138,8 @@ abstract class Sidebar
                 <a href="<?= Config::$backendDefaultView ? View::getUrl(
                     Config::$backendDefaultView
                 ) : Url::getApplicationUrl() ?>"><img
-                        src="<?= Url::getUrlToPublicFile(Config::$backendLogoFilePath) ?>" alt="App Logo"
-                        title="__framelix_backend_startpage__"></a>
+                            src="<?= Url::getUrlToPublicFile(Config::$backendLogoFilePath) ?>" alt="App Logo"
+                            title="__framelix_backend_startpage__"></a>
             </div>
             <?php
         }
@@ -299,7 +299,7 @@ abstract class Sidebar
             ?>
             <span class="framelix-sidebar-main-icon"><?= HtmlUtils::getFramelixIcon($linkData['icon']) ?></span>
             <span
-                class="framelix-sidebar-label"><?= $linkData['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $linkData['badgeText'] . '</span>' : '' ?><?= Lang::get(
+                    class="framelix-sidebar-label"><?= $linkData['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $linkData['badgeText'] . '</span>' : '' ?><?= Lang::get(
                     $linkData['label']
                 ) ?></span>
             <?php
@@ -331,7 +331,7 @@ abstract class Sidebar
                class="framelix-sidebar-link <?= $activeKey === $key ? 'framelix-sidebar-link-active' : '' ?>">
                 <span class="framelix-sidebar-main-icon"><?= HtmlUtils::getFramelixIcon($row['icon']) ?></span>
                 <div
-                    class="framelix-sidebar-label"><?= $row['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $row['badgeText'] . '</span>' : '' ?><?= $row['label'] ?></div>
+                        class="framelix-sidebar-label"><?= $row['badgeText'] !== null ? '<span class="framelix-sidebar-badge">' . $row['badgeText'] . '</span>' : '' ?><?= $row['label'] ?></div>
             </a>
             <?php
             if ($type !== 'group') {
