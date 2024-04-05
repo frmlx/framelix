@@ -463,7 +463,8 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
 }
 .framelix-modal::backdrop {
   border: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
   outline: 0;
   z-index: 0 !important;
 }
@@ -565,6 +566,7 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
 }
 .framelix-modal .framelix-modal-close framelix-button {
   padding: 10px;
+  aspect-ratio: 1;
 }
 
 .framelix-popup {
@@ -736,6 +738,7 @@ html[data-touch="1"] .framelix-table > table > tfoot > tr > th[data-flag-icon="1
 .framelix-table > table > tfoot > tr > td[data-flag-icon="1"] framelix-button,
 .framelix-table > table > tfoot > tr > th[data-flag-icon="1"] framelix-button {
   height: 100%;
+  width: 100%;
   border-radius: 0;
   font-size: 16px;
 }
