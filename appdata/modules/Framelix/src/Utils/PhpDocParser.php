@@ -68,7 +68,7 @@ class PhpDocParser
     /**
      * Parse doc comment into array
      * @param string $phpDocComment
-     * @return array{description : string[], annotations:array{array{type:string, value: string[]}}
+     * @return array{description : string[], annotations:array{array{type:string, value: string[]}}}
      */
     public static function parse(string $phpDocComment): array
     {
