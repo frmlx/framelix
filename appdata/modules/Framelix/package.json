@@ -12,5 +12,5 @@
     "sortablejs": "^1.15.2",
     "swiped-events": "^1.1.9"
   },
-  "web-types": "web-types/web-types.json"
+  "web-types": "dev/web-types/web-types.json"
 }
