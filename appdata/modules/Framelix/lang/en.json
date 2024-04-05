@@ -231,10 +231,10 @@
         "Language"
     ],
     "__framelix_login_fido2__": [
-        "Login with FIDO2"
+        "Login with a Passkey"
     ],
     "__framelix_login_invalid_fido2__": [
-        "E-Mail does not exist, not have enabled a Fido2 auth or your device has not enabled a Fido2 auth for this e-mail"
+        "E-Mail does not exist, not have enabled a Passkey or your device has not enabled a Passkey for this e-mail"
     ],
     "__framelix_login_invalid_user__": [
         "E-Mail and\/or password does not match"
@@ -671,23 +671,23 @@
     "__framelix_view_backend_login__": [
         "Login"
     ],
+    "__framelix_view_backend_setup__": [
+        "Set 'em up!"
+    ],
     "__framelix_view_backend_system__": [
         "System"
     ],
-    "__framelix_view_backend_system_logs_clear__": [
-        "Delete all logs"
-    ],
     "__framelix_view_backend_system_errorlogs__": [
         "Error logs"
+    ],
+    "__framelix_view_backend_system_logs_clear__": [
+        "Delete all logs"
     ],
     "__framelix_view_backend_system_logs_nologs__": [
         "Here are no logs"
     ],
     "__framelix_view_backend_system_systemeventlogs__": [
         "System event logs"
-    ],
-    "__framelix_view_backend_setup__": [
-        "Set 'em up!"
     ],
     "__framelix_view_backend_user_basic__": [
         "Basic data"
@@ -783,37 +783,37 @@
         "Step 2 done. your new e-mail address is now {0}. You can close this window now."
     ],
     "__framelix_view_backend_userprofile_fido2_2fa_info__": [
-        "If you login with FIDO2, you not need a second factor, even if 2-Factor Authentication is enabled. FIDO2 is already considered really secure and is device bound, which effectively is the second factor."
+        "If you login with a Passkey, you not need a second factor, even if 2-Factor Authentication is enabled. A Passkey is already considered really secure and is device bound, which effectively is the second factor."
     ],
     "__framelix_view_backend_userprofile_fido2__": [
-        "FIDO2 (Fingerprint, Hardware Token, etc...)"
+        "FIDO2\/Passkey\/Fingerprint\/Hardware Token"
     ],
     "__framelix_view_backend_userprofile_fido2_already_enabled__": [
-        "You have already enabled FIDO2 for this device"
+        "You have already enabled a Passkey for this device"
     ],
     "__framelix_view_backend_userprofile_fido2_authnid_error__": [
         "Missing correct WebAuthnId. Please repeat the process."
     ],
     "__framelix_view_backend_userprofile_fido2_disable__": [
-        "Disable FIDO2 on this device"
+        "Disable the Passkey on this device"
     ],
     "__framelix_view_backend_userprofile_fido2_domainunsupported__": [
-        "FIDO 2 doesn't work on {domain}. Use {use} for example to fix that issue."
+        "Passkey doesn't work on {domain}. Use {use} for example to fix that issue."
     ],
     "__framelix_view_backend_userprofile_fido2_enable__": [
-        "Enable FIDO2 on this device now"
+        "Enable a Passkey on this device now"
     ],
     "__framelix_view_backend_userprofile_fido2_error__": [
         "Error: {0}"
     ],
     "__framelix_view_backend_userprofile_fido2_info__": [
-        "With FIDO2 you can enable secure web logins like Fingerprint Login, Hardware Token Login, etc... on this device. After you have activated this feature, you can still login with your password but you can also login with your second secure login method. You can delete each added FIDO2 device, which disable the advanced login functionality for this device."
+        "With a Passkey you can enable secure web logins like Fingerprint Login, Hardware Token Login, etc... on this device. After you have activated this feature, you can still login with your password but you can also login with your second secure login method. You can delete each added Passkey, which disable the advanced login functionality for this device."
     ],
     "__framelix_view_backend_userprofile_fido2_success__": [
         "Authentication successfully added. You can now login with this authentication method."
     ],
     "__framelix_view_backend_userprofile_fido2_unsupported__": [
-        "Sorry. FIDO2 is not supported on this device\/browser."
+        "Sorry. Passkeys are not supported on this device\/browser."
     ],
     "__framelix_view_backend_userprofile_fido2_webauthn_error__": [
         "Error from WebAuthn Backend"

@@ -308,12 +308,12 @@
         "4994a"
     ],
     "__framelix_login_fido2__": [
-        "Mit FIDO2 einloggen",
-        "eb133"
+        "Mit Passkey einloggen",
+        "0a8ff"
     ],
     "__framelix_login_invalid_fido2__": [
-        "E-Mail existiert nicht, hat kein FIDO2 aktiviert oder dein Ger\u00e4t hat kein FIDO2 aktiviert f\u00fcr diese E-Mail",
-        "21f7a"
+        "E-Mail existiert nicht, hat kein Passkey aktiviert oder dein Ger\u00e4t hat kein Passkey aktiviert f\u00fcr diese E-Mail",
+        "14447"
     ],
     "__framelix_login_invalid_user__": [
         "E-Mail und\/oder Passwort stimmt nicht",
@@ -1052,32 +1052,32 @@
         "d776d"
     ],
     "__framelix_view_backend_userprofile_fido2_2fa_info__": [
-        "Falls du dich mit FIDO2 einloggst, dann braucht du den 2ten Faktor nicht, egal ob er aktiviert ist oder nicht. FIDO2 ist bereits sicherer als der 2te Faktor und wenn mans genau nimmt, FIDO2 ist der 2te Faktor.",
-        "e9df6"
+        "Falls du dich mit Passkey einloggst, dann braucht du den 2ten Faktor nicht, egal ob er aktiviert ist oder nicht. Ein Passkey ist bereits sicherer als der 2te Faktor und wenn mans genau nimmt, ein Passkey ist der 2te Faktor.",
+        "0e50d"
     ],
     "__framelix_view_backend_userprofile_fido2__": [
-        "FIDO2 (Fingerprint, Hardware Token, etc...)",
-        "b3ac4"
+        "FIDO2\/Passkey\/Fingerprint\/Hardware Token",
+        "b97e2"
     ],
     "__framelix_view_backend_userprofile_fido2_already_enabled__": [
-        "Du hast FIDO2 bereits auf diesem Ger\u00e4t aktiviert",
-        "fe7fe"
+        "Du hast bereits einen Passkey auf diesem Ger\u00e4t aktiviert",
+        "bd1a0"
     ],
     "__framelix_view_backend_userprofile_fido2_authnid_error__": [
         "Fehlende WebAuthnId. Bitte erneut probieren.",
         "eed94"
     ],
     "__framelix_view_backend_userprofile_fido2_disable__": [
-        "Deaktiviere FIDO2 auf diesem Ger\u00e4t",
-        "62256"
+        "Deaktiviere einen Passkey auf diesem Ger\u00e4t",
+        "b12e5"
     ],
     "__framelix_view_backend_userprofile_fido2_domainunsupported__": [
-        "FIDO 2 funktioniert auf der Domain {domain} nicht. Benutze zum Beispiel {use} um das Problem zu beheben.",
-        "2cdd7"
+        "Passkeys funktionieren auf der Domain {domain} nicht. Benutze zum Beispiel {use} um das Problem zu beheben.",
+        "19a79"
     ],
     "__framelix_view_backend_userprofile_fido2_enable__": [
-        "Aktiviere jetzt FIDO2 auf diesem Ger\u00e4t",
-        "5b39d"
+        "Aktiviere jetzt einen Passkey auf diesem Ger\u00e4t",
+        "abf98"
     ],
     "__framelix_view_backend_userprofile_fido2_error__": [
         "Fehler: {0}",
@@ -1085,15 +1085,15 @@
     ],
     "__framelix_view_backend_userprofile_fido2_info__": [
         "Mit FIDO2 kannst du einen weiteren sicheren Login f\u00fcr deinen Account aktivieren. Du kannst zwischen verschiedenen Methoden w\u00e4hlen, je nachdem was dein Ger\u00e4t unterst\u00fctzt. Fingerprint, Hardware Token, etc... Du kannst dich aber auch weiterhin mit deinem Passwort einloggen. Du kannst auch einen Eintrag wieder l\u00f6schen, dann wird der erweiterte Login f\u00fcr das jeweilige Ger\u00e4t wieder deaktiviert wird.",
-        "ac068"
+        "4b42a"
     ],
     "__framelix_view_backend_userprofile_fido2_success__": [
         "Authentifizierung erfolgreich hinzugef\u00fcgt. Du kannst dich mit der gew\u00e4hlten Methode nun einloggen.",
         "f3bdc"
     ],
     "__framelix_view_backend_userprofile_fido2_unsupported__": [
-        "Upsi. FIDO2 ist auf deinem Ger\u00e4t\/Browser nicht verf\u00fcgbar.",
-        "70dbb"
+        "Upsi. Passkey ist auf deinem Ger\u00e4t\/Browser nicht verf\u00fcgbar.",
+        "f4ea2"
     ],
     "__framelix_view_backend_userprofile_fido2_webauthn_error__": [
         "Fehler vom WebAuthn Backend",
