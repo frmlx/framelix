@@ -47,7 +47,7 @@ class JsCall
         ?array $additionalUrlParameters = null,
         bool $signWithCurrentUserToken = true,
         int $maxLifetime = 86400
-    ): string {
+    ): Url {
         return View::getUrl(View\JsCallView::class)
             ->setParameter('method', $phpMethod)
             ->setParameter('action', $action)
