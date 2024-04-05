@@ -274,7 +274,7 @@ abstract class View extends \Framelix\Framelix\View
                     ?>
                   <framelix-button theme="transparent"
                                    class="framelix-user-settings"
-                                   jscall-url="<?= JsCall::getUrl(__CLASS__, 'settings') ?>"
+                                   jscall-url="<?= JsCall::getUrl([self::class, 'onJsCall'], 'settings') ?>"
                                    target="modal"
                                    modal-options='{"maxWidth":500}'
                                    icon="739"

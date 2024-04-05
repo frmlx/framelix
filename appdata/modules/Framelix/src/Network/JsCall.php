@@ -3,6 +3,7 @@
 namespace Framelix\Framelix\Network;
 
 use Framelix\Framelix\Exception\FatalError;
+use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\View;
 use ReflectionClass;
@@ -32,23 +33,26 @@ class JsCall
     public mixed $result = null;
 
     /**
-     * Get signed url to point to a jsCall() function
-     * @param string $phpMethod
+     * Get signed url to point to the js call view
+     * @param string|callable|array $phpMethod A callable is only supported as array, not as a closure
      * @param string $action
      * @param array|null $additionalUrlParameters Additional array parameters to pass by
-     * @return string
+     * @param bool $signWithCurrentUserToken If true, then sign with current user token, so this url can only be verified by the same user
+     * @param int $maxLifetime Max url lifetime in seconds, set to 0 if unlimited
+     * @return Url
      */
     public static function getUrl(
-        string $phpMethod,
+        string|callable|array $phpMethod,
         string $action,
-        ?array $additionalUrlParameters = null
+        ?array $additionalUrlParameters = null,
+        bool $signWithCurrentUserToken = true,
+        int $maxLifetime = 86400
     ): string {
-        $url = View::getUrl(View\Api::class, ['requestMethod' => 'jscall'])
-            ->setParameter('phpMethod', $phpMethod)
+        return View::getUrl(View\JsCallView::class)
+            ->setParameter('method', $phpMethod)
             ->setParameter('action', $action)
             ->addParameters($additionalUrlParameters)
-            ->sign();
-        return $url->getUrlAsString();
+            ->sign($signWithCurrentUserToken, $maxLifetime);
     }
 
     /**

@@ -6,6 +6,8 @@ use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Html\HtmlAttributes;
 use Framelix\Framelix\Html\TableCell;
+use Framelix\Framelix\Network\JsCall;
+use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
 use Framelix\Framelix\Network\UploadedFile;
 use Framelix\Framelix\Url;
@@ -23,6 +25,7 @@ use function dirname;
 use function file_get_contents;
 use function file_put_contents;
 use function filesize;
+use function http_response_code;
 use function in_array;
 use function is_dir;
 use function is_file;
@@ -97,6 +100,22 @@ class StorableFile extends StorableExtended
      * @var string[]
      */
     protected array $keepFileExtensions = ['jpg', 'jpeg', 'gif', 'png', 'apng', 'svg', 'webp', 'mp4', 'webm'];
+
+    public static function onJsCall(JsCall $jsCall): void
+    {
+        if ($jsCall->action === 'downloadFile') {
+            $file = StorableFile::getById(
+                Request::getGet('id'),
+                Request::getGet('connectionId'),
+                true
+            );
+            if (!$file) {
+                http_response_code(404);
+                return;
+            }
+            Response::download($file);
+        }
+    }
 
     /**
      * Get the absolute path to the userdata folder where the files for this storable should be stored
@@ -195,10 +214,8 @@ class StorableFile extends StorableExtended
         if (!$this->id) {
             return null;
         }
-        return View::getUrl(View\Api::class, ['requestMethod' => 'downloadFile'])
-            ->setParameter('id', $this)
-            ->setParameter('connectionId', $this->connectionId)
-            ->sign();
+        return JsCall::getUrl([self::class, "onJsCall"], "downloadFile",
+            ["id" => $this->id, "connectionId" => $this->connectionId]);
     }
 
     /**

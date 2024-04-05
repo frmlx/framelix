@@ -36,8 +36,6 @@ class TwoFactor extends View
         switch ($jsCall->action) {
             case 'enable':
                 $form = self::getEnableForm();
-                /** @var TwoFactorCode $field */
-                $field = $form->fields['code'];
                 $tfa = new TwoFactorAuth($jsCall->parameters['name'] ?? '');
                 $secret = $tfa->createSecret();
                 $codes = [];

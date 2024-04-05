@@ -1,16 +1,6 @@
 {
-    "directoryListHash": "3|254081651",
+    "directoryListHash": "3|2326117813",
     "views": {
-        "Framelix\\Framelix\\View\\Api": {
-            "accessRole": "*",
-            "customUrl": "~^\/api\/(?<requestMethod>[A-Za-z0-9]+$)~",
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/api"
-        },
         "Framelix\\Framelix\\View\\Backend\\Dev\\LangEditor": {
             "accessRole": true,
             "customUrl": null,
@@ -240,6 +230,16 @@
             "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/twofactor"
+        },
+        "Framelix\\Framelix\\View\\JsCallView": {
+            "accessRole": "*",
+            "customUrl": "\/jscv",
+            "devModeOnly": false,
+            "multilanguage": true,
+            "urlPriority": 0,
+            "hiddenView": false,
+            "pageTitle": "{classLangKey}",
+            "url": "\/jscallview"
         },
         "Framelix\\Framelix\\View\\MPdfBase": {
             "accessRole": true,

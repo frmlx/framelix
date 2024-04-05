@@ -126,7 +126,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                         $value = Url::create();
                         break;
                     case View::class:
-                        $value = new View\Api();
+                        $value = new View\Backend\Login();
                         break;
                     case Field::class:
                         $value = new Field\Text();

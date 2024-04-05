@@ -12,7 +12,5 @@
     "sortablejs": "^1.15.2",
     "swiped-events": "^1.1.9"
   },
-  "scripts": {
-    "start": "node nodejs/start.js"
-  }
+  "web-types": "web-types/web-types.json"
 }
