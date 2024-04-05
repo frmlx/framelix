@@ -39,10 +39,10 @@ use function trim;
  */
 abstract class StorableMeta implements JsonSerializable
 {
-    public const CONTEXT_TABLE = 1;
-    public const CONTEXT_FORM = 2;
-    public const CONTEXT_QUICK_SEARCH = 3;
-    public const CONTEXT_EXTENDED_SEARCH = 4;
+    public const int CONTEXT_TABLE = 1;
+    public const int CONTEXT_FORM = 2;
+    public const int CONTEXT_QUICK_SEARCH = 3;
+    public const int CONTEXT_EXTENDED_SEARCH = 4;
 
     /**
      * The meta id
@@ -101,23 +101,21 @@ abstract class StorableMeta implements JsonSerializable
      */
     public static function onJsCall(JsCall $jsCall): void
     {
-        switch ($jsCall->action) {
-            case 'quicksearch':
-                $meta = StorableMeta::createFromUrl(Url::create());
-                $query = trim((string)($jsCall->parameters['query'] ?? null));
-                if (User::hasRole('dev')) {
-                    $condition = $meta->getQuickSearchCondition($jsCall->parameters['options'] ?? null);
-                    Response::header(
-                        "x-debug-query: " . $condition->getPreparedCondition($meta->storable->getDb(), $query)
-                    );
-                }
-                $objects = $meta->getQuickSearchResult($query, $jsCall->parameters['options'] ?? null);
-                if ($objects) {
-                    $meta->getTable($objects, "quicksearch")->show();
-                } else {
-                    echo '<framelix-alert>__framelix_form_search_noresult__</framelix-alert>';
-                }
-                break;
+        if ($jsCall->action == 'quicksearch') {
+            $meta = StorableMeta::createFromUrl(Url::create());
+            $query = trim((string)($jsCall->parameters['query'] ?? null));
+            if (User::hasRole('dev')) {
+                $condition = $meta->getQuickSearchCondition($jsCall->parameters['options'] ?? null);
+                Response::header(
+                    "x-debug-query: " . $condition->getPreparedCondition($meta->storable->getDb(), $query)
+                );
+            }
+            $objects = $meta->getQuickSearchResult($query, $jsCall->parameters['options'] ?? null);
+            if ($objects) {
+                $meta->getTable($objects, "quicksearch")->show();
+            } else {
+                echo '<framelix-alert>__framelix_form_search_noresult__</framelix-alert>';
+            }
         }
     }
 

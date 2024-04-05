@@ -27,7 +27,7 @@ class Lang
     /**
      * All official 2-char ISO lang codes
      */
-    public const ISO_LANG_CODES = [
+    public const array ISO_LANG_CODES = [
         "ab" => "Abkhazian",
         "aa" => "Afar",
         "af" => "Afrikaans",

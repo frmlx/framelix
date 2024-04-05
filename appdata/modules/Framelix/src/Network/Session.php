@@ -26,7 +26,7 @@ class Session
     /**
      * How long should sessions been kept on disk
      */
-    public const MAX_LIFETIME_DAYS = 3;
+    public const int MAX_LIFETIME_DAYS = 3;
 
     /**
      * The session name

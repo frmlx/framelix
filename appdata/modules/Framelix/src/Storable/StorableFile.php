@@ -49,19 +49,19 @@ class StorableFile extends StorableExtended
      * Extensions for that we can generate thumbnails
      * @var string[]
      */
-    public const THUMBNAIL_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
+    public const array THUMBNAIL_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
 
     /**
      * Extensions that can be viewed safely in today's browsers
      * @var string[]
      */
-    public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'apng', 'png', 'webp', 'bmp', 'svg'];
+    public const array IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'apng', 'png', 'webp', 'bmp', 'svg'];
 
     /**
      * Extensions that can be viewed safely in today's' browsers
      * @var string[]
      */
-    public const VIDEO_EXTENSIONS = ['mp4', 'webm'];
+    public const array VIDEO_EXTENSIONS = ['mp4', 'webm'];
 
     /**
      * All available thumb sizes

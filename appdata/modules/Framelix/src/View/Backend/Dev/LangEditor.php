@@ -130,7 +130,7 @@ class LangEditor extends View
                 form.container.on('focusin', 'textarea', function () {
                   if (this.name.startsWith('valuesUnmodified')) {
                     /** @type {FramelixFormFieldHidden} hiddenField */
-                    const baseName = this.name.substr(0, this.name.length - 3)
+                    const baseName = this.name.substring(0, this.name.length - 3)
                     const hiddenField = form.fields[baseName + '[1]']
                     if (hiddenField) {
                       hiddenField.input[0].name = hiddenField.input[0].name.replace(/valuesUnmodified/, 'values')

@@ -18,8 +18,8 @@ use function explode;
  */
 class Captcha extends Field
 {
-    public const TYPE_RECAPTCHA_V2 = 'recaptchav2';
-    public const TYPE_RECAPTCHA_V3 = 'recaptchav3';
+    public const string TYPE_RECAPTCHA_V2 = 'recaptchav2';
+    public const string TYPE_RECAPTCHA_V3 = 'recaptchav3';
 
     /**
      * The type of the captcha
@@ -40,26 +40,24 @@ class Captcha extends Field
      */
     public static function onJsCall(JsCall $jsCall): void
     {
-        switch ($jsCall->action) {
-            case 'verify':
-                $type = $jsCall->parameters['type'] ?? null;
-                switch ($type) {
-                    case self::TYPE_RECAPTCHA_V2:
-                    case self::TYPE_RECAPTCHA_V3:
-                        $token = (string)($jsCall->parameters['token'] ?? null);
-                        $responseData = self::recaptchaValidationRequest(
-                            $token,
-                            Config::$captchaKeys[$type]['privateKey']
-                        );
-                        if ($type === self::TYPE_RECAPTCHA_V3) {
-                            $success = ($responseData['success'] ?? null) && ($responseData['score'] ?? 0) >= Config::$recaptchaV3Treshold;
-                        } else {
-                            $success = (bool)($responseData['success'] ?? null);
-                        }
-                        $jsCall->result = ['hash' => $success ? CryptoUtils::hash($token) : null];
-                        break;
-                }
-                break;
+        if ($jsCall->action == 'verify') {
+            $type = $jsCall->parameters['type'] ?? null;
+            switch ($type) {
+                case self::TYPE_RECAPTCHA_V2:
+                case self::TYPE_RECAPTCHA_V3:
+                    $token = (string)($jsCall->parameters['token'] ?? null);
+                    $responseData = self::recaptchaValidationRequest(
+                        $token,
+                        Config::$captchaKeys[$type]['privateKey']
+                    );
+                    if ($type === self::TYPE_RECAPTCHA_V3) {
+                        $success = ($responseData['success'] ?? null) && ($responseData['score'] ?? 0) >= Config::$recaptchaV3Treshold;
+                    } else {
+                        $success = (bool)($responseData['success'] ?? null);
+                    }
+                    $jsCall->result = ['hash' => $success ? CryptoUtils::hash($token) : null];
+                    break;
+            }
         }
     }
 

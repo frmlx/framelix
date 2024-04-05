@@ -49,7 +49,7 @@ abstract class View implements JsonSerializable
     /**
      * Increase this number when something important changes in metadata handling
      */
-    public const METADATA_VERSION = 3;
+    public const int METADATA_VERSION = 3;
 
     /**
      * The current active view

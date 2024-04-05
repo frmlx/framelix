@@ -171,7 +171,7 @@ class SpreadsheetWrapper
                         if (str_starts_with($value, "=")) {
                             $cell->setValueExplicit($value, PhpSpreadsheet\Cell\DataType::TYPE_FORMULA);
                         } else {
-                            $cell = $cell->setValueExplicit($value, PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                            $cell = $cell->setValueExplicit($value);
                             $cell->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
                             $cell->getStyle()->setQuotePrefix(true);
                         }

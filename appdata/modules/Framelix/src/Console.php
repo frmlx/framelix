@@ -40,7 +40,7 @@ use const STR_PAD_LEFT;
  */
 class Console
 {
-    public const CONSOLE_SCRIPT = "framelix_console";
+    public const string CONSOLE_SCRIPT = "framelix_console";
 
     /**
      * Do not output anything when using ::error, ::warn, ::success, ::line

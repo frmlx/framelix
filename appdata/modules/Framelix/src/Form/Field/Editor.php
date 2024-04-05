@@ -15,7 +15,7 @@ use function strlen;
  */
 class Editor extends Field
 {
-    public const TINYMCE_PATH = __DIR__ . "/../../../public/vendor/tinymce-6.8.2/js/tinymce/tinymce.min.js";
+    public const string TINYMCE_PATH = __DIR__ . "/../../../public/vendor/tinymce-6.8.2/js/tinymce/tinymce.min.js";
 
     /**
      * The min height for the editor in pixel

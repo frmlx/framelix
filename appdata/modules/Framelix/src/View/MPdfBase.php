@@ -21,12 +21,12 @@ class MPdfBase extends View
     /**
      * The x position where the address must start in case of a windowed post cuvert
      */
-    public const ADDRESS_HEADER_WINDOW_START_X_POSITION = 20;
+    public const int ADDRESS_HEADER_WINDOW_START_X_POSITION = 20;
 
     /**
      * The y position where the address must start in case of a windowed post cuvert
      */
-    public const ADDRESS_HEADER_WINDOW_START_Y_POSITION = 55;
+    public const int ADDRESS_HEADER_WINDOW_START_Y_POSITION = 55;
 
     public Mpdf $pdf;
 
@@ -79,13 +79,13 @@ class MPdfBase extends View
 
         $this->pdf->onBeforeAddPage(function () {
             Buffer::start();
-            $this->pdf->SetHTMLHeader('');
+            $this->pdf->SetHTMLHeader();
             if ($this->showHeaderHtml()) {
                 $this->pdf->SetHTMLHeader(Buffer::get());
             }
 
             Buffer::start();
-            $this->pdf->SetHTMLFooter('');
+            $this->pdf->SetHTMLFooter();
             if ($this->showFooterHtml()) {
                 $this->pdf->SetHTMLFooter(Buffer::get());
             }

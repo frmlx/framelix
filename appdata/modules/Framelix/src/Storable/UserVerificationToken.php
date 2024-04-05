@@ -14,9 +14,9 @@ use Framelix\Framelix\Utils\RandomGenerator;
  */
 class UserVerificationToken extends StorableExtended
 {
-    public const CATEGORY_FORGOT_PASSWORD = 1;
-    public const CATEGORY_CHANGE_EMAIL_OLD = 2;
-    public const CATEGORY_CHANGE_EMAIL_NEW = 3;
+    public const int CATEGORY_FORGOT_PASSWORD = 1;
+    public const int CATEGORY_CHANGE_EMAIL_OLD = 2;
+    public const int CATEGORY_CHANGE_EMAIL_NEW = 3;
 
     /**
      * Create a new, already stored, token for given user

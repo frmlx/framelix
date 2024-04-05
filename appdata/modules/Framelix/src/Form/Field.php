@@ -37,14 +37,14 @@ abstract class Field implements JsonSerializable
      * Does layout jumps but hidden fields take no space
      * @var string
      */
-    public const VISIBILITY_HIDDEN = 'hidden';
+    public const string VISIBILITY_HIDDEN = 'hidden';
 
     /**
      * Hide the field almost transparent
      * Prevent a lot of layout jumps but hidden fields will take the space
      * @var string
      */
-    public const  VISIBILITY_TRANSPARENT = 'transparent';
+    public const  string VISIBILITY_TRANSPARENT = 'transparent';
 
     /**
      * The form the field is attached to

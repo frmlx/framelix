@@ -16,17 +16,17 @@ class TableCell implements JsonSerializable
     /**
      * Just do the request but not showing actual results anywhere
      */
-    public const JSCALLMODE_INVISIBLE = 0;
+    public const int JSCALLMODE_INVISIBLE = 0;
 
     /**
      * Display contents inside a modal
      */
-    public const JSCALLMODE_MODAL = 1;
+    public const int JSCALLMODE_MODAL = 1;
 
     /**
      * Display contents inside a tooltip popup attached to the clicked icon
      */
-    public const JSCALLMODE_POPUP = 2;
+    public const int JSCALLMODE_POPUP = 2;
 
     /**
      * String value

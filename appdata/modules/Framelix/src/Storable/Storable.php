@@ -85,18 +85,17 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
 
     public static function onJsCall(JsCall $jsCall): void
     {
-        switch ($jsCall->action) {
-            case 'deleteStorable':
-                $storable = Storable::getById(Request::getGet('id'), Request::getGet('connectionId'));
-                $result = 'Storable not found';
-                if ($storable) {
-                    $storable->delete();
-                    $result = true;
-                }
-                if ($redirect = Request::getGet('redirect')) {
-                    Url::create($redirect)->redirect();
-                }
-                $jsCall->result = $result;
+        if ($jsCall->action == 'deleteStorable') {
+            $storable = Storable::getById(Request::getGet('id'), Request::getGet('connectionId'));
+            $result = 'Storable not found';
+            if ($storable) {
+                $storable->delete();
+                $result = true;
+            }
+            if ($redirect = Request::getGet('redirect')) {
+                Url::create($redirect)->redirect();
+            }
+            $jsCall->result = $result;
         }
     }
 

@@ -29,8 +29,8 @@ use const FRAMELIX_MODULE;
  */
 class StorableSchema
 {
-    public const ID_TABLE = "framelix__id";
-    public const SCHEMA_TABLE = "framelix__schema";
+    public const string ID_TABLE = "framelix__id";
+    public const string SCHEMA_TABLE = "framelix__schema";
 
     /**
      * The parent storable schemas

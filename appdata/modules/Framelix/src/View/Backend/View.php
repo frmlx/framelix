@@ -41,13 +41,13 @@ abstract class View extends \Framelix\Framelix\View
     /**
      * The default backend layout
      */
-    public const LAYOUT_DEFAULT = 1;
+    public const int LAYOUT_DEFAULT = 1;
 
     /**
      * Display the page in a small centered container
      * For login page and such stuff with almost no content
      */
-    public const LAYOUT_SMALL_CENTERED = 2;
+    public const int LAYOUT_SMALL_CENTERED = 2;
 
     /**
      * The layout to use

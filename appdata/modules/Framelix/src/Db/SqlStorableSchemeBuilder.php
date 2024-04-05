@@ -33,8 +33,8 @@ use function trim;
  */
 class SqlStorableSchemeBuilder
 {
-    public const MYSQL_DEFAULT_COLLATION = 'utf8mb4_unicode_ci';
-    public const MYSQL_DEFAULT_ENGINE = 'InnoDB';
+    public const string MYSQL_DEFAULT_COLLATION = 'utf8mb4_unicode_ci';
+    public const string MYSQL_DEFAULT_ENGINE = 'InnoDB';
 
     public function __construct(public SchemeBuilderRequirementsInterface & Sql $db)
     {

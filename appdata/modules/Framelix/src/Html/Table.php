@@ -42,43 +42,43 @@ class Table implements JsonSerializable
      * No special behaviour
      * @var string
      */
-    public const COLUMNFLAG_DEFAULT = 'default';
+    public const string COLUMNFLAG_DEFAULT = 'default';
 
     /**
      * An icon column which takes the complete space of a column and display a clickable button with that icon
      * @var string
      */
-    public const COLUMNFLAG_ICON = 'icon';
+    public const string COLUMNFLAG_ICON = 'icon';
 
     /**
      * Use smallest width possible, depending on the content
      * @var string
      */
-    public const COLUMNFLAG_SMALLWIDTH = 'smallwidth';
+    public const string COLUMNFLAG_SMALLWIDTH = 'smallwidth';
 
     /**
      * Use a smaller font
      * @var string
      */
-    public const COLUMNFLAG_SMALLFONT = 'smallfont';
+    public const string COLUMNFLAG_SMALLFONT = 'smallfont';
 
     /**
      * Ignore sort for this column
      * @var string
      */
-    public const COLUMNFLAG_IGNORESORT = 'ignoresort';
+    public const string COLUMNFLAG_IGNORESORT = 'ignoresort';
 
     /**
      * Ignore click and link to url on this column
      * @var string
      */
-    public const COLUMNFLAG_IGNOREURL = 'ignoreurl';
+    public const string COLUMNFLAG_IGNOREURL = 'ignoreurl';
 
     /**
      * Remove the column if all cells in the tbody are empty
      * @var string
      */
-    public const COLUMNFLAG_REMOVE_IF_EMPTY = 'removeifempty';
+    public const string COLUMNFLAG_REMOVE_IF_EMPTY = 'removeifempty';
 
     /**
      * Id for the table

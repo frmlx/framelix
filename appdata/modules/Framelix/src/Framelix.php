@@ -38,7 +38,7 @@ class Framelix
      * The version of the framelix core itself
      * Will be replaced in production build with actual version number
      */
-    public const VERSION = "dev";
+    public const string VERSION = "dev";
 
     /**
      * @var string[]

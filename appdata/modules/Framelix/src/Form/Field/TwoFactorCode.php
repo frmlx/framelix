@@ -15,10 +15,10 @@ use function strlen;
  */
 class TwoFactorCode extends Field
 {
-    public const COOKIE_NAME_SECRET = 'framelix-2fa-secret';
-    public const COOKIE_NAME_BACKUPCODES = 'framelix-2fa-backupcodes';
-    public const COOKIE_NAME_USERID = 'framelix-2fa-userid';
-    public const COOKIE_NAME_USERSTAY = 'framelix-2fa-stay';
+    public const string COOKIE_NAME_SECRET = 'framelix-2fa-secret';
+    public const string COOKIE_NAME_BACKUPCODES = 'framelix-2fa-backupcodes';
+    public const string COOKIE_NAME_USERID = 'framelix-2fa-userid';
+    public const string COOKIE_NAME_USERSTAY = 'framelix-2fa-stay';
 
     /**
      * Auto submit the form containing this field after user has entered 6-digits

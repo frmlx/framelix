@@ -9,8 +9,8 @@ use Framelix\Framelix\Form\Field;
  */
 class Toggle extends Field
 {
-    public const STYLE_TOGGLE = 'toggle';
-    public const STYLE_CHECKBOX = 'checkbox';
+    public const string STYLE_TOGGLE = 'toggle';
+    public const string STYLE_CHECKBOX = 'checkbox';
 
     /**
      * The style for the toggle

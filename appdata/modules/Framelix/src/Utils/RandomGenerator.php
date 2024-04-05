@@ -14,19 +14,19 @@ class RandomGenerator
     /**
      * All alphanumeric chars
      */
-    public const CHARSET_ALPHANUMERIC = 1;
+    public const int CHARSET_ALPHANUMERIC = 1;
 
     /**
      * A set of reduced alphanumeric characters that can easily be distinguished by humans
      * Optimal for OTP tokens or stuff like that
      */
-    public const CHARSET_ALPHANUMERIC_READABILITY = 2;
+    public const int CHARSET_ALPHANUMERIC_READABILITY = 2;
 
     /**
      * List of charsets
      * @var string[]
      */
-    public static $charsets = [
+    public static array $charsets = [
         self::CHARSET_ALPHANUMERIC => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
         self::CHARSET_ALPHANUMERIC_READABILITY => 'ABCDEFHKLMNPQRSTUWXYZ0123456789'
     ];
