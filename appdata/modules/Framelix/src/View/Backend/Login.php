@@ -29,6 +29,11 @@ use function base64_decode;
 
 class Login extends View
 {
+
+    public static string $imgBgDark = __DIR__ . "/../../../public/img/bg-login-dark.webp";
+
+    public static string $imgBgLight = __DIR__ . "/../../../public/img/bg-login-light.webp";
+
     protected string|bool $accessRole = "*";
 
     public static function onJsCall(JsCall $jsCall): void
@@ -164,62 +169,78 @@ class Login extends View
         $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ButtonColor::PRIMARY);
         $form->show();
         ?>
-        <style>
-          framelix-button:not(.fido2-enabled)[data-action='fido2'] {
-            display: none;
+      <style>
+        framelix-button:not(.fido2-enabled)[data-action='fido2'] {
+          display: none;
+        }
+        html[data-layout="2"][data-color-scheme=dark] .framelix-page {
+          background: url(<?=Url::getUrlToPublicFile(self::$imgBgDark)?>) center no-repeat;
+          background-size: cover;
+        }
+        html[data-layout="2"][data-color-scheme=dark] .framelix-content-inner-inner {
+          backdrop-filter: blur(12px);
+          background: rgba(0, 0, 0, 0.7);
+        }
+        html[data-layout="2"][data-color-scheme=light] .framelix-page {
+          background: url(<?=Url::getUrlToPublicFile(self::$imgBgLight)?>) center no-repeat;
+          background-size: cover;
+        }
+        html[data-layout="2"][data-color-scheme=light] .framelix-content-inner-inner {
+          backdrop-filter: blur(12px);
+          background: rgba(255, 255, 255, 0.6);
+        }
+      </style>
+      <script>
+        (async function () {
+          const form = FramelixForm.getById('<?=$form->id?>')
+          await form.rendered
+          form.container.on('change', function () {
+            const email = form.fields['email'].getValue()
+            FramelixLocalStorage.set('login-email', email)
+          })
+          const storedEmail = FramelixLocalStorage.get('login-email')
+          if (storedEmail) {
+            form.fields['email'].setValue(storedEmail)
+            form.fields['password'].container.find('input').trigger('focus')
+          } else {
+            form.fields['email'].container.find('input').trigger('focus')
           }
-        </style>
-        <script>
-          (async function () {
-            const form = FramelixForm.getById('<?=$form->id?>')
-            await form.rendered
-            form.container.on('change', function () {
-              const email = form.fields['email'].getValue()
-              FramelixLocalStorage.set('login-email', email)
-            })
-            const storedEmail = FramelixLocalStorage.get('login-email')
-            if (storedEmail) {
-              form.fields['email'].setValue(storedEmail)
-              form.fields['password'].container.find('input').trigger('focus')
-            } else {
-              form.fields['email'].container.find('input').trigger('focus')
-            }
-            if (FramelixLocalStorage.get('webauthn')) {
-              const fidoButton = $('framelix-button[data-action=\'fido2\']')
-              fidoButton.addClass('fido2-enabled')
-              fidoButton.on('click', async function () {
-                let getArgsServerData = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                    __CLASS__,
-                    'webauthn-getargs'
-                )?>', form.getValues()).getResponseData()
-                if (typeof getArgsServerData === 'string') {
-                  FramelixToast.error(getArgsServerData)
-                  return
+          if (FramelixLocalStorage.get('webauthn')) {
+            const fidoButton = $('framelix-button[data-action=\'fido2\']')
+            fidoButton.addClass('fido2-enabled')
+            fidoButton.on('click', async function () {
+              let getArgsServerData = await FramelixRequest.jsCall('<?=JsCall::getUrl(
+                  __CLASS__,
+                  'webauthn-getargs'
+              )?>', form.getValues()).getResponseData()
+              if (typeof getArgsServerData === 'string') {
+                FramelixToast.error(getArgsServerData)
+                return
+              }
+              let getArgs = getArgsServerData.getArgs
+              Framelix.recursiveBase64StrToArrayBuffer(getArgs)
+              navigator.credentials.get(getArgs).then(async function (getArgsClientData) {
+                let loginArgsParams = {
+                  'formValues': form?.getValues(),
+                  'credentialId': Framelix.arrayBufferToBase64(getArgsClientData.rawId),
+                  'clientData': Framelix.arrayBufferToBase64(getArgsClientData.response.clientDataJSON),
+                  'authenticatorData': Framelix.arrayBufferToBase64(getArgsClientData.response.authenticatorData),
+                  'signature': Framelix.arrayBufferToBase64(getArgsClientData.response.signature),
                 }
-                let getArgs = getArgsServerData.getArgs
-                Framelix.recursiveBase64StrToArrayBuffer(getArgs)
-                navigator.credentials.get(getArgs).then(async function (getArgsClientData) {
-                  let loginArgsParams = {
-                    'formValues': form?.getValues(),
-                    'credentialId': Framelix.arrayBufferToBase64(getArgsClientData.rawId),
-                    'clientData': Framelix.arrayBufferToBase64(getArgsClientData.response.clientDataJSON),
-                    'authenticatorData': Framelix.arrayBufferToBase64(getArgsClientData.response.authenticatorData),
-                    'signature': Framelix.arrayBufferToBase64(getArgsClientData.response.signature),
-                  }
-                  let loginResult = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                      __CLASS__,
-                      'webauthn-login'
-                  )?>', loginArgsParams).getResponseData()
-                  if (loginResult.url) {
-                    Framelix.redirect(loginResult.url)
-                  } else {
-                    FramelixToast.error(loginResult)
-                  }
-                })
+                let loginResult = await FramelixRequest.jsCall('<?=JsCall::getUrl(
+                    __CLASS__,
+                    'webauthn-login'
+                )?>', loginArgsParams).getResponseData()
+                if (loginResult.url) {
+                  Framelix.redirect(loginResult.url)
+                } else {
+                  FramelixToast.error(loginResult)
+                }
               })
-            }
-          })()
-        </script>
+            })
+          }
+        })()
+      </script>
         <?php
     }
 
@@ -267,4 +288,5 @@ class Login extends View
 
         return $form;
     }
+
 }
