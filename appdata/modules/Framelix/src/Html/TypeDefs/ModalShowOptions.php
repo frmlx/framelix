@@ -7,10 +7,10 @@ class ModalShowOptions extends BaseTypeDef
     public function __construct(
         /**
          * The body content to render
-         * @var string
+         * @var string|null
          * @jstype string|Cash|FramelixRequest
          */
-        public string $bodyContent,
+        public ?string $bodyContent = null,
         /**
          * The fixed header content which can be optional
          * @var string|null

@@ -7,14 +7,20 @@ use Framelix\Framelix\Framelix;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Utils\ClassUtils;
 use Framelix\Framelix\Utils\FileUtils;
+use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\Utils\PhpDocParser;
 use JsonSerializable;
 use ReflectionClass;
 
+use function array_map;
 use function basename;
 use function file_put_contents;
 use function filemtime;
 use function implode;
+use function is_array;
+use function is_bool;
+use function is_string;
+use function str_contains;
 use function str_replace;
 use function substr;
 
@@ -77,16 +83,37 @@ abstract class BaseTypeDef implements JsonSerializable
                 $phpDoc = PhpDocParser::parse($prop->getDocComment());
                 $jsType = null;
                 $phpType = null;
+                $instance = new $class();
+                $defaultValue = $instance->{$propName};
                 foreach ($phpDoc['annotations'] as $row) {
-                    if ($row['type'] === 'jstype') {
+                    if ($row['type'] === 'jslistconstants') {
+                        $defaultValuesList = '';
+                        $searchFor = implode("", $row['value']);
+                        foreach ($reflection->getConstants() as $constantName => $constantValue) {
+                            if (str_contains($constantName, $searchFor)) {
+                                $defaultValuesList .= JsonUtils::encode($constantValue) . ", ";
+                            }
+                        }
+                        $jsType = '(' . trim($defaultValuesList, ', ') . ')';
+                    } elseif ($row['type'] === 'jstype') {
                         $jsType = implode("", $row['value']);
                     } elseif ($row['type'] === 'var') {
                         $phpType = implode("", $row['value']);
                         $phpType = str_replace(["int", "float"], "number", $phpType);
+                        $phpType = str_replace(["bool"], "boolean", $phpType);
+                        $phpType = str_replace(["array"], "Array", $phpType);
                     }
                 }
-                $jsData .= " * @property {" . ($jsType ?? $phpType ?? '') . "} $propName " . implode(" ",
-                        $phpDoc['description']) . "\n";
+                if ($defaultValue === null) {
+                    $defaultValue = "null";
+                } elseif (is_bool($defaultValue)) {
+                    $defaultValue = $defaultValue ? "true" : "false";
+                } elseif (is_string($defaultValue) || is_array($defaultValue)) {
+                    $defaultValue = JsonUtils::encode($defaultValue);
+                }
+                $propName = is_string($defaultValue) ? "[$propName=" . $defaultValue . "]" : $propName;
+                $jsData .= " * @property {" . ($jsType ?? $phpType ?? '') . "} $propName " . implode(", ",
+                        array_map('trim', $phpDoc['description'])) . "\n";
             }
             $jsData .= "*/";
             file_put_contents($jsFilePath, $jsData);

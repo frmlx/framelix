@@ -42,7 +42,7 @@ class FramelixPopup {
 
   /**
    * The options with what the popup was created with
-   * @type {FramelixPopupShowOptions}
+   * @type {FramelixHtmlTypeDefsPopupShowOptions}
    */
   options = {}
 
@@ -134,39 +134,11 @@ class FramelixPopup {
     })
   }
 
-  // docs-id-start: FramelixPopupShowOptions
-  /**
-   * @typedef {Object} FramelixPopupShowOptions
-   * @property {string} [placement='top'] Where to place the popup beside the target, https://popper.js.org/docs/v2/constructors/#options
-   * @property {boolean} [stickInViewport=false] Stick in viewport so it always is visible, even if target is out of screen
-   * @property {string|string[]} [closeMethods='click-outside'] How the popup should be closed
-   *    click-outside close self when user click outside of the popup
-   *    click-inside close self when user click inside the popup
-   *    click close self when user click anywhere on the page
-   *    mouseleave-target closes when user leave target element with mouse (also implicit using "click" on it because usually this lead to some other content modification)
-   *    focusout-popup closes when user has focused popup and then leaves the popup focus
-   *    manual can only be closed programmatically with FramelixPopup.destroyInstance()
-   * @property {string|HTMLElement=} [color='default'] Popup color
-   *    default is dark
-   *    primary|error|warning|success
-   *    or HexColor starting with #
-   *    or a css variable starting with --
-   *    or element to copy background and text color from
-   * @property {string=} [group='popup'] The group id, one target can have one popup of one group
-   * @property {number[]=} [offset=[0,5]] Offset the popup from the target (X,Y)
-   * @property {string=} [padding='5px 10px'] Css padding of popup container
-   * @property {MouseEvent=} offsetByMouseEvent Offset X by given mouse event, so popup is centered where the cursor is
-   * @property {string|Cash=} [appendTo='body'] Where this popup should be appended to
-   * @property {Object=} data Any data to pass to the instance for later reference
-   */
-
-  // docs-id-end: FramelixPopupShowOptions
-
   /**
    * Show a popup on given element
    * @param {HTMLElement|Cash} target The target to bind to
    * @param {string|Cash|FramelixRequest} content The content
-   * @param {FramelixPopupShowOptions=} options
+   * @param {FramelixHtmlTypeDefsPopupShowOptions=} options
    * @return {FramelixPopup}
    */
   static show (target, content, options) {
