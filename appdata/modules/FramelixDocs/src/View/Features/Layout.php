@@ -57,7 +57,7 @@ class Layout extends View
         </p>
         <p>
             A list of all web-components an there available attributes is
-            in <?= $this->getSourceFileLinkTag(["Framelix/web-types/web-types.json"]) ?>
+            in <?= $this->getSourceFileLinkTag(["Framelix/dev/web-types/web-types.json"]) ?>
         </p>
         <p>
             Here are a few examples.
