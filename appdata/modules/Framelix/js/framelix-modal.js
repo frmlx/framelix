@@ -23,7 +23,7 @@ class FramelixModal {
 
   /**
    * The options with what the modal was created with
-   * @type {FramelixModalShowOptions}
+   * @type {FramelixHtmlTypeDefsModalShowOptions}
    */
   options = {}
 
@@ -119,7 +119,7 @@ class FramelixModal {
   /**
    * Display a nice alert box (instead of a native alert() function)
    * @param {string|Cash} content
-   * @param {FramelixModalShowOptions=} options
+   * @param {FramelixHtmlTypeDefsModalShowOptions=} options
    * @return {FramelixModal}
    */
   static alert (content, options) {
@@ -144,7 +144,7 @@ class FramelixModal {
    * Display a nice prompt box (instead of a native prompt() function)
    * @param {string|Cash} content
    * @param {string=} defaultText
-   * @param {FramelixModalShowOptions=} options
+   * @param {FramelixHtmlTypeDefsModalShowOptions=} options
    * @return {FramelixModal}
    */
   static prompt (content, defaultText, options) {
@@ -194,7 +194,7 @@ class FramelixModal {
   /**
    * Display a nice confirmation box (instead of a native confirm() function)
    * @param {string|Cash} content
-   * @param {FramelixModalShowOptions=} options
+   * @param {FramelixHtmlTypeDefsModalShowOptions=} options
    * @return {FramelixModal}
    */
   static confirm (content, options) {
@@ -231,7 +231,7 @@ class FramelixModal {
    * @param {Object|FormData|string=} postData Post data to send
    * @param {boolean|Cash=} showProgressBar Show progress bar at top of page or in given container
    * @param {Object=} fetchOptions Additonal options to directly pass to the fetch() call
-   * @param {FramelixModalShowOptions=} modalOptions Modal options
+   * @param {FramelixHtmlTypeDefsModalShowOptions=} modalOptions Modal options
    * @return {Promise<FramelixModal>} Resolved when content is loaded
    */
   static async request (method, urlPath, urlParams, postData, showProgressBar, fetchOptions, modalOptions) {
@@ -246,23 +246,9 @@ class FramelixModal {
     return modal
   }
 
-  // docs-id-start: FramelixModalShowOptions
-  /**
-   * @typedef {Object} FramelixModalShowOptions
-   * @property {string|Cash|FramelixRequest} bodyContent The body content
-   * @property {string|Cash|FramelixRequest|null=} headerContent The fixed header content
-   * @property {string|Cash|FramelixRequest|null=} footerContent The fixed footer content
-   * @property {number|string=} maxWidth Max width
-   * @property {string=} color The modal color, success, warning, error, primary
-   * @property {FramelixModal=} instance Reuse the given instance instead of creating a new
-   * @property {Object=} data Any data to pass to the instance for later reference
-   */
-
-  // docs-id-end: FramelixModalShowOptions
-
   /**
    * Show modal
-   * @param {FramelixModalShowOptions} options
+   * @param {FramelixHtmlTypeDefsModalShowOptions} options
    * @return {FramelixModal}
    */
   static show (options) {

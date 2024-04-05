@@ -90,8 +90,7 @@ class ModalWindow extends View
         </p>
         <?php
         $this->addSourceFile(
-            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/js/framelix-modal.js",
-            'FramelixModalShowOptions'
+            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/public/dist/typedefs/ModalShowOptions.js"
         );
         $this->showSourceFiles();
         ?>

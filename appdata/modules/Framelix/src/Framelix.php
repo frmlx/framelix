@@ -4,6 +4,7 @@ namespace Framelix\Framelix;
 
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Html\Compiler;
+use Framelix\Framelix\Html\TypeDefs\BaseTypeDef;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\View\Backend\Setup;
@@ -175,6 +176,7 @@ class Framelix
         View::updateMetadata($module);
         View::addAvailableViewsByModule($module);
         Compiler::compile($module);
+        BaseTypeDef::compile($module);
     }
 
     /**

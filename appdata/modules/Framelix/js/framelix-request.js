@@ -30,7 +30,7 @@ class FramelixRequest {
   _responseJson
 
   /**
-   * A js call request
+   * Create a jscall request
    * @param {string} signedUrl The signed call url generated from backend JsCall::getUrl
    * @param {Object=} parameters Parameters to pass by
    * @param {boolean|Cash=} showProgressBar Show progress bar at top of page or in given container
@@ -44,7 +44,7 @@ class FramelixRequest {
   }
 
   /**
-   * Make a request
+   * Create a request
    * @param {string} method post|get|put|delete
    * @param {string} urlPath The url path with or without url parameters
    * @param {Object=} urlParams Additional url parameters to append to urlPath
