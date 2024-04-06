@@ -32,6 +32,7 @@ use const JSON_PRETTY_PRINT;
  */
 class ErrorHandler
 {
+
     public const string LOGFOLDER = FRAMELIX_USERDATA_FOLDER . "/" . FRAMELIX_MODULE . "/_logs";
 
     /**
@@ -68,14 +69,15 @@ class ErrorHandler
                 'post' => $post,
                 'session' => $session,
                 'cookie' => $cookie,
-            ]
+            ],
         ];
     }
 
     /**
      * Show error as html from exception data
      * @param array $logData
-     * @param bool $forceShowDetails If true, then all exception data will be shown. If false, this info is only visible in devMode
+     * @param bool $forceShowDetails If true, then all exception data will be shown. If false, this info is only
+     *     visible in devMode
      */
     public static function showErrorFromExceptionLog(array $logData, bool $forceShowDetails = false): void
     {
@@ -85,52 +87,52 @@ class ErrorHandler
             $id = RandomGenerator::getRandomHtmlId();
             $html = [
                 'title' => htmlentities($logData['message']) . ' in ' . $logData['file'] . '(' . $logData['line'] . ')',
-                'trace' => implode('</pre><pre class="framelix-error-log-trace">', $logData['traceSimple'])
+                'trace' => implode('</pre><pre class="framelix-error-log-trace">', $logData['traceSimple']),
             ];
             ?>
-            <div id="<?= $id ?>" class="framelix-error-log">
-                <small><?= DateTime::anyToFormat($logData['time'] ?? null, "d.m.Y H:i:s") ?></small>
-                <pre class="framelix-error-log-title"><?= $html['title'] ?></pre>
-                <pre class="framelix-error-log-trace"><?= $html['trace'] ?></pre>
-                <pre class="framelix-error-log-json"><?= JsonUtils::encode(
-                        $logData['additionalData'] ?? null,
-                        true
-                    ) ?></pre>
-            </div>
-            <style>
-              .framelix-error-log {
-                padding: 10px;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-              }
+          <div id="<?= $id ?>" class="framelix-error-log">
+            <small><?= DateTime::anyToFormat($logData['time'] ?? null, "d.m.Y H:i:s") ?></small>
+            <pre class="framelix-error-log-title"><?= $html['title'] ?></pre>
+            <pre class="framelix-error-log-trace"><?= $html['trace'] ?></pre>
+            <pre class="framelix-error-log-json"><?= JsonUtils::encode(
+                    $logData['additionalData'] ?? null,
+                    true
+                ) ?></pre>
+          </div>
+          <style>
+            .framelix-error-log {
+              padding: 10px;
+              border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+            }
 
-              .framelix-error-log-title {
-                color: var(--color-error-text, red);
-                font-weight: bold;
-                max-width: 100%;
-                overflow-x: auto;
-                white-space: pre-line;
-                margin: 0;
-                font-size: 0.9rem;
-              }
+            .framelix-error-log-title {
+              color: var(--color-error-text, red);
+              font-weight: bold;
+              max-width: 100%;
+              overflow-x: auto;
+              white-space: pre-line;
+              margin: 0;
+              font-size: 0.9rem;
+            }
 
-              .framelix-error-log-trace,
-              .framelix-error-log-json {
-                max-width: 100%;
-                overflow-x: auto;
-                white-space: pre-wrap;
-                text-indent: -27px;
-                padding-left: 27px;
-                display: block;
-                margin: 0;
-                font-size: 0.8rem;
-              }
-            </style>
-            <script>
-              (function () {
-                const errorData = <?=json_encode($logData)?>;
-                console.log('Framelix Error', errorData)
-              })()
-            </script>
+            .framelix-error-log-trace,
+            .framelix-error-log-json {
+              max-width: 100%;
+              overflow-x: auto;
+              white-space: pre-wrap;
+              text-indent: -27px;
+              padding-left: 27px;
+              display: block;
+              margin: 0;
+              font-size: 0.8rem;
+            }
+          </style>
+          <script>
+            (function () {
+              const errorData = <?=json_encode($logData)?>;
+              console.log('Framelix Error', errorData)
+            })()
+          </script>
             <?php
         }
     }
@@ -183,7 +185,9 @@ class ErrorHandler
             if (Request::isAsync()) {
                 Response::header("x-redirect: " . $e->url);
             } else {
-                http_response_code($e->getCode());
+                if (!headers_sent()) {
+                    http_response_code($e->getCode());
+                }
                 Response::header("location: " . $e->url);
             }
             return;
@@ -206,7 +210,9 @@ class ErrorHandler
             exit($e->getCode() > 0 ? $e->getCode() : 1);
         }
         // on server, return with error response code and let the views handles the output
-        http_response_code(500);
+        if (!headers_sent()) {
+            http_response_code(500);
+        }
         if (!View::$activeView) {
             ErrorHandler::showErrorFromExceptionLog($logData);
         } else {
@@ -245,4 +251,5 @@ class ErrorHandler
         }
         throw new FatalError($errstr);
     }
+
 }
