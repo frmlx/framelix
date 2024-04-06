@@ -9,7 +9,7 @@
       "elements": [
         {
           "name": "framelix-button",
-          "description": "A clickable button with some customization options. Accept's a language key as well.",
+          "description": "A clickable button with some customization options. Accept's a language key as label as well.",
           "attributes": [
             {
               "name": "block",

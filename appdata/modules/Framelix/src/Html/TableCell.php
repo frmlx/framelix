@@ -13,20 +13,6 @@ use JsonSerializable;
  */
 class TableCell implements JsonSerializable
 {
-    /**
-     * Just do the request but not showing actual results anywhere
-     */
-    public const int JSCALLMODE_INVISIBLE = 0;
-
-    /**
-     * Display contents inside a modal
-     */
-    public const int JSCALLMODE_MODAL = 1;
-
-    /**
-     * Display contents inside a tooltip popup attached to the clicked icon
-     */
-    public const int JSCALLMODE_POPUP = 2;
 
     /**
      * String value
@@ -53,7 +39,7 @@ class TableCell implements JsonSerializable
     public ?string $buttonIcon = null;
 
     /**
-     * Icon theme, primary, success, warning, error, light
+     * The button text
      * @var string|null
      */
     public ?string $buttonText = null;
@@ -90,7 +76,7 @@ class TableCell implements JsonSerializable
     public Url|string|null $buttonHref = null;
 
     /**
-     * Open the icon url in a new tab
+     * The target to render to response to
      * @var string|null
      */
     public ?string $buttonTarget = null;
@@ -121,4 +107,5 @@ class TableCell implements JsonSerializable
     {
         return new PhpToJsData((array)$this, $this, 'FramelixTableCell');
     }
+
 }

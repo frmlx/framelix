@@ -42,6 +42,9 @@ class FramelixCustomElementButton extends FramelixCustomElement {
     if (!this.initialized) {
       this.initialized = true
       this.addEventListener('click', async function (ev) {
+        ev.stopPropagation()
+        ev.preventDefault()
+
         disabled = disabled = this.hasAttribute('disabled')
         if (disabled) return
 
