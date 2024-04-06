@@ -23,6 +23,7 @@ use function unlink;
 
 class Compiler
 {
+
     /**
      * Internal cache
      * Not modify it, it is public just for unit tests
@@ -63,7 +64,10 @@ class Compiler
         // meta file will store previous compiler data
         // if anything changes, then we need to force an update
         $moduleRoot = FileUtils::getModuleRootPath($module);
-        $existingDistFiles = FileUtils::getFiles("$moduleRoot/public/dist", "~\.(js|css)$~", true);
+        $existingDistFiles = array_merge(
+            FileUtils::getFiles("$moduleRoot/public/dist/css", "~\.css$~", true),
+            FileUtils::getFiles("$moduleRoot/public/dist/js", "~\.js$~", true)
+        );
         $existingDistFiles = array_combine($existingDistFiles, $existingDistFiles);
         $returnDistFiles = [];
         foreach ($compilerFileBundles as $bundle) {
@@ -72,7 +76,7 @@ class Compiler
             $metaFilePath = $distFilePath . ".hash.txt";
             $metadataWrite = md5(JsonUtils::encode([
                 'bundle' => $bundle,
-                'compileFiles' => $compileFiles
+                'compileFiles' => $compileFiles,
             ]));
             if (!is_file($metaFilePath) || file_get_contents($metaFilePath) !== $metadataWrite) {
                 $forceUpdate = true;
@@ -104,13 +108,13 @@ class Compiler
                 'type' => $bundle->type,
                 'distFilePath' => $distFilePath,
                 'files' => $compileFiles,
-                'options' => $bundleOptions
+                'options' => $bundleOptions,
             ];
             $shell = Shell::prepare(
                 "node {*}",
                 [
                     __DIR__ . "/../../nodejs/compiler.js",
-                    base64_encode(JsonUtils::encode($cmdParams))
+                    base64_encode(JsonUtils::encode($cmdParams)),
                 ]
             );
             $shell->execute();
@@ -128,4 +132,5 @@ class Compiler
         }
         return $returnDistFiles;
     }
+
 }
