@@ -21,6 +21,7 @@ use const JSON_THROW_ON_ERROR;
  */
 class JsonUtils
 {
+
     private static array $cache = [];
 
     /**
@@ -99,7 +100,7 @@ class JsonUtils
                     $data = (string)$data;
                 }
                 if (!is_object($data)) {
-                    $msg .= ' in ' . $data;
+                    $msg .= ' in ' . json_encode($data);
                 }
                 throw new FatalError($msg);
             }
@@ -123,4 +124,5 @@ class JsonUtils
         }
         return json_decode($data, true, 512, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE);
     }
+
 }
