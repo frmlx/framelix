@@ -43,8 +43,7 @@ class CompilerFileBundle
         public string $module,
         #[ExpectedValues(['js', 'scss'])] public string $type,
         public string $bundleId
-    ) {
-    }
+    ) {}
 
     public function getGeneratedBundleFilePath(): string
     {
@@ -65,16 +64,30 @@ class CompilerFileBundle
      * Add a folder with all files in it, relative from the bundles module folder
      * @param string $relativeFolderPath
      * @param bool $recursive
-     * @param array|null $ignoreFilenames
+     * @param \Framelix\Framelix\Html\CompilerFileBundle[]|\Framelix\Framelix\Html\CompilerFileBundle|null $ignoreFilesFromBundles Ignores
+     *     all files from given bundles
      * @return void
      */
-    public function addFolder(string $relativeFolderPath, bool $recursive, ?array $ignoreFilenames = null): void
-    {
+    public function addFolder(
+        string $relativeFolderPath,
+        bool $recursive,
+        array|CompilerFileBundle|null $ignoreFilesFromBundles = null
+    ): void {
+        $ignoredFiles = [];
+        if ($ignoreFilesFromBundles) {
+            /** @var \Framelix\Framelix\Html\CompilerFileBundle[] $arr */
+            $arr = !is_array($ignoreFilesFromBundles) ? [$ignoreFilesFromBundles] : $ignoreFilesFromBundles;
+            foreach ($arr as $ignoredBundle) {
+                if ($ignoredBundle !== $this && $ignoredBundle instanceof CompilerFileBundle) {
+                    $ignoredFiles = array_merge($ignoredFiles, $ignoredBundle->getFiles());
+                }
+            }
+        }
         $this->entries[] = [
             "type" => "folder",
             "path" => $relativeFolderPath,
             "recursive" => $recursive,
-            "ignoreFilenames" => $ignoreFilenames
+            "ignoredFiles" => $ignoredFiles,
         ];
     }
 
@@ -87,7 +100,7 @@ class CompilerFileBundle
     {
         $this->entries[] = [
             "type" => "file",
-            "path" => $relativeFilePath
+            "path" => $relativeFilePath,
         ];
     }
 
@@ -98,6 +111,7 @@ class CompilerFileBundle
     public function getFiles(): array
     {
         $files = [];
+        $ignoredFiles = [];
         foreach ($this->entries as $row) {
             if ($this->type === 'scss') {
                 $bootstrapFile = FileUtils::getModuleRootPath($this->module) . "/scss/_compiler-bootstrap.scss";
@@ -105,6 +119,7 @@ class CompilerFileBundle
                     $files[] = $bootstrapFile;
                 }
             }
+
             if ($row['type'] === 'file') {
                 $files[] = FileUtils::getModuleRootPath($this->module) . "/" . $row['path'];
             } elseif ($row['type'] === 'folder') {
@@ -115,12 +130,8 @@ class CompilerFileBundle
                     "~\.$extensions$~",
                     $row['recursive'] ?? false
                 );
-                if (isset($row['ignoreFilenames'])) {
-                    foreach ($folderFiles as $key => $file) {
-                        if (in_array(basename($file), $row['ignoreFilenames'])) {
-                            unset($folderFiles[$key]);
-                        }
-                    }
+                if ($row['ignoredFiles'] ?? null) {
+                    $ignoredFiles = $row['ignoredFiles'];
                 }
                 $files = array_merge(
                     $files,
@@ -132,6 +143,9 @@ class CompilerFileBundle
         $compileFiles = [];
         foreach ($files as $file) {
             $realFile = realpath($file);
+            if (in_array($realFile, $ignoredFiles)) {
+                continue;
+            }
             if (!$realFile) {
                 throw new FatalError('Cannot find file "' . $file . '" for compiler');
             }
@@ -141,4 +155,5 @@ class CompilerFileBundle
         }
         return array_values($compileFiles);
     }
+
 }

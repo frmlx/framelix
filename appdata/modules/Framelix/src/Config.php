@@ -19,6 +19,7 @@ use const FRAMELIX_MODULE;
 
 class Config
 {
+
     /**
      * Development mode enables more debugging and generation of required dist and meta files after source changes
      * Enable this with ENV variable FRAMELIX_DEVMODE=1 before starting the docker image
@@ -121,7 +122,7 @@ class Config
      */
     public static array $enabledBuiltInSystemEventLogs = [
         SystemEventLog::CATEGORY_LOGIN_FAILED => true,
-        SystemEventLog::CATEGORY_LOGIN_SUCCESS => true
+        SystemEventLog::CATEGORY_LOGIN_SUCCESS => true,
     ];
 
     /**
@@ -130,7 +131,7 @@ class Config
      */
     public static array $enabledBuiltInSystemEventLogsKeepDays = [
         SystemEventLog::CATEGORY_LOGIN_FAILED => 60,
-        SystemEventLog::CATEGORY_LOGIN_SUCCESS => 60
+        SystemEventLog::CATEGORY_LOGIN_SUCCESS => 60,
     ];
 
     /**
@@ -235,7 +236,8 @@ class Config
     /**
      * The application url prefix
      * This is only required when to application is NOT installed on the domain root
-     * e.g: The app startpoint is installed at yourdomain.com/myapplication, then you have to set prefix to "myapplication"
+     * e.g: The app startpoint is installed at yourdomain.com/myapplication, then you have to set prefix to
+     * "myapplication"
      * @var string
      */
     public static string $applicationUrlPrefix = '';
@@ -352,12 +354,7 @@ class Config
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general");
         $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
-        $bundle->addFolder('js', false, [
-            "framelix-table-sort-serviceworker.js",
-            "framelix-device-detection.js",
-            "framelix-local-storage.js",
-            "framelix-session-storage.js"
-        ]);
+        $bundle->addFolder('js', false, Config::$compilerFileBundles);
         $bundle->addFile('custom-elements/framelix-custom-element.js');
         $bundle->addFolder('custom-elements', true);
 
@@ -443,7 +440,7 @@ class Config
             'port' => $port,
             'username' => $username,
             'password' => $password,
-            'database' => $database
+            'database' => $database,
         ];
     }
 
@@ -475,7 +472,7 @@ class Config
             'username' => $username,
             'password' => $password,
             'database' => $database,
-            'socket' => $socket
+            'socket' => $socket,
         ];
     }
 
@@ -492,7 +489,7 @@ class Config
         Config::$sqlConnections[$id] = [
             'type' => Sql::TYPE_SQLITE,
             'id' => $id,
-            'path' => $path
+            'path' => $path,
         ];
     }
 
@@ -513,7 +510,7 @@ class Config
         self::$captchaKeys[$type] = [
             'privateKey' => $privateKey,
             'publicKey' => $publicKey,
-            'additionalData' => $additionalData
+            'additionalData' => $additionalData,
         ];
     }
 
@@ -617,8 +614,9 @@ class Config
             "// database connections, urls, salts and all that sensible stuff belongs to here",
             "\\Framelix\\Framelix\\Config::addSalt('" . $defaultSalt . "');",
             "\\Framelix\\Framelix\\Config::\$applicationHost = '" . $applicationHost . "';",
-            "\\Framelix\\Framelix\\Config::\$applicationUrlPrefix = '" . $applicationUrlPrefix . "';"
+            "\\Framelix\\Framelix\\Config::\$applicationUrlPrefix = '" . $applicationUrlPrefix . "';",
         ];
         file_put_contents($userConfigFile, implode("\n", $fileContents));
     }
+
 }
