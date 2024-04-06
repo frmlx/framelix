@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|2483110291",
+    "directoryListHash": "3|216628336",
     "views": {
         "Framelix\\FramelixTests\\View\\BrowserTestView": {
             "accessRole": "*",
@@ -31,15 +31,15 @@
             "pageTitle": "{classLangKey}",
             "url": ""
         },
-        "Framelix\\FramelixTests\\View\\ModalWindow": {
+        "Framelix\\FramelixTests\\View\\Misc\\CustomElementButton": {
             "accessRole": "*",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
             "hiddenView": false,
-            "pageTitle": "Modal Window Tests",
-            "url": "\/modalwindow"
+            "pageTitle": "{classLangKey}",
+            "url": "\/misc\/customelementbutton"
         },
         "Framelix\\FramelixTests\\View\\TestBackendView": {
             "accessRole": true,

@@ -300,6 +300,13 @@ abstract class View extends \Framelix\Framelix\View
         </script>
         <?php
         echo '</div>';
+        echo HtmlUtils::getIncludeTagForUrl(
+            Config::getCompilerFileBundle(
+                "Framelix",
+                "js",
+                "general-late"
+            )->getGeneratedBundleUrl()
+        );
         echo '</body></html>';
         echo Buffer::getAll();
     }

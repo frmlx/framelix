@@ -352,11 +352,13 @@ class Config
         $bundle->addFile('js/framelix-session-storage.js');
         $bundle->addFile('js/framelix-device-detection.js');
 
+        $bundle = self::createCompilerFileBundle("Framelix", "js", "general-late");
+        $bundle->addFile('custom-elements/framelix-custom-element.js');
+        $bundle->addFolder('custom-elements', true);
+
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general");
         $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->addFolder('js', false, Config::$compilerFileBundles);
-        $bundle->addFile('custom-elements/framelix-custom-element.js');
-        $bundle->addFolder('custom-elements', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "table-sorter-serviceworker");
         $bundle->addFile('js/framelix-table-sort-serviceworker.js');
