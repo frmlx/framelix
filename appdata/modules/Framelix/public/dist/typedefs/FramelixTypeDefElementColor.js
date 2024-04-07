@@ -38,8 +38,8 @@ class FramelixTypeDefElementColor extends FramelixBaseTypeDef {
 
     /**
      * Predefined color theme for action colors like error, success, etc...
-     * Require any of the class constants starting with COLORTYPE_
-     * @type  {()}
+     * Require any of the class constants starting with THEME_
+     * @type  {("default", "primary", "success", "warning", "error")}
      */
     theme = "default"
 

@@ -38,11 +38,11 @@ class ElementColor extends BaseTypeDef
     public function __construct(
         /**
          * Predefined color theme for action colors like error, success, etc...
-         * @var string|null
-         * @jslistconstants COLORTYPE_
+         * @var string
+         * @jslistconstants THEME_
          */
         #[ExpectedValues(valuesFromClass: self::class)]
-        public string $theme = 'default',
+        public string $theme = self::THEME_DEFAULT,
         /**
          * Background color in HSL range to override
          * Array of 4 numeric values, where only the first is required
