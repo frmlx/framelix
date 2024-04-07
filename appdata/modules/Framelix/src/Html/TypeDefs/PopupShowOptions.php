@@ -95,7 +95,7 @@ class PopupShowOptions extends BaseTypeDef
         public mixed $offsetByMouseEvent = null,
         /**
          * Where this popup should be appended to
-         * @var string|null
+         * @var string
          * @jstype string|Cash
          */
         public string $appendTo = 'body',
