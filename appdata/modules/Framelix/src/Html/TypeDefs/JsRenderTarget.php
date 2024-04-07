@@ -26,7 +26,7 @@ class JsRenderTarget extends BaseTypeDef
         /**
          * Render into given element selector (Can be a html element, selector or cash instance)
          * @var string|null
-         * @jstype string|HtmlElement|Cash|null
+         * @jstype string|HTMLElement|Cash|null
          */
         public string|null $elementSelector = null,
         /**

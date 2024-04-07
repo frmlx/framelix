@@ -5,6 +5,7 @@ namespace Framelix\Framelix\View\Backend\UserProfile;
 use Framelix\Framelix\Enums\ButtonColor;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
+use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
@@ -142,7 +143,7 @@ class Fido2 extends View
             $form->addButton(
                 'enable',
                 '__framelix_view_backend_userprofile_fido2_enable__',
-                buttonColor: ButtonColor::PRIMARY
+                buttonColor: ElementColor::THEME_PRIMARY
             );
         }
         $form->show();

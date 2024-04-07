@@ -4,6 +4,60 @@
 class FramelixColorUtils {
 
   /**
+   * Set colors on an element based on the color definition
+   * @param {FramelixTypeDefElementColor|Object|string} colorDef
+   * @param {HTMLElement|Cash} element
+   */
+  static setColorsFromElementColorDef (colorDef, element) {
+    element = $(element)
+    if (typeof colorDef === 'string' || colorDef.theme) {
+      const theme = colorDef.theme || colorDef
+      // custom elements have themes built-in
+      if (element[0].tagName.startsWith('FRAMELIX-')) {
+        element.attr('theme', theme)
+      } else {
+        element.css('color', 'var(--color-' + theme + '-text)').css('background-color', 'var(--color-' + theme + '-text)')
+      }
+    }
+    if (colorDef instanceof FramelixTypeDefElementColor || typeof colorDef === 'object') {
+      if (colorDef.bgColor) {
+        const hsla = colorDef.bgColor
+        const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
+        if (hsla.length < 2) {
+          hsla[1] = 'var(--color-default-contrast-bg)'
+        } else {
+          hsla[1] += '%'
+        }
+        if (hsla.length < 3) {
+          hsla[2] = 'var(--color-default-lightness-bg)'
+        } else {
+          hsla[2] += '%'
+        }
+        element.css('background-color', colorType + '(' + hsla.join(', ') + ')')
+      }
+      if (colorDef.textColor) {
+        if (colorDef.textColor === 'invert') {
+          setTimeout(function () {
+            element[0].style.color = FramelixColorUtils.invertColor(FramelixColorUtils.cssColorToHex(getComputedStyle(element[0]).backgroundColor), true)
+          }, 10)
+        } else {
+          const hsla = colorDef.textColor
+          const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
+          if (hsla.length < 3) {
+            hsla[2] = 'var(--color-default-lightness-text)'
+          }
+          if (hsla.length < 2) {
+            hsla[1] = 'var(--color-default-contrast-text)'
+          }
+          hsla[1] += '%'
+          hsla[2] += '%'
+          element.css('color', colorType + '(' + hsla.join(', ') + ')')
+        }
+      }
+    }
+  }
+
+  /**
    * Invert given hex color
    * This returns black/white hex color, depending on given background color
    * @link https://stackoverflow.com/a/35970186/1887622
@@ -13,7 +67,9 @@ class FramelixColorUtils {
    */
   static invertColor (hex, blackWhite = false) {
     let rgb = FramelixColorUtils.hexToRgb(hex)
-    if (!rgb) return null
+    if (!rgb) {
+      return null
+    }
     if (blackWhite) {
       // https://stackoverflow.com/a/3943023/112731
       return (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114) > 186 ? '#000' : '#fff'
@@ -43,11 +99,21 @@ class FramelixColorUtils {
       r = g = b = l // achromatic
     } else {
       const hue2rgb = function hue2rgb (p, q, t) {
-        if (t < 0) t += 1
-        if (t > 1) t -= 1
-        if (t < 1 / 6) return p + (q - p) * 6 * t
-        if (t < 1 / 2) return q
-        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6
+        if (t < 0) {
+          t += 1
+        }
+        if (t > 1) {
+          t -= 1
+        }
+        if (t < 1 / 6) {
+          return p + (q - p) * 6 * t
+        }
+        if (t < 1 / 2) {
+          return q
+        }
+        if (t < 2 / 3) {
+          return p + (q - p) * (2 / 3 - t) * 6
+        }
         return p
       }
 

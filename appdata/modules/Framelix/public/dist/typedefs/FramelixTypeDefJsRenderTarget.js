@@ -27,7 +27,7 @@ class FramelixTypeDefJsRenderTarget extends FramelixBaseTypeDef {
 
     /**
      * Render into given element selector (Can be a html element, selector or cash instance)
-     * @type  {string|HtmlElement|Cash|null}
+     * @type  {string|HTMLElement|Cash|null}
      */
     elementSelector = null
 

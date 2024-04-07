@@ -69,7 +69,7 @@ class PopupShowOptions extends BaseTypeDef
          *    or a css variable starting with --
          *    or element to copy background and text color from
          * @var string
-         * @jstype string|HtmlElement|Cash
+         * @jstype string|HTMLElement|Cash
          */
         public string $color = 'default',
         /**

@@ -3,7 +3,6 @@
 namespace Framelix\Framelix\View\Backend;
 
 use Framelix\Framelix\Config;
-use Framelix\Framelix\Enums\ButtonColor;
 use Framelix\Framelix\Form\Field\Captcha;
 use Framelix\Framelix\Form\Field\Email;
 use Framelix\Framelix\Form\Field\Html;
@@ -11,6 +10,7 @@ use Framelix\Framelix\Form\Field\Password;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Field\TwoFactorCode;
 use Framelix\Framelix\Form\Form;
+use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
@@ -166,7 +166,7 @@ class Login extends View
     {
         $form = $this->getForm();
         $form->addSubmitButton('login', '__framelix_login_submit__');
-        $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ButtonColor::PRIMARY);
+        $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ElementColor::THEME_PRIMARY);
         $form->show();
         ?>
       <style>

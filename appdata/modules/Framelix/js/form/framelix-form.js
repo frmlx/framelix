@@ -298,14 +298,14 @@ class FramelixForm {
    * @param {string} actionId
    * @param {string} buttonText
    * @param {string|null} buttonIcon
-   * @param {string} buttonColor
+   * @param {string|FramelixTypeDefElementColor|Object|null} buttonColor
    * @param {string|null} buttonTooltip
    */
   addButton (
     actionId,
     buttonText,
     buttonIcon = '70c',
-    buttonColor = 'dark',
+    buttonColor = FramelixTypeDefElementColor.THEME_DEFAULT,
     buttonTooltip = null
   ) {
     this.buttons['action-' + actionId] = {
@@ -323,14 +323,14 @@ class FramelixForm {
    * @param url
    * @param {string} buttonText
    * @param {string|null} buttonIcon
-   * @param {string} buttonColor
+   * @param {string|FramelixTypeDefElementColor|Object|null} buttonColor
    * @param {string|null} buttonTooltip
    */
   addLoadUrlButton (
     url,
     buttonText,
     buttonIcon = '70c',
-    buttonColor = 'dark',
+    buttonColor = FramelixTypeDefElementColor.THEME_DEFAULT,
     buttonTooltip = null
   ) {
     this.buttons['url-' + url] = {
@@ -348,14 +348,14 @@ class FramelixForm {
    * @param {string} submitFieldName
    * @param {string} buttonText
    * @param {string|null} buttonIcon
-   * @param {string} buttonColor
+   * @param {string|FramelixTypeDefElementColor|Object|null} buttonColor
    * @param {string|null} buttonTooltip
    */
   addSubmitButton (
     submitFieldName,
     buttonText,
     buttonIcon = null,
-    buttonColor = 'success',
+    buttonColor = FramelixTypeDefElementColor.THEME_SUCCESS,
     buttonTooltip = null
   ) {
     this.buttons['submit-' + submitFieldName] = {
@@ -665,7 +665,7 @@ class FramelixForm {
         }
 
         const button = $(`<framelix-button>`)
-        button.attr('theme', buttonData.color)
+        FramelixColorUtils.setColorsFromElementColorDef(buttonData.color, button)
         button.attr('data-type', buttonData.type)
         button.attr('data-submit-field-name', buttonData.submitFieldName)
         button.html(buttonData.buttonText)

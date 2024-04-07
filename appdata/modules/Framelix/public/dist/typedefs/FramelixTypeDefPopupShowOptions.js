@@ -67,7 +67,7 @@ class FramelixTypeDefPopupShowOptions extends FramelixBaseTypeDef {
      * or HexColor starting with #
      * or a css variable starting with --
      * or element to copy background and text color from
-     * @type  {string|HtmlElement|Cash}
+     * @type  {string|HTMLElement|Cash}
      */
     color = "default"
 

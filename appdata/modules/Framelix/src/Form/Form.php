@@ -6,6 +6,7 @@ use Framelix\Framelix\Enums\ButtonColor;
 use Framelix\Framelix\Form\Field\File;
 use Framelix\Framelix\Html\HtmlAttributes;
 use Framelix\Framelix\Html\PhpToJsData;
+use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
@@ -28,6 +29,7 @@ use function ob_start;
  */
 class Form implements JsonSerializable
 {
+
     /**
      * The id for the form
      * @var string
@@ -148,7 +150,8 @@ class Form implements JsonSerializable
 
     /**
      * Show form
-     * @param bool $fillWithSubmittedData If true then fill form data with submitted data, if form isn't async and current request contains form data
+     * @param bool $fillWithSubmittedData If true then fill form data with submitted data, if form isn't async and
+     *     current request contains form data
      */
     final public function show(bool $fillWithSubmittedData = true): void
     {
@@ -214,7 +217,7 @@ class Form implements JsonSerializable
      * @param string $actionId
      * @param string $buttonText
      * @param string|null $buttonIcon
-     * @param ButtonColor $buttonColor
+     * @param ElementColor|string $buttonColor
      * @param string|null $buttonTooltip
      * @param bool $ignoreReadOnly If true and $readOnly of form is also true, this button will still be kept visible,
      *    Buttons without this flag will be hidden when the form is readOnly
@@ -223,7 +226,7 @@ class Form implements JsonSerializable
         string $actionId,
         string $buttonText,
         ?string $buttonIcon = '70c',
-        ButtonColor $buttonColor = ButtonColor::DEFAULT,
+        ElementColor|string $buttonColor = ElementColor::THEME_DEFAULT,
         ?string $buttonTooltip = null,
         bool $ignoreReadOnly = false
     ): void {
@@ -234,7 +237,7 @@ class Form implements JsonSerializable
             'buttonText' => Lang::get($buttonText),
             'buttonIcon' => $buttonIcon,
             'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
-            'ignoreReadOnly' => $ignoreReadOnly
+            'ignoreReadOnly' => $ignoreReadOnly,
         ];
     }
 
@@ -243,7 +246,7 @@ class Form implements JsonSerializable
      * @param Url $url
      * @param string $buttonText
      * @param string|null $buttonIcon
-     * @param ButtonColor $buttonColor
+     * @param ElementColor|string $buttonColor
      * @param string|null $buttonTooltip
      * @param bool $ignoreReadOnly Same as in self::addButton
      * @see self::addButton()
@@ -252,7 +255,7 @@ class Form implements JsonSerializable
         Url $url,
         string $buttonText = '__framelix_stop_edit__',
         ?string $buttonIcon = '70c',
-        ButtonColor $buttonColor = ButtonColor::DEFAULT,
+        ElementColor|string $buttonColor = ElementColor::THEME_DEFAULT,
         ?string $buttonTooltip = null,
         bool $ignoreReadOnly = false
     ): void {
@@ -263,7 +266,7 @@ class Form implements JsonSerializable
             'buttonText' => Lang::get($buttonText),
             'buttonIcon' => $buttonIcon,
             'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
-            'ignoreReadOnly' => $ignoreReadOnly
+            'ignoreReadOnly' => $ignoreReadOnly,
         ];
     }
 
@@ -272,7 +275,7 @@ class Form implements JsonSerializable
      * @param string $submitFieldName
      * @param string $buttonText
      * @param string|null $buttonIcon
-     * @param ButtonColor $buttonColor
+     * @param ElementColor|string $buttonColor
      * @param string|null $buttonTooltip
      * @param bool $ignoreReadOnly Same as in self::addButton
      * @see self::addButton()
@@ -281,7 +284,7 @@ class Form implements JsonSerializable
         string $submitFieldName = 'save',
         string $buttonText = '__framelix_save__',
         ?string $buttonIcon = '718',
-        ButtonColor $buttonColor = ButtonColor::SUCCESS,
+        ElementColor|string $buttonColor = ElementColor::THEME_SUCCESS,
         ?string $buttonTooltip = null,
         bool $ignoreReadOnly = false
     ): void {
@@ -292,7 +295,7 @@ class Form implements JsonSerializable
             'buttonText' => Lang::get($buttonText),
             'buttonIcon' => $buttonIcon,
             'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
-            'ignoreReadOnly' => $ignoreReadOnly
+            'ignoreReadOnly' => $ignoreReadOnly,
         ];
     }
 
@@ -318,7 +321,7 @@ class Form implements JsonSerializable
             'label' => $label,
             'fieldNames' => $fieldNames,
             'defaultState' => $defaultState,
-            'rememberState' => $rememberState
+            'rememberState' => $rememberState,
         ];
     }
 
@@ -405,7 +408,8 @@ class Form implements JsonSerializable
 
     /**
      * Validate the form
-     * @param bool $asyncValidation If true and validation messages exist, then output messages as json and stop code execution
+     * @param bool $asyncValidation If true and validation messages exist, then output messages as json and stop code
+     *     execution
      * @return bool
      */
     public function validate(bool $asyncValidation = true): bool
@@ -441,4 +445,5 @@ class Form implements JsonSerializable
         }
         return new PhpToJsData($properties, $this, 'FramelixForm');
     }
+
 }
