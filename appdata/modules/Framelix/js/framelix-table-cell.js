@@ -65,12 +65,13 @@ class FramelixTableCell {
   /**
    * @type {string|null}
    */
-  buttonJscallUrl = null
+  buttonConfirmMessage = null
 
   /**
-   * @type {string|null}
+   * The request should be made when clicking the button
+   * @type {FramelixTypeDefJsRequestOptions|null}
    */
-  buttonConfirmMessage = null
+  buttonRequestOptions = null
 
   /**
    * Additional button attributes
@@ -106,11 +107,11 @@ class FramelixTableCell {
       if (this.buttonTarget) {
         buttonAttr.set('target', this.buttonTarget)
       }
-      if (this.buttonJscallUrl) {
-        buttonAttr.set('jscall-url', this.buttonJscallUrl)
-      }
       if (this.buttonConfirmMessage) {
         buttonAttr.set('confirm-message', this.buttonConfirmMessage)
+      }
+      if (this.buttonRequestOptions) {
+        buttonAttr.set('request-options', FramelixTypeDefJsRequestOptions.toAttrValue(this.buttonRequestOptions))
       }
       return '<framelix-button ' + buttonAttr.toString() + '>' + (this.buttonText || '') + '</framelix-button>'
     } else {

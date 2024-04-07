@@ -14,13 +14,13 @@ class ModalShowOptions extends BaseTypeDef
         /**
          * The fixed header content which can be optional
          * @var string|null
-         * @jstype string|Cash|FramelixRequest|null=
+         * @jstype string|Cash|FramelixRequest|null
          */
         public ?string $headerContent = null,
         /**
          * The fixed footer content which can be optional
          * @var string|null
-         * @jstype string|Cash|FramelixRequest|null=
+         * @jstype string|Cash|FramelixRequest|null
          */
         public ?string $footerContent = null,
         /**
@@ -36,13 +36,13 @@ class ModalShowOptions extends BaseTypeDef
         /**
          * Reuse the given modal instance instead of creating a new
          * @var string|null
-         * @jstype FramelixModal=
+         * @jstype FramelixModal|null
          */
         public mixed $instance = null,
         /**
          * Any data to pass to the instance for later reference
          * @var array|null
-         * @jstype Object=
+         * @jstype Object|null
          */
         public ?array $data = null,
     ) {

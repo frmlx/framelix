@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Html;
 
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Url;
 use JetBrains\PhpStorm\ExpectedValues;
 use JsonSerializable;
@@ -82,12 +83,6 @@ class TableCell implements JsonSerializable
     public ?string $buttonTarget = null;
 
     /**
-     * If set, this jscall request will be made
-     * @var string|null
-     */
-    public ?string $buttonJscallUrl = null;
-
-    /**
      * If set, given confirm message will appear before jscall will be executed
      * @var string|null
      */
@@ -98,6 +93,12 @@ class TableCell implements JsonSerializable
      * @var HtmlAttributes|null
      */
     public ?HtmlAttributes $buttonAttributes = null;
+
+    /**
+     * The request should be made when clicking the button
+     * @var \Framelix\Framelix\Html\TypeDefs\JsRequestOptions|null
+     */
+    public ?JsRequestOptions $buttonRequestOptions = null;
 
     /**
      * Json serialize

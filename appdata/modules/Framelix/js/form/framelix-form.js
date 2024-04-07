@@ -91,24 +91,9 @@ class FramelixForm {
 
   /**
    * The target to render the submit response to
-   *
-   * auto = if form is inside
-   *   - a framelix tab: it behaves like "currenttab"
-   *   - a framelix modal: it behaves like "currentmodal"
-   *   - else: it behaves like "pagecontent"
-   *
-   * Non-Async behaviour:
-   * _blank = Open a new browser window (only when submitAsync = false)
-   *
-   * Async behaviour (Rendering only happens when response contains buffered output data):
-   * newmodal = Render to a new modal
-   * currentmodal =  Render to a current modal (fallback to newmodal if form is not inside a modal)
-   * currenttab = Render to a current tab (fallback to newmodal if form is not inside a modal)
-   * pagecontent = Render to the whole page content container (overrides everything else)
-   * selector: = If it starts with "selector:", everything after : will be considered a CSS selector to render to
-   * none = Even if there is output data, do nothing with it
+   * @type {FramelixTypeDefJsRequestOptions}
    */
-  submitResponseRenderTarget = 'auto'
+  requestOptions = { url: '', renderTarget: 'currentcontext' }
 
   /**
    * Submit the form async
@@ -207,11 +192,17 @@ class FramelixForm {
     const inputSearchMap = new Map()
     const inputSearchValueMap = new Map()
     $(document).on('input keydown', 'input[type=\'search\']', function (ev) {
-      if (ev.key === 'Tab') return
+      if (ev.key === 'Tab') {
+        return
+      }
       clearTimeout(inputSearchMap.get(this))
-      if (inputSearchValueMap.get(this) === this.value && ev.key !== 'Enter') return
+      if (inputSearchValueMap.get(this) === this.value && ev.key !== 'Enter') {
+        return
+      }
       inputSearchValueMap.set(this, this.value)
-      if (this.getAttribute('data-continuous-search') !== '1' && ev.key !== 'Enter') return
+      if (this.getAttribute('data-continuous-search') !== '1' && ev.key !== 'Enter') {
+        return
+      }
       if (ev.key === 'Escape') {
         if (this.value === '') {
           $(this).trigger('blur')
@@ -581,7 +572,9 @@ class FramelixForm {
   async render () {
     const self = this
     this.form = $(`<form>`)
-    if (!this.autocomplete) this.form.attr('autocomplete', 'off')
+    if (!this.autocomplete) {
+      this.form.attr('autocomplete', 'off')
+    }
     this.form.attr('novalidate', true)
     this.container.empty()
     this.container.toggleClass('framelix-form-sticky-form-buttons', this.stickyFormButtons)
@@ -631,7 +624,9 @@ class FramelixForm {
         let state = row.defaultState
         if (row.rememberState) {
           state = FramelixLocalStorage.get(storageKey)
-          if (state === null) state = row.defaultState
+          if (state === null) {
+            state = row.defaultState
+          }
         }
         let groupStartField = null
         let prevGroupField = null
@@ -665,7 +660,9 @@ class FramelixForm {
     if (buttonsCount) {
       for (let i in this.buttons) {
         const buttonData = this.buttons[i]
-        if (this.readOnly && !buttonData.ignoreReadOnly) continue
+        if (this.readOnly && !buttonData.ignoreReadOnly) {
+          continue
+        }
 
         const button = $(`<framelix-button>`)
         button.attr('theme', buttonData.color)
@@ -684,7 +681,9 @@ class FramelixForm {
           })
         } else if (buttonData.type === 'url') {
           button.on('click', function () {
-            if (self.submitRequest) self.submitRequest.abort()
+            if (self.submitRequest) {
+              self.submitRequest.abort()
+            }
             window.location.href = buttonData.url
           })
         } else if (buttonData.type === 'action') {
@@ -704,7 +703,9 @@ class FramelixForm {
     this.submitStatusContainer = $(`<div class="framelix-form-submit-status"></div>`)
     bottomRow.append(this.submitStatusContainer)
     this.container.css('display', '')
-    if (this.validationMessage !== null) this.showValidationMessage(this.validationMessage)
+    if (this.validationMessage !== null) {
+      this.showValidationMessage(this.validationMessage)
+    }
     this.form.on('focusin', function () {
       self.hideValidationMessage()
     })
@@ -721,20 +722,32 @@ class FramelixForm {
 
     for (let i = 0; i < positionedFields.length; i++) {
       const field = positionedFields[i]
-      if (!field.positionInForm || !field.positionInForm.after) continue
+      if (!field.positionInForm || !field.positionInForm.after) {
+        continue
+      }
       const afterField = self.fields[field.positionInForm.after]
-      if (!afterField) continue
+      if (!afterField) {
+        continue
+      }
       const rowToAttach = afterField.container.parent()
       const oldRow = field.container.parent()
       rowToAttach.attr('data-sizing', field.positionInForm.sizing)
-      if (field.positionInForm.columnGrowMe) field.container.css('flex-grow', field.positionInForm.columnGrowMe)
-      if (field.positionInForm.columnGrowOther) afterField.container.css('flex-grow', field.positionInForm.columnGrowOther)
+      if (field.positionInForm.columnGrowMe) {
+        field.container.css('flex-grow', field.positionInForm.columnGrowMe)
+      }
+      if (field.positionInForm.columnGrowOther) {
+        afterField.container.css('flex-grow', field.positionInForm.columnGrowOther)
+      }
       rowToAttach.append(field.container)
-      if (!oldRow.children('.framelix-form-field').length) oldRow.remove()
+      if (!oldRow.children('.framelix-form-field').length) {
+        oldRow.remove()
+      }
     }
 
     Promise.all(fieldRenderPromises).then(function () {
-      if (self._renderedResolve) self._renderedResolve()
+      if (self._renderedResolve) {
+        self._renderedResolve()
+      }
       self._renderedResolve = null
       self.updateFieldVisibility()
       self.form.on(FramelixFormField.EVENT_CHANGE, function () {
@@ -751,10 +764,14 @@ class FramelixForm {
   async submit (submitButtonName) {
 
     // already submitting, skip submit
-    if (this.isSubmitting) return false
+    if (this.isSubmitting) {
+      return false
+    }
 
     // validate the form before submit
-    if ((await this.validate()) !== true) return false
+    if ((await this.validate()) !== true) {
+      return false
+    }
 
     const self = this
 
@@ -765,7 +782,7 @@ class FramelixForm {
       this.setSubmitStatus(true)
       this.form.removeAttr('onsubmit')
       this.form.attr('method', this.submitMethod)
-      this.form.attr('target', this.submitResponseRenderTarget === '_blank' ? '_blank' : '_self')
+      this.form.attr('target', this.requestOptions.renderTarget && this.requestOptions.renderTarget.newTab ? '_blank' : '_self')
       this.form.attr('action', this.submitUrl || window.location.href)
       this.form[0].submit()
       this.form.attr('onsubmit', 'return false')
@@ -811,7 +828,9 @@ class FramelixForm {
         }
       }
     }
-    if (!submitUrl) submitUrl = location.href
+    if (!submitUrl) {
+      submitUrl = location.href
+    }
     this.submitRequest = FramelixRequest.request('post', submitUrl, null, formData, this.submitStatusContainer)
     const request = self.submitRequest
     await request.finished
@@ -826,11 +845,15 @@ class FramelixForm {
 
     // if request does handle anything itself, do not proceed handling the request
     const responseCheckHeadersStatus = await request.checkHeaders()
-    if (responseCheckHeadersStatus !== 0) return true
+    if (responseCheckHeadersStatus !== 0) {
+      return true
+    }
 
     // got no response data, just end here
     const responseData = await request.getJson()
-    if (!responseData) return true
+    if (!responseData) {
+      return true
+    }
 
     // got error messages, display them
     if (responseData.errorMessages) {
@@ -841,7 +864,9 @@ class FramelixForm {
         // field specific errors
         for (let fieldName in self.fields) {
           const field = self.fields[fieldName] || this
-          if (!responseData.errorMessages[fieldName]) continue
+          if (!responseData.errorMessages[fieldName]) {
+            continue
+          }
           if (field) {
             field.showValidationMessage(responseData.errorMessages[fieldName])
           } else {
@@ -859,51 +884,10 @@ class FramelixForm {
     }
 
     if (typeof responseData.buffer === 'string' && responseData.buffer.length) {
-      const tabContent = this.container.closest('.framelix-tab-content')
-      const modalBody = this.container.closest('.framelix-modal-body')
-      let selectorContainer = null
-
-      let target = this.submitResponseRenderTarget
-
-      if (target.startsWith('selector:')) {
-        selectorContainer = $(target.substring(9))
-        if (selectorContainer.length) {
-          target = 'selector'
-        } else {
-          target = 'auto'
-        }
-      }
-
-      if (target === 'auto') {
-        if (tabContent.length) {
-          target = 'currenttab'
-        } else if (modalBody.length) {
-          target = 'currentmodal'
-        }
-      }
-
-      if (target === 'currentmodal' && !modalBody.length) {
-        target = 'newmodal'
-      }
-      if (target === 'currenttab' && !tabContent.length) {
-        target = 'pagecontent'
-      }
-
-      if (target === 'newmodal') {
-        FramelixModal.show({ bodyContent: responseData.buffer })
-      }
-      if (target === 'currentmodal') {
-        modalBody.html(responseData.buffer)
-      }
-      if (target === 'currenttab') {
-        tabContent.html(responseData.buffer)
-      }
-      if (target === 'pagecontent') {
-        $('.framelix-content-inner-inner').html(responseData.buffer)
-      }
-      if (target === 'selector') {
-        selectorContainer.html(responseData.buffer)
-      }
+      // override response data json to rest of the buffer to use default renderer
+      request.requestOptions = this.requestOptions
+      request['_responseJson'] = responseData.buffer
+      await request.render(this.container[0])
     }
 
     if (this.executeAfterAsyncSubmit) {

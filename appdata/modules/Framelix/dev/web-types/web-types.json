@@ -12,6 +12,14 @@
           "description": "A clickable button with some customization options. Accept's a language key as label as well.",
           "attributes": [
             {
+              "name": "request-options",
+              "description": "Onclick making a request based on this options. Generate with new JsRequestOptions(PHP)|FramelixTypeDefJsRequestOptions.toAttrValue(JS)",
+              "required": false,
+              "value": {
+                "kind": "plain"
+              }
+            },
+            {
               "name": "block",
               "description": "Display as block element instead if inline",
               "required": false,
@@ -52,16 +60,8 @@
               }
             },
             {
-              "name": "modal-options",
-              "description": "If target = modal, this JSON object string to pass to FramelixModal.show()",
-              "required": false,
-              "value": {
-                "kind": "plain"
-              }
-            },
-            {
               "name": "target",
-              "description": "Target if link attributes is provided",
+              "description": "Target of href attribute if provided",
               "required": false,
               "value": {
                 "type": "enum"
@@ -79,32 +79,8 @@
                 {
                   "name": "_top",
                   "description": "Top window (Helpful when inside an iframe)"
-                },
-                {
-                  "name": "modal",
-                  "description": "Opens in a Modal window. Define modal-pptions as JSON object with custom modal FramelixModal.show options"
-                },
-                {
-                  "name": "attached",
-                  "description": "Same as tooltip, but with color inherited from the page (dark/light mode depended)"
-                },
-                {
-                  "name": "tooltip",
-                  "description": "Displayed as a tooltip attached to this button (Always dark)"
-                },
-                {
-                  "name": "none",
-                  "description": "Just load the url but do nothing with the result"
                 }
               ]
-            },
-            {
-              "name": "jscall-url",
-              "description": "Load given JsCall url on click",
-              "required": false,
-              "value": {
-                "kind": "plain"
-              }
             },
             {
               "name": "confirm-message",

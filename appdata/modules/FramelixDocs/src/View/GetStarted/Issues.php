@@ -2,6 +2,9 @@
 
 namespace Framelix\FramelixDocs\View\GetStarted;
 
+use Framelix\Framelix\Html\TypeDefs\JsRenderTarget;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
+use Framelix\Framelix\Html\TypeDefs\ModalShowOptions;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\FramelixDocs\View\View;
 
@@ -43,8 +46,7 @@ class Issues extends View
             <img src="/slack-badge.svg" height="20" alt="Slack Members"><br/>
             We also have a Slack channel. Click the button bellow to join.
         </p>
-        <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'slack') ?>" icon="730" theme="primary"
-                         target="modal">
+        <framelix-button request-options="<?= new JsRequestOptions(JsCall::getUrl(__CLASS__, 'slack'), JsRequestOptions::RENDER_TARGET_POPUP) ?>" icon="730" theme="primary">
             Join our Slack channel now
         </framelix-button>
         <?php

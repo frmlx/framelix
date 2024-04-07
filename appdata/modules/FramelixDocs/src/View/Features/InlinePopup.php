@@ -77,8 +77,7 @@ class InlinePopup extends View
         </p>
         <?php
         $this->addSourceFile(
-            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/public/dist/typedefs/PopupShowOptions.js",
-            'FramelixPopupShowOptions'
+            FRAMELIX_APPDATA_FOLDER . "/modules/Framelix/public/dist/typedefs/FramelixTypeDefPopupShowOptions.js"
         );
         $this->showSourceFiles();
         ?>

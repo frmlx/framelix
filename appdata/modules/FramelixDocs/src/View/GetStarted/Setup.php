@@ -8,6 +8,7 @@ use Framelix\Framelix\Form\Field\Text;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Framelix;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
@@ -27,6 +28,7 @@ use function substr;
 
 class Setup extends View
 {
+
     protected string $pageTitle = 'Setup for module development';
 
     public static function onJsCall(JsCall $jsCall): void
@@ -66,7 +68,7 @@ class Setup extends View
                     '# mariadb-start',
                     '# mariadb-end',
                     '# mariadb-backup-start',
-                    '# mariadb-backup-end'
+                    '# mariadb-backup-end',
                 ], '', $contents);
                 $lines = explode("\n", $contents);
                 $contents = implode(
@@ -82,9 +84,10 @@ class Setup extends View
                 Response::stopWithFormValidationResponse();
             }
             ?>
-            <framelix-alert>
-                This tool will create you a docker-compose.yml which you can copy to your empty folder.
-            </framelix-alert>
+          <framelix-alert theme="primary">
+            This tool will create you a docker-compose.yml which you can copy to your empty folder.
+          </framelix-alert>
+          <div class="framelix-spacer"></div>
             <?php
             $form = new Form();
             $form->id = 'config';
@@ -174,46 +177,49 @@ class Setup extends View
     public function showContent(): void
     {
         ?>
-        <p>
-            Development in Framelix is basically split into <code>modules</code>.
-            One application as just one module, by default.
-            So, here we are showing you how you setup for your first application module in Framelix.
-            Framelix has a docker image that is ready to kickstart and what contains everything you need to begin
-            developing.
-        </p>
+      <p>
+        Development in Framelix is basically split into <code>modules</code>.
+        One application as just one module, by default.
+        So, here we are showing you how you setup for your first application module in Framelix.
+        Framelix has a docker image that is ready to kickstart and what contains everything you need to begin
+        developing.
+      </p>
         <?= $this->getAnchoredTitle('requirements', 'Requirements') ?>
-        <p>
-            You need <?= $this->getLinkToExternalPage('https://www.docker.com/', 'Docker installed') ?>.<br/>
-            On Windows you need to run
-            everything <?= $this->getLinkToExternalPage(
-                'https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview',
-                'inside WSL'
-            ) ?>. It is recommended to use the Ubuntu image for WSL with Docker Desktop installed.
-        </p>
+      <p>
+        You need <?= $this->getLinkToExternalPage('https://www.docker.com/', 'Docker installed') ?>.<br/>
+        On Windows you need to run
+        everything <?= $this->getLinkToExternalPage(
+              'https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview',
+              'inside WSL'
+          ) ?>. It is recommended to use the Ubuntu image for WSL with Docker Desktop installed.
+      </p>
         <?= $this->getAnchoredTitle('setup', 'Setup') ?>
-        <p>
-            Create an empty folder somewhere and open a command line to it.<br/>
-            Run the following commands. This will start the Framelix container and extract you the core and a
-            starter module from the image, to provide you full autocompletion support and a minimal module to start
-            with.
-        </p>
+      <p>
+        Create an empty folder somewhere and open a command line to it.<br/>
+        Run the following commands. This will start the Framelix container and extract you the core and a
+        starter module from the image, to provide you full autocompletion support and a minimal module to start
+        with.
+      </p>
         <?= $this->getAnchoredTitle('compose', 'Get your docker-compose.yml') ?>
-        <p>
-            At first you need a docker-compose.yml. Click the button bellow to generate one
-        </p>
-        <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'create-config') ?>" theme="primary"
-                         icon="798" target="modal">Click here to create your docker-compose.yml
-        </framelix-button>
+      <p>
+        At first you need a docker-compose.yml. Click the button bellow to generate one
+      </p>
+      <framelix-button request-options="<?= new JsRequestOptions(
+          JsCall::getUrl(__CLASS__, 'create-config'),
+          JsRequestOptions::RENDER_TARGET_MODAL_NEW
+      ) ?>" theme="primary"
+                       icon="798">Click here to create your docker-compose.yml
+      </framelix-button>
 
         <?= $this->getAnchoredTitle('start', 'Start container') ?>
-        <p>The code bellow extract the code for the <code>Framelix (Core)</code> and <code>FramelixStarter</code> module
-            from the docker
-            image to your appdata directory.
-            The module <code>Framelix</code> is by default "read-only" (It is not mapped from host to container). It is
-            only for your IDE auto-completion in the first place.
-            If you want quick hack into the core, just uncomment the prepared mapping line in docker-compose.yml.
-            However, if you want help develop the core itself, head to this page.
-        </p>
+      <p>The code bellow extract the code for the <code>Framelix (Core)</code> and <code>FramelixStarter</code> module
+        from the docker
+        image to your appdata directory.
+        The module <code>Framelix</code> is by default "read-only" (It is not mapped from host to container). It is
+        only for your IDE auto-completion in the first place.
+        If you want quick hack into the core, just uncomment the prepared mapping line in docker-compose.yml.
+        However, if you want help develop the core itself, head to this page.
+      </p>
         <?php
         $this->showCodeBlock(
             '
@@ -233,20 +239,21 @@ class Setup extends View
         ?>
 
         <?= $this->getAnchoredTitle('recommendations', 'Recommendations') ?>
-        <p>
-            Our favorite IDE is PhpStorm and Framelix is basically developed only with this. It provides industry
-            leading autocompletion and so many other features, which makes development so much faster and easier. We are
-            not affiliated with this IDE or company, it's just our recommendation.
-        </p>
+      <p>
+        Our favorite IDE is PhpStorm and Framelix is basically developed only with this. It provides industry
+        leading autocompletion and so many other features, which makes development so much faster and easier. We are
+        not affiliated with this IDE or company, it's just our recommendation.
+      </p>
         <?= $this->getAnchoredTitle('older-docs', 'Get older version of this docs') ?>
-        <p>
-            We guess you only will need older docs when you actually using older versions of Framelix.
-            For this, all Framelix docker images have the corresponding docs fully integrated.
-            All you need to do is to enable them on a port, to be accessable.
-            Use the docker-compose generator above to get a docker-compose.yml where the docs module is enabled and
-            accessable. At the end, just modify the version to your needs in the final generated .yml file and start the
-            project.
-        </p>
+      <p>
+        We guess you only will need older docs when you actually using older versions of Framelix.
+        For this, all Framelix docker images have the corresponding docs fully integrated.
+        All you need to do is to enable them on a port, to be accessable.
+        Use the docker-compose generator above to get a docker-compose.yml where the docs module is enabled and
+        accessable. At the end, just modify the version to your needs in the final generated .yml file and start the
+        project.
+      </p>
         <?php
     }
+
 }

@@ -42,7 +42,7 @@ class FramelixPopup {
 
   /**
    * The options with what the popup was created with
-   * @type {FramelixHtmlTypeDefsPopupShowOptions}
+   * @type {FramelixTypeDefPopupShowOptions|Object|null}
    */
   options = {}
 
@@ -138,7 +138,7 @@ class FramelixPopup {
    * Show a popup on given element
    * @param {HTMLElement|Cash} target The target to bind to
    * @param {string|Cash|FramelixRequest} content The content
-   * @param {FramelixHtmlTypeDefsPopupShowOptions=} options
+   * @param {FramelixTypeDefPopupShowOptions|Object} options
    * @return {FramelixPopup}
    */
   static show (target, content, options) {
@@ -227,6 +227,7 @@ class FramelixPopup {
       popperEl.css('color', FramelixColorUtils.invertColor(options.color, true))
       popperEl.css('--arrow-color', popperEl.css('background-color'))
     }
+    popperEl[0].framelixPopupInstance = instance
 
     instance.content = contentEl
     instance.popperInstance = Popper.createPopper(target, popperEl[0], popperOptions)

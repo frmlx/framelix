@@ -10,7 +10,9 @@ class FramelixCustomElement extends HTMLElement {
   }
 
   async connectedCallback () {
-    this.originalHtml = this.innerHTML
+    if (this.originalHtml === undefined) {
+      this.originalHtml = this.innerHTML
+    }
     this.updateDomContents()
   }
 

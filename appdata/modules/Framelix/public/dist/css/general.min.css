@@ -371,7 +371,7 @@ datalist {
 }
 .framelix-loading {
   display: inline-block;
-  width: 30px;
+  width: 16px;
   height: 16px;
   line-height: 0;
   user-select: none;
@@ -379,8 +379,11 @@ datalist {
   position: relative;
   transition: width 0.3s;
   border-radius: var(--border-radius);
-  margin-right: 10px;
   vertical-align: middle;
+}
+
+.framelix-loading + * {
+  margin-left: 10px;
 }
 
 .framelix-loading::after {
@@ -722,6 +725,7 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
   vertical-align: middle;
   padding: 0;
   height: 100%;
+  text-align: center;
 }
 html[data-touch="1"] .framelix-table > table > tbody > tr > td[data-flag-icon="1"],
 html[data-touch="1"] .framelix-table > table > tbody > tr > th[data-flag-icon="1"],

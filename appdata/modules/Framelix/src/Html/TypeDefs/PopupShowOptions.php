@@ -69,6 +69,7 @@ class PopupShowOptions extends BaseTypeDef
          *    or a css variable starting with --
          *    or element to copy background and text color from
          * @var string
+         * @jstype string|HtmlElement|Cash
          */
         public string $color = 'default',
         /**
@@ -85,7 +86,7 @@ class PopupShowOptions extends BaseTypeDef
          * Css padding of popup container
          * @var string
          */
-        public ?string $padding = '5px 15px',
+        public string $padding = '5px 15px',
         /**
          * Offset X by given mouse event, so popup is centered where the cursor is
          * @var mixed
@@ -95,13 +96,13 @@ class PopupShowOptions extends BaseTypeDef
         /**
          * Where this popup should be appended to
          * @var string|null
-         * @jstype string|Cash=
+         * @jstype string|Cash
          */
-        public ?string $appendTo = 'body',
+        public string $appendTo = 'body',
         /**
          * Any data to pass to the instance for later reference
          * @var array|null
-         * @jstype Object=
+         * @jstype Object|null
          */
         public ?array $data = null,
     ) {

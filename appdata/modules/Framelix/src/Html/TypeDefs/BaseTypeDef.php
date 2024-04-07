@@ -22,17 +22,17 @@ use function is_bool;
 use function is_string;
 use function str_contains;
 use function str_replace;
-use function substr;
 
 use const FRAMELIX_APPDATA_FOLDER;
 
 /**
  * Type definitions without logic
- * This classes can be added to the JS compiler, which automatically generates a js doc file in the "dev" folder of the module
- * Just for good autocompletion in both PHP and JS
+ * This classes can be added to the JS compiler, which automatically generates a js doc file in the "dev" folder of the
+ * module Just for good autocompletion in both PHP and JS
  */
-abstract class BaseTypeDef implements JsonSerializable
+abstract class BaseTypeDef implements JsonSerializable, \Stringable
 {
+
     public static function compile(string $module): void
     {
         // no compile in production or missing module
@@ -44,8 +44,10 @@ abstract class BaseTypeDef implements JsonSerializable
             return;
         }
         $distFolder = FRAMELIX_APPDATA_FOLDER . "/modules/$module/public/dist/typedefs";
-        $srcTypeDefFiles = FileUtils::getFiles(FRAMELIX_APPDATA_FOLDER . "/modules/$module/src/Html/TypeDefs",
-            "~.*\.php~");
+        $srcTypeDefFiles = FileUtils::getFiles(
+            FRAMELIX_APPDATA_FOLDER . "/modules/$module/src/Html/TypeDefs",
+            "~.*\.php~"
+        );
         $jsTypeDefFiles = FileUtils::getFiles($distFolder, "~.*\.js~");
         $lastTimeStampSrc = 0;
         foreach ($srcTypeDefFiles as $key => $typeDefFile) {
@@ -74,10 +76,22 @@ abstract class BaseTypeDef implements JsonSerializable
             /** @var static $class */
             $class = ClassUtils::getClassNameForFile($typeDefFile);
             $reflection = new ReflectionClass($class);
-            $jsFileName = substr(basename($typeDefFile), 0, -4) . ".js";
-            $jsFilePath = $distFolder . "/$jsFileName";
             $props = $reflection->getProperties();
-            $jsData = "/**\n * @typedef {Object} " . $class::getJsTypeName() . "\n";
+            $jsClassName = $class::getJsTypeName();
+            $jsClassDefFileData = "class $jsClassName extends FramelixBaseTypeDef {\n";
+            foreach ($reflection->getReflectionConstants() as $constant) {
+                $docComment = $constant->getDocComment();
+                if ($docComment) {
+                    $jsClassDefFileData .= "    $docComment\n";
+                }
+                $jsClassDefFileData .= "    static " . $constant->getName() . " = " . JsonUtils::encode(
+                        $constant->getValue()
+                    ) . "\n\n";
+            }
+            $jsClassDefFileData .= "    /**\n    * @param {" . $jsClassName . "|Object} data\n    * @return {string}\n    */\n";
+            $jsClassDefFileData .= "    static toAttrValue (data) { return super.toAttrValue(data) }\n\n";
+            $jsClassDefFileData .= "    /**\n    * @param {string} str\n    * @return {" . $jsClassName . "|Object|null}\n    */\n";
+            $jsClassDefFileData .= "    static fromAttrValue (str) { return super.fromAttrValue(str) }\n\n";
             foreach ($props as $prop) {
                 $propName = $prop->getName();
                 $phpDoc = PhpDocParser::parse($prop->getDocComment());
@@ -85,17 +99,20 @@ abstract class BaseTypeDef implements JsonSerializable
                 $phpType = null;
                 $instance = new $class();
                 $defaultValue = $instance->{$propName};
+                $propertyDoc = implode("\n     * ", array_map('trim', $phpDoc['description']));
                 foreach ($phpDoc['annotations'] as $row) {
                     if ($row['type'] === 'jslistconstants') {
                         $defaultValuesList = '';
                         $searchFor = implode("", $row['value']);
+                        $propertyDoc .= "\n     * Require any of the class constants starting with $searchFor";
                         foreach ($reflection->getConstants() as $constantName => $constantValue) {
                             if (str_contains($constantName, $searchFor)) {
                                 $defaultValuesList .= JsonUtils::encode($constantValue) . ", ";
                             }
                         }
-                        $jsType = '(' . trim($defaultValuesList, ', ') . ')';
-                    } elseif ($row['type'] === 'jstype') {
+                        $jsType = ($jsType ? $jsType . "|" : "") . '(' . trim($defaultValuesList, ', ') . ')';
+                    }
+                    if ($row['type'] === 'jstype') {
                         $jsType = implode("", $row['value']);
                     } elseif ($row['type'] === 'var') {
                         $phpType = implode("", $row['value']);
@@ -111,23 +128,52 @@ abstract class BaseTypeDef implements JsonSerializable
                 } elseif (is_string($defaultValue) || is_array($defaultValue)) {
                     $defaultValue = JsonUtils::encode($defaultValue);
                 }
-                $propName = is_string($defaultValue) ? "[$propName=" . $defaultValue . "]" : $propName;
-                $jsData .= " * @property {" . ($jsType ?? $phpType ?? '') . "} $propName " . implode(", ",
-                        array_map('trim', $phpDoc['description'])) . "\n";
+                $jsClassDefFileData .= "    /**\n     * $propertyDoc\n     * @type  {" . ($jsType ?? $phpType ?? '') . "}\n     */\n";
+                $jsClassDefFileData .= "    $propName";
+                if (is_string($defaultValue)) {
+                    $jsClassDefFileData .= " = " . $defaultValue;
+                }
+                $jsClassDefFileData .= "\n\n";
             }
-            $jsData .= "*/";
-            file_put_contents($jsFilePath, $jsData);
+            $jsClassDefFileData .= "}";
+            file_put_contents($distFolder . "/$jsClassName.js", $jsClassDefFileData);
         }
     }
 
     public static function getJsTypeName(): string
     {
-        $class = str_replace("\\Framelix\\", "\\", static::class);
+        $class = str_replace("\\Html\\TypeDefs\\", "\\TypeDef", substr(static::class, 9));
         return str_replace("\\", "", $class);
+    }
+
+    /**
+     * Create instance from given attr value
+     * @param string $str
+     * @return static
+     */
+    public static function fromAttrValue(string $str): static
+    {
+        $data = JsonUtils::decode(hex2bin($str));
+        return new static(...$data);
+    }
+
+    public function __toString(): string
+    {
+        return $this->toAttrValue();
     }
 
     public function jsonSerialize(): array
     {
         return (array)$this;
     }
+
+    /**
+     * Convert to html attribute safe value in hex format
+     * @return string
+     */
+    public function toAttrValue(): string
+    {
+        return bin2hex(JsonUtils::encode($this));
+    }
+
 }

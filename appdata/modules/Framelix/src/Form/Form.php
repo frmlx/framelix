@@ -73,27 +73,6 @@ class Form implements JsonSerializable
     public Url|View|string|null $submitUrl = null;
 
     /**
-     * The target to render the submit response to
-     *
-     * auto = if form is inside
-     *   - a framelix tab: it behaves like "currenttab"
-     *   - a framelix modal: it behaves like "currentmodal"
-     *   - else: it behaves like "pagecontent"
-     *
-     * Non-Async behaviour:
-     * _blank = Open a new browser window (only when submitAsync = false)
-     *
-     * Async behaviour (Rendering only happens when response contains buffered output data):
-     * newmodal = Render to a new modal
-     * currentmodal =  Render to a current modal (fallback to newmodal if form is not inside a modal)
-     * currenttab = Render to a current tab (fallback to newmodal if form is not inside a modal)
-     * pagecontent = Render to the whole page content container (overrides everything else)
-     * selector: = If it starts with "selector:", everything after : will be considered a CSS selector to render to
-     * none = Even if there is output data, do nothing with it
-     */
-    public string $submitResponseRenderTarget = 'auto';
-
-    /**
      * Submit the form async
      * If false then the form will be submitted with native form submit features (new page load)
      * @var bool

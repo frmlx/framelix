@@ -359,6 +359,7 @@ class Config
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general");
         $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
         $bundle->addFolder('js', false, Config::$compilerFileBundles);
+        $bundle->addFolder('public/dist/typedefs', false);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "table-sorter-serviceworker");
         $bundle->addFile('js/framelix-table-sort-serviceworker.js');

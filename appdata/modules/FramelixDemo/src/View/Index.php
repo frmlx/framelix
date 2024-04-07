@@ -4,6 +4,7 @@ namespace Framelix\FramelixDemo\View;
 
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Html\Toast;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Url;
@@ -14,6 +15,7 @@ use Framelix\FramelixDemo\Cron;
 
 class Index extends View
 {
+
     protected string|bool $accessRole = "*";
 
     public static function onJsCall(JsCall $jsCall): void
@@ -45,36 +47,36 @@ class Index extends View
                 )->getHtmlString() . '</framelix-alert>';
         }
         ?>
-        <h1>Welcome to the Framelix Demo Application</h1>
-        <p>
-            This application as an example of what you can make with Framelix.
-            The application is a copy of one our internal accounting software products that are build with Framelix.
-        </p>
-        <h2>The main features are</h2>
-        <ul>
-            <li>Manage incomes and outgoings for your company</li>
-            <li>Manage and create PDF invoices and offers</li>
-            <li>Excel reporting and exports</li>
-            <li>Quick search features to find entries</li>
-            <li>Multilanguage interface (English and German only for this demo). Choose at the top right user settings
-                icon.
-            </li>
-            <li>With the demo user, you are an administrator and see all features, including user management, logs and
-                stuff that a normal user probably never need to see.
-            </li>
-        </ul>
-        <h2>Prefilled with demo data</h2>
-        <p>
-            The application have a lot of demo entries to show you an interface with data, even if the data itself make
-            absolutely no sense.
-        </p>
+      <h1>Welcome to the Framelix Demo Application</h1>
+      <p>
+        This application as an example of what you can make with Framelix.
+        The application is a copy of one our internal accounting software products that are build with Framelix.
+      </p>
+      <h2>The main features are</h2>
+      <ul>
+        <li>Manage incomes and outgoings for your company</li>
+        <li>Manage and create PDF invoices and offers</li>
+        <li>Excel reporting and exports</li>
+        <li>Quick search features to find entries</li>
+        <li>Multilanguage interface (English and German only for this demo). Choose at the top right user settings
+          icon.
+        </li>
+        <li>With the demo user, you are an administrator and see all features, including user management, logs and
+          stuff that a normal user probably never need to see.
+        </li>
+      </ul>
+      <h2>Prefilled with demo data</h2>
+      <p>
+        The application have a lot of demo entries to show you an interface with data, even if the data itself make
+        absolutely no sense.
+      </p>
         <?php
         if (!User::get()) {
             ?>
-            <h2>Login</h2>
-            <p>
-            On the left, you have a login link.<br/>
-            Admin user credentials are:<br/><br/>
+          <h2>Login</h2>
+          <p>
+          On the left, you have a login link.<br/>
+          Admin user credentials are:<br/><br/>
             <?php
             $user = User::getByEmail('admin@test.local', true);
             if (!$user) {
@@ -91,21 +93,21 @@ class Index extends View
             echo 'E-Mail: <code>' . $user->email . '</code><br/>';
             echo 'Password: <code>' . $user->settings['pwRaw'] . '</code><br/>';
             ?>
-            <br/>
-            If you can't login, someone probably have changed the password. Click the PW reset button bellow, to
-            generate a
-            new password.
-            <br/>
-            <br/>
-            <framelix-button jscall-url="<?= JsCall::getUrl(__CLASS__, 'resetpw') ?>"
-                             theme="primary"
-                             icon="785"
-                             target="none">Reset password
-            </framelix-button>
+          <br/>
+          If you can't login, someone probably have changed the password. Click the PW reset button bellow, to
+          generate a
+          new password.
+          <br/>
+          <br/>
+          <framelix-button request-options="<?= new JsRequestOptions(JsCall::getUrl(__CLASS__, 'resetpw')) ?>"
+                           theme="primary"
+                           icon="785">Reset password
+          </framelix-button>
             <?php
         }
         ?>
-        </p>
+      </p>
         <?php
     }
+
 }

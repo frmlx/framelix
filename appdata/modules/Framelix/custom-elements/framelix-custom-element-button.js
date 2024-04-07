@@ -20,9 +20,13 @@ class FramelixCustomElementButton extends FramelixCustomElement {
     this.toggleAttribute('haslabel', this.originalHtml.trim().length >= 1)
     if (!this.hasAttribute('raw')) {
       let html = ''
-      if (icon) html += '<div class="icon"><framelix-icon icon="' + icon + '"></framelix-icon></div>'
+      if (icon) {
+        html += '<div class="icon"><framelix-icon icon="' + icon + '"></framelix-icon></div>'
+      }
       const text = await FramelixLang.get(this.originalHtml.trim())
-      if (text.length) html += '<label class="label">' + text + '</label>'
+      if (text.length) {
+        html += '<label class="label">' + text + '</label>'
+      }
       this.innerHTML = html
     }
     if (bgcolor) {
@@ -42,11 +46,11 @@ class FramelixCustomElementButton extends FramelixCustomElement {
     if (!this.initialized) {
       this.initialized = true
       this.addEventListener('click', async function (ev) {
-        ev.stopPropagation()
-        ev.preventDefault()
 
         disabled = disabled = this.hasAttribute('disabled')
-        if (disabled) return
+        if (disabled) {
+          return
+        }
 
         const clickConfirmMessage = this.getAttribute('confirm-message')
         if (clickConfirmMessage) {
@@ -54,54 +58,32 @@ class FramelixCustomElementButton extends FramelixCustomElement {
             return
           }
         }
-        const target = this.getAttribute('target') || '_self'
-        const modalOptions = this.getAttribute('modal-options')
-        const jscallUrl = this.getAttribute('jscall-url')
-        const href = this.getAttribute('href')
-        if (jscallUrl) {
+        const requestOptions = FramelixTypeDefJsRequestOptions.fromAttrValue(this.getAttribute('request-options'))
+        if (requestOptions) {
+          ev.stopPropagation()
+          ev.preventDefault()
           self.setAttribute('disabled', '1')
           self.updateDomContents()
-          const request = FramelixRequest.jsCall(jscallUrl, { 'data': this.dataset })
-          if (target === 'modal') {
-            FramelixModal.show(Object.assign({ bodyContent: request }, modalOptions ? JSON.parse(modalOptions) : {}))
-          } else if (target === 'tooltip' || target === 'attached') {
-            FramelixPopup.show(this, request, { color: target === 'tooltip' ? 'dark' : document.body })
-          } else if (target === 'attached') {
-            FramelixPopup.show(this, request)
-          } else if (target === '_blank') {
-            const result = await request.getResponseData()
-            const w = window.open('about:blank')
-            w.document.write(result)
-          } else if (target === '_top') {
-            const result = await request.getResponseData()
-            window.top.document.write(result)
-          } else if (target === '_self') {
-            const result = await request.getResponseData()
-            window.document.write(result)
-          } else if (target === 'none') {
-            Framelix.showProgressBar(1)
-            await request.checkHeaders()
-            Framelix.showProgressBar(null)
-          }
-          self.removeAttribute('disabled')
-          self.updateDomContents()
+          FramelixRequest.renderFromRequestOptions(requestOptions, this, null, function (loaded) {
+            if (loaded >= 1) {
+              self.removeAttribute('disabled')
+              self.updateDomContents()
+            }
+          })
+          return
         }
+        const href = this.getAttribute('href')
         if (href) {
-          if (target === 'modal') {
-            const request = FramelixRequest.request('get', href)
-            FramelixModal.show({ bodyContent: request })
-          } else if (target === 'none') {
-            const request = FramelixRequest.request('get', href)
-            await request.checkHeaders()
-          } else {
-            const link = $('<a>').attr('href', href).attr('target', target)
-            link.css('display', 'hidden')
-            $('body').append()
-            link.trigger('click')
-            setTimeout(function () {
-              link.remove()
-            }, 1000)
-          }
+          ev.stopPropagation()
+          ev.preventDefault()
+          const target = this.getAttribute('target') || '_self'
+          const link = $('<a>').attr('href', href).attr('target', target)
+          link.css('display', 'hidden')
+          $('body').append()
+          link.trigger('click')
+          setTimeout(function () {
+            link.remove()
+          }, 1000)
         }
       })
       this.addEventListener('keydown', function (ev) {

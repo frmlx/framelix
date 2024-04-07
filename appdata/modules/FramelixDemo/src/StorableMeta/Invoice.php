@@ -10,6 +10,9 @@ use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Html\QuickSearch;
 use Framelix\Framelix\Html\Table;
 use Framelix\Framelix\Html\TableCell;
+use Framelix\Framelix\Html\TypeDefs\JsRenderTarget;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
+use Framelix\Framelix\Html\TypeDefs\ModalShowOptions;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\StorableMeta;
@@ -21,6 +24,7 @@ use function is_numeric;
 
 class Invoice extends StorableMeta
 {
+
     /**
      * @var \Framelix\FramelixDemo\Storable\Invoice
      */
@@ -84,12 +88,13 @@ class Invoice extends StorableMeta
             if (!$this->storable->attachment) {
                 $tableCell->buttonBgColor = '#777';
             }
-            $tableCell->buttonJscallUrl = JsCall::getUrl(
-                Invoices::class,
-                'invoice-pdf-download',
-                ['invoice' => $this->storable]
+            $tableCell->buttonRequestOptions = new JsRequestOptions(
+                JsCall::getUrl(
+                    Invoices::class,
+                    'invoice-pdf-download',
+                    ['invoice' => $this->storable]
+                ), new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))
             );
-            $tableCell->buttonTarget = "modal";
             return $tableCell;
         };
 
@@ -115,7 +120,6 @@ class Invoice extends StorableMeta
         }
 
         $this->addDefaultPropertiesAtStart();
-
 
         $this->tableDefault->addColumnFlag('invoiceNr', Table::COLUMNFLAG_SMALLWIDTH);
         $property = $this->createProperty("invoiceNr");
@@ -216,4 +220,5 @@ class Invoice extends StorableMeta
         }
         return $condition;
     }
+
 }

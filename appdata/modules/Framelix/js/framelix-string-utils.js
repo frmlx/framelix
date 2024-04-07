@@ -96,7 +96,28 @@ class FramelixStringUtils {
    * @return {string}
    */
   static cut (string, length, truncateAffix = '...') {
-    if (string.length <= length) return string
-    return string.substr(0, length) + truncateAffix
+    if (string.length <= length) {
+      return string
+    }
+    return string.substring(0, length) + truncateAffix
   }
+
+  /**
+   * Convert a string into HEX representation
+   * @param {string} str
+   * @returns {string}
+   */
+  static strToHex (str) {
+    return str.split('').map(x => x.charCodeAt(0).toString(16).padStart(2, '0')).join('')
+  }
+
+  /**
+   * Convert a HEX representation to actual string representation
+   * @param {string} str
+   * @returns {string}
+   */
+  static hexToStr (str) {
+    return str.match(/.{1,2}/g).map(x => String.fromCharCode(parseInt(x, 16))).join('')
+  }
+
 }

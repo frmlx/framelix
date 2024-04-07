@@ -2,9 +2,9 @@
 
 namespace Framelix\FramelixDocs\View;
 
-
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Html\Tabs;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
@@ -49,14 +49,23 @@ use const FRAMELIX_APPDATA_FOLDER;
 
 abstract class View extends \Framelix\Framelix\View\Backend\View
 {
+
     public ?string $clientId = null;
+
     protected string|bool $accessRole = "*";
+
     protected mixed $contentMaxWidth = "1400px";
+
     private array $titles = [];
+
     private ?int $startCodeLineNumber = null;
+
     private array $jsCodeSnippets = [];
+
     private array $phpCodeSnippets = [];
+
     private array $htmlCodeSnippets = [];
+
     private array $sourceFiles = [];
 
     public static function onJsCall(JsCall $jsCall): void
@@ -67,9 +76,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $view->addSourceFile($file);
             $view->showSourceFiles();
             ?>
-            <script>
-              FramelixDocs.renderCodeBlocks()
-            </script>
+          <script>
+            FramelixDocs.renderCodeBlocks()
+          </script>
             <?php
         }
         if ($jsCall->action === 'phpCode') {
@@ -139,14 +148,15 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
 
     /**
      * @param string $filePathOrClass
-     * @param string|null $docsId If set, only parses the lines between // docs-id-start: $docsId and  docs-id-end: $docsId
+     * @param string|null $docsId If set, only parses the lines between // docs-id-start: $docsId and  docs-id-end:
+     *     $docsId
      * @return void
      */
     public function addSourceFile(string $filePathOrClass, ?string $docsId = null): void
     {
         $this->sourceFiles[] = [
             'filePathOrClass' => $filePathOrClass,
-            'docsId' => $docsId
+            'docsId' => $docsId,
         ];
     }
 
@@ -202,7 +212,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         $this->htmlCodeSnippets[] = [
             'scriptLabel' => $scriptLabel,
             'description' => $description,
-            'code' => $code
+            'code' => $code,
         ];
     }
 
@@ -250,7 +260,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         $this->jsCodeSnippets[] = [
             'scriptLabel' => $scriptLabel,
             'description' => $description,
-            'code' => $code
+            'code' => $code,
         ];
     }
 
@@ -298,7 +308,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
         $this->phpCodeSnippets[] = [
             'method' => $method,
             'scriptLabel' => $scriptLabel,
-            'description' => $description
+            'description' => $description,
         ];
     }
 
@@ -321,11 +331,13 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 array_slice($lines, $method->getStartLine() + 1, $method->getEndLine() - $method->getStartLine())
             );
             $codeLanguage = "php";
-            $buttonsHtml = '<framelix-button jscall-url="' . JsCall::getUrl(
-                    View::class,
-                    'phpCode',
-                    ['callable' => $row['method']]
-                ) . '" theme="primary" icon="789" target="modal">Run the code bellow</framelix-button>';
+            $buttonsHtml = '<framelix-button request-options="' . new JsRequestOptions(
+                    JsCall::getUrl(
+                        View::class,
+                        'phpCode',
+                        ['callable' => $row['method']]
+                    ), JsRequestOptions::RENDER_TARGET_MODAL_NEW
+                ) . '" theme="primary" icon="789">Run the code bellow</framelix-button>';
             Buffer::start();
             if ($row['description']) {
                 echo '<p>' . $row['description'] . '</p>';
@@ -494,4 +506,5 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             ) . '</script>';
         echo $html;
     }
+
 }

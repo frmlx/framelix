@@ -4,6 +4,9 @@ namespace Framelix\Framelix\Html;
 
 use Framelix\Framelix\Db\StorableSchemaProperty;
 use Framelix\Framelix\Exception\FatalError;
+use Framelix\Framelix\Html\TypeDefs\JsRenderTarget;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
+use Framelix\Framelix\Html\TypeDefs\ModalShowOptions;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\ObjectTransformable;
@@ -15,6 +18,7 @@ use Framelix\Framelix\Utils\ArrayUtils;
 use Framelix\Framelix\Utils\NumberUtils;
 use Framelix\Framelix\Utils\RandomGenerator;
 use Framelix\Framelix\Utils\StringUtils;
+use Framelix\FramelixDemo\View\Invoices;
 use JetBrains\PhpStorm\ExpectedValues;
 use JsonSerializable;
 
@@ -336,7 +340,7 @@ class Table implements JsonSerializable
             $cell->buttonIcon = "732";
             $cell->buttonTarget = "none";
             $cell->buttonTextColor = "var(--color-error-text)";
-            $cell->buttonJscallUrl = $deleteUrl;
+            $cell->buttonRequestOptions = new JsRequestOptions($deleteUrl);
             $cell->buttonConfirmMessage = Lang::get('__framelix_delete_sure__');
             if (!in_array("_deletable", $this->columnOrder)) {
                 array_unshift($this->columnOrder, "_deletable");

@@ -4,9 +4,15 @@
 class FramelixRequest {
 
   /**
+   * The request options if created with renderFromRequestOptions()
+   * @type {FramelixTypeDefJsRequestOptions|null}
+   */
+  requestOptions = null
+
+  /**
    * A function to be fired during submit progress
    * The first parameter is submit status in percent from 0 to 1
-   * @type {function|null}
+   * @type {function(number, Event)|null}
    */
   progressCallback = null
 
@@ -28,6 +34,40 @@ class FramelixRequest {
    * @private
    */
   _responseJson
+
+  /**
+   * Create a request, execute it and render to page depending on the options given
+   * @param {FramelixTypeDefJsRequestOptions} requestOptions
+   * @param {Cash|HTMLElement|null} initiatorElement
+   * @param {Object|FormData|string=} postData If set, request will be a POST request, no matter what isset in requestOptions
+   * @param {function(number, Event)=} progressCallback A function that is called everytime request progress is updated with a number between 0-1
+   * @return {FramelixRequest|null} The crafted request, is null in case of newTab or selfTab
+   */
+  static renderFromRequestOptions (requestOptions, initiatorElement, postData, progressCallback) {
+    if (requestOptions.renderTarget && (requestOptions.renderTarget.newTab || requestOptions.renderTarget.selfTab)) {
+      const link = $('<a>').attr('href', requestOptions.url).attr('target', requestOptions.renderTarget.newTab ? '_blank' : '_self')
+      link.css('display', 'hidden')
+      $('body').append()
+      link.trigger('click')
+      if (progressCallback && requestOptions.renderTarget.newTab) {
+        progressCallback(1, null)
+      }
+      setTimeout(function () {
+        link.remove()
+      }, 1000)
+      return null
+    }
+    let method = 'get'
+    // with post data or a jscall request we use POST
+    if (postData || requestOptions.url.includes('/jscv?method=')) {
+      method = 'post'
+    }
+    const request = FramelixRequest.request(method, requestOptions.url, null, postData)
+    request.requestOptions = requestOptions
+    request.progressCallback = progressCallback
+    request.render(initiatorElement)
+    return request
+  }
 
   /**
    * Create a jscall request
@@ -71,7 +111,9 @@ class FramelixRequest {
         body = FramelixRequest.objectToFormData(postData)
       }
     }
-    if (!fetchOptions) fetchOptions = {}
+    if (!fetchOptions) {
+      fetchOptions = {}
+    }
 
     instance.finished = new Promise(function (resolve) {
       instance.submitRequest = new XMLHttpRequest()
@@ -98,10 +140,14 @@ class FramelixRequest {
         }
       })
       instance.submitRequest.addEventListener('load', async function (ev) {
+        if (instance.progressCallback) {
+          instance.progressCallback(1, ev)
+        }
         resolve()
       })
       instance.submitRequest.addEventListener('error', function (ev) {
         console.error(ev)
+        instance.progressCallback(1, ev)
         resolve()
       })
       instance.submitRequest.send(body)
@@ -122,7 +168,9 @@ class FramelixRequest {
    * @return {FormData}
    */
   static objectToFormData (obj, formData, parentKey) {
-    if (!formData) formData = new FormData()
+    if (!formData) {
+      formData = new FormData()
+    }
     if (obj) {
       for (let i in obj) {
         let v = obj[i]
@@ -140,10 +188,74 @@ class FramelixRequest {
   }
 
   /**
+   * Render request response into target based on requestOptions
+   * Resolves when content has been rendered
+   * @return {Promise<void>}
+   */
+  async render (initiatorElement) {
+    const requestOptions = this.requestOptions
+    // quick target options
+    if (typeof requestOptions.renderTarget === 'string') {
+      if (requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_MODAL_NEW) {
+        requestOptions.renderTarget = { modalOptions: {} }
+      } else if (requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_POPUP) {
+        requestOptions.renderTarget = { popupOptions: { closeMethods: 'click-outside' } }
+      } else if (requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_CURRENT_CONTEXT) {
+        requestOptions.renderTarget = requestOptions.renderTarget = { modalOptions: {} }
+        if (!initiatorElement) {
+          console.error('Missing initiatorElement for render to current context')
+          return null
+        }
+        initiatorElement = $(initiatorElement)
+        let parentCell = initiatorElement.closest('td')
+        let parentPopup = initiatorElement.closest('.framelix-popup')
+        let parentModal = initiatorElement.closest('.framelix-modal')
+        let parentTab = initiatorElement.closest('.framelix-tab-content')
+
+        if (parentCell.length) {
+          requestOptions.renderTarget = requestOptions.renderTarget = { elementSelector: parentCell }
+        } else if (parentPopup.length) {
+          requestOptions.renderTarget = { popupOptions: parentPopup[0].framelixPopupInstance.options }
+          initiatorElement = parentPopup[0].framelixPopupInstance.target
+        } else if (parentModal.length) {
+          const modal = FramelixModal.instances[parentModal.attr('data-instance-id')]
+          if (modal) {
+            requestOptions.renderTarget = requestOptions.renderTarget = { modalOptions: { instance: modal } }
+          }
+        } else if (parentTab.length) {
+          const modal = FramelixModal.instances[parentModal.attr('data-instance-id')]
+          if (modal) {
+            requestOptions.renderTarget = requestOptions.renderTarget = { modalOptions: { instance: modal } }
+          }
+        }
+      }
+    }
+    if (!requestOptions.renderTarget) {
+      Framelix.showProgressBar(1)
+      this.checkHeaders().then(function () {
+        Framelix.showProgressBar(null)
+      })
+    } else if (requestOptions.renderTarget.modalOptions) {
+      let options = requestOptions.renderTarget.modalOptions
+      options.bodyContent = this
+      await FramelixModal.show(options).created
+    } else if (requestOptions.renderTarget.popupOptions) {
+      let options = requestOptions.renderTarget.popupOptions
+      await FramelixPopup.show(initiatorElement, this, options).created
+    } else if (requestOptions.renderTarget.elementSelector) {
+      const el = $(requestOptions.renderTarget.elementSelector)
+      el.html(`<div class="framelix-loading"></div>`)
+      el.html(await this.getJson())
+    }
+  }
+
+  /**
    * Abort
    */
   abort () {
-    if (this.submitRequest.readyState !== this.submitRequest.DONE) this.submitRequest.abort()
+    if (this.submitRequest.readyState !== this.submitRequest.DONE) {
+      this.submitRequest.abort()
+    }
   }
 
   /**
@@ -202,7 +314,9 @@ class FramelixRequest {
     await this.finished
     const self = this
     return new Promise(async function (resolve) {
-      if (checkHeaders && await self.checkHeaders() !== 0) return
+      if (checkHeaders && await self.checkHeaders() !== 0) {
+        return
+      }
       if (await self.getHeader('content-type') === 'application/json') {
         resolve(self.getJson())
       }

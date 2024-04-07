@@ -3,6 +3,7 @@
 namespace Framelix\FramelixDocs\View\Features;
 
 use Framelix\Framelix\DateTime;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\JsonUtils;
@@ -94,8 +95,7 @@ class Layout extends View
             <framelix-button theme="error"
                              icon="759"
                              confirm-message="Are you sure?"
-                             jscall-url="' . JsCall::getUrl(__CLASS__, 'info') . '"
-                             target="attached"
+                             request-options="' . new JsRequestOptions(JsCall::getUrl(__CLASS__, 'info'), JsRequestOptions::RENDER_TARGET_POPUP) . '"
                              block>
                 There is some destructive action
             </framelix-button>

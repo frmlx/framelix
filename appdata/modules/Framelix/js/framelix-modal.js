@@ -23,7 +23,7 @@ class FramelixModal {
 
   /**
    * The options with what the modal was created with
-   * @type {FramelixHtmlTypeDefsModalShowOptions}
+   * @type {FramelixTypeDefModalShowOptions|Object}
    */
   options = {}
 
@@ -119,7 +119,7 @@ class FramelixModal {
   /**
    * Display a nice alert box (instead of a native alert() function)
    * @param {string|Cash} content
-   * @param {FramelixHtmlTypeDefsModalShowOptions=} options
+   * @param {FramelixTypeDefModalShowOptions|Object=} options
    * @return {FramelixModal}
    */
   static alert (content, options) {
@@ -144,7 +144,7 @@ class FramelixModal {
    * Display a nice prompt box (instead of a native prompt() function)
    * @param {string|Cash} content
    * @param {string=} defaultText
-   * @param {FramelixHtmlTypeDefsModalShowOptions=} options
+   * @param {FramelixTypeDefModalShowOptions|Object=} options
    * @return {FramelixModal}
    */
   static prompt (content, defaultText, options) {
@@ -194,7 +194,7 @@ class FramelixModal {
   /**
    * Display a nice confirmation box (instead of a native confirm() function)
    * @param {string|Cash} content
-   * @param {FramelixHtmlTypeDefsModalShowOptions=} options
+   * @param {FramelixTypeDefModalShowOptions|Object=} options
    * @return {FramelixModal}
    */
   static confirm (content, options) {
@@ -231,7 +231,7 @@ class FramelixModal {
    * @param {Object|FormData|string=} postData Post data to send
    * @param {boolean|Cash=} showProgressBar Show progress bar at top of page or in given container
    * @param {Object=} fetchOptions Additonal options to directly pass to the fetch() call
-   * @param {FramelixHtmlTypeDefsModalShowOptions=} modalOptions Modal options
+   * @param {FramelixTypeDefModalShowOptions|Object=} modalOptions Modal options
    * @return {Promise<FramelixModal>} Resolved when content is loaded
    */
   static async request (method, urlPath, urlParams, postData, showProgressBar, fetchOptions, modalOptions) {
@@ -248,7 +248,7 @@ class FramelixModal {
 
   /**
    * Show modal
-   * @param {FramelixHtmlTypeDefsModalShowOptions} options
+   * @param {FramelixTypeDefModalShowOptions|Object} options
    * @return {FramelixModal}
    */
   static show (options) {
@@ -273,7 +273,7 @@ class FramelixModal {
     if (!options.instance) {
       FramelixModal.modalsContainer.append(instance.container)
       instance.container[0].showModal()
-      instance.closeButton = instance.container.find('.framelix-modal-close')
+      instance.closeButton = instance.container.find('.framelix-modal-close framelix-button')
       instance.contentContainer = instance.container.find('.framelix-modal-content')
       instance.headerContainer = instance.container.find('.framelix-modal-header')
       instance.bodyContainer = instance.container.find('.framelix-modal-body')
