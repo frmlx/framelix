@@ -76,9 +76,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $view->addSourceFile($file);
             $view->showSourceFiles();
             ?>
-          <script>
-            FramelixDocs.renderCodeBlocks()
-          </script>
+            <script>
+              FramelixDocs.renderCodeBlocks()
+            </script>
             <?php
         }
         if ($jsCall->action === 'phpCode') {
@@ -459,11 +459,14 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                     ) . ')</script>';
                 continue;
             }
-            $tags[] = '<framelix-button small icon="733" theme="transparent" jscall-url="' . JsCall::getUrl(
+            $tags[] = '<framelix-button small icon="733" theme="transparent" request-options=\'' . new JsRequestOptions(JsCall::getUrl(
                     View::class,
                     'show-source',
-                    ['path' => $relativePath]
-                ) . '" title="Click to show complete source" target="modal">' . $relativePath . '</framelix-button>';
+                    ['path' => $relativePath],
+                    false,
+                    0
+                ),
+                    JsRequestOptions::RENDER_TARGET_MODAL_NEW) . '\' title="Click to show complete source">' . $relativePath . '</framelix-button>';
         }
         if (count($tags) > 1) {
             $lastTag = array_pop($tags);
