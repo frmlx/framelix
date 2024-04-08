@@ -95,7 +95,7 @@ class Layout extends View
             <framelix-button theme="error"
                              icon="759"
                              confirm-message="Are you sure?"
-                             request-options="' . new JsRequestOptions(JsCall::getUrl(__CLASS__, 'info'), JsRequestOptions::RENDER_TARGET_POPUP) . '"
+                             request-options=\'' . new JsRequestOptions(JsCall::getUrl(__CLASS__, 'info'), JsRequestOptions::RENDER_TARGET_POPUP) . '\'
                              block>
                 There is some destructive action
             </framelix-button>

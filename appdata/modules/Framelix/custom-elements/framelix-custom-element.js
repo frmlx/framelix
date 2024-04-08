@@ -5,10 +5,6 @@ class FramelixCustomElement extends HTMLElement {
    */
   originalHtml
 
-  constructor () {
-    super()
-  }
-
   async connectedCallback () {
     if (this.originalHtml === undefined) {
       this.originalHtml = this.innerHTML

@@ -46,7 +46,7 @@ class Issues extends View
             <img src="/slack-badge.svg" height="20" alt="Slack Members"><br/>
             We also have a Slack channel. Click the button bellow to join.
         </p>
-        <framelix-button request-options="<?= new JsRequestOptions(JsCall::getUrl(__CLASS__, 'slack'), JsRequestOptions::RENDER_TARGET_POPUP) ?>" icon="730" theme="primary">
+        <framelix-button request-options='<?= new JsRequestOptions(JsCall::getUrl(__CLASS__, 'slack'), JsRequestOptions::RENDER_TARGET_POPUP) ?>' icon="730" theme="primary">
             Join our Slack channel now
         </framelix-button>
         <?php

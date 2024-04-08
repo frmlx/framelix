@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Html\TypeDefs;
 
+use Framelix\Framelix\Url;
 use JetBrains\PhpStorm\ExpectedValues;
 
 /**
@@ -33,10 +34,10 @@ class JsRequestOptions extends BaseTypeDef
     public function __construct(
         /**
          * The url to load for the request
-         * @var string|\Framelix\Framelix\Url
+         * @var string|Url
          * @jstype string|FramelixRequest
          */
-        public string|\Framelix\Framelix\Url $url = '',
+        public string|Url $url = '',
 
         /**
          * The render target for the request
@@ -53,6 +54,16 @@ class JsRequestOptions extends BaseTypeDef
             null
         ])]
         public JsRenderTarget|string|null $renderTarget = null,
-    ) {}
+    ) {
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = parent::jsonSerialize();
+        if ($data['url'] instanceof Url) {
+            $data['url'] = $data['url']->getUrlAsString(false);
+        }
+        return $data;
+    }
 
 }

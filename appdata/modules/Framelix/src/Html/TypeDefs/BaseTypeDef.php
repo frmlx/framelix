@@ -153,7 +153,7 @@ abstract class BaseTypeDef implements JsonSerializable, \Stringable
      */
     public static function fromAttrValue(string $str): static
     {
-        $data = JsonUtils::decode(hex2bin($str));
+        $data = JsonUtils::decode($str);
         return new static(...$data);
     }
 
@@ -168,12 +168,12 @@ abstract class BaseTypeDef implements JsonSerializable, \Stringable
     }
 
     /**
-     * Convert to html attribute safe value in hex format
+     * Convert to html attribute safe value
      * @return string
      */
     public function toAttrValue(): string
     {
-        return bin2hex(JsonUtils::encode($this));
+        return JsonUtils::encode($this, false, true);
     }
 
 }

@@ -331,13 +331,13 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 array_slice($lines, $method->getStartLine() + 1, $method->getEndLine() - $method->getStartLine())
             );
             $codeLanguage = "php";
-            $buttonsHtml = '<framelix-button request-options="' . new JsRequestOptions(
+            $buttonsHtml = '<framelix-button request-options=\'' . new JsRequestOptions(
                     JsCall::getUrl(
                         View::class,
                         'phpCode',
                         ['callable' => $row['method']]
                     ), JsRequestOptions::RENDER_TARGET_MODAL_NEW
-                ) . '" theme="primary" icon="789">Run the code bellow</framelix-button>';
+                ) . '\' theme="primary" icon="789">Run the code bellow</framelix-button>';
             Buffer::start();
             if ($row['description']) {
                 echo '<p>' . $row['description'] . '</p>';

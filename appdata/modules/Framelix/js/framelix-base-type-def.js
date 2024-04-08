@@ -9,7 +9,7 @@ class FramelixBaseTypeDef {
    * @return {string}
    */
   static toAttrValue (data) {
-    return FramelixStringUtils.strToHex(JSON.stringify(data))
+    return FramelixStringUtils.jsonStringify(data, false, true)
   }
 
   /**
@@ -21,6 +21,6 @@ class FramelixBaseTypeDef {
     if (!str) {
       return null
     }
-    return JSON.parse(FramelixStringUtils.hexToStr(str))
+    return JSON.parse(str)
   }
 }
