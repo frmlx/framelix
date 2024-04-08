@@ -146,7 +146,7 @@ class FramelixPopup {
     if (!options) options = {}
     if (options.group === undefined) options.group = 'popup'
     if (options.offset === undefined) options.offset = [0, 5]
-    if (options.color === undefined) options.color = 'default'
+    if (options.color === undefined) options.color = 'dark'
     if (options.appendTo === undefined) options.appendTo = lastModal.length ? lastModal : 'body'
     if (options.padding === undefined) options.padding = '5px 10px'
     if (options.closeMethods === undefined) options.closeMethods = 'click-outside'
@@ -194,38 +194,24 @@ class FramelixPopup {
     if (target.popperInstances[options.group]) {
       target.popperInstances[options.group].destroy()
     }
-    let popperEl = $(`<div class="framelix-popup" data-color="${options.color.toString()}"><div data-popper-arrow></div><div class="framelix-popup-inner" style="padding:${options.padding}"></div></div>`)
+    let popperEl = $(`<div class="framelix-popup" data-theme><div data-popper-arrow></div><div class="framelix-popup-inner" style="padding:${options.padding}"></div></div>`)
     $(options.appendTo).append(popperEl)
+    FramelixColorUtils.setColorsFromElementColorDef(options.color, popperEl)
     const contentEl = popperEl.children('.framelix-popup-inner')
     const writePromises = []
     if (content instanceof FramelixRequest) {
       writePromises.push(new Promise(async function (resolve) {
-          contentEl.html(`<div class="framelix-loading"></div>`)
-          // on any response handling other then default response, destroy the popup as it will hang in a undefined state without any proper returning response
-          if (await content.checkHeaders() > 0) {
-            instance.destroy()
-            return
-          }
-          await content.writeToContainer(contentEl)
-          resolve()
-        }))
+        contentEl.html(`<div class="framelix-loading"></div>`)
+        // on any response handling other then default response, destroy the popup as it will hang in a undefined state without any proper returning response
+        if (await content.checkHeaders() > 0) {
+          instance.destroy()
+          return
+        }
+        await content.writeToContainer(contentEl)
+        resolve()
+      }))
     } else {
       contentEl.html(content)
-    }
-
-    if (options.color instanceof HTMLElement || options.color instanceof cash) {
-      const el = $(options.color)
-      popperEl.css('background-color', el.css('backgroundColor'))
-      popperEl.css('color', el.css('color'))
-      popperEl.css('--arrow-color', popperEl.css('background-color'))
-    } else if (options.color.startsWith('--')) {
-      popperEl.css('background-color', 'var(' + options.color + ')')
-      popperEl.css('color', FramelixColorUtils.invertColor(FramelixColorUtils.cssColorToHex(popperEl.css('background-color')), true))
-      popperEl.css('--arrow-color', popperEl.css('background-color'))
-    } else if (options.color.startsWith('#')) {
-      popperEl.css('background-color', options.color)
-      popperEl.css('color', FramelixColorUtils.invertColor(options.color, true))
-      popperEl.css('--arrow-color', popperEl.css('background-color'))
     }
     popperEl[0].framelixPopupInstance = instance
 

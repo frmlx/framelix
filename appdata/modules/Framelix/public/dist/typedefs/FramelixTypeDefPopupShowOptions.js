@@ -62,14 +62,9 @@ class FramelixTypeDefPopupShowOptions extends FramelixBaseTypeDef {
 
     /**
      * Popup color
-     * default is dark
-     * primary|error|warning|success
-     * or HexColor starting with #
-     * or a css variable starting with --
-     * or element to copy background and text color from
-     * @type  {string|HTMLElement|Cash}
+     * @type  {string|FramelixTypeDefElementColor}
      */
-    color = "default"
+    color = "dark"
 
     /**
      * The group id, one target can have one popup of one group
@@ -88,6 +83,12 @@ class FramelixTypeDefPopupShowOptions extends FramelixBaseTypeDef {
      * @type  {string}
      */
     padding = "5px 15px"
+
+    /**
+     * The fixed with for the popup
+     * @type  {string|null}
+     */
+    width = null
 
     /**
      * Offset X by given mouse event, so popup is centered where the cursor is

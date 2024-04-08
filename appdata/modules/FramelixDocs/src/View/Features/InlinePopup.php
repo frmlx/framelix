@@ -59,7 +59,7 @@ class InlinePopup extends View
             'Colored',
             'Mimic the colors of the code block.',
             /** @lang JavaScript */
-            "FramelixPopup.show(codeBlock, 'A simple popup', {color:codeBlock})"
+            "FramelixPopup.show(codeBlock, 'A simple popup', {color:{bgColor:codeBlock, textColor:codeBlock}})"
         );
         $this->addJsExecutableSnippet(
             'Positioned to MousePos',

@@ -337,27 +337,27 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
   max-width: calc(100vw - 50px);
   max-height: calc(100vh - 50px);
 }
-.framelix-popup[data-color=primary] {
+.framelix-popup[data-theme=primary] {
   --arrow-color: var(--color-popup-primary-bg);
   background: var(--color-popup-primary-bg);
   color: var(--color-popup-primary-text);
 }
-.framelix-popup[data-color=success] {
+.framelix-popup[data-theme=success] {
   --arrow-color: var(--color-popup-success-bg);
   background: var(--color-popup-success-bg);
   color: var(--color-popup-success-text);
 }
-.framelix-popup[data-color=warning] {
+.framelix-popup[data-theme=warning] {
   --arrow-color: var(--color-popup-warning-bg);
   background: var(--color-popup-warning-bg);
   color: var(--color-popup-warning-text);
 }
-.framelix-popup[data-color=error] {
+.framelix-popup[data-theme=error] {
   --arrow-color: var(--color-popup-error-bg);
   background: var(--color-popup-error-bg);
   color: var(--color-popup-error-text);
 }
-.framelix-popup[data-color=trans] {
+.framelix-popup[data-theme=trans] {
   box-shadow: none;
   background: transparent;
   color: var(--color-page-text);

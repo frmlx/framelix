@@ -63,15 +63,10 @@ class PopupShowOptions extends BaseTypeDef
         public string|array $closeMethods = self::CLOSEMETHODS_CLICK_OUTSIDE,
         /**
          * Popup color
-         * default is dark
-         *    primary|error|warning|success
-         *    or HexColor starting with #
-         *    or a css variable starting with --
-         *    or element to copy background and text color from
-         * @var string
-         * @jstype string|HTMLElement|Cash
+         * @var string|ElementColor
+         * @jstype string|FramelixTypeDefElementColor
          */
-        public string $color = 'default',
+        public string $color = 'dark',
         /**
          * The group id, one target can have one popup of one group
          * @var string
@@ -87,6 +82,11 @@ class PopupShowOptions extends BaseTypeDef
          * @var string
          */
         public string $padding = '5px 15px',
+        /**
+         * The fixed with for the popup
+         * @var string|null
+         */
+        public ?string $width = null,
         /**
          * Offset X by given mouse event, so popup is centered where the cursor is
          * @var mixed

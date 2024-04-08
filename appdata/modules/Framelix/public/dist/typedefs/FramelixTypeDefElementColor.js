@@ -52,7 +52,8 @@ class FramelixTypeDefElementColor extends FramelixBaseTypeDef {
      * 2 = Lightness between 0-100 (Percent) (If not set, it uses darkness depending on dark/light mode)
      * 3 = Alpha opacity between 0-1 (0=Invisible, If not set, it is fully visible)
      * If any of the array values is null, it uses defaults same if as if not set
-     * @type  {number[]|null}
+     * If given a HTMLElement|Cash instance, it will copy from that
+     * @type  {number[]|HTMLElement|Cash|null}
      */
     bgColor = null
 
@@ -66,7 +67,8 @@ class FramelixTypeDefElementColor extends FramelixBaseTypeDef {
      * 2 = Lightness between 0-100 (Percent) (If not set, it uses darkness depending on dark/light mode)
      * 3 = Alpha opacity between 0-1 (0=Invisible, If not set, it is fully visible)
      * If any of the array values is null, it uses defaults same if as if not set
-     * @type  {number[]|string|null}
+     * If given a HTMLElement|Cash instance, it will copy from that
+     * @type  {number[]|string|HTMLElement|Cash|null}
      */
     textColor = null
 
