@@ -11,6 +11,7 @@ use Framelix\FramelixDemo\Console;
 
 class Reset extends View
 {
+
     protected string|bool $accessRole = "admin";
 
     public static function onJsCall(JsCall $jsCall): void
@@ -30,11 +31,12 @@ class Reset extends View
     public function showContent(): void
     {
         ?>
-        <p><?= Lang::get('__framelixdemo_view_reset_info__') ?></p>
-        <framelix-button request-options='<?= new JsRequestOptions(JsCall::getUrl(__CLASS__, 'reset')) ?>'
-                         confirm-message="<?= Lang::get('__framelix_sure__') ?>"
-                         theme="primary"
-                         icon="785"><?= Lang::get('__framelixdemo_view_reset__') ?></framelix-button>
+      <p><?= Lang::get('__framelixdemo_view_reset_info__') ?></p>
+      <framelix-button <?= (new JsRequestOptions(JsCall::getUrl(__CLASS__, 'reset')))->toDefaultAttrStr() ?>
+        confirm-message="<?= Lang::get('__framelix_sure__') ?>"
+        theme="primary"
+        icon="785"><?= Lang::get('__framelixdemo_view_reset__') ?></framelix-button>
         <?php
     }
+
 }

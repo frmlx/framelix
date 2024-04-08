@@ -99,9 +99,11 @@ class Index extends View
           new password.
           <br/>
           <br/>
-          <framelix-button request-options='<?= new JsRequestOptions(JsCall::getUrl(__CLASS__, 'resetpw')) ?>'
-                           theme="primary"
-                           icon="785">Reset password
+          <framelix-button
+              <?= (new JsRequestOptions(JsCall::getUrl(__CLASS__, 'resetpw')))->toDefaultAttrStr() ?>
+            theme="primary"
+            icon="785">
+            Reset password
           </framelix-button>
             <?php
         }

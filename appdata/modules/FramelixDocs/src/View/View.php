@@ -76,9 +76,9 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             $view->addSourceFile($file);
             $view->showSourceFiles();
             ?>
-            <script>
-              FramelixDocs.renderCodeBlocks()
-            </script>
+          <script>
+            FramelixDocs.renderCodeBlocks()
+          </script>
             <?php
         }
         if ($jsCall->action === 'phpCode') {
@@ -331,13 +331,11 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 array_slice($lines, $method->getStartLine() + 1, $method->getEndLine() - $method->getStartLine())
             );
             $codeLanguage = "php";
-            $buttonsHtml = '<framelix-button request-options=\'' . new JsRequestOptions(
-                    JsCall::getUrl(
-                        View::class,
-                        'phpCode',
-                        ['callable' => $row['method']]
-                    ), JsRequestOptions::RENDER_TARGET_MODAL_NEW
-                ) . '\' theme="primary" icon="789">Run the code bellow</framelix-button>';
+            $buttonsHtml = '<framelix-button 
+            ' . (new JsRequestOptions(JsCall::getUrl(View::class, 'phpCode', ['callable' => $row['method']]),
+                    JsRequestOptions::RENDER_TARGET_MODAL_NEW))->toDefaultAttrStr() . ' 
+            theme="primary" 
+            icon="789">Run the code bellow</framelix-button>';
             Buffer::start();
             if ($row['description']) {
                 echo '<p>' . $row['description'] . '</p>';
@@ -459,14 +457,17 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                     ) . ')</script>';
                 continue;
             }
-            $tags[] = '<framelix-button small icon="733" theme="transparent" request-options=\'' . new JsRequestOptions(JsCall::getUrl(
+            $requestOptions = new JsRequestOptions(
+                JsCall::getUrl(
                     View::class,
                     'show-source',
                     ['path' => $relativePath],
                     false,
                     0
-                ),
-                    JsRequestOptions::RENDER_TARGET_MODAL_NEW) . '\' title="Click to show complete source">' . $relativePath . '</framelix-button>';
+                ), JsRequestOptions::RENDER_TARGET_MODAL_NEW
+            );
+            $tags[] = '<framelix-button small icon="733" theme="transparent" ' . $requestOptions->toDefaultAttrStr(
+                ) . ' title="Click to show complete source">' . $relativePath . '</framelix-button>';
         }
         if (count($tags) > 1) {
             $lastTag = array_pop($tags);

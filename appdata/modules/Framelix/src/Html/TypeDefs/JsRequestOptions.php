@@ -51,11 +51,10 @@ class JsRequestOptions extends BaseTypeDef
             self::RENDER_TARGET_MODAL_NEW,
             self::RENDER_TARGET_CURRENT_CONTEXT,
             self::RENDER_TARGET_POPUP,
-            null
+            null,
         ])]
         public JsRenderTarget|string|null $renderTarget = null,
-    ) {
-    }
+    ) {}
 
     public function jsonSerialize(): array
     {
@@ -64,6 +63,15 @@ class JsRequestOptions extends BaseTypeDef
             $data['url'] = $data['url']->getUrlAsString(false);
         }
         return $data;
+    }
+
+    /**
+     * Returns a request-options=attributeValue html string
+     * @return string
+     */
+    public function toDefaultAttrStr(): string
+    {
+        return $this->toAttrValue('request-options');
     }
 
 }

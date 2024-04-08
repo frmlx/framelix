@@ -77,7 +77,7 @@ class Invoice extends StorableMeta
                     ['invoice' => $this->storable]
                 ), new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))
             );
-            return TableCell::create('<framelix-button icon="73e" theme="error" title="__framelixdemo_storable_invoice_download__" request-options=\'' . $requestOptions . '\'></framelix-button>');
+            return TableCell::create('<framelix-button icon="73e" theme="error" title="__framelixdemo_storable_invoice_download__" ' . $requestOptions->toDefaultAttrStr() . '></framelix-button>');
         };
 
         if (!$isOffer) {
