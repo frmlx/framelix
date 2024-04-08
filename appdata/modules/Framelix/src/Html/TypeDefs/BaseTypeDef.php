@@ -169,11 +169,16 @@ abstract class BaseTypeDef implements JsonSerializable, \Stringable
 
     /**
      * Convert to html attribute safe value
+     * @param string|null $includeAttributeName If true, it will return the attributeName=attributeValue
      * @return string
      */
-    public function toAttrValue(): string
+    public function toAttrValue(?string $includeAttributeName = null): string
     {
-        return JsonUtils::encode($this, false, true);
+        return $includeAttributeName ? $includeAttributeName . "='" . JsonUtils::encode(
+                $this,
+                false,
+                true
+            ) . "'" : JsonUtils::encode($this, false, true);
     }
 
 }
