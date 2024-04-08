@@ -13,6 +13,10 @@ use function is_object;
 use function json_encode;
 
 use const FRAMELIX_APPDATA_FOLDER;
+use const JSON_HEX_AMP;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const JSON_HEX_TAG;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
@@ -83,13 +87,17 @@ class JsonUtils
      * Encode
      * @param mixed $data
      * @param bool $prettyPrint
+     * @param bool $convertSpecialChars If true, convert html special chars to unicode representation
      * @return string
      */
-    public static function encode(mixed $data, bool $prettyPrint = false): string
+    public static function encode(mixed $data, bool $prettyPrint = false, bool $convertSpecialChars = false): string
     {
         $options = JSON_THROW_ON_ERROR;
         if ($prettyPrint) {
             $options = $options | JSON_PRETTY_PRINT;
+        }
+        if ($convertSpecialChars) {
+            $options = $options | JSON_HEX_QUOT | JSON_HEX_APOS | JSON_HEX_TAG | JSON_HEX_AMP;
         }
         if (Config::$devMode) {
             try {
