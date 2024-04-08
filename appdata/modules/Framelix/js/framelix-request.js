@@ -215,25 +215,24 @@ class FramelixRequest {
         let parentTab = initiatorElement.closest('.framelix-tab-content')
 
         if (parentCell.length) {
-          requestOptions.renderTarget = requestOptions.renderTarget = { elementSelector: parentCell }
+          requestOptions.renderTarget = { elementSelector: parentCell }
         } else if (parentPopup.length) {
           requestOptions.renderTarget = { popupOptions: parentPopup[0].framelixPopupInstance.options }
           initiatorElement = parentPopup[0].framelixPopupInstance.target
         } else if (parentModal.length) {
           const modal = FramelixModal.instances[parentModal.attr('data-instance-id')]
           if (modal) {
-            requestOptions.renderTarget = requestOptions.renderTarget = { modalOptions: { instance: modal } }
+            requestOptions.renderTarget = { modalOptions: { instance: modal } }
           }
         } else if (parentTab.length) {
           const modal = FramelixModal.instances[parentModal.attr('data-instance-id')]
           if (modal) {
-            requestOptions.renderTarget = requestOptions.renderTarget = { modalOptions: { instance: modal } }
+            requestOptions.renderTarget = { modalOptions: { instance: modal } }
           }
         }
       }
     }
     const isFixedResponse = !(request instanceof FramelixRequest)
-    const override = typeof overrideResponse === 'string'
     if (!requestOptions.renderTarget) {
       if (!isFixedResponse) {
         Framelix.showProgressBar(1)
