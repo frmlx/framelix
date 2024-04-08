@@ -38,8 +38,8 @@ if (preg_match("~^[0-9]+\.[0-9]+\.[0-9]+~i", $version)) {
     $coreFile = "/framelix/appdata/modules/Framelix/src/Framelix.php";
     $coreFileData = file_get_contents($coreFile);
     $coreFileData = str_replace(
-        'public const VERSION = "dev";',
-        'public const VERSION = "' . $version . '";',
+        'public const string VERSION = "dev";',
+        'public const string VERSION = "' . $version . '";',
         $coreFileData
     );
     file_put_contents($coreFile, $coreFileData);
