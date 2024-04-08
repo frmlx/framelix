@@ -23,6 +23,7 @@ class FramelixColorUtils {
       if (tagName.startsWith('framelix-')) {
         attributes.set('theme', theme)
       } else {
+        attributes.set('data-theme', theme)
         attributes.setStyle('color', 'var(--color-' + theme + '-text)')
         attributes.setStyle('background-color', 'var(--color-' + theme + '-text)')
       }
@@ -31,6 +32,8 @@ class FramelixColorUtils {
       if (colorDef.bgColor) {
         if (typeof colorDef.bgColor === 'string') {
           attributes.setStyle('background-color', colorDef.bgColor)
+        } else if (colorDef.bgColor instanceof HTMLElement || colorDef.bgColor instanceof cash) {
+          attributes.setStyle('background-color', $(colorDef.bgColor).css('background-color'))
         } else {
           const hsla = colorDef.bgColor
           const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
@@ -56,6 +59,8 @@ class FramelixColorUtils {
           attributes.setStyle('background-color', FramelixColorUtils.invertColor(colorDef.bgColor, true))
         } else if (typeof colorDef.textColor === 'string') {
           attributes.setStyle('color', colorDef.textColor)
+        } else if (colorDef.textColor instanceof HTMLElement || colorDef.textColor instanceof cash) {
+          attributes.setStyle('color', $(colorDef.textColor).css('color'))
         } else {
           const hsla = colorDef.textColor
           const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
@@ -86,13 +91,20 @@ class FramelixColorUtils {
       if (element[0].tagName.startsWith('FRAMELIX-')) {
         element.attr('theme', theme)
       } else {
-        element.css('color', 'var(--color-' + theme + '-text)').css('background-color', 'var(--color-' + theme + '-text)')
+        // if provided a data-theme attribute, it is considered to can handle themes
+        if (typeof element.attr('data-theme') === 'string') {
+          element.attr('data-theme', theme)
+        } else {
+          element.css('color', 'var(--color-' + theme + '-text)').css('background-color', 'var(--color-' + theme + '-text)')
+        }
       }
     }
     if (colorDef instanceof FramelixTypeDefElementColor || typeof colorDef === 'object') {
       if (colorDef.bgColor) {
         if (typeof colorDef.bgColor === 'string') {
           element.css('background-color', colorDef.bgColor)
+        } else if (colorDef.bgColor instanceof HTMLElement || colorDef.bgColor instanceof cash) {
+          element.css('background-color', $(colorDef.bgColor).css('background-color'))
         } else {
           const hsla = colorDef.bgColor
           const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
@@ -114,6 +126,8 @@ class FramelixColorUtils {
           element[0].style.color = FramelixColorUtils.invertColor(element[0].backgroundColor, true)
         } else if (typeof colorDef.textColor === 'string') {
           element.css('color', colorDef.textColor)
+        } else if (colorDef.textColor instanceof HTMLElement || colorDef.textColor instanceof cash) {
+          element.css('color', $(colorDef.textColor).css('color'))
         } else {
           const hsla = colorDef.textColor
           const colorType = hsla.length === 4 ? 'hsla' : 'hsl'

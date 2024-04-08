@@ -52,8 +52,9 @@ class ElementColor extends BaseTypeDef
          * 2 = Lightness between 0-100 (Percent) (If not set, it uses darkness depending on dark/light mode)
          * 3 = Alpha opacity between 0-1 (0=Invisible, If not set, it is fully visible)
          * If any of the array values is null, it uses defaults same if as if not set
+         * If given a HTMLElement|Cash instance, it will copy from that
          * @var array|string
-         * @jstype number[]|null
+         * @jstype number[]|HTMLElement|Cash|null
          */
         public array|null $bgColor = null,
         /**
@@ -66,8 +67,9 @@ class ElementColor extends BaseTypeDef
          * 2 = Lightness between 0-100 (Percent) (If not set, it uses darkness depending on dark/light mode)
          * 3 = Alpha opacity between 0-1 (0=Invisible, If not set, it is fully visible)
          * If any of the array values is null, it uses defaults same if as if not set
+         * If given a HTMLElement|Cash instance, it will copy from that
          * @var array|string
-         * @jstype number[]|string|null
+         * @jstype number[]|string|HTMLElement|Cash|null
          */
         public array|string|null $textColor = null,
     ) {}
