@@ -136,39 +136,42 @@ class Url implements JsonSerializable
      */
     public function __toString(): string
     {
+        return $this->getUrlAsString();
+    }
+
+    /**
+     * Get url as string
+     * @param bool $includeHostname If false, it returns only path without host/scheme
+     * @return string
+     */
+    public function getUrlAsString(bool $includeHostname = true): string
+    {
         $url = "";
-        if ($this->urlData['scheme'] ?? null) {
-            $url .= $this->urlData['scheme'] . "://";
-        }
-        $hostPrefix = null;
-        if ($this->urlData['user'] ?? null) {
-            $url .= $this->urlData['user'];
-            $hostPrefix = "@";
-        }
-        if ($this->urlData['pass'] ?? null) {
-            $url .= ":" . $this->urlData['pass'];
-            $hostPrefix = "@";
-        }
-        if ($this->urlData['host'] ?? null) {
-            $url .= $hostPrefix . $this->urlData['host'];
-        }
-        if ($this->urlData['port'] ?? null) {
-            $url .= ":" . $this->urlData['port'];
+        if ($includeHostname) {
+            if ($this->urlData['scheme'] ?? null) {
+                $url .= $this->urlData['scheme'] . "://";
+            }
+            $hostPrefix = null;
+            if ($this->urlData['user'] ?? null) {
+                $url .= $this->urlData['user'];
+                $hostPrefix = "@";
+            }
+            if ($this->urlData['pass'] ?? null) {
+                $url .= ":" . $this->urlData['pass'];
+                $hostPrefix = "@";
+            }
+            if ($this->urlData['host'] ?? null) {
+                $url .= $hostPrefix . $this->urlData['host'];
+            }
+            if ($this->urlData['port'] ?? null) {
+                $url .= ":" . $this->urlData['port'];
+            }
         }
         $url .= $this->getPathAndQueryString();
         if ($this->urlData['fragment'] ?? null) {
             $url .= "#" . $this->urlData['fragment'];
         }
         return $url;
-    }
-
-    /**
-     * Get url
-     * @return string
-     */
-    public function getUrlAsString(): string
-    {
-        return (string)$this;
     }
 
     /**
