@@ -33,19 +33,9 @@ class FramelixTableCell {
   buttonText = null
 
   /**
-   * @type {string|null}
+   * @type {FramelixTypeDefElementColor|null}
    */
-  buttonTheme = null
-
-  /**
-   * @type {string|null}
-   */
-  buttonBgColor = null
-
-  /**
-   * @type {string|null}
-   */
-  buttonTextColor = null
+  buttonColor = null
 
   /**
    * @type {string|null}
@@ -89,14 +79,8 @@ class FramelixTableCell {
       if (this.buttonIcon) {
         buttonAttr.set('icon', this.buttonIcon)
       }
-      if (this.buttonTheme) {
-        buttonAttr.set('theme', this.buttonTheme)
-      }
-      if (this.buttonTextColor) {
-        buttonAttr.set('textcolor', this.buttonTextColor)
-      }
-      if (this.buttonBgColor) {
-        buttonAttr.set('bgcolor', this.buttonBgColor)
+      if (this.buttonColor) {
+        FramelixColorUtils.setColorHtmlAttributesFromColorDef(this.buttonColor, buttonAttr, 'framelix-button')
       }
       if (this.buttonTooltip) {
         buttonAttr.set('title', this.buttonTooltip)

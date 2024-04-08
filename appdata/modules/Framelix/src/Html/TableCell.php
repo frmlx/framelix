@@ -2,9 +2,9 @@
 
 namespace Framelix\Framelix\Html;
 
+use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Url;
-use JetBrains\PhpStorm\ExpectedValues;
 use JsonSerializable;
 
 /**
@@ -46,23 +46,10 @@ class TableCell implements JsonSerializable
     public ?string $buttonText = null;
 
     /**
-     * Icon theme, primary, success, warning, error, light
-     * @var string|null
+     * The button color definition
+     * @var ElementColor|null
      */
-    #[ExpectedValues(values: ['primary', 'success', 'warning', 'error', 'light', 'transparent'])]
-    public ?string $buttonTheme = null;
-
-    /**
-     * Icon background color, any css value is allowed
-     * @var string|null
-     */
-    public ?string $buttonBgColor = null;
-
-    /**
-     * Icon text color, any css value is allowed
-     * @var string|null
-     */
-    public ?string $buttonTextColor = null;
+    public ?ElementColor $buttonColor = null;
 
     /**
      * Icon tooltip
@@ -96,7 +83,7 @@ class TableCell implements JsonSerializable
 
     /**
      * The request should be made when clicking the button
-     * @var \Framelix\Framelix\Html\TypeDefs\JsRequestOptions|null
+     * @var JsRequestOptions|null
      */
     public ?JsRequestOptions $buttonRequestOptions = null;
 

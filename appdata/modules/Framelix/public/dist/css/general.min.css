@@ -7,7 +7,7 @@
   --color-error-hue: 353;
   --color-contrast-modifier: 0%;
   --color-default-lightness-bg: 70%;
-  --color-default-lightness-text: 15%;
+  --color-default-lightness-text: 55%;
   --color-default-contrast-bg: calc(var(--color-contrast-modifier) + 70%);
   --color-default-contrast-text: calc(var(--color-contrast-modifier) + 70%);
   --color-default-bg: white;

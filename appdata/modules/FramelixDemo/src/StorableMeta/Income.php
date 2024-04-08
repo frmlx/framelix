@@ -8,6 +8,7 @@ use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Html\QuickSearch;
 use Framelix\Framelix\Html\Table;
 use Framelix\Framelix\Html\TableCell;
+use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\StorableMeta;
@@ -39,7 +40,7 @@ class Income extends StorableMeta
             $tableCell->button = true;
             $tableCell->buttonIcon = "78a";
             $tableCell->buttonTooltip = "__framelixdemo_storable_income_copy__";
-            $tableCell->buttonTheme = "primary";
+            $tableCell->buttonColor = new ElementColor(ElementColor::THEME_PRIMARY);
             $tableCell->buttonHref = View::getUrl(Incomes::class)->setParameter('copy', $this->storable);
             return $tableCell;
         };
@@ -55,7 +56,7 @@ class Income extends StorableMeta
                 $tableCell->button = true;
                 $tableCell->buttonIcon = "73a";
                 $tableCell->buttonTooltip = "__framelixdemo_storable_income_download_invoice__";
-                $tableCell->buttonTheme = "error";
+                $tableCell->buttonColor = new ElementColor(ElementColor::THEME_ERROR);
                 $tableCell->buttonHref = $this->storable->invoice->attachment?->getDownloadUrl();
                 return $tableCell;
             }

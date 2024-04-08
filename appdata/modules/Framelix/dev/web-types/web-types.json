@@ -148,7 +148,7 @@
             }
           ],
           "source": {
-            "file": "../custom-elements/framelix-custom-element-button.js",
+            "file": "../../custom-elements/framelix-custom-element-button.js",
             "offset": 0
           }
         },
@@ -218,7 +218,7 @@
             }
           ],
           "source": {
-            "file": "../custom-elements/framelix-custom-element-image.js",
+            "file": "../../custom-elements/framelix-custom-element-image.js",
             "offset": 0
           }
         },
@@ -292,7 +292,7 @@
             }
           ],
           "source": {
-            "file": "../custom-elements/framelix-custom-element-alert.js",
+            "file": "../../custom-elements/framelix-custom-element-alert.js",
             "offset": 0
           }
         },
@@ -362,7 +362,7 @@
             }
           ],
           "source": {
-            "file": "../custom-elements/framelix-custom-element-image.js",
+            "file": "../../custom-elements/framelix-custom-element-image.js",
             "offset": 0
           }
         },
@@ -389,7 +389,7 @@
             }
           ],
           "source": {
-            "file": "../custom-elements/framelix-custom-element-time.js",
+            "file": "../../custom-elements/framelix-custom-element-time.js",
             "offset": 0
           }
         },
@@ -415,7 +415,7 @@
             }
           ],
           "source": {
-            "file": "../custom-elements/framelix-custom-element-icon.js",
+            "file": "../../custom-elements/framelix-custom-element-icon.js",
             "offset": 0
           }
         }
