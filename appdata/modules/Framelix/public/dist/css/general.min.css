@@ -337,6 +337,11 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
   max-width: calc(100vw - 50px);
   max-height: calc(100vh - 50px);
 }
+.framelix-popup[data-theme=light] {
+  --arrow-color: var(--color-page-bg-stencil);
+  background: var(--color-page-bg-stencil);
+  color: var(--color-default-text);
+}
 .framelix-popup[data-theme=primary] {
   --arrow-color: var(--color-popup-primary-bg);
   background: var(--color-popup-primary-bg);

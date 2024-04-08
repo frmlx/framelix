@@ -51,10 +51,7 @@ abstract class StorableExtended extends Storable
         }
         $html = '<span class="framelix-modified-timestamp"><span title=\'' . implode("<br/>", $tooltip) . '\'>' .
             $this->updateTime->getHtmlString() . '</span>' . $html . '</span>';
-        $tableCell = new TableCell();
-        $tableCell->sortValue = $this->updateTime->getTimestamp();
-        $tableCell->stringValue = $html;
-        return $tableCell;
+        return TableCell::create($html, $this->updateTime->getTimestamp());
     }
 
     /**

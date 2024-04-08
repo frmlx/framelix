@@ -36,7 +36,7 @@ class FramelixRequest {
   _responseJson
 
   /**
-   * Create a request, execute it and render to page depending on the options given
+   * Create a request, execute it and render to data depending on the options given
    * @param {FramelixTypeDefJsRequestOptions} requestOptions
    * @param {Cash|HTMLElement|null} initiatorElement
    * @param {Object|FormData|string=} postData If set, request will be a POST request, no matter what isset in requestOptions
@@ -65,7 +65,7 @@ class FramelixRequest {
     const request = FramelixRequest.request(method, requestOptions.url, null, postData)
     request.requestOptions = requestOptions
     request.progressCallback = progressCallback
-    request.render(initiatorElement)
+    FramelixRequest.renderResponse(request, requestOptions, initiatorElement)
     return request
   }
 
@@ -189,11 +189,13 @@ class FramelixRequest {
 
   /**
    * Render request response into target based on requestOptions
-   * Resolves when content has been rendered
+   * @param {FramelixRequest|string} request
+   * @param {FramelixTypeDefJsRequestOptions} requestOptions
+   * @param {HTMLElement|Cash|null} initiatorElement
+   * @param {string=} overrideResponse Override the response result with given string
    * @return {Promise<void>}
    */
-  async render (initiatorElement) {
-    const requestOptions = this.requestOptions
+  static async renderResponse (request, requestOptions, initiatorElement, overrideResponse) {
     // quick target options
     if (typeof requestOptions.renderTarget === 'string') {
       if (requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_MODAL_NEW) {
@@ -230,22 +232,26 @@ class FramelixRequest {
         }
       }
     }
+    const isFixedResponse = !(request instanceof FramelixRequest)
+    const override = typeof overrideResponse === 'string'
     if (!requestOptions.renderTarget) {
-      Framelix.showProgressBar(1)
-      this.checkHeaders().then(function () {
-        Framelix.showProgressBar(null)
-      })
+      if (!isFixedResponse) {
+        Framelix.showProgressBar(1)
+        request.checkHeaders().then(function () {
+          Framelix.showProgressBar(null)
+        })
+      }
     } else if (requestOptions.renderTarget.modalOptions) {
       let options = requestOptions.renderTarget.modalOptions
-      options.bodyContent = this
+      options.bodyContent = request
       await FramelixModal.show(options).created
     } else if (requestOptions.renderTarget.popupOptions) {
       let options = requestOptions.renderTarget.popupOptions
-      await FramelixPopup.show(initiatorElement, this, options).created
+      await FramelixPopup.show(initiatorElement, request, options).created
     } else if (requestOptions.renderTarget.elementSelector) {
       const el = $(requestOptions.renderTarget.elementSelector)
       el.html(`<div class="framelix-loading"></div>`)
-      el.html(await this.getJson())
+      el.html(isFixedResponse ? request : await request.getJson())
     }
   }
 

@@ -7,7 +7,6 @@ use Framelix\Framelix\Form\Field\File;
 use Framelix\Framelix\Html\QuickSearch;
 use Framelix\Framelix\Html\Table;
 use Framelix\Framelix\Html\TableCell;
-use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\StorableMeta;
@@ -46,17 +45,10 @@ class Depreciation extends StorableMeta
                 }
             }
             if ($yearSplitRequired) {
-                $tableCell = new TableCell();
-                $tableCell->button = true;
-                $tableCell->buttonIcon = "705";
-                $tableCell->buttonTooltip = "__framelixdemo_storable_depreciation_createoutgoing__";
-                $tableCell->buttonColor = new ElementColor(ElementColor::THEME_PRIMARY);
-                $tableCell->buttonHref = View::getUrl(Outgoings::class)->setParameter(
-                    'fromDepreciation',
-                    $this->storable
-                );
-                $tableCell->buttonTarget = "_blank";
-                return $tableCell;
+                return TableCell::create('<framelix-button theme="primary" href="' . View::getUrl(Outgoings::class)->setParameter(
+                        'fromDepreciation',
+                        $this->storable
+                    ) . '" icon="705" title="__framelixdemo_storable_depreciation_createoutgoing__" target="_blank"></framelix-button>');
             }
             return null;
         };

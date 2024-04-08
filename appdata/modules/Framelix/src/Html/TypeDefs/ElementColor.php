@@ -53,10 +53,10 @@ class ElementColor extends BaseTypeDef
          * 3 = Alpha opacity between 0-1 (0=Invisible, If not set, it is fully visible)
          * If any of the array values is null, it uses defaults same if as if not set
          * If given a HTMLElement|Cash instance, it will copy from that
-         * @var array|string
+         * @var array|string|null
          * @jstype number[]|HTMLElement|Cash|null
          */
-        public array|null $bgColor = null,
+        public array|string|null $bgColor = null,
         /**
          * Text color in HSL range to override
          * If string, it will use that css color, including var() support
@@ -68,7 +68,7 @@ class ElementColor extends BaseTypeDef
          * 3 = Alpha opacity between 0-1 (0=Invisible, If not set, it is fully visible)
          * If any of the array values is null, it uses defaults same if as if not set
          * If given a HTMLElement|Cash instance, it will copy from that
-         * @var array|string
+         * @var array|string|null
          * @jstype number[]|string|HTMLElement|Cash|null
          */
         public array|string|null $textColor = null,

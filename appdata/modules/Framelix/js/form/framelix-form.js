@@ -884,15 +884,12 @@ class FramelixForm {
     }
 
     if (typeof responseData.buffer === 'string' && responseData.buffer.length) {
-      // override response data json to rest of the buffer to use default renderer
-      request.requestOptions = this.requestOptions
-      request['_responseJson'] = responseData.buffer
-      await request.render(this.container[0])
+      FramelixRequest.renderResponse(responseData.buffer, this.requestOptions, this.container[0])
     }
 
     if (this.executeAfterAsyncSubmit) {
       await new Promise(function (resolve) {
-        eval('(async function(){' + self.executeAfterAsyncSubmit + '; resolve();})()')
+        eval('(async function(){' + self.executeAfterAsyncSubmit + ' resolve();})()')
       })
     }
     return true

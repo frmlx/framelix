@@ -26,12 +26,11 @@ class Fixation extends StorableMeta
         $property->setVisibility(self::CONTEXT_TABLE, true);
         $property->setLabel("");
         $property->valueCallable = function () {
-            $tableCell = new TableCell();
-            $tableCell->button = true;
-            $tableCell->buttonIcon = "709";
-            $tableCell->buttonHref = $this->storable->attachment?->getDownloadUrl() ?? null;
-            $tableCell->buttonTooltip = "__framelix_download_file__";
-            return $tableCell;
+            $downloadUrl = $this->storable->attachment?->getDownloadUrl();
+            if (!$downloadUrl) {
+                return null;
+            }
+            return TableCell::create('<framelix-button icon="709" href="' . $downloadUrl . '" title="__framelix_download_file__"></framelix-button>');
         };
 
         $this->addDefaultPropertiesAtStart();

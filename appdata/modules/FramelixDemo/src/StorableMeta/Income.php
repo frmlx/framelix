@@ -36,13 +36,7 @@ class Income extends StorableMeta
         $property->setVisibility(self::CONTEXT_TABLE, true);
         $property->setLabel('');
         $property->valueCallable = function () {
-            $tableCell = new TableCell();
-            $tableCell->button = true;
-            $tableCell->buttonIcon = "78a";
-            $tableCell->buttonTooltip = "__framelixdemo_storable_income_copy__";
-            $tableCell->buttonColor = new ElementColor(ElementColor::THEME_PRIMARY);
-            $tableCell->buttonHref = View::getUrl(Incomes::class)->setParameter('copy', $this->storable);
-            return $tableCell;
+            return TableCell::create('<framelix-button icon="78a" theme="primary" href="' . View::getUrl(Incomes::class)->setParameter('copy', $this->storable) . '" title="__framelixdemo_storable_income_copy__"></framelix-button>');
         };
 
         $this->tableDefault->addColumnFlag('downloadInvoice', Table::COLUMNFLAG_REMOVE_IF_EMPTY);
@@ -51,16 +45,11 @@ class Income extends StorableMeta
         $property->setVisibility(self::CONTEXT_TABLE, true);
         $property->setLabel('');
         $property->valueCallable = function () {
-            if ($this->storable->invoice) {
-                $tableCell = new TableCell();
-                $tableCell->button = true;
-                $tableCell->buttonIcon = "73a";
-                $tableCell->buttonTooltip = "__framelixdemo_storable_income_download_invoice__";
-                $tableCell->buttonColor = new ElementColor(ElementColor::THEME_ERROR);
-                $tableCell->buttonHref = $this->storable->invoice->attachment?->getDownloadUrl();
-                return $tableCell;
+            $downloadUrl = $this->storable->invoice?->attachment?->getDownloadUrl();
+            if (!$downloadUrl) {
+                return null;
             }
-            return null;
+            return TableCell::create('<framelix-button icon="709" theme="error" href="' . $downloadUrl . '" title="__framelixdemo_storable_income_download_invoice__"></framelix-button>');
         };
 
         $this->addDefaultPropertiesAtStart();

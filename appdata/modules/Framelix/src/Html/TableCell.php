@@ -2,9 +2,6 @@
 
 namespace Framelix\Framelix\Html;
 
-use Framelix\Framelix\Html\TypeDefs\ElementColor;
-use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
-use Framelix\Framelix\Url;
 use JsonSerializable;
 
 /**
@@ -28,64 +25,18 @@ class TableCell implements JsonSerializable
     public mixed $sortValue = null;
 
     /**
-     * Cell will be a fully filled button
-     * @var bool
+     * Create an instance
+     * @param mixed $stringValue
+     * @param mixed|null $sortValue
+     * @return TableCell
      */
-    public bool $button = false;
-
-    /**
-     * Icon, see <framelix-icon> for more information
-     * @var string|null
-     */
-    public ?string $buttonIcon = null;
-
-    /**
-     * The button text
-     * @var string|null
-     */
-    public ?string $buttonText = null;
-
-    /**
-     * The button color definition
-     * @var ElementColor|null
-     */
-    public ?ElementColor $buttonColor = null;
-
-    /**
-     * Icon tooltip
-     * @var string|null
-     */
-    public ?string $buttonTooltip = null;
-
-    /**
-     * Icon url to redirect on click
-     * @var Url|string|null
-     */
-    public Url|string|null $buttonHref = null;
-
-    /**
-     * The target to render to response to
-     * @var string|null
-     */
-    public ?string $buttonTarget = null;
-
-    /**
-     * If set, given confirm message will appear before jscall will be executed
-     * @var string|null
-     */
-    public ?string $buttonConfirmMessage = null;
-
-    /**
-     * Additional icon attributes
-     * @var HtmlAttributes|null
-     */
-    public ?HtmlAttributes $buttonAttributes = null;
-
-    /**
-     * The request should be made when clicking the button
-     * @var JsRequestOptions|null
-     */
-    public ?JsRequestOptions $buttonRequestOptions = null;
+    public static function create(mixed $stringValue, mixed $sortValue = null): TableCell
+    {
+        $cell = new self();
+        $cell->stringValue = $stringValue;
+        $cell->sortValue = $sortValue;
+        return $cell;
+    }
 
     /**
      * Json serialize

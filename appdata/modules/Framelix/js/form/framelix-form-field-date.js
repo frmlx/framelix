@@ -182,7 +182,7 @@ class FramelixFormFieldDate extends FramelixFormFieldText {
     }
 
     const self = this
-    this.datepickerPopup = FramelixPopup.show(this.field, '', { color: '--color-page-bg', placement: 'bottom' })
+    this.datepickerPopup = FramelixPopup.show(this.field, '', { color: 'light', placement: 'bottom', width: null })
 
     this.datepickerPopup.destroyed.then(function () {
       self.datepickerPopup = null

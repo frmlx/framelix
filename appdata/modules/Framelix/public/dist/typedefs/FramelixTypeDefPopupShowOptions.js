@@ -85,10 +85,17 @@ class FramelixTypeDefPopupShowOptions extends FramelixBaseTypeDef {
     padding = "5px 15px"
 
     /**
-     * The fixed with for the popup
+     * The fixed width for the popup
+     * Set to null for dynamic width depending on content
      * @type  {string|null}
      */
-    width = null
+    width = "300px"
+
+    /**
+     * The text align in the popup
+     * @type  {string}
+     */
+    textAlign = "center"
 
     /**
      * Offset X by given mouse event, so popup is centered where the cursor is

@@ -66,7 +66,7 @@ class PopupShowOptions extends BaseTypeDef
          * @var string|ElementColor
          * @jstype string|FramelixTypeDefElementColor
          */
-        public string $color = 'dark',
+        public string|ElementColor $color = 'dark',
         /**
          * The group id, one target can have one popup of one group
          * @var string
@@ -83,10 +83,16 @@ class PopupShowOptions extends BaseTypeDef
          */
         public string $padding = '5px 15px',
         /**
-         * The fixed with for the popup
+         * The fixed width for the popup
+         * Set to null for dynamic width depending on content
          * @var string|null
          */
-        public ?string $width = null,
+        public ?string $width = "300px",
+        /**
+         * The text align in the popup
+         * @var string
+         */
+        public string $textAlign = "center",
         /**
          * Offset X by given mouse event, so popup is centered where the cursor is
          * @var mixed

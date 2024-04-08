@@ -33,6 +33,7 @@ use function is_int;
 use function is_string;
 use function mb_strtolower;
 use function reset;
+use function str_starts_with;
 use function trim;
 
 /**
@@ -331,14 +332,11 @@ class Table implements JsonSerializable
         }
         if ($this->storableDeletable && $storable->isDeletable()) {
             $deleteUrl = $storable->getDeleteUrl(Url::getBrowserUrl());
-            $cell = new TableCell();
-            $cell->button = true;
-            $cell->buttonTooltip = "__framelix_deleteentry__";
-            $cell->buttonIcon = "732";
-            $cell->buttonTarget = "none";
-            $cell->buttonColor = new ElementColor(bgColor: [360, 65, null, 0.5], textColor: 'white');
-            $cell->buttonRequestOptions = new JsRequestOptions($deleteUrl);
-            $cell->buttonConfirmMessage = Lang::get('__framelix_delete_sure__');
+            $cell = null;
+            if($deleteUrl){
+                $requestOptions = new JsRequestOptions($deleteUrl);
+                $cell = TableCell::create('<framelix-button icon="732" bgcolor="hsla(360,65%,var(--color-default-contrast-bg),0.5)" textcolor="white" confirm-message="__framelix_delete_sure__" request-options=\''.$requestOptions.'\'></framelix-button>');
+            }
             if (!in_array("_deletable", $this->columnOrder)) {
                 array_unshift($this->columnOrder, "_deletable");
             }
@@ -394,7 +392,11 @@ class Table implements JsonSerializable
         if (!isset($this->rows[$group][$rowKey])) {
             $this->rows[$group][$rowKey]['rowKeyInitial'] = $rowKey;
         }
-        if ($value instanceof TableCell && $value->button) {
+        // auto detect column flag if framelix button is assed
+        if (
+            $value instanceof TableCell
+            && is_string($value->stringValue)
+            && str_starts_with($value->stringValue, '<framelix-button')) {
             $this->addColumnFlag(
                 $columnName,
                 self::COLUMNFLAG_ICON,

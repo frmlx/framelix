@@ -32,15 +32,10 @@ class User extends StorableMeta
         $property->setVisibility(self::CONTEXT_TABLE, true);
         $property->setLabel('');
         $property->valueCallable = function () {
-            $tableCell = new TableCell();
-            $tableCell->button = true;
-            $tableCell->buttonIcon = "739";
-            $tableCell->buttonTooltip = "__framelix_simulateuser__";
-            $tableCell->buttonHref = View::getUrl(View\Backend\User\Index::class)->setParameter(
+            return TableCell::create('<framelix-button href="'.View::getUrl(View\Backend\User\Index::class)->setParameter(
                 'simulateUser',
                 $this->storable
-            );
-            return $tableCell;
+            ).'" icon="739" title="__framelix_simulateuser__"></framelix-button>');
         };
 
         $this->addDefaultPropertiesAtStart();

@@ -14,6 +14,12 @@
     max-height: calc(100vh - 50px);
   }
 
+  &[data-theme='light'] {
+    --arrow-color: var(--color-page-bg-stencil);
+    background: var(--color-page-bg-stencil);
+    color: var(--color-default-text);
+  }
+
   &[data-theme='primary'] {
     --arrow-color: var(--color-popup-primary-bg);
     background: var(--color-popup-primary-bg);

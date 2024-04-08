@@ -460,7 +460,7 @@ class FramelixTable {
         cellValue = ''
       }
       if (cellValue instanceof FramelixTableCell) {
-        cellValue = cellValue.getHtmlString()
+        cellValue = cellValue.stringValue
       } else if (typeof cellValue === 'object') {
         let str = ''
         for (let i in cellValue) {
@@ -511,11 +511,7 @@ class FramelixTable {
           cellAttributes.set('data-flag-icon', '1')
           let cellValue = ''
           if (rowGroup === 'tbody') {
-            cellValue = new FramelixTableCell()
-            cellValue.button = true
-            cellValue.buttonIcon = '70f'
-            cellValue.buttonTooltip = '__framelix_table_dragsort__'
-            cellValue = cellValue.getHtmlString()
+            cellValue = '<framelix-button icon="70f" title="__framelix_table_dragsort__"></framelix-button>'
           }
           if (rowGroup === 'thead') cellValue = `<div class="framelix-table-cell-header">${cellValue}</div>`
           tableHtml += '<' + cellType + ' ' + cellAttributes.toString() + '>'
@@ -548,6 +544,11 @@ class FramelixTable {
             }
           }
           let cellValue = row.cellValues[columnName] || ''
+          if (typeof cellValue === 'string' && cellValue.startsWith('<framelix-button')) {
+            cellAttributes.set('data-flag-ignoresort', '1')
+            cellAttributes.set('data-flag-ignoreurl', '1')
+            cellAttributes.set('data-flag-icon', '1')
+          }
           cellValue = await convertValue(0, cellValue, rowGroup, columnName, cellAttributes, removeEmptyCells)
           tableHtml += '<' + cellType + ' ' + cellAttributes.toString() + '>'
           tableHtml += cellValue

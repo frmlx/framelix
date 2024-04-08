@@ -93,6 +93,8 @@ class FramelixPopup {
         group: 'tooltip',
         closeButton: false,
         offsetByMouseEvent: ev,
+        width: null,
+        textAlign: 'center',
         data: { tooltip: true }
       })
       // a tooltip is above everything
@@ -147,6 +149,8 @@ class FramelixPopup {
     if (options.group === undefined) options.group = 'popup'
     if (options.offset === undefined) options.offset = [0, 5]
     if (options.color === undefined) options.color = 'dark'
+    if (options.width === undefined) options.width = '300px'
+    if (options.textAlign === undefined) options.textAlign = 'center'
     if (options.appendTo === undefined) options.appendTo = lastModal.length ? lastModal : 'body'
     if (options.padding === undefined) options.padding = '5px 10px'
     if (options.closeMethods === undefined) options.closeMethods = 'click-outside'
@@ -198,6 +202,12 @@ class FramelixPopup {
     $(options.appendTo).append(popperEl)
     FramelixColorUtils.setColorsFromElementColorDef(options.color, popperEl)
     const contentEl = popperEl.children('.framelix-popup-inner')
+    if (typeof options.width === 'string') {
+      contentEl.css('width', options.width)
+    }
+    if (typeof options.textAlign === 'string') {
+      contentEl.css('text-align', options.textAlign)
+    }
     const writePromises = []
     if (content instanceof FramelixRequest) {
       writePromises.push(new Promise(async function (resolve) {

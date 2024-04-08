@@ -10,7 +10,6 @@ use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Html\QuickSearch;
 use Framelix\Framelix\Html\Table;
 use Framelix\Framelix\Html\TableCell;
-use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Html\TypeDefs\JsRenderTarget;
 use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Html\TypeDefs\ModalShowOptions;
@@ -44,16 +43,11 @@ class Invoice extends StorableMeta
             $property->setVisibility(self::CONTEXT_TABLE, true);
             $property->setLabel('');
             $property->valueCallable = function () {
-                $tableCell = new TableCell();
-                $tableCell->button = true;
-                $tableCell->buttonIcon = "78a";
-                $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_offfertoinvoice__";
-                $tableCell->buttonColor = new ElementColor(ElementColor::THEME_PRIMARY);
-                $tableCell->buttonHref = View::getUrl(Invoices::class)->setParameter(
-                    'category',
-                    \Framelix\FramelixDemo\Storable\Invoice::CATEGORY_INVOICE
-                )->setParameter('copy', $this->storable);
-                return $tableCell;
+                return TableCell::create('<framelix-button icon="78a" theme="primary" href="' . View::getUrl(Invoices::class)->setParameter(
+                        'category',
+                        \Framelix\FramelixDemo\Storable\Invoice::CATEGORY_INVOICE
+                    )->setParameter('copy',
+                        $this->storable) . '" title="__framelixdemo_storable_invoice_offfertoinvoice__"></framelix-button>');
             };
         }
 
@@ -63,16 +57,11 @@ class Invoice extends StorableMeta
         $property->setVisibility(self::CONTEXT_TABLE, true);
         $property->setLabel('');
         $property->valueCallable = function () {
-            $tableCell = new TableCell();
-            $tableCell->button = true;
-            $tableCell->buttonIcon = "78a";
-            $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_copy__";
-            $tableCell->buttonColor = new ElementColor(ElementColor::THEME_SUCCESS);
-            $tableCell->buttonHref = View::getUrl(Invoices::class)->setParameter(
-                'category',
-                $this->storable->category
-            )->setParameter('copy', $this->storable);
-            return $tableCell;
+            return TableCell::create('<framelix-button icon="78a" theme="success" href="' . View::getUrl(Invoices::class)->setParameter(
+                    'category',
+                    $this->storable->category
+                )->setParameter('copy',
+                    $this->storable) . '" title="__framelixdemo_storable_invoice_copy__"></framelix-button>');
         };
 
         $this->tableDefault->addColumnFlag('downloadInvoice', Table::COLUMNFLAG_REMOVE_IF_EMPTY);
@@ -81,22 +70,14 @@ class Invoice extends StorableMeta
         $property->setVisibility(self::CONTEXT_TABLE, true);
         $property->setLabel('');
         $property->valueCallable = function () {
-            $tableCell = new TableCell();
-            $tableCell->button = true;
-            $tableCell->buttonIcon = "73e";
-            $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_download__";
-            $tableCell->buttonColor = new ElementColor(ElementColor::THEME_ERROR);
-            if (!$this->storable->attachment) {
-                $tableCell->buttonColor = new ElementColor(bgColor: [0, 0, 70]);
-            }
-            $tableCell->buttonRequestOptions = new JsRequestOptions(
+            $requestOptions = new JsRequestOptions(
                 JsCall::getUrl(
                     Invoices::class,
                     'invoice-pdf-download',
                     ['invoice' => $this->storable]
                 ), new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))
             );
-            return $tableCell;
+            return TableCell::create('<framelix-button icon="73e" theme="error" title="__framelixdemo_storable_invoice_download__" request-options=\'' . $requestOptions . '\'></framelix-button>');
         };
 
         if (!$isOffer) {
@@ -107,14 +88,8 @@ class Invoice extends StorableMeta
             $property->setLabel('');
             $property->valueCallable = function () {
                 if (!$this->storable->income && $this->storable->datePaid) {
-                    $tableCell = new TableCell();
-                    $tableCell->button = true;
-                    $tableCell->buttonIcon = "78c";
-                    $tableCell->buttonTooltip = "__framelixdemo_storable_invoice_createincome__";
-                    $tableCell->buttonColor = new ElementColor(ElementColor::THEME_PRIMARY);
-                    $tableCell->buttonHref = View::getUrl(Incomes::class)->setParameter('fromInvoice', $this->storable);
-                    $tableCell->buttonTarget = "_blank";
-                    return $tableCell;
+                    return TableCell::create('<framelix-button icon="78c" theme="primary" href="' . View::getUrl(Incomes::class)->setParameter('fromInvoice',
+                            $this->storable) . '" title="__framelixdemo_storable_invoice_createincome__"></framelix-button>');
                 }
                 return null;
             };
