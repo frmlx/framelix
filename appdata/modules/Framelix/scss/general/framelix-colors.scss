@@ -36,15 +36,15 @@
   --color-page-text: var(--color-default-text);
 
   --color-alert-default-bg: var(--color-page-bg-stencil);
-  --color-alert-default-text: hsl(var(--color-primary-hue), 20%, 5%);
+  --color-alert-default-text: var(--color-default-text);
   --color-alert-success-bg: var(--color-success-bg);
-  --color-alert-success-text: var(--color-success-text);
+  --color-alert-success-text: var(--color-default-text);
   --color-alert-warning-bg: var(--color-warning-bg);
-  --color-alert-warning-text: var(--color-warning-text);
+  --color-alert-warning-text: var(--color-default-text);
   --color-alert-error-bg: var(--color-error-bg);
-  --color-alert-error-text: var(--color-error-text);
+  --color-alert-error-text: var(--color-default-text);
   --color-alert-primary-bg: var(--color-primary-bg);
-  --color-alert-primary-text: var(--color-primary-text);
+  --color-alert-primary-text: var(--color-default-text);
 
   --color-toast-default-bg: hsl(var(--color-primary-hue), 20%, 25%);
   --color-toast-default-text: white;
