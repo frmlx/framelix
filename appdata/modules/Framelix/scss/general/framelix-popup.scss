@@ -2,10 +2,10 @@
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   z-index: 61;
-  background: var(--color-popup-default-bg);
-  color: var(--color-popup-default-text);
+  background: var(--color-popup-dark-bg);
+  color: var(--color-popup-dark-text);
   box-shadow: rgba(0, 0, 0, 0.6) 0 0 10px;
-  --arrow-color: var(--color-popup-default-bg);
+  --arrow-color: var(--color-popup-dark-bg);
   --arrow-size: 7px;
 
   .framelix-popup-inner {

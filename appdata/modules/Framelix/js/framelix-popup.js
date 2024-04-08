@@ -203,7 +203,7 @@ class FramelixPopup {
     FramelixColorUtils.setColorsFromElementColorDef(options.color, popperEl)
     const contentEl = popperEl.children('.framelix-popup-inner')
     if (typeof options.width === 'string') {
-      contentEl.css('width', options.width)
+      popperEl.css('width', options.width)
     }
     if (typeof options.textAlign === 'string') {
       contentEl.css('text-align', options.textAlign)

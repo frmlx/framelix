@@ -68,8 +68,8 @@
   --color-modal-error-text: hsl(var(--color-error-hue), var(--color-default-contrast-text), 20%);
   --color-modal-primary-bg: hsl(var(--color-primary-hue), var(--color-default-contrast-bg), 90%);
   --color-modal-primary-text: hsl(var(--color-primary-hue), var(--color-default-contrast-text), 5%);
-  --color-popup-default-bg: black;
-  --color-popup-default-text: white;
+  --color-popup-dark-bg: hsl(220, 30%, 12%);
+  --color-popup-dark-text: white;
   --color-popup-success-bg: hsl(var(--color-success-hue), var(--color-default-contrast-bg), 90%);
   --color-popup-success-text: hsl(var(--color-success-hue), var(--color-default-contrast-text), 20%);
   --color-popup-warning-bg: hsl(var(--color-warning-hue), var(--color-default-contrast-bg), 90%);
@@ -326,10 +326,10 @@ html[data-screen-size=s] .framelix-responsive-grid-3 > * {
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   z-index: 61;
-  background: var(--color-popup-default-bg);
-  color: var(--color-popup-default-text);
+  background: var(--color-popup-dark-bg);
+  color: var(--color-popup-dark-text);
   box-shadow: rgba(0, 0, 0, 0.6) 0 0 10px;
-  --arrow-color: var(--color-popup-default-bg);
+  --arrow-color: var(--color-popup-dark-bg);
   --arrow-size: 7px;
 }
 .framelix-popup .framelix-popup-inner {
