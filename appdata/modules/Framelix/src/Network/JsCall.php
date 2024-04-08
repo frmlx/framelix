@@ -26,6 +26,7 @@ use function trim;
  */
 class JsCall
 {
+
     /**
      * The result to return
      * @var mixed
@@ -37,7 +38,8 @@ class JsCall
      * @param string|callable|array $phpMethod A callable is only supported as array, not as a closure
      * @param string $action
      * @param array|null $additionalUrlParameters Additional array parameters to pass by
-     * @param bool $signWithCurrentUserToken If true, then sign with current user token, so this url can only be verified by the same user
+     * @param bool $signWithCurrentUserToken If true, then sign with current user token, so this url can only be
+     *     verified by the same user
      * @param int $maxLifetime Max url lifetime in seconds, set to 0 if unlimited
      * @return Url
      */
@@ -63,8 +65,7 @@ class JsCall
     public function __construct(
         public string $action,
         public mixed $parameters
-    ) {
-    }
+    ) {}
 
     /**
      * Call given callable method and passing this instance as parameter
@@ -112,14 +113,31 @@ class JsCall
             );
         }
         Buffer::start();
-        $reflectionMethod->invoke(null, $this);
+        $returnValue = $reflectionMethod->invoke(null, $this);
         $output = Buffer::get();
-        if (strlen(trim($output)) > 0) {
-            if (isset($this->result)) {
-                throw new FatalError("Cannot mix buffer output and \$jsCall->result");
-            }
+        $hasBuffer = strlen(trim($output)) > 0;
+        $hasReturn = $returnValue !== null;
+        $hasResult = $this->result !== null;
+        $sources = 0;
+        if ($hasBuffer) {
+            $sources++;
+        }
+        if ($hasReturn) {
+            $sources++;
+        }
+        if ($hasResult) {
+            $sources++;
+        }
+        if ($sources > 1) {
+            throw new FatalError("Cannot mix multiple JsCall return values and outputs");
+        }
+        if ($hasBuffer) {
             return $output;
+        }
+        if ($hasReturn) {
+            return $returnValue;
         }
         return $this->result;
     }
+
 }
