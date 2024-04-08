@@ -4,6 +4,28 @@
 class FramelixStringUtils {
 
   /**
+   * Converts data with JSON.stringify() but converts special characters into unicode standard (Same as Php->JsonUtils::encode(convertSpecialChars:true)
+   * Mimics same behaviour as JsonUtils::encode() in PHP
+   * Output is still a valid JSON string
+   * Converted chars are: ", ', &, <, >
+   * @param {*} data
+   * @param {boolean} prettyPrint If true, it adds whitespace and newlines to the json output
+   * @param {boolean} convertSpecialChars If true, convert html special chars to unicode representation
+   * @return {string}
+   */
+  static jsonStringify (data, prettyPrint = false, convertSpecialChars = false) {
+    let str = JSON.stringify(data, null, prettyPrint ? 2 : null)
+    if (convertSpecialChars) {
+      str = str.replace(/\\"/g, '\\u0022')
+      str = str.replace(/'/g, '\\u0027')
+      str = str.replace(/</g, '\\u003C')
+      str = str.replace(/>/g, '\\u003E')
+      str = str.replace(/&/g, '\\u0026')
+    }
+    return str
+  }
+
+  /**
    * Creates a slug out of a string.
    * Replaces everything but letters and numbers with dashes.
    * @see http://en.wikipedia.org/wiki/Slug_(typesetting)
