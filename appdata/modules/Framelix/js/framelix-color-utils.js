@@ -4,6 +4,76 @@
 class FramelixColorUtils {
 
   /**
+   * Internal cache for invertColor if it required color computing
+   * @type {{}}
+   * @private
+   */
+  static inverterCache = {}
+
+  /**
+   * Set colors on FramelixHtmlAttributes based on the color definition
+   * @param {FramelixTypeDefElementColor|Object|string} colorDef
+   * @param {FramelixHtmlAttributes} attributes
+   * @param {string} tagName For which html tag is it, example: framelix-button, div, etc..
+   */
+  static setColorHtmlAttributesFromColorDef (colorDef, attributes, tagName) {
+    if (typeof colorDef === 'string' || colorDef.theme) {
+      const theme = colorDef.theme || colorDef
+      // custom elements have themes built-in
+      if (tagName.startsWith('framelix-')) {
+        attributes.set('theme', theme)
+      } else {
+        attributes.setStyle('color', 'var(--color-' + theme + '-text)')
+        attributes.setStyle('background-color', 'var(--color-' + theme + '-text)')
+      }
+    }
+    if (colorDef instanceof FramelixTypeDefElementColor || typeof colorDef === 'object') {
+      if (colorDef.bgColor) {
+        if (typeof colorDef.bgColor === 'string') {
+          attributes.setStyle('background-color', colorDef.bgColor)
+        } else {
+          const hsla = colorDef.bgColor
+          const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
+          if (hsla.length < 2 || hsla[1] === null) {
+            hsla[1] = 'var(--color-default-contrast-bg)'
+          } else {
+            hsla[1] += '%'
+          }
+          if (hsla.length < 3 || hsla[2] === null) {
+            hsla[2] = 'var(--color-default-lightness-bg)'
+          } else {
+            hsla[2] += '%'
+          }
+          attributes.setStyle('background-color', colorType + '(' + hsla.join(', ') + ')')
+        }
+      }
+      if (colorDef.textColor) {
+        if (colorDef.textColor === 'invert') {
+          if (!colorDef.bgColor) {
+            console.error('To invert textcolor, a bgcolor must be set')
+            return
+          }
+          attributes.setStyle('background-color', FramelixColorUtils.invertColor(colorDef.bgColor, true))
+        } else if (typeof colorDef.textColor === 'string') {
+          attributes.setStyle('color', colorDef.textColor)
+        } else {
+          const hsla = colorDef.textColor
+          const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
+          if (hsla.length < 3) {
+            hsla[2] = 'var(--color-default-lightness-text)'
+          }
+          if (hsla.length < 2) {
+            hsla[1] = 'var(--color-default-contrast-text)'
+          }
+          hsla[1] += '%'
+          hsla[2] += '%'
+          attributes.setStyle('color', colorType + '(' + hsla.join(', ') + ')')
+        }
+      }
+    }
+  }
+
+  /**
    * Set colors on an element based on the color definition
    * @param {FramelixTypeDefElementColor|Object|string} colorDef
    * @param {HTMLElement|Cash} element
@@ -21,25 +91,29 @@ class FramelixColorUtils {
     }
     if (colorDef instanceof FramelixTypeDefElementColor || typeof colorDef === 'object') {
       if (colorDef.bgColor) {
-        const hsla = colorDef.bgColor
-        const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
-        if (hsla.length < 2) {
-          hsla[1] = 'var(--color-default-contrast-bg)'
+        if (typeof colorDef.bgColor === 'string') {
+          element.css('background-color', colorDef.bgColor)
         } else {
-          hsla[1] += '%'
+          const hsla = colorDef.bgColor
+          const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
+          if (hsla.length < 2 || hsla[1] === null) {
+            hsla[1] = 'var(--color-default-contrast-bg)'
+          } else {
+            hsla[1] += '%'
+          }
+          if (hsla.length < 3 || hsla[2] === null) {
+            hsla[2] = 'var(--color-default-lightness-bg)'
+          } else {
+            hsla[2] += '%'
+          }
+          element.css('background-color', colorType + '(' + hsla.join(', ') + ')')
         }
-        if (hsla.length < 3) {
-          hsla[2] = 'var(--color-default-lightness-bg)'
-        } else {
-          hsla[2] += '%'
-        }
-        element.css('background-color', colorType + '(' + hsla.join(', ') + ')')
       }
       if (colorDef.textColor) {
         if (colorDef.textColor === 'invert') {
-          setTimeout(function () {
-            element[0].style.color = FramelixColorUtils.invertColor(FramelixColorUtils.cssColorToHex(getComputedStyle(element[0]).backgroundColor), true)
-          }, 10)
+          element[0].style.color = FramelixColorUtils.invertColor(element[0].backgroundColor, true)
+        } else if (typeof colorDef.textColor === 'string') {
+          element.css('color', colorDef.textColor)
         } else {
           const hsla = colorDef.textColor
           const colorType = hsla.length === 4 ? 'hsla' : 'hsl'
@@ -58,27 +132,51 @@ class FramelixColorUtils {
   }
 
   /**
-   * Invert given hex color
+   * Invert any valid css color, including variables with var()
    * This returns black/white hex color, depending on given background color
    * @link https://stackoverflow.com/a/35970186/1887622
-   * @param {string} hex
+   * @param {string} colorStr
    * @param {boolean} blackWhite If true, then only return black or white, depending on which has better contrast
-   * @return {string|null}
+   * @return {string}
    */
-  static invertColor (hex, blackWhite = false) {
-    let rgb = FramelixColorUtils.hexToRgb(hex)
-    if (!rgb) {
-      return null
+  static invertColor (colorStr, blackWhite = false) {
+    const cacheKey = colorStr + '_' + (blackWhite ? '1' : '0')
+    if (typeof FramelixColorUtils.inverterCache[cacheKey] !== 'undefined') {
+      return FramelixColorUtils.inverterCache[cacheKey]
+    }
+    let rgb = []
+    if (colorStr.startsWith('#') && colorStr.length === 7) {
+      rgb = FramelixColorUtils.hexToRgb(colorStr)
+    } else if (colorStr.startsWith('rgb')) {
+      rgb = colorStr.replace(/[^0-9.,]/g, '').split(',').map(function (value) {
+        return parseInt(value)
+      })
+    } else if (colorStr.startsWith('hsl')) {
+      rgb = FramelixColorUtils.hslToRgb(...colorStr.replace(/[^0-9.,]/g, '').split(',').map(function (value, index) {
+        if (index === 0) {
+          return parseFloat(value) / 360
+        }
+        return parseFloat(value) / 100
+      }))
+    } else {
+      const el = document.createElement('span')
+      el.style.color = colorStr
+      document.body.appendChild(el)
+      FramelixColorUtils.inverterCache[cacheKey] = FramelixColorUtils.invertColor(getComputedStyle(el).color)
+      el.remove()
+      return FramelixColorUtils.inverterCache[cacheKey]
     }
     if (blackWhite) {
       // https://stackoverflow.com/a/3943023/112731
-      return (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114) > 186 ? '#000' : '#fff'
+      FramelixColorUtils.inverterCache[cacheKey] = (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114) > 186 ? '#000' : '#fff'
+      return FramelixColorUtils.inverterCache[cacheKey]
     }
     // invert color components
     let r = (255 - rgb[0]).toString(16)
     let g = (255 - rgb[1]).toString(16)
     let b = (255 - rgb[2]).toString(16)
-    return '#' + r.padStart(2, '0') + g.padStart(2, '0') + b.padStart(2, '0')
+    FramelixColorUtils.inverterCache[cacheKey] = '#' + r.padStart(2, '0') + g.padStart(2, '0') + b.padStart(2, '0')
+    return FramelixColorUtils.inverterCache[cacheKey]
   }
 
   /**
