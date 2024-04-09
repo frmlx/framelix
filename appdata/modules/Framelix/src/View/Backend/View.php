@@ -56,7 +56,7 @@ abstract class View extends \Framelix\Framelix\View
      * The layout to use
      * @var int
      */
-    #[ExpectedValues(valuesFromClass: self::class)]
+    #[ExpectedValues(valuesFromClass: __CLASS__)]
     protected int $layout = self::LAYOUT_DEFAULT;
 
     /**
@@ -98,6 +98,12 @@ abstract class View extends \Framelix\Framelix\View
      */
     #[ExpectedValues(values: ['light', 'dark'])]
     protected ?string $forceColorScheme = null;
+
+    /**
+     * Html insertions at specific points in layout
+     * @var string[]
+     */
+    protected array $htmlInserts = [];
 
     /**
      * Html to directly output in the <head> section of the page
@@ -161,33 +167,33 @@ abstract class View extends \Framelix\Framelix\View
 
             $form->show();
             ?>
-          <script>
-            (async function () {
-              const form = FramelixForm.getById('framelix_user_settings')
-              await form.rendered
-              const languageSelect = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'languageSelect')
-              if (languageSelect) {
-                languageSelect.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
-                  const v = languageSelect.getValue()
-                  if (v) {
-                    window.location.href = v
-                  }
+            <script>
+              (async function () {
+                const form = FramelixForm.getById('framelix_user_settings')
+                await form.rendered
+                const languageSelect = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'languageSelect')
+                if (languageSelect) {
+                  languageSelect.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
+                    const v = languageSelect.getValue()
+                    if (v) {
+                      window.location.href = v
+                    }
+                  })
+                }
+                const darkModeToggle = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'darkMode')
+                if (darkModeToggle) {
+                  darkModeToggle.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
+                    FramelixLocalStorage.set('framelix-darkmode', darkModeToggle.getValue() === '1')
+                    FramelixDeviceDetection.updateAttributes()
+                  })
+                  darkModeToggle.setValue(FramelixLocalStorage.get('framelix-darkmode'))
+                }
+                form.container.on('click', '.framelix_reset_alerts', function () {
+                  FramelixCustomElementAlert.resetAllAlerts()
+                  FramelixToast.success('__framelix_reset_alerts_done__')
                 })
-              }
-              const darkModeToggle = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'darkMode')
-              if (darkModeToggle) {
-                darkModeToggle.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
-                  FramelixLocalStorage.set('framelix-darkmode', darkModeToggle.getValue() === '1')
-                  FramelixDeviceDetection.updateAttributes()
-                })
-                darkModeToggle.setValue(FramelixLocalStorage.get('framelix-darkmode'))
-              }
-              form.container.on('click', '.framelix_reset_alerts', function () {
-                FramelixCustomElementAlert.resetAllAlerts()
-                FramelixToast.success('__framelix_reset_alerts_done__')
-              })
-            })()
-          </script>
+              })()
+            </script>
             <?php
         }
     }
@@ -224,6 +230,11 @@ abstract class View extends \Framelix\Framelix\View
             $this->showContent();
         }
         $pageContent = Buffer::getAll();
+
+        if ($this->metaRobots) {
+            Response::header('X-Robots-Tag: ' . $this->metaRobots);
+        }
+
         $htmlAttributes = new HtmlAttributes();
         $htmlAttributes->set('data-appstate', $appIsSetup ? 'ok' : 'setup');
         $htmlAttributes->set('data-user', User::get());
@@ -240,76 +251,68 @@ abstract class View extends \Framelix\Framelix\View
             $htmlAttributes->set('data-screen-size-force', $this->forceScreenSize);
         }
         if (Config::$backendFaviconFilePath) {
-            $this->addHeadHtml(
-                '<link rel="icon" href="' . Url::getUrlToPublicFile(Config::$backendFaviconFilePath) . '">'
-            );
+            $this->addHtmlInsert('before-head-close',
+                '<link rel="icon" href="' . Url::getUrlToPublicFile(Config::$backendFaviconFilePath) . '">');
         }
 
         Buffer::start();
-        echo '<!DOCTYPE html>';
-        echo '<html lang="' . Config::$language . '" ' . $htmlAttributes . '>';
-        $this->showDefaultPageStartHtml();
-        echo '<body>';
+        $this->showDefaultPageStartHtml($htmlAttributes);
         echo '<div class="framelix-page" style="--max-content-width:' . $this->contentMaxWidth . '">';
         ?>
-      <div class="framelix-page-spacer-left"></div>
-      <nav class="framelix-sidebar">
-        <div class="framelix-sidebar-inner">
-            <?= $sidebarContent ?>
-        </div>
-      </nav>
-      <div class="framelix-content">
-          <?php
-          if ($this->showTopBar) {
-              ?>
-            <header class="framelix-top-bar">
-                <?php
-                if ($this->showSidebar) {
-                    ?>
-                  <framelix-button class="framelix-sidebar-toggle" icon="73f"
-                                   theme="transparent"></framelix-button>
-                    <?php
-                }
+        <div class="framelix-page-spacer-left"></div>
+        <?php
+        if ($this->showSidebar) {
+            ?>
+            <nav class="framelix-sidebar">
+                <div class="framelix-sidebar-inner">
+                    <?= $sidebarContent ?>
+                </div>
+            </nav>
+            <?php
+        }
+        ?>
+        <div class="framelix-content">
+            <?php
+            if ($this->showTopBar) {
                 ?>
-              <h1 class="framelix-page-title"><?= $this->getPageTitle(false) ?></h1>
-                <?php
-                if ($appIsSetup) {
-                    ?>
-                  <framelix-button theme="transparent"
-                                   class="framelix-user-settings"
-                      <?= (new JsRequestOptions(JsCall::getUrl([self::class, 'onJsCall'], 'settings'),
-                          new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))))->toDefaultAttrStr() ?>
-                                   icon="739"
-                                   title="__framelix_backend_user_settings__"></framelix-button>
+                <header class="framelix-top-bar">
                     <?php
-                }
-                ?>
-            </header>
-              <?php
-          }
-          ?>
-        <div class="framelix-content-inner">
-          <div class="framelix-content-spacer-left"></div>
-          <div class="framelix-content-inner-inner">
-              <?= $pageContent ?>
-          </div>
-          <div class="framelix-content-spacer-right"></div>
+                    if ($this->showSidebar) {
+                        ?>
+                        <framelix-button class="framelix-sidebar-toggle" icon="73f"
+                                         theme="transparent"></framelix-button>
+                        <?php
+                    }
+                    ?>
+                    <h1 class="framelix-page-title"><?= $this->getPageTitle(false) ?></h1>
+                    <?php
+                    if ($appIsSetup) {
+                        ?>
+                        <framelix-button theme="transparent"
+                                         class="framelix-user-settings"
+                            <?= (new JsRequestOptions(JsCall::getUrl([self::class, 'onJsCall'], 'settings'),
+                                new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))))->toDefaultAttrStr() ?>
+                                         icon="739"
+                                         title="__framelix_backend_user_settings__"></framelix-button>
+                        <?php
+                    }
+                    ?>
+                </header>
+                <?php
+            }
+            ?>
+            <div class="framelix-content-inner">
+                <div class="framelix-content-spacer-left"></div>
+                <div class="framelix-content-inner-inner">
+                    <?= $pageContent ?>
+                </div>
+                <div class="framelix-content-spacer-right"></div>
+            </div>
         </div>
-      </div>
-      <div class="framelix-page-spacer-right"></div>
-      <script>
-        Framelix.initLate()
-      </script>
+        <div class="framelix-page-spacer-right"></div>
         <?php
         echo '</div>';
-        echo HtmlUtils::getIncludeTagForUrl(
-            Config::getCompilerFileBundle(
-                "Framelix",
-                "js",
-                "general-late"
-            )->getGeneratedBundleUrl()
-        );
-        echo '</body></html>';
+        $this->showDefaultPageEndHtml();
         echo Buffer::getAll();
     }
 
@@ -326,42 +329,46 @@ abstract class View extends \Framelix\Framelix\View
     }
 
     /**
-     * Add html to <head>
+     * Add additional html to be displayed in certain positions on the page
+     * @param string $position
      * @param string $html
-     * @return void
      */
-    public function addHeadHtml(string $html): void
-    {
-        $this->headHtml .= "\n" . $html;
-    }
-
-    /**
-     * Add html to <head> but after $headHtml has been included and after page has reached earlyInit stage
-     * @param string $html
-     * @return void
-     */
-    public function addHeadHtmlAfterInit(string $html): void
-    {
-        $this->headHtmlAfterInit .= "\n" . $html;
-    }
-
-    /**
-     * Show the default <head> html tag
-     */
-    public function showDefaultPageStartHtml(): void
-    {
-        if ($this->metaRobots) {
-            Response::header('X-Robots-Tag: ' . $this->metaRobots);
+    public function addHtmlInsert(
+        #[ExpectedValues(values: [
+            'before-head-close',
+            'after-head-open',
+            'before-body-close',
+            'after-body-open'
+        ])] string $position,
+        string $html
+    ): void {
+        if (!isset($this->htmlInserts[$position])) {
+            $this->htmlInserts[$position] = "";
         }
+        $this->htmlInserts[$position] .= $html . "\n";
+    }
+
+    /**
+     * Show the default html, including doctype, <head> and starting <body> tag
+     * @param HtmlAttributes|null $htmlAttributes
+     * @param HtmlAttributes|null $bodyAttributes
+     * @return void
+     */
+    public function showDefaultPageStartHtml(
+        ?HtmlAttributes $htmlAttributes = null,
+        ?HtmlAttributes $bodyAttributes = null
+    ): void {
         $distUrls = [];
-        $includedBundles = [];
         foreach (Config::$compilerFileBundles as $bundle) {
-            $file = $bundle->getGeneratedBundleFilePath();
-            if (is_file($file)) {
-                if ($bundle->includeInBackendView && $this instanceof $bundle->includeInBackendView) {
-                    $includedBundles[] = $bundle;
-                }
+            if (is_file($bundle->getGeneratedBundleFilePath())) {
                 $distUrls[$bundle->module][$bundle->type][$bundle->bundleId] = $bundle->getGeneratedBundleUrl();
+            }
+        }
+        $includedBundles = [];
+        $positions = ['early', 'default'];
+        foreach ($positions as $position) {
+            foreach (Config::getMatchingCompilerFileBundles($this, $position) as $key => $bundle) {
+                $includedBundles[$position][$key] = $bundle;
             }
         }
         $loadableLangFiles = [];
@@ -387,87 +394,105 @@ abstract class View extends \Framelix\Framelix\View
                 }
             }
         }
-        ?>
-      <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-          <?php
-          if ($this->metaRobots) {
-              echo '<meta name="robots" content="' . $this->metaRobots . '">';
-          }
-          ?>
-        <title><?= $this->getPageTitle(true) ?></title>
-        <script>
-          ;(function () {
-            const customElementsSupport = typeof window.customElements !== 'undefined'
-            const resizeObserverSupport = typeof ResizeObserver !== 'undefined'
-            const lazyLoadingImg = typeof document.createElement('img').loading !== 'undefined'
-            const dialogSupport = typeof document.createElement('dialog').open === 'boolean'
-            // check for minimal supported browsers, if unsupported then stop any further execution
-            // which effectively excludes IE and all legacy edge versions
-            // requires at least chrome 77 (2021), firefox 98 (2022) or safari 15.4 (back to iphone 6s/macos 10.15)
-            if (!customElementsSupport || !resizeObserverSupport || !lazyLoadingImg || !dialogSupport) {
-              (function showError () {
-                if (!document.body) {
-                  setTimeout(showError, 200)
-                  return
-                }
-                document.body.innerHTML = '<div style="padding:20px; font-family: Arial, sans-serif; font-size: 24px"><?=Lang::get(
-                    '__framelix_browser_unsupported__'
-                )?></div>'
-              })()
-            }
-          })()
-        </script>
-        <script>
-          class FramelixInit {
-            /** @type {function[]} */
-            static early = []
-            /** @type {function[]} */
-            static late = []
-            /** @type {Promise} */
-            static initialized = null
-            /** @type {function} */
-            static initializedResolve = null
-          }
 
-          FramelixInit.initialized = new Promise(function (resolve) {
-            FramelixInit.initializedResolve = resolve
-          })
-        </script>
-          <?= HtmlUtils::getIncludeTagForUrl(
-              Config::getCompilerFileBundle(
-                  "Framelix",
-                  "js",
-                  "general-early"
-              )->getGeneratedBundleUrl()
-          ); ?>
-        <script>
-          FramelixDeviceDetection.init()
-        </script>
-          <?= HtmlUtils::getIncludeTagsForBundles($includedBundles); ?>
-          <?= $this->headHtml ?>
-        <script>
-          FramelixConfig.applicationUrl = <?=JsonUtils::encode(Url::getApplicationUrl())?>;
-          FramelixConfig.modulePublicUrl = <?=JsonUtils::encode(
-              Url::getUrlToPublicFile(FileUtils::getModuleRootPath(FRAMELIX_MODULE . "/public"))
-          )?>;
-          FramelixConfig.compiledFileUrls = <?=JsonUtils::encode($distUrls)?>;
-          FramelixConfig.modules = <?=JsonUtils::encode(Framelix::$registeredModules)?>;
-          FramelixConfig.dateFormatJs = <?=JsonUtils::encode(Config::$dateFormatJs)?>;
-          FramelixConfig.dateFormatPhp = <?=JsonUtils::encode(Config::$dateFormatPhp)?>;
-          FramelixConfig.dateTimeFormatJs = <?=JsonUtils::encode(Config::$dateTimeFormatJs)?>;
-          FramelixConfig.dateTimeFormatPhp = <?=JsonUtils::encode(Config::$dateTimeFormatPhp)?>;
-          FramelixLang.lang = <?=JsonUtils::encode(Config::$language)?>;
-          FramelixLang.langFallback = <?=JsonUtils::encode(Config::$languageFallback)?>;
-          FramelixLang.languagesAvailable = <?=JsonUtils::encode(Config::$languagesAvailable)?>;
-          FramelixLang.loadableLangFiles = <?=JsonUtils::encode($loadableLangFiles)?>;
-          FramelixToast.queue = <?=JsonUtils::encode(Toast::getQueueMessages(true))?>;
-          Framelix.initEarly()
-        </script>
-          <?= $this->headHtmlAfterInit ?>
-      </head>
+        echo '<!DOCTYPE html>';
+        echo '<html lang="' . Config::$language . '" ' . $htmlAttributes . '>';
+        ?>
+        <head>
+            <?= $this->htmlInserts['after-head-open'] ?? '' ?>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <?php
+            if ($this->metaRobots) {
+                echo '<meta name="robots" content="' . $this->metaRobots . '">';
+            }
+            ?>
+            <title><?= $this->getPageTitle(true) ?></title>
+            <script>
+              ;(function () {
+                const customElementsSupport = typeof window.customElements !== 'undefined'
+                const resizeObserverSupport = typeof ResizeObserver !== 'undefined'
+                const lazyLoadingImg = typeof document.createElement('img').loading !== 'undefined'
+                const dialogSupport = typeof document.createElement('dialog').open === 'boolean'
+                // check for minimal supported browsers, if unsupported then stop any further execution
+                // which effectively excludes IE and all legacy edge versions
+                // requires at least chrome 77 (2021), firefox 98 (2022) or safari 15.4 (back to iphone 6s/macos 10.15)
+                if (!customElementsSupport || !resizeObserverSupport || !lazyLoadingImg || !dialogSupport) {
+                  (function showError () {
+                    if (!document.body) {
+                      setTimeout(showError, 200)
+                      return
+                    }
+                    document.body.innerHTML = '<div style="padding:20px; font-family: Arial, sans-serif; font-size: 24px"><?=Lang::get(
+                        '__framelix_browser_unsupported__'
+                    )?></div>'
+                  })()
+                }
+              })()
+            </script>
+            <script>
+              class FramelixInit {
+                /** @type {function[]} */
+                static early = []
+                /** @type {function[]} */
+                static late = []
+                /** @type {Promise} */
+                static initialized = null
+                /** @type {function} */
+                static initializedResolve = null
+              }
+
+              FramelixInit.initialized = new Promise(function (resolve) {
+                FramelixInit.initializedResolve = resolve
+              })
+            </script>
+            <?= HtmlUtils::getIncludeTagsForBundles($includedBundles['early'] ?? []); ?>
+            <script>
+              FramelixDeviceDetection.init()
+            </script>
+            <?= HtmlUtils::getIncludeTagsForBundles($includedBundles['default'] ?? []); ?>
+            <script>
+              FramelixConfig.applicationUrl = <?=JsonUtils::encode(Url::getApplicationUrl())?>;
+              FramelixConfig.modulePublicUrl = <?=JsonUtils::encode(
+                  Url::getUrlToPublicFile(FileUtils::getModuleRootPath(FRAMELIX_MODULE . "/public"))
+              )?>;
+              FramelixConfig.compiledFileUrls = <?=JsonUtils::encode($distUrls)?>;
+              FramelixConfig.modules = <?=JsonUtils::encode(Framelix::$registeredModules)?>;
+              FramelixConfig.dateFormatJs = <?=JsonUtils::encode(Config::$dateFormatJs)?>;
+              FramelixConfig.dateFormatPhp = <?=JsonUtils::encode(Config::$dateFormatPhp)?>;
+              FramelixConfig.dateTimeFormatJs = <?=JsonUtils::encode(Config::$dateTimeFormatJs)?>;
+              FramelixConfig.dateTimeFormatPhp = <?=JsonUtils::encode(Config::$dateTimeFormatPhp)?>;
+              FramelixLang.lang = <?=JsonUtils::encode(Config::$language)?>;
+              FramelixLang.langFallback = <?=JsonUtils::encode(Config::$languageFallback)?>;
+              FramelixLang.languagesAvailable = <?=JsonUtils::encode(Config::$languagesAvailable)?>;
+              FramelixLang.loadableLangFiles = <?=JsonUtils::encode($loadableLangFiles)?>;
+              FramelixToast.queue = <?=JsonUtils::encode(Toast::getQueueMessages(true))?>;
+              Framelix.initEarly()
+            </script>
+            <?= $this->htmlInserts['before-head-close'] ?? '' ?>
+        </head>
         <?php
+        echo '<body ' . $bodyAttributes . '>';
+        echo $this->htmlInserts['after-body-open'] ?? '';
+    }
+
+    /**
+     * Show the the late init scripts end </body></html> tags
+     * @return void
+     */
+    public function showDefaultPageEndHtml(): void
+    {
+        $includedBundles = [];
+        $positions = ['late'];
+        foreach ($positions as $position) {
+            foreach (Config::getMatchingCompilerFileBundles($this, $position) as $key => $bundle) {
+                $includedBundles[$position][$key] = $bundle;
+            }
+        }
+        echo HtmlUtils::getIncludeTagsForBundles($includedBundles['late'] ?? []);
+        echo '<script>Framelix.initLate()</script>';
+        echo $this->htmlInserts['before-body-close'] ?? '';
+        echo '</body></html>';
     }
 
     /**
@@ -498,9 +523,9 @@ abstract class View extends \Framelix\Framelix\View
         Buffer::clear();
         $this->contentCallable = function () use ($message) {
             ?>
-          <framelix-alert theme="error">
-              <?= htmlentities(Lang::get($message)) ?>
-          </framelix-alert>
+            <framelix-alert theme="error">
+                <?= htmlentities(Lang::get($message)) ?>
+            </framelix-alert>
             <?php
         };
         $this->showContentBasedOnRequestType();

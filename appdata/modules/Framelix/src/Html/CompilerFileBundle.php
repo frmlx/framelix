@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Html;
 
+use Closure;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\FileUtils;
@@ -12,13 +13,12 @@ use function is_file;
 
 class CompilerFileBundle
 {
-
     /**
-     * Automatically include into backend views that inherit from given view class
-     * If null you need to add it by hand with HtmlUtils::getIncludeTagForBundle
-     * @var string|null
+     * If this isset, Config::getMatchingCompilerFileBundles will return only if this match filter returns true
+     * If not set, it will never be returned
+     * @var Closure|null
      */
-    public ?string $includeInBackendView = null;
+    public ?Closure $matchFilter = null;
 
     /**
      * Compile the bundle with babel/sass
@@ -43,7 +43,8 @@ class CompilerFileBundle
         public string $module,
         #[ExpectedValues(['js', 'scss'])] public string $type,
         public string $bundleId
-    ) {}
+    ) {
+    }
 
     public function getGeneratedBundleFilePath(): string
     {
@@ -64,7 +65,7 @@ class CompilerFileBundle
      * Add a folder with all files in it, relative from the bundles module folder
      * @param string $relativeFolderPath
      * @param bool $recursive
-     * @param \Framelix\Framelix\Html\CompilerFileBundle[]|\Framelix\Framelix\Html\CompilerFileBundle|null $ignoreFilesFromBundles Ignores
+     * @param CompilerFileBundle[]|CompilerFileBundle|null $ignoreFilesFromBundles Ignores
      *     all files from given bundles
      * @return void
      */
@@ -75,7 +76,7 @@ class CompilerFileBundle
     ): void {
         $ignoredFiles = [];
         if ($ignoreFilesFromBundles) {
-            /** @var \Framelix\Framelix\Html\CompilerFileBundle[] $arr */
+            /** @var CompilerFileBundle[] $arr */
             $arr = !is_array($ignoreFilesFromBundles) ? [$ignoreFilesFromBundles] : $ignoreFilesFromBundles;
             foreach ($arr as $ignoredBundle) {
                 if ($ignoredBundle !== $this && $ignoredBundle instanceof CompilerFileBundle) {

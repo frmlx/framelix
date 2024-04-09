@@ -36,6 +36,9 @@
 html body {
   overflow: hidden;
   background: var(--color-page-bg);
+  color: var(--color-page-text);
+  padding: 0;
+  margin: 0;
 }
 
 html[data-layout="2"] .framelix-page {
@@ -75,13 +78,6 @@ html[data-screen-size=s] .hide-if-small {
 
 * {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-body {
-  background: var(--color-page-bg);
-  color: var(--color-page-text);
-  padding: 0;
-  margin: 0;
 }
 
 body, button, input, select, textarea {

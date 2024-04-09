@@ -12,7 +12,9 @@ use Framelix\Framelix\Utils\JsonUtils;
 use JetBrains\PhpStorm\ExpectedValues;
 use SensitiveParameter;
 
+use function call_user_func_array;
 use function file_exists;
+use function is_file;
 use function set_time_limit;
 
 use const FRAMELIX_MODULE;
@@ -306,6 +308,15 @@ class Config
      */
     public static function onRegister(): void
     {
+        $matchFilterEarly = function (View $view, string $position) {
+            return $view instanceof \Framelix\Framelix\View\Backend\View && $position === 'early';
+        };
+        $matchFilterDefault = function (View $view, string $position) {
+            return $view instanceof \Framelix\Framelix\View\Backend\View && $position === 'default';
+        };
+        $matchFilterLate = function (View $view, string $position) {
+            return $view instanceof \Framelix\Framelix\View\Backend\View && $position === 'late';
+        };
         // add a default salt, after application is set up, this default salt must be replaced
         // app requires any salt to be functional, even during setup
         self::addSalt('none');
@@ -318,7 +329,7 @@ class Config
         self::addAvailableUserRole('usermanagement', '__framelix_edituser_sidebar_title__');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-vendor-native");
-        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->matchFilter = $matchFilterDefault;
         $bundle->compile = false;
         $bundle->addFile('node_modules/cash-dom/dist/cash.min.js');
         $bundle->addFile('js/cashjs/cash-improvements.js');
@@ -331,7 +342,7 @@ class Config
         $bundle->addFile('node_modules/swiped-events/dist/swiped-events.min.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "form");
-        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->matchFilter = $matchFilterDefault;
         $bundle->addFile('js/form/framelix-form.js');
         $bundle->addFile('js/form/framelix-form-field.js');
         $bundle->addFile('js/form/framelix-form-field-text.js');
@@ -348,16 +359,18 @@ class Config
         $bundle->addFolder('vendor/qrcodejs', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-early");
+        $bundle->matchFilter = $matchFilterEarly;
         $bundle->addFile('js/framelix-local-storage.js');
         $bundle->addFile('js/framelix-session-storage.js');
         $bundle->addFile('js/framelix-device-detection.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-late");
+        $bundle->matchFilter = $matchFilterLate;
         $bundle->addFile('custom-elements/framelix-custom-element.js');
         $bundle->addFolder('custom-elements', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general");
-        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->matchFilter = $matchFilterDefault;
         $bundle->addFolder('js', false, Config::$compilerFileBundles);
         $bundle->addFolder('public/dist/typedefs', false);
 
@@ -365,20 +378,20 @@ class Config
         $bundle->addFile('js/framelix-table-sort-serviceworker.js');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "backend");
-        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->matchFilter = $matchFilterDefault;
         $bundle->addFolder('js/backend', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "general");
-        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->matchFilter = $matchFilterDefault;
         $bundle->addFolder('scss/general', false);
         $bundle->addFolder('custom-elements', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "form");
-        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->matchFilter = $matchFilterDefault;
         $bundle->addFolder('scss/form', true);
 
         $bundle = self::createCompilerFileBundle("Framelix", "scss", "backend");
-        $bundle->includeInBackendView = \Framelix\Framelix\View\Backend\View::class;
+        $bundle->matchFilter = $matchFilterDefault;
         $bundle->addFolder('scss/backend', true);
 
         // register the other module
@@ -543,6 +556,28 @@ class Config
         $bundle = new CompilerFileBundle($module, $type, $bundleId);
         self::$compilerFileBundles[$module . "-" . $type . "-" . $bundleId] = $bundle;
         return $bundle;
+    }
+
+    /**
+     * @param View $view
+     * @param string $position
+     * @return array
+     */
+    public static function getMatchingCompilerFileBundles(
+        View $view,
+        #[ExpectedValues(values: ['early', 'default', 'late'])] string $position
+    ): array {
+        $arr = [];
+        foreach (Config::$compilerFileBundles as $bundle) {
+            $file = $bundle->getGeneratedBundleFilePath();
+            if (!is_file($file) || !$bundle->matchFilter) {
+                continue;
+            }
+            if (call_user_func_array($bundle->matchFilter, [$view, $position]) === true) {
+                $arr[] = $bundle;
+            }
+        }
+        return $arr;
     }
 
     /**
