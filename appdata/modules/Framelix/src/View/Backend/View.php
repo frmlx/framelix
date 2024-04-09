@@ -106,19 +106,6 @@ abstract class View extends \Framelix\Framelix\View
     protected array $htmlInserts = [];
 
     /**
-     * Html to directly output in the <head> section of the page
-     * @var string
-     */
-    protected string $headHtml = '';
-
-    /**
-     * Html to directly output in the <head> section of the page but after $headHtml has been included and after page
-     * has reached earlyInit stage
-     * @var string
-     */
-    protected string $headHtmlAfterInit = '';
-
-    /**
      * The robots meta tag
      * More information about robots here:
      * https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
