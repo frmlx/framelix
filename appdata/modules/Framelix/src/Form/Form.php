@@ -224,6 +224,7 @@ class Form implements JsonSerializable
      * @param string|null $buttonTooltip
      * @param bool $ignoreReadOnly If true and $readOnly of form is also true, this button will still be kept visible,
      *    Buttons without this flag will be hidden when the form is readOnly
+     * @param HtmlAttributes|null $additionalAttributes Add additional html attributes
      */
     public function addButton(
         string $actionId,
@@ -231,7 +232,8 @@ class Form implements JsonSerializable
         ?string $buttonIcon = '70c',
         ElementColor|string $buttonColor = ElementColor::THEME_DEFAULT,
         ?string $buttonTooltip = null,
-        bool $ignoreReadOnly = false
+        bool $ignoreReadOnly = false,
+        HtmlAttributes|null $additionalAttributes = null
     ): void {
         $this->buttons[] = [
             'type' => 'action',
@@ -241,6 +243,7 @@ class Form implements JsonSerializable
             'buttonIcon' => $buttonIcon,
             'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
             'ignoreReadOnly' => $ignoreReadOnly,
+            'additionalAttributes' => $additionalAttributes,
         ];
     }
 
@@ -252,6 +255,7 @@ class Form implements JsonSerializable
      * @param ElementColor|string $buttonColor
      * @param string|null $buttonTooltip
      * @param bool $ignoreReadOnly Same as in self::addButton
+     * @param HtmlAttributes|null $additionalAttributes Add additional html attributes
      * @see self::addButton()
      */
     public function addLoadUrlButton(
@@ -260,7 +264,8 @@ class Form implements JsonSerializable
         ?string $buttonIcon = '70c',
         ElementColor|string $buttonColor = ElementColor::THEME_DEFAULT,
         ?string $buttonTooltip = null,
-        bool $ignoreReadOnly = false
+        bool $ignoreReadOnly = false,
+        HtmlAttributes|null $additionalAttributes = null
     ): void {
         $this->buttons[] = [
             'type' => 'url',
@@ -270,6 +275,7 @@ class Form implements JsonSerializable
             'buttonIcon' => $buttonIcon,
             'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
             'ignoreReadOnly' => $ignoreReadOnly,
+            'additionalAttributes' => $additionalAttributes,
         ];
     }
 
@@ -281,6 +287,7 @@ class Form implements JsonSerializable
      * @param ElementColor|string $buttonColor
      * @param string|null $buttonTooltip
      * @param bool $ignoreReadOnly Same as in self::addButton
+     * @param HtmlAttributes|null $additionalAttributes Add additional html attributes
      * @see self::addButton()
      */
     public function addSubmitButton(
@@ -289,7 +296,8 @@ class Form implements JsonSerializable
         ?string $buttonIcon = '718',
         ElementColor|string $buttonColor = ElementColor::THEME_SUCCESS,
         ?string $buttonTooltip = null,
-        bool $ignoreReadOnly = false
+        bool $ignoreReadOnly = false,
+        HtmlAttributes|null $additionalAttributes = null
     ): void {
         $this->buttons[] = [
             'type' => 'submit',
@@ -299,6 +307,7 @@ class Form implements JsonSerializable
             'buttonIcon' => $buttonIcon,
             'buttonTooltip' => $buttonTooltip ? Lang::get($buttonTooltip) : null,
             'ignoreReadOnly' => $ignoreReadOnly,
+            'additionalAttributes' => $additionalAttributes,
         ];
     }
 
@@ -395,6 +404,21 @@ class Form implements JsonSerializable
                 continue;
             }
             $storable->{$storableSchemaProperty->name} = $fieldValue;
+        }
+    }
+
+    /**
+     * Set default values of form fields based on array|object
+     * @param mixed $data
+     * @return void
+     */
+    public function setDefaultValues(mixed $data): void
+    {
+        foreach ($this->fields as $field) {
+            $value = ArrayUtils::getValue($data, $field->name);
+            if ($value !== null) {
+                $field->defaultValue = $value;
+            }
         }
     }
 
