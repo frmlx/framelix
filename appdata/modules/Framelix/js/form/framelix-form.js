@@ -673,7 +673,6 @@ class FramelixForm {
           if (!(buttonData.additionalAttributes instanceof FramelixHtmlAttributes)) {
             buttonData.additionalAttributes = FramelixObjectUtils.phpJsonToJs(buttonData.additionalAttributes)
           }
-          console.log(buttonData)
           buttonData.additionalAttributes.assignToElement(button)
         }
         button.attr('data-type', buttonData.type)
@@ -901,8 +900,9 @@ class FramelixForm {
       }
       FramelixToast.showNext()
     }
-
-    if (typeof responseData.buffer === 'string' && responseData.buffer.length) {
+    if (typeof responseData === 'string') {
+      FramelixRequest.renderResponse(responseData, requestOptions, this.container[0])
+    } else if (typeof responseData.buffer === 'string' && responseData.buffer.length) {
       FramelixRequest.renderResponse(responseData.buffer, requestOptions, this.container[0])
     }
     return true

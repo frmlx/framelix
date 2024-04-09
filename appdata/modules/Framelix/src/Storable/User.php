@@ -30,7 +30,8 @@ class User extends StorableExtended
     private static array $cache = [];
 
     /**
-     * Only used for unit tests to simulate specific roles without actually storing that in the database The check is cached by default, once it have been checked. Set true to flush the cache
+     * Only used for unit tests to simulate specific roles without actually storing that in the database The check is
+     * cached by default, once it have been checked. Set true to flush the cache
      * @var string[]|null
      */
     public ?array $simulateRoles = null;
@@ -217,4 +218,5 @@ class User extends StorableExtended
         self::deleteMultiple(UserWebAuthn::getByCondition('`user` = {0}', [$this]));
         parent::delete($force);
     }
+
 }

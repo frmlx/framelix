@@ -247,7 +247,6 @@ class FramelixRequest {
         }
       }
     }
-    console.log(requestOptions)
     const isFixedResponse = !(request instanceof FramelixRequest)
     if (!requestOptions.renderTarget || requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_NONE_AND_CLOSE) {
       if (!isFixedResponse) {
