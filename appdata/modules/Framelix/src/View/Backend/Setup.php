@@ -3,6 +3,7 @@
 namespace Framelix\Framelix\View\Backend;
 
 use Framelix\Framelix\Config;
+use Framelix\Framelix\Console;
 use Framelix\Framelix\Db\Sql;
 use Framelix\Framelix\Db\SqlStorableSchemeBuilder;
 use Framelix\Framelix\Form\Field\Email;
@@ -32,8 +33,11 @@ use const FRAMELIX_MODULE;
 
 class Setup extends View
 {
+
     protected string|bool $accessRole = "*";
+
     protected ?string $customUrl = "~.*~";
+
     protected bool $hiddenView = true;
 
     public function onRequest(): void
@@ -129,6 +133,9 @@ class Setup extends View
 
                 // wait 3 seconds to let opcache refresh
                 sleep(3);
+
+                // run first time warmup with a fully setup app
+                Console::callMethodInSeparateProcess('appWarmup');
             } catch (Throwable $e) {
                 if (file_exists($userConfigFile)) {
                     unlink($userConfigFile);
@@ -148,16 +155,16 @@ class Setup extends View
         $form->addSubmitButton('setup', '__framelix_setup_finish_setup__');
         $form->show();
         ?>
-        <script>
-          (function () {
-            // check if scripts have been loaded successfully, if not, we are on the wrong path
-            if (typeof FramelixDeviceDetection === 'undefined') {
-              const spl = window.location.pathname.split('/')
-              spl.splice(1, 1)
-              window.location.pathname = spl.join('/')
-            }
-          })()
-        </script>
+      <script>
+        (function () {
+          // check if scripts have been loaded successfully, if not, we are on the wrong path
+          if (typeof FramelixDeviceDetection === 'undefined') {
+            const spl = window.location.pathname.split('/')
+            spl.splice(1, 1)
+            window.location.pathname = spl.join('/')
+          }
+        })()
+      </script>
         <?php
     }
 
@@ -260,7 +267,7 @@ class Setup extends View
         $field->minLength = 8;
         $form->addField($field);
 
-
         return $form;
     }
+
 }

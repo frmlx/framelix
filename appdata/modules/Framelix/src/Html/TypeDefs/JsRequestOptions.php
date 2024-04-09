@@ -31,6 +31,12 @@ class JsRequestOptions extends BaseTypeDef
      */
     public const string RENDER_TARGET_CURRENT_CONTEXT = "currentcontext";
 
+    /**
+     * Same as "null", makes the request, but not render it, additionally it destroys all modals and popups to get back
+     * to the pages context
+     */
+    public const string RENDER_TARGET_NONE_AND_CLOSE = "none-close";
+
     public function __construct(
         /**
          * The url to load for the request
@@ -51,6 +57,7 @@ class JsRequestOptions extends BaseTypeDef
             self::RENDER_TARGET_MODAL_NEW,
             self::RENDER_TARGET_CURRENT_CONTEXT,
             self::RENDER_TARGET_POPUP,
+            self::RENDER_TARGET_NONE_AND_CLOSE,
             null,
         ])]
         public JsRenderTarget|string|null $renderTarget = null,

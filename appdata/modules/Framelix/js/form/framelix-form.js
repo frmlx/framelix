@@ -93,7 +93,7 @@ class FramelixForm {
    * The target to render the submit response to
    * @type {FramelixTypeDefJsRequestOptions}
    */
-  requestOptions = { url: '', renderTarget: 'currentcontext' }
+  requestOptions = { url: null, renderTarget: FramelixTypeDefJsRequestOptions.RENDER_TARGET_CURRENT_CONTEXT }
 
   /**
    * Submit the form async
@@ -109,12 +109,6 @@ class FramelixForm {
    * @type {boolean}
    */
   submitAsyncRaw = true
-
-  /**
-   * Execute the javascript code after form submit
-   * @var {string|null}
-   */
-  executeAfterAsyncSubmit = null
 
   /**
    * Submit the form with enter key
@@ -818,7 +812,9 @@ class FramelixForm {
       }
     }
     this.hideValidationMessage()
-    let submitUrl = this.submitUrl
+    const requestOptions = this.requestOptions ? this.requestOptions : { url: null, renderTarget: 'currentcontext' }
+    let submitUrl = this.submitUrl || requestOptions.url
+    // if no submit url is defined, try to use the current tab context url
     if (!submitUrl) {
       const tabContent = this.form.closest('.framelix-tab-content')
       if (tabContent.length) {
@@ -845,6 +841,13 @@ class FramelixForm {
 
     // if request does handle anything itself, do not proceed handling the request
     const responseCheckHeadersStatus = await request.checkHeaders()
+
+    // handling closing modals, no matter what happen later
+    if (requestOptions && requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_NONE_AND_CLOSE) {
+      FramelixModal.destroyAll()
+      FramelixPopup.destroyAll()
+    }
+
     if (responseCheckHeadersStatus !== 0) {
       return true
     }
@@ -884,13 +887,7 @@ class FramelixForm {
     }
 
     if (typeof responseData.buffer === 'string' && responseData.buffer.length) {
-      FramelixRequest.renderResponse(responseData.buffer, this.requestOptions, this.container[0])
-    }
-
-    if (this.executeAfterAsyncSubmit) {
-      await new Promise(function (resolve) {
-        eval('(async function(){' + self.executeAfterAsyncSubmit + ' resolve();})()')
-      })
+      FramelixRequest.renderResponse(responseData.buffer, requestOptions, this.container[0])
     }
     return true
   }

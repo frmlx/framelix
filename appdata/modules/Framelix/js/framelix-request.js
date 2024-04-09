@@ -209,36 +209,59 @@ class FramelixRequest {
           return null
         }
         initiatorElement = $(initiatorElement)
-        let parentCell = initiatorElement.closest('td')
-        let parentPopup = initiatorElement.closest('.framelix-popup')
-        let parentModal = initiatorElement.closest('.framelix-modal')
-        let parentTab = initiatorElement.closest('.framelix-tab-content')
-
-        if (parentCell.length) {
-          requestOptions.renderTarget = { elementSelector: parentCell }
-        } else if (parentPopup.length) {
-          requestOptions.renderTarget = { popupOptions: parentPopup[0].framelixPopupInstance.options }
-          initiatorElement = parentPopup[0].framelixPopupInstance.target
-        } else if (parentModal.length) {
-          const modal = FramelixModal.instances[parentModal.attr('data-instance-id')]
-          if (modal) {
-            requestOptions.renderTarget = { modalOptions: { instance: modal } }
+        let validTarget = false
+        if (!validTarget) {
+          let responseReceiver = initiatorElement.closest('td')
+          if (responseReceiver.length) {
+            validTarget = true
+            requestOptions.renderTarget = { elementSelector: responseReceiver }
           }
-        } else if (parentTab.length) {
-          const modal = FramelixModal.instances[parentModal.attr('data-instance-id')]
-          if (modal) {
-            requestOptions.renderTarget = { modalOptions: { instance: modal } }
+        }
+
+        if (!validTarget) {
+          let responseReceiver = initiatorElement.closest('.framelix-popup')
+          if (responseReceiver.length) {
+            validTarget = true
+            requestOptions.renderTarget = { popupOptions: responseReceiver[0].framelixPopupInstance.options }
+            initiatorElement = responseReceiver[0].framelixPopupInstance.target
+          }
+        }
+
+        if (!validTarget) {
+          let responseReceiver = initiatorElement.closest('.framelix-modal')
+          if (responseReceiver.length) {
+            validTarget = true
+            const modal = FramelixModal.instances[responseReceiver.attr('data-instance-id')]
+            if (modal) {
+              requestOptions.renderTarget = { modalOptions: { instance: modal } }
+            }
+          }
+        }
+
+        if (!validTarget) {
+          let responseReceiver = initiatorElement.closest('[data-request-response-receiver]')
+          if (responseReceiver.length) {
+            validTarget = true
+            requestOptions.renderTarget = { elementSelector: responseReceiver }
           }
         }
       }
     }
+    console.log(requestOptions)
     const isFixedResponse = !(request instanceof FramelixRequest)
-    if (!requestOptions.renderTarget) {
+    if (!requestOptions.renderTarget || requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_NONE_AND_CLOSE) {
       if (!isFixedResponse) {
         Framelix.showProgressBar(1)
         request.checkHeaders().then(function () {
           Framelix.showProgressBar(null)
+          if (requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_NONE_AND_CLOSE) {
+            FramelixPopup.destroyAll()
+            FramelixModal.destroyAll()
+          }
         })
+      } else if (requestOptions.renderTarget === FramelixTypeDefJsRequestOptions.RENDER_TARGET_NONE_AND_CLOSE) {
+        FramelixPopup.destroyAll()
+        FramelixModal.destroyAll()
       }
     } else if (requestOptions.renderTarget.modalOptions) {
       let options = requestOptions.renderTarget.modalOptions

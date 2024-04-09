@@ -2,11 +2,11 @@
 
 namespace Framelix\Framelix\Form;
 
-use Framelix\Framelix\Enums\ButtonColor;
 use Framelix\Framelix\Form\Field\File;
 use Framelix\Framelix\Html\HtmlAttributes;
 use Framelix\Framelix\Html\PhpToJsData;
 use Framelix\Framelix\Html\TypeDefs\ElementColor;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Network\Response;
@@ -69,10 +69,19 @@ class Form implements JsonSerializable
 
     /**
      * The url to submit to
-     * If null then it is the current url
+     * If null then it is the current url or current tag
      * @var Url|View|string|null
      */
     public Url|View|string|null $submitUrl = null;
+
+    /**
+     * The request options instead of submitUrl
+     * @var JsRequestOptions|array|null
+     */
+    public JsRequestOptions|array|null $requestOptions = [
+        'url' => null,
+        'renderTarget' => JsRequestOptions::RENDER_TARGET_CURRENT_CONTEXT,
+    ];
 
     /**
      * Submit the form async
@@ -88,12 +97,6 @@ class Form implements JsonSerializable
      * @var bool
      */
     public bool $submitAsyncRaw = false;
-
-    /**
-     * Execute the javascript code after form submit
-     * @var string|null
-     */
-    public ?string $executeAfterAsyncSubmit = null;
 
     /**
      * Validation message to show in the frontend

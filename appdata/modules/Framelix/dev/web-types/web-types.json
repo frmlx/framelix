@@ -6,6 +6,23 @@
   "default-icon": "icon.png",
   "contributions": {
     "html": {
+      "attributes": [
+        {
+          "name": "title",
+          "description": "Displays the content as a tooltip. Accepts a language key as well."
+        },
+        {
+          "name": "data-toolip",
+          "description": "Alias for 'title'"
+        },
+        {
+          "name": "data-request-response-receiver",
+          "description": "If set, this container will receive the request response if a child container does make an async request.",
+          "value": {
+            "kind": "no-value"
+          }
+        }
+      ],
       "elements": [
         {
           "name": "framelix-button",

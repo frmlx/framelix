@@ -20,6 +20,12 @@ class FramelixTypeDefJsRequestOptions extends FramelixBaseTypeDef {
     static RENDER_TARGET_CURRENT_CONTEXT = "currentcontext"
 
     /**
+     * Same as "null", makes the request, but not render it, additionally it destroys all modals and popups to get back
+     * to the pages context
+     */
+    static RENDER_TARGET_NONE_AND_CLOSE = "none-close"
+
+    /**
     * @param {FramelixTypeDefJsRequestOptions|Object} data
     * @return {string}
     */
@@ -41,7 +47,7 @@ class FramelixTypeDefJsRequestOptions extends FramelixBaseTypeDef {
      * The render target for the request
      * If null, it will make the request but not render it anywhere
      * Require any of the class constants starting with RENDER_TARGET_
-     * @type  {FramelixTypeDefJsRenderTarget|Object|null|("modalnew", "popup", "currentcontext")}
+     * @type  {FramelixTypeDefJsRenderTarget|Object|null|("modalnew", "popup", "currentcontext", "none-close")}
      */
     renderTarget = null
 

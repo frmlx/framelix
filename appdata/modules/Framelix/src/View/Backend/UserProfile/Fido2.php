@@ -2,7 +2,6 @@
 
 namespace Framelix\Framelix\View\Backend\UserProfile;
 
-use Framelix\Framelix\Enums\ButtonColor;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Html\TypeDefs\ElementColor;

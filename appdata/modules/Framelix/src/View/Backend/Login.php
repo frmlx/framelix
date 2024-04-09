@@ -30,10 +30,6 @@ use function base64_decode;
 class Login extends View
 {
 
-    public static string $imgBgDark = __DIR__ . "/../../../public/img/bg-login-dark.webp";
-
-    public static string $imgBgLight = __DIR__ . "/../../../public/img/bg-login-light.webp";
-
     protected string|bool $accessRole = "*";
 
     public static function onJsCall(JsCall $jsCall): void
@@ -172,22 +168,6 @@ class Login extends View
       <style>
         framelix-button:not(.fido2-enabled)[data-action='fido2'] {
           display: none;
-        }
-        html[data-layout="2"][data-color-scheme=dark] .framelix-page {
-          background: url(<?=Url::getUrlToPublicFile(self::$imgBgDark)?>) center no-repeat;
-          background-size: cover;
-        }
-        html[data-layout="2"][data-color-scheme=dark] .framelix-content-inner-inner {
-          backdrop-filter: blur(12px);
-          background: rgba(0, 0, 0, 0.7);
-        }
-        html[data-layout="2"][data-color-scheme=light] .framelix-page {
-          background: url(<?=Url::getUrlToPublicFile(self::$imgBgLight)?>) center no-repeat;
-          background-size: cover;
-        }
-        html[data-layout="2"][data-color-scheme=light] .framelix-content-inner-inner {
-          backdrop-filter: blur(12px);
-          background: rgba(255, 255, 255, 0.6);
         }
       </style>
       <script>
