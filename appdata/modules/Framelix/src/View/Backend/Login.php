@@ -11,6 +11,7 @@ use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Field\TwoFactorCode;
 use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\TypeDefs\ElementColor;
+use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
@@ -35,6 +36,49 @@ class Login extends View
     public static function onJsCall(JsCall $jsCall): void
     {
         switch ($jsCall->action) {
+            case 'login':
+                $form = self::getForm();
+                $form->validate();
+                $email = (string)Request::getPost('email');
+                $user = User::getByEmail($email);
+                if (BruteForceProtection::isBlocked('backend-login')) {
+                    Url::getBrowserUrl()->redirect();
+                }
+                BruteForceProtection::countUp('backend-login');
+                if ($user && $user->passwordVerify(Request::getPost('password'))) {
+                    if ($user->twoFactorSecret) {
+                        // if 2fa, redirect to 2fa verify page
+                        Cookie::set(TwoFactorCode::COOKIE_NAME_USERID, $user->id, encrypted: true);
+                        Cookie::set(TwoFactorCode::COOKIE_NAME_USERSTAY, Request::getPost('stay'), encrypted: true);
+                        Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $user->twoFactorSecret, encrypted: true);
+                        Cookie::set(
+                            TwoFactorCode::COOKIE_NAME_BACKUPCODES,
+                            $user->twoFactorBackupCodes,
+                            encrypted: true
+                        );
+                        \Framelix\Framelix\View::getUrl(Login2FA::class)->setParameter(
+                            'redirect',
+                            Request::getGet('redirect')
+                        )->redirect();
+                    }
+
+                    $token = UserToken::create($user);
+                    UserToken::setCookieValue($token->token, Request::getPost('stay') ? 60 * 86400 : null);
+                    // create system event logs
+                    $logCategory = SystemEventLog::CATEGORY_LOGIN_SUCCESS;
+                    if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
+                        SystemEventLog::create($logCategory, null, ['email' => $email]);
+                    }
+                    BruteForceProtection::reset('backend-login');
+                    self::redirectToDefaultUrl();
+                } else {
+                    // create system event logs
+                    $logCategory = SystemEventLog::CATEGORY_LOGIN_FAILED;
+                    if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
+                        SystemEventLog::create($logCategory, null, ['email' => $email]);
+                    }
+                    Response::stopWithFormValidationResponse('__framelix_login_invalid_user__');
+                }
             case 'webauthn-getargs':
                 $webAuthn = Fido2::getWebAuthnInstance();
                 $user = User::getByEmail((string)($jsCall->parameters['email'] ?? null));
@@ -99,136 +143,16 @@ class Login extends View
         }
     }
 
-    public function onRequest(): void
-    {
-        if (User::get()) {
-            if (Request::getGet('redirect')) {
-                Url::create(Request::getGet('redirect'))->redirect();
-            }
-            if (Config::$backendDefaultView) {
-                \Framelix\Framelix\View::getUrl(Config::$backendDefaultView)->redirect();
-            }
-            Url::getApplicationUrl()->redirect();
-        }
-        if (Form::isFormSubmitted('login')) {
-            $form = $this->getForm();
-            $form->validate();
-            $email = (string)Request::getPost('email');
-            $user = User::getByEmail($email);
-            if (BruteForceProtection::isBlocked('backend-login')) {
-                Url::getBrowserUrl()->redirect();
-            }
-            BruteForceProtection::countUp('backend-login');
-            if ($user && $user->passwordVerify(Request::getPost('password'))) {
-                if ($user->twoFactorSecret) {
-                    // if 2fa, redirect to 2fa verify page
-                    Cookie::set(TwoFactorCode::COOKIE_NAME_USERID, $user->id, encrypted: true);
-                    Cookie::set(TwoFactorCode::COOKIE_NAME_USERSTAY, Request::getPost('stay'), encrypted: true);
-                    Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $user->twoFactorSecret, encrypted: true);
-                    Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, $user->twoFactorBackupCodes, encrypted: true);
-                    \Framelix\Framelix\View::getUrl(Login2FA::class)->setParameter(
-                        'redirect',
-                        Request::getGet('redirect')
-                    )->redirect();
-                }
-
-                $token = UserToken::create($user);
-                UserToken::setCookieValue($token->token, Request::getPost('stay') ? 60 * 86400 : null);
-                // create system event logs
-                $logCategory = SystemEventLog::CATEGORY_LOGIN_SUCCESS;
-                if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
-                    SystemEventLog::create($logCategory, null, ['email' => $email]);
-                }
-                BruteForceProtection::reset('backend-login');
-                if (Request::getGet('redirect')) {
-                    Url::create(Request::getGet('redirect'))->redirect();
-                }
-                Url::getApplicationUrl()->redirect();
-            } else {
-                // create system event logs
-                $logCategory = SystemEventLog::CATEGORY_LOGIN_FAILED;
-                if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
-                    SystemEventLog::create($logCategory, null, ['email' => $email]);
-                }
-                Response::stopWithFormValidationResponse('__framelix_login_invalid_user__');
-            }
-        }
-        $this->sidebarClosedInitially = true;
-        $this->layout = self::LAYOUT_SMALL_CENTERED;
-        $this->showContentBasedOnRequestType();
-    }
-
-    public function showContent(): void
-    {
-        $form = $this->getForm();
-        $form->addSubmitButton('login', '__framelix_login_submit__');
-        $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ElementColor::THEME_PRIMARY);
-        $form->show();
-        ?>
-      <style>
-        framelix-button:not(.fido2-enabled)[data-action='fido2'] {
-          display: none;
-        }
-      </style>
-      <script>
-        (async function () {
-          const form = FramelixForm.getById('<?=$form->id?>')
-          await form.rendered
-          form.container.on('change', function () {
-            const email = form.fields['email'].getValue()
-            FramelixLocalStorage.set('login-email', email)
-          })
-          const storedEmail = FramelixLocalStorage.get('login-email')
-          if (storedEmail) {
-            form.fields['email'].setValue(storedEmail)
-            form.fields['password'].container.find('input').trigger('focus')
-          } else {
-            form.fields['email'].container.find('input').trigger('focus')
-          }
-          if (FramelixLocalStorage.get('webauthn')) {
-            const fidoButton = $('framelix-button[data-action=\'fido2\']')
-            fidoButton.addClass('fido2-enabled')
-            fidoButton.on('click', async function () {
-              let getArgsServerData = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                  __CLASS__,
-                  'webauthn-getargs'
-              )?>', form.getValues()).getResponseData()
-              if (typeof getArgsServerData === 'string') {
-                FramelixToast.error(getArgsServerData)
-                return
-              }
-              let getArgs = getArgsServerData.getArgs
-              Framelix.recursiveBase64StrToArrayBuffer(getArgs)
-              navigator.credentials.get(getArgs).then(async function (getArgsClientData) {
-                let loginArgsParams = {
-                  'formValues': form?.getValues(),
-                  'credentialId': Framelix.arrayBufferToBase64(getArgsClientData.rawId),
-                  'clientData': Framelix.arrayBufferToBase64(getArgsClientData.response.clientDataJSON),
-                  'authenticatorData': Framelix.arrayBufferToBase64(getArgsClientData.response.authenticatorData),
-                  'signature': Framelix.arrayBufferToBase64(getArgsClientData.response.signature),
-                }
-                let loginResult = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                    __CLASS__,
-                    'webauthn-login'
-                )?>', loginArgsParams).getResponseData()
-                if (loginResult.url) {
-                  Framelix.redirect(loginResult.url)
-                } else {
-                  FramelixToast.error(loginResult)
-                }
-              })
-            })
-          }
-        })()
-      </script>
-        <?php
-    }
-
-    public function getForm(): Form
+    public static function getForm(): Form
     {
         $form = new Form();
         $form->id = "login";
         $form->submitWithEnter = true;
+        $form->requestOptions = new JsRequestOptions(
+            JsCall::getUrl([self::class, "onJsCall"], "login")
+        );
+        $form->addSubmitButton('login', '__framelix_login_submit__');
+        $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ElementColor::THEME_PRIMARY);
 
         $field = new Email();
         $field->name = "email";
@@ -267,6 +191,84 @@ class Login extends View
         }
 
         return $form;
+    }
+
+    public static function redirectToDefaultUrl(): never
+    {
+        if (Request::getGet('redirect')) {
+            Url::create(Request::getGet('redirect'))->redirect();
+        }
+        if (Config::$backendDefaultView) {
+            \Framelix\Framelix\View::getUrl(Config::$backendDefaultView)->redirect();
+        }
+        Url::getApplicationUrl()->redirect();
+    }
+
+    public function onRequest(): void
+    {
+        if (User::get()) {
+            self::redirectToDefaultUrl();
+        }
+        $this->sidebarClosedInitially = true;
+        $this->layout = self::LAYOUT_SMALL_CENTERED;
+        $this->showContentBasedOnRequestType();
+    }
+
+    public function showContent(): void
+    {
+        $form = self::getForm();
+        $form->show();
+        ?>
+      <script>
+        (async function () {
+          const form = FramelixForm.getById('<?=$form->id?>')
+          await form.rendered
+          form.container.on('change', function () {
+            const email = form.fields['email'].getValue()
+            FramelixLocalStorage.set('login-email', email)
+          })
+          const storedEmail = FramelixLocalStorage.get('login-email')
+          if (storedEmail) {
+            form.fields['email'].setValue(storedEmail)
+            form.fields['password'].container.find('input').trigger('focus')
+          } else {
+            form.fields['email'].container.find('input').trigger('focus')
+          }
+
+          const fidoButton = $('framelix-button[data-action=\'fido2\']')
+          fidoButton.on('click', async function () {
+            let getArgsServerData = await FramelixRequest.jsCall('<?=JsCall::getUrl(
+                __CLASS__,
+                'webauthn-getargs'
+            )?>', form.getValues()).getResponseData()
+            if (typeof getArgsServerData === 'string') {
+              FramelixToast.error(getArgsServerData)
+              return
+            }
+            let getArgs = getArgsServerData.getArgs
+            Framelix.recursiveBase64StrToArrayBuffer(getArgs)
+            navigator.credentials.get(getArgs).then(async function (getArgsClientData) {
+              let loginArgsParams = {
+                'formValues': form?.getValues(),
+                'credentialId': Framelix.arrayBufferToBase64(getArgsClientData.rawId),
+                'clientData': Framelix.arrayBufferToBase64(getArgsClientData.response.clientDataJSON),
+                'authenticatorData': Framelix.arrayBufferToBase64(getArgsClientData.response.authenticatorData),
+                'signature': Framelix.arrayBufferToBase64(getArgsClientData.response.signature),
+              }
+              let loginResult = await FramelixRequest.jsCall('<?=JsCall::getUrl(
+                  __CLASS__,
+                  'webauthn-login'
+              )?>', loginArgsParams).getResponseData()
+              if (loginResult.url) {
+                Framelix.redirect(loginResult.url)
+              } else {
+                FramelixToast.error(loginResult)
+              }
+            })
+          })
+        })()
+      </script>
+        <?php
     }
 
 }
