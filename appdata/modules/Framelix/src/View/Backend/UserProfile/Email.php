@@ -88,7 +88,7 @@ class Email extends View
     {
         if (\Framelix\Framelix\Utils\Email::isAvailable()) {
             ?>
-            <framelix-alert>__framelix_view_backend_userprofile_email_info__</framelix-alert>
+            <framelix-alert theme="primary">__framelix_view_backend_userprofile_email_info__</framelix-alert>
             <?php
         }
         $form = $this->getForm();

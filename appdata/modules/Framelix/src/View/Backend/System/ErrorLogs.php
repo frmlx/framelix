@@ -40,7 +40,7 @@ class ErrorLogs extends View
         );
         if (!$files) {
             ?>
-            <framelix-alert>__framelix_view_backend_system_logs_nologs__</framelix-alert>
+            <framelix-alert theme="primary">__framelix_view_backend_system_logs_nologs__</framelix-alert>
             <?php
             return;
         }

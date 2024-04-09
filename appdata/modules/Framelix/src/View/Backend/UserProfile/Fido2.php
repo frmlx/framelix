@@ -120,7 +120,7 @@ class Fido2 extends View
     public function showContent(): void
     {
         if (Url::getBrowserUrl()->getHost() === '127.0.0.1') {
-            echo '<framelix-alert class="framelix-alert" theme="error">' . Lang::get(
+            echo '<framelix-alert theme="error">' . Lang::get(
                     '__framelix_view_backend_userprofile_fido2_domainunsupported__',
                     ['domain' => Url::getBrowserUrl()->getHost(), 'use' => 'localhost']
                 ) . '</framelix-alert>';
@@ -133,8 +133,8 @@ class Fido2 extends View
             return;
         }
         ?>
-        <framelix-alert class="framelix-alert">__framelix_view_backend_userprofile_fido2_info__</framelix-alert>
-        <framelix-alert class="framelix-alert">__framelix_view_backend_userprofile_fido2_2fa_info__</framelix-alert>
+        <framelix-alert theme="primary">__framelix_view_backend_userprofile_fido2_info__</framelix-alert>
+        <framelix-alert theme="primary">__framelix_view_backend_userprofile_fido2_2fa_info__</framelix-alert>
         <?php
         $form = $this->meta->getEditForm();
         if (!$this->storable->id) {
