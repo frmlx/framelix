@@ -29,7 +29,9 @@ use const FRAMELIX_MODULE;
  */
 class StorableSchema
 {
+
     public const string ID_TABLE = "framelix__id";
+
     public const string SCHEMA_TABLE = "framelix__schema";
 
     /**
@@ -127,9 +129,13 @@ class StorableSchema
             $typeIsArray = str_ends_with($type, "[]");
             if ($typeIsArray) {
                 throw new FatalError(
-                    'Array\'s are not supported in @property at ' . $reflectionClass->getName() . ' annotations of Storables. Consider using StorableArray instead.');
+                    'Array\'s are not supported in @property at ' . $reflectionClass->getName(
+                    ) . ' annotations of Storables. Consider using StorableArray instead.'
+                );
             }
-            if (!in_array($type, ["bool", "int", "float", "double", "string", "mixed"])) {
+            if (str_starts_with($type, "\\")) {
+                $possibleClassNames[] = ltrim($type, "\\");
+            } elseif (!in_array($type, ["bool", "int", "float", "double", "string", "mixed"])) {
                 $possibleClassNames[] = $namespace . "\\" . $type;
                 if ($uses) {
                     $classFirstSep = strpos($type, "\\");
@@ -158,7 +164,7 @@ class StorableSchema
                         "\\",
                         "/",
                         FileUtils::getModuleRootPath($expl[1]) . "/src/" . $relativeClassName . ".php"
-                    )
+                    ),
                 ];
                 foreach ($classFiles as $classFile) {
                     if (!file_exists($classFile)) {
@@ -253,7 +259,8 @@ class StorableSchema
         }
         $this->indexes[StringUtils::stringify($properties)] = [
             'type' => strtolower($type),
-            'properties' => $properties
+            'properties' => $properties,
         ];
     }
+
 }
