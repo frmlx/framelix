@@ -65,7 +65,7 @@ class Login2FA extends View
                 $this->user->store();
             }
             BruteForceProtection::reset('backend-login');
-            (Request::getGet('redirect') ? Url::create(Request::getGet('redirect')) : Url::getApplicationUrl())->redirect();
+            Login::redirectToDefaultUrl();
         }
 
         $this->sidebarClosedInitially = true;
