@@ -294,13 +294,15 @@ class FramelixForm {
    * @param {string|null} buttonIcon
    * @param {string|FramelixTypeDefElementColor|Object|null} buttonColor
    * @param {string|null} buttonTooltip
+   * @param {FramelixHtmlAttributes|null} additionalAttributes
    */
   addButton (
     actionId,
     buttonText,
     buttonIcon = '70c',
     buttonColor = FramelixTypeDefElementColor.THEME_DEFAULT,
-    buttonTooltip = null
+    buttonTooltip = null,
+    additionalAttributes = null
   ) {
     this.buttons['action-' + actionId] = {
       'type': 'action',
@@ -308,7 +310,8 @@ class FramelixForm {
       'color': buttonColor,
       'buttonText': buttonText,
       'buttonIcon': buttonIcon,
-      'buttonTooltip': buttonTooltip
+      'buttonTooltip': buttonTooltip,
+      'additionalAttributes': additionalAttributes
     }
   }
 
@@ -319,13 +322,15 @@ class FramelixForm {
    * @param {string|null} buttonIcon
    * @param {string|FramelixTypeDefElementColor|Object|null} buttonColor
    * @param {string|null} buttonTooltip
+   * @param {FramelixHtmlAttributes|null} additionalAttributes
    */
   addLoadUrlButton (
     url,
     buttonText,
     buttonIcon = '70c',
     buttonColor = FramelixTypeDefElementColor.THEME_DEFAULT,
-    buttonTooltip = null
+    buttonTooltip = null,
+    additionalAttributes = null
   ) {
     this.buttons['url-' + url] = {
       'type': 'url',
@@ -333,7 +338,8 @@ class FramelixForm {
       'color': buttonColor,
       'buttonText': buttonText,
       'buttonIcon': buttonIcon,
-      'buttonTooltip': buttonTooltip
+      'buttonTooltip': buttonTooltip,
+      'additionalAttributes': additionalAttributes
     }
   }
 
@@ -344,13 +350,15 @@ class FramelixForm {
    * @param {string|null} buttonIcon
    * @param {string|FramelixTypeDefElementColor|Object|null} buttonColor
    * @param {string|null} buttonTooltip
+   * @param {FramelixHtmlAttributes|null} additionalAttributes
    */
   addSubmitButton (
     submitFieldName,
     buttonText,
     buttonIcon = null,
     buttonColor = FramelixTypeDefElementColor.THEME_SUCCESS,
-    buttonTooltip = null
+    buttonTooltip = null,
+    additionalAttributes = null
   ) {
     this.buttons['submit-' + submitFieldName] = {
       'type': 'submit',
@@ -358,7 +366,8 @@ class FramelixForm {
       'color': buttonColor,
       'buttonText': buttonText,
       'buttonIcon': buttonIcon,
-      'buttonTooltip': buttonTooltip
+      'buttonTooltip': buttonTooltip,
+      'additionalAttributes': additionalAttributes
     }
   }
 
@@ -660,6 +669,13 @@ class FramelixForm {
 
         const button = $(`<framelix-button>`)
         FramelixColorUtils.setColorsFromElementColorDef(buttonData.color, button)
+        if (buttonData.additionalAttributes) {
+          if (!(buttonData.additionalAttributes instanceof FramelixHtmlAttributes)) {
+            buttonData.additionalAttributes = FramelixObjectUtils.phpJsonToJs(buttonData.additionalAttributes)
+          }
+          console.log(buttonData)
+          buttonData.additionalAttributes.assignToElement(button)
+        }
         button.attr('data-type', buttonData.type)
         button.attr('data-submit-field-name', buttonData.submitFieldName)
         button.html(buttonData.buttonText)
