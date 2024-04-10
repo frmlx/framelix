@@ -953,8 +953,8 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         if (!$this->isDeletable()) {
             return null;
         }
-        return JsCall::getUrl(
-            __CLASS__,
+        return JsCall::getSignedUrl(
+            [self::class, "onJsCall"],
             'deleteStorable',
             ['id' => $this->id, 'connectionId' => $this->connectionId, "redirect" => $redirectToUrlAfterDelete]
         );

@@ -332,7 +332,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             );
             $codeLanguage = "php";
             $buttonsHtml = '<framelix-button 
-            ' . (new JsRequestOptions(JsCall::getUrl(View::class, 'phpCode', ['callable' => $row['method']]),
+            ' . (new JsRequestOptions(JsCall::getSignedUrl([View::class, "onJsCall"], 'phpCode', ['callable' => $row['method']]),
                     JsRequestOptions::RENDER_TARGET_MODAL_NEW))->toDefaultAttrStr() . ' 
             theme="primary" 
             icon="789">Run the code bellow</framelix-button>';
@@ -458,8 +458,8 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
                 continue;
             }
             $requestOptions = new JsRequestOptions(
-                JsCall::getUrl(
-                    View::class,
+                JsCall::getSignedUrl(
+                    [View::class, "onJsCall"],
                     'show-source',
                     ['path' => $relativePath],
                     false,

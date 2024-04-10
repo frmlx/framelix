@@ -107,6 +107,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                     case 'array':
                         $value = ["test"];
                         break;
+                    case 'callable':
+                        $value = [self::class, 'callable'];
+                        break;
                     case JsCall::class:
                         $value = new JsCall("testaction", null);
                         break;

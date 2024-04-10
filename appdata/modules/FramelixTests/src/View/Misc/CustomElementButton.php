@@ -46,7 +46,7 @@ class CustomElementButton extends View\Backend\View
       <script>
         (async function () {
           const response = await FramelixRequest.jsCall(<?=JsonUtils::encode(
-              JsCall::getUrl([self::class, "onJsCall"], "more-buttons")
+              JsCall::getSignedUrl([self::class, "onJsCall"], "more-buttons")
           )?>).getJson()
           $('.results')[0].innerHTML = response
         })()

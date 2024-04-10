@@ -134,7 +134,7 @@ class Search extends Select
         $parameters = $storableMeta->jsonSerialize();
         $parameters['sort'] = $sort;
         $parameters['limit'] = $limit;
-        $this->setSearchMethod(__CLASS__, "quicksearch", $parameters, 'storablemeta');
+        $this->setSearchMethod([self::class, "onJsCall"], "quicksearch", $parameters, 'storablemeta');
     }
 
     /**
@@ -151,7 +151,7 @@ class Search extends Select
         ?int $limit = 300
     ): void {
         $this->setSearchMethod(
-            __CLASS__,
+            [self::class, "onJsCall"],
             "search",
             [
                 'storableClass' => $storable,
@@ -165,20 +165,20 @@ class Search extends Select
 
     /**
      * Set search method - Call will be done with FramelixRequest.jsCall()
-     * @param string|null $callableMethod Could be class name only, then onJsCall is the method name
+     * @param callable|array|null $callable A callable is only supported as array, not as a closure
      * @param string $action The action
      * @param array|null $parameters Parameters to pass by
      * @param string $internalType Internal type to distinguish between search functionality
      */
     public function setSearchMethod(
-        ?string $callableMethod,
+        callable|array|null $callable,
         string $action,
         ?array $parameters = null,
         string $internalType = 'default'
     ): void {
         $this->searchMethod = [
             'type' => $internalType,
-            'callableMethod' => $callableMethod,
+            'callableMethod' => $callable,
             "action" => $action,
             "parameters" => $parameters
         ];
@@ -190,7 +190,7 @@ class Search extends Select
             throw new FatalError('Missing search method for ' . get_class($this));
         }
         $data = parent::jsonSerialize();
-        $data->properties['signedUrlSearch'] = JsCall::getUrl(
+        $data->properties['signedUrlSearch'] = JsCall::getSignedUrl(
             $this->searchMethod['callableMethod'],
             $this->searchMethod['action'],
             $this->searchMethod['parameters']

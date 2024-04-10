@@ -24,6 +24,7 @@ use Framelix\Framelix\Storable\UserToken;
 use Framelix\Framelix\Storable\UserWebAuthn;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\View\Backend\UserProfile\Fido2;
+use JetBrains\PhpStorm\ExpectedValues;
 use lbuchs\WebAuthn\Binary\ByteBuffer;
 
 use function base64_decode;
@@ -37,7 +38,10 @@ class Login extends View
     {
         switch ($jsCall->action) {
             case 'login':
-                $form = self::getForm();
+                $form = self::getForm(
+                    Request::getGet('showCaptchaType'),
+                    !!Request::getGet('includeForgotPasswordLink')
+                );
                 $form->validate();
                 $email = (string)Request::getPost('email');
                 $user = User::getByEmail($email);
@@ -137,19 +141,29 @@ class Login extends View
                 if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
                     SystemEventLog::create($logCategory, null, ['email' => $user->email]);
                 }
-                $url = Url::getBrowserUrl();
-                $jsCall->result = ['url' => $url->getParameter('redirect') ?? Url::getApplicationUrl()];
-                break;
+                Login::redirectToDefaultUrl();
         }
     }
 
-    public static function getForm(): Form
-    {
+    /**
+     * Get login form
+     * @param string|null $showCaptchaType If set, this captcha type will be required to be filled out
+     * @param bool $includeForgotPasswordLink Show a password forgot url
+     * @return Form
+     */
+    public static function getForm(
+        #[ExpectedValues(valuesFromClass: Captcha::class)] ?string $showCaptchaType,
+        bool $includeForgotPasswordLink
+    ): Form {
         $form = new Form();
         $form->id = "login";
         $form->submitWithEnter = true;
         $form->requestOptions = new JsRequestOptions(
-            JsCall::getUrl([self::class, "onJsCall"], "login")
+            JsCall::getSignedUrl(
+                [self::class, "onJsCall"],
+                "login",
+                ['showCaptchaType' => $showCaptchaType, 'includeForgotPasswordLink' => $includeForgotPasswordLink]
+            )
         );
         $form->addSubmitButton('login', '__framelix_login_submit__');
         $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ElementColor::THEME_PRIMARY);
@@ -168,11 +182,12 @@ class Login extends View
         $field->required = true;
         $form->addField($field);
 
-        if (Config::$backendLoginCaptcha) {
+        if ($showCaptchaType) {
             $field = new Captcha();
             $field->name = "captcha";
             $field->required = true;
             $field->trackingAction = "framelix_backend_login";
+            $field->type = $showCaptchaType;
             $form->addField($field);
         }
 
@@ -181,7 +196,7 @@ class Login extends View
         $field->label = "__framelix_stay_logged_in__";
         $form->addField($field);
 
-        if (\Framelix\Framelix\Utils\Email::isAvailable()) {
+        if ($includeForgotPasswordLink && \Framelix\Framelix\Utils\Email::isAvailable()) {
             $field = new Html();
             $field->name = "forgot";
             $field->defaultValue = '<a href="' . \Framelix\Framelix\View::getUrl(
@@ -189,6 +204,54 @@ class Login extends View
                 ) . '">' . Lang::get('__framelix_forgotpassword__') . '</a>';
             $form->addField($field);
         }
+
+        $getArgsUrl = JsCall::getSignedUrl([self::class, "onJsCall"], 'webauthn-getargs');
+        $loginUrl = JsCall::getSignedUrl([self::class, "onJsCall"], 'webauthn-login');
+        $form->appendHtml = "<script>
+            (async function (){     
+            
+                const form = FramelixForm.getById('" . $form->id . "')
+                await form.rendered
+                
+                form.container.on('change', function () {
+                  const email = form.fields['email'].getValue()
+                  FramelixLocalStorage.set('login-email', email)
+                })
+                const storedEmail = FramelixLocalStorage.get('login-email')
+                if (storedEmail) {
+                  form.fields['email'].setValue(storedEmail)
+                  form.fields['password'].container.find('input').trigger('focus')
+                } else {
+                  form.fields['email'].container.find('input').trigger('focus')
+                }
+            
+                const fidoButton = $('framelix-button[data-action=\'fido2\']')
+                fidoButton.on('click', async function () {
+                  let getArgsServerData = await FramelixRequest.jsCall('$getArgsUrl', form.getValues()).getResponseData()
+                  if (typeof getArgsServerData === 'string') {
+                    FramelixToast.error(getArgsServerData)
+                    return
+                  }
+                  let getArgs = getArgsServerData.getArgs
+                  Framelix.recursiveBase64StrToArrayBuffer(getArgs)
+                  navigator.credentials.get(getArgs).then(async function (getArgsClientData) {
+                    let loginArgsParams = {
+                      'formValues': form?.getValues(),
+                      'credentialId': Framelix.arrayBufferToBase64(getArgsClientData.rawId),
+                      'clientData': Framelix.arrayBufferToBase64(getArgsClientData.response.clientDataJSON),
+                      'authenticatorData': Framelix.arrayBufferToBase64(getArgsClientData.response.authenticatorData),
+                      'signature': Framelix.arrayBufferToBase64(getArgsClientData.response.signature),
+                    }
+                    let loginResult = await FramelixRequest.jsCall('$loginUrl', loginArgsParams).getResponseData()
+                    if (loginResult.url) {
+                      Framelix.redirect(loginResult.url)
+                    } else {
+                      FramelixToast.error(loginResult)
+                    }
+                  })
+                })
+            })()
+        </script>";
 
         return $form;
     }
@@ -216,59 +279,8 @@ class Login extends View
 
     public function showContent(): void
     {
-        $form = self::getForm();
+        $form = self::getForm(Config::$backendAuthCaptcha, true);
         $form->show();
-        ?>
-      <script>
-        (async function () {
-          const form = FramelixForm.getById('<?=$form->id?>')
-          await form.rendered
-          form.container.on('change', function () {
-            const email = form.fields['email'].getValue()
-            FramelixLocalStorage.set('login-email', email)
-          })
-          const storedEmail = FramelixLocalStorage.get('login-email')
-          if (storedEmail) {
-            form.fields['email'].setValue(storedEmail)
-            form.fields['password'].container.find('input').trigger('focus')
-          } else {
-            form.fields['email'].container.find('input').trigger('focus')
-          }
-
-          const fidoButton = $('framelix-button[data-action=\'fido2\']')
-          fidoButton.on('click', async function () {
-            let getArgsServerData = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                __CLASS__,
-                'webauthn-getargs'
-            )?>', form.getValues()).getResponseData()
-            if (typeof getArgsServerData === 'string') {
-              FramelixToast.error(getArgsServerData)
-              return
-            }
-            let getArgs = getArgsServerData.getArgs
-            Framelix.recursiveBase64StrToArrayBuffer(getArgs)
-            navigator.credentials.get(getArgs).then(async function (getArgsClientData) {
-              let loginArgsParams = {
-                'formValues': form?.getValues(),
-                'credentialId': Framelix.arrayBufferToBase64(getArgsClientData.rawId),
-                'clientData': Framelix.arrayBufferToBase64(getArgsClientData.response.clientDataJSON),
-                'authenticatorData': Framelix.arrayBufferToBase64(getArgsClientData.response.authenticatorData),
-                'signature': Framelix.arrayBufferToBase64(getArgsClientData.response.signature),
-              }
-              let loginResult = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                  __CLASS__,
-                  'webauthn-login'
-              )?>', loginArgsParams).getResponseData()
-              if (loginResult.url) {
-                Framelix.redirect(loginResult.url)
-              } else {
-                FramelixToast.error(loginResult)
-              }
-            })
-          })
-        })()
-      </script>
-        <?php
     }
 
 }

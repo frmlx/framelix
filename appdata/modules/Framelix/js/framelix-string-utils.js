@@ -95,10 +95,13 @@ class FramelixStringUtils {
    * Html escape a string
    * Also valid to use in html attributs
    * @param {string} str
+   * @param {boolean} nl2br Converts \n to <br/>
    * @return {string}
    */
-  static htmlEscape (str) {
-    return (str + '').replace(/&/g, '&amp;').replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  static htmlEscape (str, nl2br = false) {
+    str = (str + '').replace(/&/g, '&amp;').replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    if (nl2br) str = str.replace(/\n/g, '<br/>')
+    return str
   }
 
   /**

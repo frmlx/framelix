@@ -63,7 +63,7 @@ class FramelixFormFieldCaptcha extends FramelixFormField {
     if (this.disabled) {
       return
     }
-    const messageContainer = $(`<framelix-alert><div class="framelix-loading"></div> ${await FramelixLang.get('__framelix_form_validation_captcha_loading__')}</div>`)
+    const messageContainer = $(`<framelix-alert><div class="framelix-loading"></div>&nbsp;&nbsp;${await FramelixLang.get('__framelix_form_validation_captcha_loading__')}</div>`)
     this.field.append(messageContainer)
     const self = this
     if (this.type === FramelixFormFieldCaptcha.TYPE_RECAPTCHA_V2 || this.type === FramelixFormFieldCaptcha.TYPE_RECAPTCHA_V3) {
@@ -110,7 +110,7 @@ class FramelixFormFieldCaptcha extends FramelixFormField {
         } else {
           self.hideValidationMessage()
           messageContainer.attr('theme', 'success')
-          messageContainer.html(await FramelixLang.get('__framelix_form_validation_captcha_verified__'))
+          messageContainer[0].updateBodyHtml(await FramelixLang.get('__framelix_form_validation_captcha_verified__'))
           self.field.append($(`<input type="hidden" name="${self.name}">`).val(token + ':' + apiResponse.hash))
           self.triggerChange(self.field, false)
         }

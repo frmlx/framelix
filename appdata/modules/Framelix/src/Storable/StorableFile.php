@@ -214,7 +214,7 @@ class StorableFile extends StorableExtended
         if (!$this->id) {
             return null;
         }
-        return JsCall::getUrl([self::class, "onJsCall"], "downloadFile",
+        return JsCall::getSignedUrl([self::class, "onJsCall"], "downloadFile",
             ["id" => $this->id, "connectionId" => $this->connectionId]);
     }
 

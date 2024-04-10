@@ -97,7 +97,7 @@ class Layout extends View
                              icon="759"
                              confirm-message="Are you sure?"
                              ' . (new JsRequestOptions(
-                JsCall::getUrl(__CLASS__, 'info'),
+                JsCall::getSignedUrl([self::class, "onJsCall"], 'info'),
                 JsRequestOptions::RENDER_TARGET_POPUP
             ))->toDefaultAttrStr() . '
                              block>

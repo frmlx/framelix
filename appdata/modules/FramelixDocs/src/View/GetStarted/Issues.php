@@ -46,7 +46,7 @@ class Issues extends View
       </p>
       <framelix-button
           <?= (new JsRequestOptions(
-              JsCall::getUrl(__CLASS__, 'slack'), JsRequestOptions::RENDER_TARGET_POPUP
+              JsCall::getSignedUrl([self::class, "onJsCall"], 'slack'), JsRequestOptions::RENDER_TARGET_POPUP
           ))->toDefaultAttrStr() ?>
         icon="730"
         theme="primary"

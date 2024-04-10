@@ -72,8 +72,8 @@ class ModalWindow extends View
             /** @lang JavaScript */
             "
               FramelixModal.show({
-                  bodyContent: FramelixRequest.jsCall('" . JsCall::getUrl(
-                __CLASS__,
+                  bodyContent: FramelixRequest.jsCall('" . JsCall::getSignedUrl(
+                [self::class, "onJsCall"],
                 'modalContentTest'
             ) . "')
               })

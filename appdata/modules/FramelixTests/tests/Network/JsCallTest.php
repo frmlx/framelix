@@ -10,6 +10,8 @@ use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\View;
 use Framelix\FramelixTests\TestCase;
 
+use function var_dump;
+
 final class JsCallTest extends TestCase
 {
 
@@ -33,14 +35,14 @@ final class JsCallTest extends TestCase
     {
         // output buffer
         $jsCall = new JsCall('echo', null);
-        $this->assertSame("123", $jsCall->call(__CLASS__));
+        $this->assertSame("123", $jsCall->call([self::class, 'onJsCall']));
 
         // explicit return value in result
         $jsCall = new JsCall('return', null);
-        $this->assertSame(123, $jsCall->call(__CLASS__));
+        $this->assertSame(123, $jsCall->call([self::class, 'onJsCall']));
 
         // testing url invoke for jscall
-        $this->setSimulatedUrl(JsCall::getUrl(__CLASS__, 'echo'));
+        $this->setSimulatedUrl(JsCall::getSignedUrl([self::class, "onJsCall"], 'echo'));
         Buffer::start();
         try {
             View::findViewForUrl(Url::create())->onRequest();
@@ -51,13 +53,13 @@ final class JsCallTest extends TestCase
         // error when mixing output buffer and explicit result
         $this->assertExceptionOnCall(function () {
             $jsCall = new JsCall('both', null);
-            $jsCall->call(__CLASS__);
+            $jsCall->call([self::class, 'onJsCall']);
         });
 
         // calling no valid jscall method
         $this->assertExceptionOnCall(function () {
             $jsCall = new JsCall('both', null);
-            $jsCall->call(__CLASS__ . "::onJsCallInvalid");
+            $jsCall->call([self::class, 'onJsCallInvalid']);
         });
     }
 }

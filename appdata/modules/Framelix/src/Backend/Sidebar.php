@@ -119,7 +119,11 @@ abstract class Sidebar
     {
         $field = new Select();
         $field->name = "cookieValue";
-        $field->loadUrlOnChange = JsCall::getUrl(__CLASS__, 'change-cookie', ['cookieName' => $cookieName]);
+        $field->loadUrlOnChange = JsCall::getSignedUrl(
+            [self::class, "onJsCall"],
+            'change-cookie',
+            ['cookieName' => $cookieName]
+        );
         $field->loadUrlTarget = "none";
         $field->addOptions($options);
         $field->defaultValue = Cookie::get($cookieName) ?? $defaultValue;

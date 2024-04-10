@@ -11,11 +11,9 @@ use ReflectionUnionType;
 
 use function class_exists;
 use function count;
-use function explode;
 use function get_class;
+use function is_array;
 use function method_exists;
-use function preg_replace;
-use function str_contains;
 use function strlen;
 use function trim;
 
@@ -35,23 +33,25 @@ class JsCall
 
     /**
      * Get signed url to point to the js call view
-     * @param string|callable|array $phpMethod A callable is only supported as array, not as a closure
+     * @param callable|array $callable A callable is only supported as array, not as a closure
      * @param string $action
-     * @param array|null $additionalUrlParameters Additional array parameters to pass by
-     * @param bool $signWithCurrentUserToken If true, then sign with current user token, so this url can only be
-     *     verified by the same user
+     * @param array|null $additionalUrlParameters Additional GET url parameters to pass by, this are signed so they cannot be manipulated by the user
+     * @param bool $signWithCurrentUserToken If true, then sign with current user token, so this url can only be verified by the same user
      * @param int $maxLifetime Max url lifetime in seconds, set to 0 if unlimited
      * @return Url
      */
-    public static function getUrl(
-        string|callable|array $phpMethod,
+    public static function getSignedUrl(
+        callable|array $callable,
         string $action,
         ?array $additionalUrlParameters = null,
         bool $signWithCurrentUserToken = true,
         int $maxLifetime = 86400
     ): Url {
-        return View::getUrl(View\JsCallView::class)
-            ->setParameter('method', $phpMethod)
+        if (!is_array($callable) || count($callable) !== 2) {
+            throw new FatalError("\$callable must be an array of 2 values [className, methodName]");
+        }
+        return View::getUrl(View\Jscv::class)
+            ->setParameter('method', $callable)
             ->setParameter('action', $action)
             ->addParameters($additionalUrlParameters)
             ->sign($signWithCurrentUserToken, $maxLifetime);
@@ -65,27 +65,25 @@ class JsCall
     public function __construct(
         public string $action,
         public mixed $parameters
-    ) {}
+    ) {
+    }
 
     /**
      * Call given callable method and passing this instance as parameter
      * Does verify the target function if it accepts a valid JsCall parameter
-     * @param string $callableMethod
+     * @param callable|array $callable A callable is only supported as array, not as a closure
      * @return mixed The result of the invoked call
      */
-    public function call(string $callableMethod): mixed
+    public function call(callable|array $callable): mixed
     {
-        // validate if the requested php method exist and accept valid parameters
-        $phpMethod = preg_replace("~[^a-z0-9_\\\\:]~i", "", $callableMethod);
-        if (!str_contains($phpMethod, "::")) {
-            $phpMethod .= "::onJsCall";
+        if (!is_array($callable) || count($callable) !== 2) {
+            throw new FatalError("\$callable must be an array of 2 values [className, methodName]");
         }
         $reflectionMethod = null;
-        $split = explode("::", $phpMethod);
-        if ($split[0] && class_exists($split[0])) {
-            if (method_exists($split[0], $split[1])) {
-                $reflection = new ReflectionClass($split[0]);
-                $method = $reflection->getMethod($split[1]);
+        if ($callable[0] && class_exists($callable[0])) {
+            if (method_exists($callable[0], $callable[1])) {
+                $reflection = new ReflectionClass($callable[0]);
+                $method = $reflection->getMethod($callable[1]);
                 if ($method->isStatic()) {
                     $parameters = $method->getParameters();
                     if (count($parameters) === 1) {

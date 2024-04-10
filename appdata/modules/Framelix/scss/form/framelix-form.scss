@@ -20,11 +20,10 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 
   .framelix-form-buttons {
     margin-top: 10px;
-    display: inline-flex;
-    gap: 10px;
   }
 
   .framelix-form-submit-status {
@@ -60,7 +59,7 @@
 }
 
 @media print {
-  :root{
+  :root {
     --input-border: 1px solid #000000 !important;
     --color-input-background: white !important;
   }

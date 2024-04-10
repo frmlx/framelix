@@ -32,7 +32,7 @@ class Reset extends View
     {
         ?>
       <p><?= Lang::get('__framelixdemo_view_reset_info__') ?></p>
-      <framelix-button <?= (new JsRequestOptions(JsCall::getUrl(__CLASS__, 'reset')))->toDefaultAttrStr() ?>
+      <framelix-button <?= (new JsRequestOptions(JsCall::getSignedUrl([self::class, "onJsCall"], 'reset')))->toDefaultAttrStr() ?>
         confirm-message="<?= Lang::get('__framelix_sure__') ?>"
         theme="primary"
         icon="785"><?= Lang::get('__framelixdemo_view_reset__') ?></framelix-button>

@@ -161,7 +161,7 @@ abstract class StorableMeta implements JsonSerializable
     {
         $quickSearch = new QuickSearch();
         $quickSearch->id = "quicksearch-" . $this->id;
-        $quickSearch->setSearchMethod(__CLASS__, "quicksearch", $this->jsonSerialize());
+        $quickSearch->setSearchMethod([self::class, "onJsCall"], "quicksearch", $this->jsonSerialize());
         $lazyCondition = $this->getQuickSearchCondition();
         if ($lazyCondition->columns) {
             foreach ($lazyCondition->columns as $row) {

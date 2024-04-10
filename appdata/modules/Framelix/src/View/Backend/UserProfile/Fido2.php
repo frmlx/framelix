@@ -175,8 +175,8 @@ class Fido2 extends View
                 }
                 if (!await form.validate()) return
 
-                let createArgsServerData = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                    __CLASS__,
+                let createArgsServerData = await FramelixRequest.jsCall('<?=JsCall::getSignedUrl(
+                    [self::class, "onJsCall"],
                     'createargs'
                 )?>').getResponseData()
                 let createArgs = createArgsServerData.createArgs
@@ -192,8 +192,8 @@ class Fido2 extends View
                     'clientData': Framelix.arrayBufferToBase64(createArgsClientData.response.clientDataJSON),
                     'attestationObject': Framelix.arrayBufferToBase64(createArgsClientData.response.attestationObject)
                   }
-                  let processArgsResult = await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                      __CLASS__,
+                  let processArgsResult = await FramelixRequest.jsCall('<?=JsCall::getSignedUrl(
+                      [self::class, "onJsCall"],
                       'processargs'
                   )?>', processArgsParams).getResponseData()
                   if (processArgsResult === true) {

@@ -112,10 +112,12 @@ class Config
     public static array $captchaKeys = [];
 
     /**
-     * Does the backend require a login captcha
-     * @var bool
+     * Does the backend user authentication forms require a captcha (login, lost password)
+     * If set, define the type of the captcha
+     * @var string|null
      */
-    public static bool $backendLoginCaptcha = false;
+    #[ExpectedValues(valuesFromClass: Captcha::class)]
+    public static ?string $backendAuthCaptcha = null;
 
     /**
      * Which built-in system event logs are enabled

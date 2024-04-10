@@ -44,8 +44,8 @@ class InlinePopup extends View
             'Async',
             'Open a popup with contents loaded from an ajax request.',
             /** @lang JavaScript */
-            "FramelixPopup.show(codeBlock, FramelixRequest.jsCall('" . JsCall::getUrl(
-                __CLASS__,
+            "FramelixPopup.show(codeBlock, FramelixRequest.jsCall('" . JsCall::getSignedUrl(
+                [self::class, "onJsCall"],
                 'modalContentTest'
             ) . "'))"
         );

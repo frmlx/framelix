@@ -24,7 +24,7 @@ class ForgotPassword extends View
     public function onRequest(): void
     {
         if (User::get()) {
-            Url::getApplicationUrl()->redirect();
+            Login::redirectToDefaultUrl();
         }
         if ($tokenStr = Request::getGet('token')) {
             $this->token = UserVerificationToken::getForToken((string)$tokenStr);
@@ -125,11 +125,12 @@ class ForgotPassword extends View
         $field->required = true;
         $form->addField($field);
 
-        if (Config::$backendLoginCaptcha) {
+        if (Config::$backendAuthCaptcha) {
             $field = new Captcha();
             $field->name = "captcha";
             $field->required = true;
             $field->trackingAction = "framelix_backend_forgot_password";
+            $field->type = Config::$backendAuthCaptcha;
             $form->addField($field);
         }
 

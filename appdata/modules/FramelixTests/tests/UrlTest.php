@@ -93,9 +93,9 @@ final class UrlTest extends TestCase
         $this->assertSame(null, $url->getHash());
 
         $url = Url::create('https://localhost');
-        $url->setParameter('foo', ['bar' => 'war']);
-        $this->assertSame('https://localhost?foo%5Bbar%5D=war', (string)$url);
-        $this->assertSame(["foo[bar]" => 'war'], $url->getParameters());
+        $url->setParameter('foo', ['bar' => 'waröäüß@😊']);
+        $this->assertSame('https://localhost?foo%5Bbar%5D=war' . urlencode("öäüß@😊"), (string)$url);
+        $this->assertSame(["foo" => ['bar' => 'waröäüß@😊']], $url->getParameters());
 
         // test language in url
         $fakeUrlStr = 'https://localhost/en/bla';

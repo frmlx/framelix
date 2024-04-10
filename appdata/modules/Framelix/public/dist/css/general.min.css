@@ -80,6 +80,9 @@
   --color-popup-primary-text: hsl(var(--color-primary-hue), var(--color-default-contrast-text), 5%);
   --color-input-background: white;
   --input-border: 1px solid #ddd;
+  --input-border-focus: inherit;
+  --input-box-shadow: inherit;
+  --input-box-shadow-focus: none;
   --color-input-text: var(--color-page-text);
   --color-input-checkbox-background: var(--color-input-background);
   --color-input-checkbox-checked: var(--color-button-primary-bg);
@@ -174,34 +177,6 @@
 
 [data-color-contrast=more] {
   --color-contrast-modifier: 30%;
-}
-
-.framelix-responsive-grid-2 {
-  display: flex;
-  gap: 5px;
-}
-.framelix-responsive-grid-2 > * {
-  flex-basis: 50%;
-}
-
-.framelix-responsive-grid-3 {
-  display: flex;
-  gap: 5px;
-}
-.framelix-responsive-grid-3 > * {
-  flex-basis: 33%;
-}
-.framelix-responsive-grid-3 > *:last-child {
-  flex-basis: 34%;
-}
-
-html[data-screen-size=s] .framelix-responsive-grid-2,
-html[data-screen-size=s] .framelix-responsive-grid-3 {
-  flex-wrap: wrap;
-}
-html[data-screen-size=s] .framelix-responsive-grid-2 > *,
-html[data-screen-size=s] .framelix-responsive-grid-3 > * {
-  flex-basis: 100%;
 }
 
 .framelix-modal {
@@ -817,6 +792,15 @@ framelix-alert[theme=transparent] {
   background: rgba(var(--light-color), var(--light-color), var(--light-color), 0.07);
   color: inherit;
   --hover-color: 0;
+}
+
+.framelix-buttons-wrap {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.framelix-buttons-wrap * {
+  flex: 1 0 auto;
 }
 
 framelix-button {

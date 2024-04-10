@@ -98,8 +98,8 @@ class Captcha extends Field
         foreach ($keys as $key) {
             $data->properties['publicKeys'][$key] = Config::$captchaKeys[$key]['publicKey'] ?? null;
         }
-        $data->properties['signedUrlVerifyToken'] = JsCall::getUrl(
-            Captcha::class,
+        $data->properties['signedUrlVerifyToken'] = JsCall::getSignedUrl(
+            [self::class, "onJsCall"],
             'verify'
         );
         return $data;

@@ -8,6 +8,12 @@
   .tox-tinymce {
     border-radius: var(--border-radius);
     border: var(--input-border);
+    box-shadow: var(--input-box-shadow);
+
+    &:focus-within {
+      border: var(--input-border-focus);
+      box-shadow: var(--input-box-shadow-focus);
+    }
   }
 
 }

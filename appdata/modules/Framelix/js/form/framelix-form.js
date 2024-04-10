@@ -664,7 +664,7 @@ class FramelixForm {
     this.container.append(bottomRow)
 
     const buttonsCount = FramelixObjectUtils.countKeys(this.buttons)
-    const buttonsRow = $(`<div class="framelix-form-buttons" data-buttons="${buttonsCount}"></div>`)
+    const buttonsRow = $(`<div class="framelix-form-buttons framelix-buttons-wrap" data-buttons="${buttonsCount}"></div>`)
     bottomRow.append(buttonsRow)
     if (buttonsCount) {
       for (let i in this.buttons) {

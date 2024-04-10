@@ -206,7 +206,7 @@ class Setup extends View
       </p>
       <framelix-button
           <?= (new JsRequestOptions(
-              JsCall::getUrl(__CLASS__, 'create-config'),
+              JsCall::getSignedUrl([self::class, "onJsCall"], 'create-config'),
               JsRequestOptions::RENDER_TARGET_MODAL_NEW
           ))->toDefaultAttrStr() ?>
         theme="primary"

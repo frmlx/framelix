@@ -71,8 +71,8 @@ class Invoice extends StorableMeta
         $property->setLabel('');
         $property->valueCallable = function () {
             $requestOptions = new JsRequestOptions(
-                JsCall::getUrl(
-                    Invoices::class,
+                JsCall::getSignedUrl(
+                    [Invoices::class, "onJsCall"],
                     'invoice-pdf-download',
                     ['invoice' => $this->storable]
                 ), new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))

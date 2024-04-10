@@ -58,8 +58,8 @@ class Toasts extends View
             'Async',
             'Toasts can be async as well.',
             /** @lang JavaScript */
-            "FramelixToast.info(FramelixRequest.jsCall('" . JsCall::getUrl(
-                __CLASS__,
+            "FramelixToast.info(FramelixRequest.jsCall('" . JsCall::getSignedUrl(
+                [self::class, "onJsCall"],
                 'modalContentTest'
             ) . "'))"
         );

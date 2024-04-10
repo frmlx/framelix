@@ -148,13 +148,16 @@ class QuickSearch implements JsonSerializable
 
     /**
      * Set search method - Call will be done with FramelixRequest.jsCall()
-     * @param string|null $callableMethod Could be class name only, then onJsCall is the method name
+     * @param callable|array|null $callable A callable is only supported as array, not as a closure
      * @param string $action The action
      * @param array|null $parameters Parameters to pass by
      */
-    public function setSearchMethod(?string $callableMethod, string $action, ?array $parameters = null): void
-    {
-        $this->searchMethod = ['callableMethod' => $callableMethod, "action" => $action, "parameters" => $parameters];
+    public function setSearchMethod(
+        callable|array|null $callable,
+        string $action,
+        ?array $parameters = null
+    ): void {
+        $this->searchMethod = ['callableMethod' => $callable, "action" => $action, "parameters" => $parameters];
     }
 
     /**
@@ -175,7 +178,7 @@ class QuickSearch implements JsonSerializable
         foreach ($this as $key => $value) {
             $properties[$key] = $value;
         }
-        $properties['signedUrlSearch'] = JsCall::getUrl(
+        $properties['signedUrlSearch'] = JsCall::getSignedUrl(
             $this->searchMethod['callableMethod'],
             $this->searchMethod['action'],
             $this->searchMethod['parameters']

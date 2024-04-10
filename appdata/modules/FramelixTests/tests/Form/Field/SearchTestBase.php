@@ -23,7 +23,7 @@ abstract class SearchTestBase extends TestCaseDbTypes
         $this->setSimulatedGetData(
             ['storableClass' => \Framelix\FramelixTests\Storable\TestStorable2::class, 'properties' => ['name']]
         );
-        $field->setSearchMethod(Search::class, 'search', ['query' => '123']);
+        $field->setSearchMethod([Search::class, "onJsCall"], 'search', ['query' => '123']);
         $field->defaultValue = new \Framelix\FramelixTests\Storable\TestStorable2();
         $this->assertTrue(isset($field->jsonSerialize()->properties['signedUrlSearch']));
 
@@ -34,7 +34,7 @@ abstract class SearchTestBase extends TestCaseDbTypes
         $parameters['query'] = '123';
         $this->setSimulatedUrl("http://localhost");
         $this->setSimulatedGetData($parameters);
-        $field->setSearchMethod(Search::class, 'quicksearch', $parameters);
+        $field->setSearchMethod([Search::class, "onJsCall"], 'quicksearch', $parameters);
         $field->defaultValue = new \Framelix\FramelixTests\Storable\TestStorable2();
         $this->assertTrue(isset($field->jsonSerialize()->properties['signedUrlSearch']));
 

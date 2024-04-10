@@ -190,7 +190,7 @@ abstract class FormTestBase extends TestCaseDbTypes
 
         $field = new Search();
         $field->name = $field::class;
-        $field->setSearchMethod(__CLASS__, 'test');
+        $field->setSearchMethod([self::class, "onJsCall"], 'test');
         $form->addField($field);
 
         $field = new Select();

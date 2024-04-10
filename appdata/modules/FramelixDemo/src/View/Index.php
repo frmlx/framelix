@@ -100,7 +100,7 @@ class Index extends View
           <br/>
           <br/>
           <framelix-button
-              <?= (new JsRequestOptions(JsCall::getUrl(__CLASS__, 'resetpw')))->toDefaultAttrStr() ?>
+              <?= (new JsRequestOptions(JsCall::getSignedUrl([self::class, "onJsCall"], 'resetpw')))->toDefaultAttrStr() ?>
             theme="primary"
             icon="785">
             Reset password

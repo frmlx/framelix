@@ -48,48 +48,48 @@ class TwoFactor extends View
             Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $secret, encrypted: true);
             Cookie::set(TwoFactorCode::COOKIE_NAME_BACKUPCODES, $codes, encrypted: true);
             ?>
-          <div style="text-align: center">
-            <div><?= Lang::get('__framelix_view_backend_userprofile_2fa_enable_info__') ?></div>
-            <div class="framelix-spacer-x2"></div>
-            <framelix-button theme="primary" data-action="getcodes">
-              __framelix_view_backend_userprofile_2fa_download_codes__
-            </framelix-button>
-            <div class="framelix-spacer-x2"></div>
-            <div id="qrcode"></div>
-            <div class="framelix-spacer-x2"></div>
-              <?= $secret ?>
-            <div class="framelix-spacer-x2"></div>
-            <div><?= Lang::get('__framelix_view_backend_userprofile_2fa_enable_enter__') ?></div>
-            <div class="framelix-spacer-x2"></div>
-              <?php
-              $form->show();
-              ?>
-          </div>
-          <script>
-            (async function () {
-              const container = $('#qrcode')
-              new QRCode(container[0], {
-                text: <?=JsonUtils::encode($tfa->getQRText(User::get()->email, $secret))?>,
-                width: Math.min(container.width(), 250),
-                height: Math.min(container.width(), 250),
-                colorDark: '#000',
-                colorLight: '#fff',
-                correctLevel: QRCode.CorrectLevel.H
-              })
-              setTimeout(function () {
-                container.find('img').removeAttr('style').css('max-width', '100%')
-              }, 10)
-            })()
-          </script>
+            <div style="text-align: center">
+                <div><?= Lang::get('__framelix_view_backend_userprofile_2fa_enable_info__') ?></div>
+                <div class="framelix-spacer-x2"></div>
+                <framelix-button theme="primary" data-action="getcodes">
+                    __framelix_view_backend_userprofile_2fa_download_codes__
+                </framelix-button>
+                <div class="framelix-spacer-x2"></div>
+                <div id="qrcode"></div>
+                <div class="framelix-spacer-x2"></div>
+                <?= $secret ?>
+                <div class="framelix-spacer-x2"></div>
+                <div><?= Lang::get('__framelix_view_backend_userprofile_2fa_enable_enter__') ?></div>
+                <div class="framelix-spacer-x2"></div>
+                <?php
+                $form->show();
+                ?>
+            </div>
+            <script>
+              (async function () {
+                const container = $('#qrcode')
+                new QRCode(container[0], {
+                  text: <?=JsonUtils::encode($tfa->getQRText(User::get()->email, $secret))?>,
+                  width: Math.min(container.width(), 250),
+                  height: Math.min(container.width(), 250),
+                  colorDark: '#000',
+                  colorLight: '#fff',
+                  correctLevel: QRCode.CorrectLevel.H
+                })
+                setTimeout(function () {
+                  container.find('img').removeAttr('style').css('max-width', '100%')
+                }, 10)
+              })()
+            </script>
             <?php
         } elseif ($jsCall->action === 'test') {
             ?>
-          <div style="text-align: center">
-              <?php
-              $form = self::getTestForm();
-              $form->show();
-              ?>
-          </div>
+            <div style="text-align: center">
+                <?php
+                $form = self::getTestForm();
+                $form->show();
+                ?>
+            </div>
             <?php
         } elseif ($jsCall->action === 'disable') {
             $user = User::get();
@@ -213,74 +213,79 @@ class TwoFactor extends View
             return;
         }
         ?>
-      <framelix-alert theme="primary">__framelix_view_backend_userprofile_2fa_info__</framelix-alert>
+        <framelix-alert theme="primary">__framelix_view_backend_userprofile_2fa_info__</framelix-alert>
         <?php
         if ($this->storable->twoFactorSecret) {
             ?>
-          <framelix-alert theme="primary">__framelix_view_backend_userprofile_2fa_disable_info__</framelix-alert>
-          <div class="framelix-responsive-grid-3">
-            <framelix-button theme="success"
-                             data-action="disable"
-                             icon="789">__framelix_view_backend_userprofile_2fa_disable__
-            </framelix-button>
-            <framelix-button theme="primary"
-                             data-action="test"
-                             icon="75a">__framelix_view_backend_userprofile_2fa_test__
-            </framelix-button>
-            <framelix-button theme="error"
-                             data-action="regenerate"
-                             icon="78a">__framelix_view_backend_userprofile_2fa_regenerate_codes__
-            </framelix-button>
-          </div>
+            <framelix-alert theme="primary">__framelix_view_backend_userprofile_2fa_disable_info__</framelix-alert>
+            <div class="framelix-buttons-wrap">
+                <framelix-button theme="success"
+                                 data-action="disable"
+                                 icon="789">
+                    __framelix_view_backend_userprofile_2fa_disable__
+                </framelix-button>
+                <framelix-button theme="primary"
+                                 data-action="test"
+                                 icon="75a">
+                    __framelix_view_backend_userprofile_2fa_test__
+                </framelix-button>
+                <framelix-button theme="error"
+                                 data-action="regenerate"
+                                 icon="78a">
+                    __framelix_view_backend_userprofile_2fa_regenerate_codes__
+                </framelix-button>
+            </div>
             <?php
         } else {
             ?>
-          <framelix-button theme="success" data-action="enable">__framelix_view_backend_userprofile_2fa_enable__
-          </framelix-button>
+            <framelix-button theme="success" data-action="enable">__framelix_view_backend_userprofile_2fa_enable__
+            </framelix-button>
             <?php
         }
         ?>
-      <script>
-        (function () {
-          $(document).on('click', 'framelix-button[data-action]', async function () {
-            switch ($(this).attr('data-action')) {
-              case 'enable':
-                await FramelixDom.includeCompiledFile('Framelix', 'js', 'qrcodejs', 'QRCode')
-                let name = await FramelixModal.prompt(await FramelixLang.get('__framelix_view_backend_userprofile_2fa_enable_name__'), '<?=FRAMELIX_MODULE?>').promptResult
-                await FramelixModal.show({
-                  bodyContent: FramelixRequest.jsCall('<?=JsCall::getUrl(__CLASS__, 'enable')?>', { 'name': name })
-                })
-                break
-              case 'test':
-                await FramelixModal.show({
-                  bodyContent: FramelixRequest.jsCall('<?=JsCall::getUrl(__CLASS__, 'test')?>')
-                })
-                break
-              case 'disable':
-                if (await FramelixModal.confirm(await FramelixLang.get('__framelix_view_backend_userprofile_2fa_disable_warning__')).confirmed) {
+        <script>
+          (function () {
+            $(document).on('click', 'framelix-button[data-action]', async function () {
+              switch ($(this).attr('data-action')) {
+                case 'enable':
+                  await FramelixDom.includeCompiledFile('Framelix', 'js', 'qrcodejs', 'QRCode')
+                  let name = await FramelixModal.prompt(await FramelixLang.get('__framelix_view_backend_userprofile_2fa_enable_name__'), '<?=FRAMELIX_MODULE?>').promptResult
                   await FramelixModal.show({
-                    bodyContent: FramelixRequest.jsCall('<?=JsCall::getUrl(__CLASS__, 'disable')?>')
+                    bodyContent: FramelixRequest.jsCall('<?=JsCall::getSignedUrl([self::class, "onJsCall"],
+                        'enable')?>', { 'name': name })
                   })
-                }
-                break
-              case 'getcodes':
-                await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                    __CLASS__,
-                    'getcodes'
-                )?>').checkHeaders()
-                break
-              case 'regenerate':
-                if (await FramelixModal.confirm(await FramelixLang.get('__framelix_view_backend_userprofile_2fa_regenerate_codes_warning__')).confirmed) {
-                  await FramelixRequest.jsCall('<?=JsCall::getUrl(
-                      __CLASS__,
-                      'regenerate'
-                  )?>').getResponseData()
-                }
-                break
-            }
-          })
-        })()
-      </script>
+                  break
+                case 'test':
+                  await FramelixModal.show({
+                    bodyContent: FramelixRequest.jsCall('<?=JsCall::getSignedUrl([self::class, "onJsCall"], 'test')?>')
+                  })
+                  break
+                case 'disable':
+                  if (await FramelixModal.confirm(await FramelixLang.get('__framelix_view_backend_userprofile_2fa_disable_warning__')).confirmed) {
+                    await FramelixModal.show({
+                      bodyContent: FramelixRequest.jsCall('<?=JsCall::getSignedUrl([self::class, "onJsCall"],
+                          'disable')?>')
+                    })
+                  }
+                  break
+                case 'getcodes':
+                  await FramelixRequest.jsCall('<?=JsCall::getSignedUrl(
+                      [self::class, "onJsCall"],
+                      'getcodes'
+                  )?>').checkHeaders()
+                  break
+                case 'regenerate':
+                  if (await FramelixModal.confirm(await FramelixLang.get('__framelix_view_backend_userprofile_2fa_regenerate_codes_warning__')).confirmed) {
+                    await FramelixRequest.jsCall('<?=JsCall::getSignedUrl(
+                        [self::class, "onJsCall"],
+                        'regenerate'
+                    )?>').getResponseData()
+                  }
+                  break
+              }
+            })
+          })()
+        </script>
         <?php
     }
 

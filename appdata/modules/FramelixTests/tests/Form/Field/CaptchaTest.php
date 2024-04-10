@@ -21,12 +21,12 @@ final class CaptchaTest extends TestCase
         $this->setSimulatedPostData([$field->name => "Foo"]);
 
         $jsCall = new JsCall('verify', ['type' => $field->type]);
-        $jsCall->call(Captcha::class);
+        $jsCall->call([Captcha::class, "onJsCall"]);
         $this->assertTrue(ArrayUtils::keyExists($jsCall->result, 'hash'));
 
         $field->type = $field::TYPE_RECAPTCHA_V3;
         $jsCall = new JsCall('verify', ['type' => $field->type]);
-        $jsCall->call(Captcha::class);
+        $jsCall->call([Captcha::class, "onJsCall"]);
         $this->assertTrue(ArrayUtils::keyExists($jsCall->result, 'hash'));
 
         $this->assertIsString($field->validate());

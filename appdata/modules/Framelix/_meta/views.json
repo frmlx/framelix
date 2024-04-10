@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|2326117813",
+    "directoryListHash": "3|394443880",
     "views": {
         "Framelix\\Framelix\\View\\Backend\\Dev\\LangEditor": {
             "accessRole": true,
@@ -231,15 +231,15 @@
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/userprofile\/twofactor"
         },
-        "Framelix\\Framelix\\View\\JsCallView": {
+        "Framelix\\Framelix\\View\\Jscv": {
             "accessRole": "*",
-            "customUrl": "\/jscv",
+            "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
             "urlPriority": 0,
             "hiddenView": false,
             "pageTitle": "{classLangKey}",
-            "url": "\/jscallview"
+            "url": "\/jscv"
         },
         "Framelix\\Framelix\\View\\MPdfBase": {
             "accessRole": true,

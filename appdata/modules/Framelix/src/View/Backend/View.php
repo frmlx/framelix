@@ -277,7 +277,7 @@ abstract class View extends \Framelix\Framelix\View
                         ?>
                         <framelix-button theme="transparent"
                                          class="framelix-user-settings"
-                            <?= (new JsRequestOptions(JsCall::getUrl([self::class, 'onJsCall'], 'settings'),
+                            <?= (new JsRequestOptions(JsCall::getSignedUrl([self::class, 'onJsCall'], 'settings'),
                                 new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))))->toDefaultAttrStr() ?>
                                          icon="739"
                                          title="__framelix_backend_user_settings__"></framelix-button>

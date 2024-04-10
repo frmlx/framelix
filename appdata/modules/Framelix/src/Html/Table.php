@@ -472,7 +472,7 @@ class Table implements JsonSerializable
         foreach ($this as $key => $value) {
             $properties[$key] = $value;
         }
-        $properties['storableSortJsCallUrl'] = JsCall::getUrl(__CLASS__, 'storableSort');
+        $properties['storableSortJsCallUrl'] = JsCall::getSignedUrl([self::class, "onJsCall"], 'storableSort');
         if ($this->footerSumColumns) {
             foreach ($this->footerSumColumns as $columnName) {
                 if (!in_array($columnName, $this->columnOrder)) {
