@@ -30,6 +30,7 @@ use function strtolower;
 use function substr;
 use function time;
 use function trim;
+use function urldecode;
 
 use const FRAMELIX_APPDATA_FOLDER;
 
@@ -372,7 +373,7 @@ class Url implements JsonSerializable
                 $this->setParameter($key . "[$subKey]", $subValue);
             }
         } else {
-            $this->urlData['queryParameters'][$key] = (string)$value;
+            ArrayUtils::setValue($this->urlData['queryParameters'], $key, (string)$value);
         }
         return $this;
     }
@@ -468,7 +469,7 @@ class Url implements JsonSerializable
      */
     public function update(string $url, bool $clearData = false): self
     {
-        $urlData = parse_url($url);
+        $urlData = parse_url(urldecode($url));
         $urlData['path'] = $urlData['path'] ?? '';
         if (isset($urlData['query'])) {
             parse_str($urlData['query'], $urlData['queryParameters']);
