@@ -90,49 +90,49 @@ class ErrorHandler
                 'trace' => implode('</pre><pre class="framelix-error-log-trace">', $logData['traceSimple']),
             ];
             ?>
-          <div id="<?= $id ?>" class="framelix-error-log">
-            <small><?= DateTime::anyToFormat($logData['time'] ?? null, "d.m.Y H:i:s") ?></small>
-            <pre class="framelix-error-log-title"><?= $html['title'] ?></pre>
-            <pre class="framelix-error-log-trace"><?= $html['trace'] ?></pre>
-            <pre class="framelix-error-log-json"><?= JsonUtils::encode(
-                    $logData['additionalData'] ?? null,
-                    true
-                ) ?></pre>
-          </div>
-          <style>
-            .framelix-error-log {
-              padding: 10px;
-              border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-            }
+            <div id="<?= $id ?>" class="framelix-error-log">
+                <small><?= DateTime::anyToFormat($logData['time'] ?? null, "d.m.Y H:i:s") ?></small>
+                <pre class="framelix-error-log-title"><?= $html['title'] ?></pre>
+                <pre class="framelix-error-log-trace"><?= $html['trace'] ?></pre>
+                <pre class="framelix-error-log-json"><?= JsonUtils::encode(
+                        $logData['additionalData'] ?? null,
+                        true
+                    ) ?></pre>
+            </div>
+            <style>
+              .framelix-error-log {
+                padding: 10px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+              }
 
-            .framelix-error-log-title {
-              color: var(--color-error-text, red);
-              font-weight: bold;
-              max-width: 100%;
-              overflow-x: auto;
-              white-space: pre-line;
-              margin: 0;
-              font-size: 0.9rem;
-            }
+              .framelix-error-log-title {
+                color: var(--color-error-text, red);
+                font-weight: bold;
+                max-width: 100%;
+                overflow-x: auto;
+                white-space: pre-line;
+                margin: 0;
+                font-size: 0.9rem;
+              }
 
-            .framelix-error-log-trace,
-            .framelix-error-log-json {
-              max-width: 100%;
-              overflow-x: auto;
-              white-space: pre-wrap;
-              text-indent: -27px;
-              padding-left: 27px;
-              display: block;
-              margin: 0;
-              font-size: 0.8rem;
-            }
-          </style>
-          <script>
-            (function () {
-              const errorData = <?=json_encode($logData)?>;
-              console.log('Framelix Error', errorData)
-            })()
-          </script>
+              .framelix-error-log-trace,
+              .framelix-error-log-json {
+                max-width: 100%;
+                overflow-x: auto;
+                white-space: pre-wrap;
+                text-indent: -27px;
+                padding-left: 27px;
+                display: block;
+                margin: 0;
+                font-size: 0.8rem;
+              }
+            </style>
+            <script>
+              (function () {
+                const errorData = <?=json_encode($logData)?>;
+                console.log('Framelix Error', errorData)
+              })()
+            </script>
             <?php
         }
     }
@@ -163,11 +163,18 @@ class ErrorHandler
             $body = '<h2 style="color:red">' . htmlentities($logData['message']) . '</h2>';
             $body .= '<pre>' . htmlentities(implode("\n", $logData['traceSimple'])) . '</pre>';
             $body .= '<pre>' . htmlentities(JsonUtils::encode($logData['additionalData'] ?? null, true)) . '</pre>';
+            // do not use subject and body templates for errors mails
+            $originalSubject = Config::$emailSubject;
+            $originalBody = Config::$emailBody;
+            Config::$emailSubject = '{subject}';
+            Config::$emailBody = '{body}';
             Email::send(
                 'ErrorLog: ' . $logData['message'],
                 $body,
                 $email
             );
+            Config::$emailSubject = $originalSubject;
+            Config::$emailBody = $originalBody;
         }
     }
 
