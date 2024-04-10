@@ -1,3 +1,14 @@
+// place buttons side by side with a flex container, wrap automatically of not enough space and fill up available width
+.framelix-buttons-wrap {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  * {
+    flex: 1 0 auto;
+  }
+}
+
 framelix-button {
   display: inline-flex;
   border-radius: var(--border-radius);
