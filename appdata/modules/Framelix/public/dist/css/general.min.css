@@ -561,13 +561,14 @@ html[data-touch="1"] .framelix-table > table > tfoot > tr > th[data-flag-icon="1
 }
 
 .framelix-tabs .framelix-tab-buttons {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   border-radius: var(--border-radius);
   margin-bottom: 10px;
   gap: 10px;
 }
 .framelix-tabs .framelix-tab-button {
+  flex: 1 0 auto;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
@@ -583,7 +584,13 @@ html[data-touch="1"] .framelix-table > table > tfoot > tr > th[data-flag-icon="1
   border-top-right-radius: 0;
   color: transparent;
   height: 3px;
+  max-height: 3px;
   transition: 0.2s;
+}
+.framelix-tabs .framelix-tab-button .label {
+  white-space: break-spaces;
+  display: flex;
+  align-items: center;
 }
 .framelix-tabs .framelix-tab-button[data-active="1"] .icon {
   background: hsl(var(--color-primary-hue), 50%, 50%);

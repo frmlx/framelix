@@ -1,6 +1,6 @@
 .framelix-tabs {
   .framelix-tab-buttons {
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
     border-radius: var(--border-radius);
     margin-bottom: 10px;
@@ -8,6 +8,7 @@
   }
 
   .framelix-tab-button {
+    flex: 1 0 auto;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -21,9 +22,16 @@
       padding: 0;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
-      color:transparent;
+      color: transparent;
       height: 3px;
+      max-height: 3px;
       transition: .2s;
+    }
+
+    .label {
+      white-space: break-spaces;
+      display: flex;
+      align-items: center;
     }
 
     &[data-active='1'] {
