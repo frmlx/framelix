@@ -123,7 +123,7 @@
         "You have used a one time backup code for your 2-factor authentication. This code cannot be used anymore."
     ],
     "__framelix_form_2fa_enter__": [
-        "Enter your 6-digits code"
+        "Enter your 6-digits authenticator code"
     ],
     "__framelix_form_2fa_enter_backup__": [
         "Enter your 10-characters backup code"

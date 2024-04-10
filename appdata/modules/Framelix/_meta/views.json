@@ -1,5 +1,5 @@
 {
-    "directoryListHash": "3|394443880",
+    "directoryListHash": "3|2511948973",
     "views": {
         "Framelix\\Framelix\\View\\Backend\\Dev\\LangEditor": {
             "accessRole": true,
@@ -50,16 +50,6 @@
             "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/login"
-        },
-        "Framelix\\Framelix\\View\\Backend\\Login2FA": {
-            "accessRole": "*",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/login2fa"
         },
         "Framelix\\Framelix\\View\\Backend\\Logout": {
             "accessRole": true,

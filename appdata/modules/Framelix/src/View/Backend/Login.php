@@ -10,6 +10,7 @@ use Framelix\Framelix\Form\Field\Password;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Field\TwoFactorCode;
 use Framelix\Framelix\Form\Form;
+use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
 use Framelix\Framelix\Lang;
@@ -27,7 +28,9 @@ use Framelix\Framelix\View\Backend\UserProfile\Fido2;
 use JetBrains\PhpStorm\ExpectedValues;
 use lbuchs\WebAuthn\Binary\ByteBuffer;
 
+use function array_values;
 use function base64_decode;
+use function strlen;
 
 class Login extends View
 {
@@ -37,6 +40,36 @@ class Login extends View
     public static function onJsCall(JsCall $jsCall): void
     {
         switch ($jsCall->action) {
+            case "2fa":
+                $user = User::getById(Request::getGet('user'));
+
+                $token = UserToken::create($user);
+                UserToken::setCookieValue(
+                    $token->token,
+                    Request::getGet('stay') ? 60 * 86400 : null
+                );
+
+                // create system event logs
+                $logCategory = SystemEventLog::CATEGORY_LOGIN_SUCCESS;
+                if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
+                    SystemEventLog::create($logCategory, null, ['email' => $user->email]);
+                }
+
+                $code = Request::getPost('code');
+                if (strlen($code) === 10 && $user->twoFactorBackupCodes) {
+                    Toast::warning('__framelix_form_2fa_backup_code_used__');
+                    $backupCodes = $user->twoFactorBackupCodes;
+                    foreach ($backupCodes as $key => $backupCode) {
+                        if ($backupCode === $code) {
+                            unset($backupCodes[$key]);
+                            break;
+                        }
+                    }
+                    $user->twoFactorBackupCodes = array_values($backupCodes);
+                    $user->store();
+                }
+                BruteForceProtection::reset('backend-login');
+                self::redirectToDefaultUrl();
             case 'login':
                 $form = self::getForm(
                     Request::getGet('showCaptchaType'),
@@ -49,33 +82,7 @@ class Login extends View
                     Url::getBrowserUrl()->redirect();
                 }
                 BruteForceProtection::countUp('backend-login');
-                if ($user && $user->passwordVerify(Request::getPost('password'))) {
-                    if ($user->twoFactorSecret) {
-                        // if 2fa, redirect to 2fa verify page
-                        Cookie::set(TwoFactorCode::COOKIE_NAME_USERID, $user->id, encrypted: true);
-                        Cookie::set(TwoFactorCode::COOKIE_NAME_USERSTAY, Request::getPost('stay'), encrypted: true);
-                        Cookie::set(TwoFactorCode::COOKIE_NAME_SECRET, $user->twoFactorSecret, encrypted: true);
-                        Cookie::set(
-                            TwoFactorCode::COOKIE_NAME_BACKUPCODES,
-                            $user->twoFactorBackupCodes,
-                            encrypted: true
-                        );
-                        \Framelix\Framelix\View::getUrl(Login2FA::class)->setParameter(
-                            'redirect',
-                            Request::getGet('redirect')
-                        )->redirect();
-                    }
-
-                    $token = UserToken::create($user);
-                    UserToken::setCookieValue($token->token, Request::getPost('stay') ? 60 * 86400 : null);
-                    // create system event logs
-                    $logCategory = SystemEventLog::CATEGORY_LOGIN_SUCCESS;
-                    if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
-                        SystemEventLog::create($logCategory, null, ['email' => $email]);
-                    }
-                    BruteForceProtection::reset('backend-login');
-                    self::redirectToDefaultUrl();
-                } else {
+                if (!$user?->passwordVerify(Request::getPost('password'))) {
                     // create system event logs
                     $logCategory = SystemEventLog::CATEGORY_LOGIN_FAILED;
                     if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
@@ -83,6 +90,40 @@ class Login extends View
                     }
                     Response::stopWithFormValidationResponse('__framelix_login_invalid_user__');
                 }
+
+                // 2fa required
+                if ($user->twoFactorSecret) {
+                    $form = new Form();
+                    $form->id = "twofa";
+
+                    $form->submitWithEnter = true;
+                    $form->requestOptions = new JsRequestOptions(
+                        JsCall::getSignedUrl(
+                            [self::class, "onJsCall"],
+                            "2fa",
+                            ["user" => $user]
+                        ),
+                        JsRequestOptions::RENDER_TARGET_CURRENT_CONTEXT
+                    );
+
+                    $field = new TwoFactorCode();
+                    $field->name = "code";
+                    $form->addField($field);
+
+                    $form->show();
+                    return;
+                }
+
+                $token = UserToken::create($user);
+                UserToken::setCookieValue($token->token, Request::getPost('stay') ? 60 * 86400 : null);
+                // create system event logs
+                $logCategory = SystemEventLog::CATEGORY_LOGIN_SUCCESS;
+                if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
+                    SystemEventLog::create($logCategory, null, ['email' => $email]);
+                }
+                BruteForceProtection::reset('backend-login');
+                self::redirectToDefaultUrl();
+
             case 'webauthn-getargs':
                 $webAuthn = Fido2::getWebAuthnInstance();
                 $user = User::getByEmail((string)($jsCall->parameters['email'] ?? null));
@@ -163,7 +204,8 @@ class Login extends View
                 [self::class, "onJsCall"],
                 "login",
                 ['showCaptchaType' => $showCaptchaType, 'includeForgotPasswordLink' => $includeForgotPasswordLink]
-            )
+            ),
+            JsRequestOptions::RENDER_TARGET_CURRENT_CONTEXT
         );
         $form->addSubmitButton('login', '__framelix_login_submit__');
         $form->addButton('fido2', '__framelix_login_fido2__', buttonColor: ElementColor::THEME_PRIMARY);
@@ -279,8 +321,10 @@ class Login extends View
 
     public function showContent(): void
     {
+        echo '<div data-request-response-receiver>';
         $form = self::getForm(Config::$backendAuthCaptcha, true);
         $form->show();
+        echo '</div>';
     }
 
 }

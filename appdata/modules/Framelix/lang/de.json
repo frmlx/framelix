@@ -160,7 +160,7 @@
         "d1917"
     ],
     "__framelix_form_2fa_enter__": [
-        "Gib deinen Code mit 6 Zahlen ein",
+        "Gib deinen Code vom Authenticator mit 6 Zahlen ein",
         "7539c"
     ],
     "__framelix_form_2fa_enter_backup__": [
@@ -168,7 +168,7 @@
         "9d7ae"
     ],
     "__framelix_form_2fa_usebackup__": [
-        "Oder klicke hier um einen Backup Code zu nutzen",
+        "Oder klicke hier um einen deiner Backup Codes zu nutzen",
         "d79d3"
     ],
     "__framelix_form_date_open_datepicker__": [
