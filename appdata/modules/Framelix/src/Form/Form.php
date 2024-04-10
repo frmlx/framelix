@@ -135,6 +135,12 @@ class Form implements JsonSerializable
     public bool $readOnly = false;
 
     /**
+     * Additional html after the form to append
+     * @var string|null
+     */
+    public ?string $appendHtml = null;
+
+    /**
      * Check if the form with the given id is submitted
      * @param string $formId
      * @return bool

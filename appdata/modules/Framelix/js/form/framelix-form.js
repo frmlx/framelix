@@ -141,6 +141,12 @@ class FramelixForm {
   readOnly = false
 
   /**
+   * Additional html after the form to append
+   * @type {string|null}
+   */
+  appendHtml = null
+
+  /**
    * A function with custom validation rules
    * If set must return true on success, string on error
    * @type {function|null}
@@ -711,6 +717,9 @@ class FramelixForm {
     }
     this.submitStatusContainer = $(`<div class="framelix-form-submit-status"></div>`)
     bottomRow.append(this.submitStatusContainer)
+    if (typeof this.appendHtml === 'string') {
+      this.container.append(this.appendHtml)
+    }
     this.container.css('display', '')
     if (this.validationMessage !== null) {
       this.showValidationMessage(this.validationMessage)
