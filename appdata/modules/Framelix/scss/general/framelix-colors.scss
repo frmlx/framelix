@@ -92,6 +92,9 @@
 
   --color-input-background: white;
   --input-border: 1px solid #ddd;
+  --input-border-focus: inherit;
+  --input-box-shadow: inherit;
+  --input-box-shadow-focus: none;
   --color-input-text: var(--color-page-text);
   --color-input-checkbox-background: var(--color-input-background);
   --color-input-checkbox-checked: var(--color-button-primary-bg);
