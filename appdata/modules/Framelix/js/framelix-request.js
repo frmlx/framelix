@@ -311,7 +311,7 @@ class FramelixRequest {
       return 2
     }
     if (this.submitRequest.status >= 400) {
-      FramelixModal.show({ bodyContent: await this.getText() })
+      FramelixModal.show({ bodyContent: await this.getResponseData(false) })
       return 3
     }
     return 0
