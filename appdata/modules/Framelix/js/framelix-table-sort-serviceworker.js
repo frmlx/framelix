@@ -1,8 +1,9 @@
 // webworker for table sorting for maximal performance boost during sort
 
 self.onmessage = function (ev) {
-  const data = ev.data
-  data.rows.sort(function (a, b) {
+  const data = ev.data;
+  const rows = (data.rows || [])
+  rows.sort(function (a, b) {
     for (let i = 0; i < data.sortSettings.length; i++) {
       let sortDirection = data.sortSettings[i].substr(0, 1) === '+' ? 1 : -1
       let sortValueA = a.sortValues[i]
@@ -16,8 +17,8 @@ self.onmessage = function (ev) {
     return 0
   })
   const indexes = []
-  for (let i = 0; i < data.rows.length; i++) {
-    indexes.push(data.rows[i].rowIndex)
+  for (let i = 0; i < rows.length; i++) {
+    indexes.push(rows[i].rowIndex)
   }
   self.postMessage(indexes)
 }
