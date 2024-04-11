@@ -27,7 +27,7 @@ use function substr;
 
 class Fido2 extends View
 {
-    protected string|bool $accessRole = true;
+    protected string|bool $accessRole = "admin,myprofile";
     private UserWebAuthn $storable;
     private \Framelix\Framelix\StorableMeta\UserWebAuthn $meta;
 

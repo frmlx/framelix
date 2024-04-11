@@ -119,7 +119,7 @@ abstract class View extends \Framelix\Framelix\View
      */
     protected $contentCallable = null;
 
-    protected string|bool $accessRole = true;
+    protected string|bool $accessRole = "admin";
 
     public static function onJsCall(JsCall $jsCall): void
     {

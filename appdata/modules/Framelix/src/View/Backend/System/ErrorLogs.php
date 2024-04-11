@@ -17,7 +17,7 @@ use const SCANDIR_SORT_DESCENDING;
 
 class ErrorLogs extends View
 {
-    protected string|bool $accessRole = "system";
+    protected string|bool $accessRole = "admin,system";
 
     public function onRequest(): void
     {

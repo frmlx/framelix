@@ -910,9 +910,11 @@ class FramelixForm {
       FramelixToast.showNext()
     }
     if (typeof responseData === 'string') {
+      // normal string response data
       FramelixRequest.renderResponse(responseData, requestOptions, this.container[0])
-    } else if (typeof responseData.buffer === 'string' && responseData.buffer.length) {
-      FramelixRequest.renderResponse(responseData.buffer, requestOptions, this.container[0])
+    } else if (typeof responseData.content === 'string' && responseData.content.length) {
+      // this response data is from async content handled by views
+      FramelixRequest.renderResponse(responseData.content, requestOptions, this.container[0])
     }
     return true
   }

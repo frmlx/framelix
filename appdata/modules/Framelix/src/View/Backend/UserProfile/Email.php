@@ -17,7 +17,7 @@ use function strtolower;
 
 class Email extends View
 {
-    protected string|bool $accessRole = true;
+    protected string|bool $accessRole = "admin,myprofile";
     private User $storable;
 
     public function onRequest(): void

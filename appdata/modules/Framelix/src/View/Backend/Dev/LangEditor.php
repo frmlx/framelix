@@ -39,7 +39,6 @@ use const SORT_ASC;
 
 class LangEditor extends View
 {
-    protected string|bool $accessRole = true;
     protected bool $devModeOnly = true;
 
     public function onRequest(): void

@@ -35,6 +35,14 @@ class Captcha extends Field
     public string $trackingAction = 'framelix';
 
     /**
+     * If true, the captcha will only be rendered after used has changed any value in the form that this
+     * captcha is in
+     * If this captcha is not part of a form, it will be rendered right away (same as false)
+     * @var bool
+     */
+    public bool $renderAfterUserInput = true;
+
+    /**
      * On js call
      * @param JsCall $jsCall
      */

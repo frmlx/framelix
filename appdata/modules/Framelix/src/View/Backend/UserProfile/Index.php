@@ -7,7 +7,7 @@ use Framelix\Framelix\View\Backend\View;
 
 class Index extends View
 {
-    protected string|bool $accessRole = true;
+    protected string|bool $accessRole = "admin,myprofile";
 
     public function onRequest(): void
     {

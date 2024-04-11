@@ -13,7 +13,7 @@ use Framelix\Framelix\View\Backend\View;
 
 class SystemEventLogs extends View
 {
-    protected string|bool $accessRole = "system";
+    protected string|bool $accessRole = "admin,system";
 
     public function onRequest(): void
     {

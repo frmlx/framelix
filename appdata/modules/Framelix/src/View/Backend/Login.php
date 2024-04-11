@@ -5,7 +5,6 @@ namespace Framelix\Framelix\View\Backend;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Form\Field\Captcha;
 use Framelix\Framelix\Form\Field\Email;
-use Framelix\Framelix\Form\Field\Html;
 use Framelix\Framelix\Form\Field\Password;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Field\TwoFactorCode;
@@ -13,7 +12,6 @@ use Framelix\Framelix\Form\Form;
 use Framelix\Framelix\Html\Toast;
 use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
-use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\Network\Request;
@@ -72,8 +70,7 @@ class Login extends View
                 self::redirectToDefaultUrl();
             case 'login':
                 $form = self::getForm(
-                    Request::getGet('showCaptchaType'),
-                    !!Request::getGet('includeForgotPasswordLink')
+                    Request::getGet('showCaptchaType')
                 );
                 $form->validate();
                 $email = (string)Request::getPost('email');
@@ -189,12 +186,10 @@ class Login extends View
     /**
      * Get login form
      * @param string|null $showCaptchaType If set, this captcha type will be required to be filled out
-     * @param bool $includeForgotPasswordLink Show a password forgot url
      * @return Form
      */
     public static function getForm(
-        #[ExpectedValues(valuesFromClass: Captcha::class)] ?string $showCaptchaType,
-        bool $includeForgotPasswordLink
+        #[ExpectedValues(valuesFromClass: Captcha::class)] ?string $showCaptchaType
     ): Form {
         $form = new Form();
         $form->id = "login";
@@ -203,7 +198,7 @@ class Login extends View
             JsCall::getSignedUrl(
                 [self::class, "onJsCall"],
                 "login",
-                ['showCaptchaType' => $showCaptchaType, 'includeForgotPasswordLink' => $includeForgotPasswordLink]
+                ['showCaptchaType' => $showCaptchaType]
             ),
             JsRequestOptions::RENDER_TARGET_CURRENT_CONTEXT
         );
@@ -237,15 +232,6 @@ class Login extends View
         $field->name = "stay";
         $field->label = "__framelix_stay_logged_in__";
         $form->addField($field);
-
-        if ($includeForgotPasswordLink && \Framelix\Framelix\Utils\Email::isAvailable()) {
-            $field = new Html();
-            $field->name = "forgot";
-            $field->defaultValue = '<a href="' . \Framelix\Framelix\View::getUrl(
-                    ForgotPassword::class
-                ) . '">' . Lang::get('__framelix_forgotpassword__') . '</a>';
-            $form->addField($field);
-        }
 
         $getArgsUrl = JsCall::getSignedUrl([self::class, "onJsCall"], 'webauthn-getargs');
         $loginUrl = JsCall::getSignedUrl([self::class, "onJsCall"], 'webauthn-login');
@@ -322,7 +308,7 @@ class Login extends View
     public function showContent(): void
     {
         echo '<div data-request-response-receiver>';
-        $form = self::getForm(Config::$backendAuthCaptcha, true);
+        $form = self::getForm(Config::$backendAuthCaptcha);
         $form->show();
         echo '</div>';
     }

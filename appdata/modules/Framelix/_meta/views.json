@@ -1,8 +1,8 @@
 {
-    "directoryListHash": "3|2511948973",
+    "directoryListHash": "3|1779007789",
     "views": {
         "Framelix\\Framelix\\View\\Backend\\Dev\\LangEditor": {
-            "accessRole": true,
+            "accessRole": "admin",
             "customUrl": null,
             "devModeOnly": true,
             "multilanguage": true,
@@ -12,7 +12,7 @@
             "url": "\/backend\/dev\/langeditor"
         },
         "Framelix\\Framelix\\View\\Backend\\Dev\\Update": {
-            "accessRole": "dev",
+            "accessRole": "admin",
             "customUrl": null,
             "devModeOnly": true,
             "multilanguage": true,
@@ -22,7 +22,7 @@
             "url": "\/backend\/dev\/update"
         },
         "Framelix\\Framelix\\View\\Backend\\Dev\\UpdateDatabase": {
-            "accessRole": "dev",
+            "accessRole": "admin",
             "customUrl": null,
             "devModeOnly": true,
             "multilanguage": true,
@@ -30,16 +30,6 @@
             "hiddenView": false,
             "pageTitle": "{classLangKey}",
             "url": "\/backend\/dev\/updatedatabase"
-        },
-        "Framelix\\Framelix\\View\\Backend\\ForgotPassword": {
-            "accessRole": "*",
-            "customUrl": null,
-            "devModeOnly": false,
-            "multilanguage": true,
-            "urlPriority": 0,
-            "hiddenView": false,
-            "pageTitle": "{classLangKey}",
-            "url": "\/backend\/forgotpassword"
         },
         "Framelix\\Framelix\\View\\Backend\\Login": {
             "accessRole": "*",
@@ -72,7 +62,7 @@
             "url": "\/backend\/setup"
         },
         "Framelix\\Framelix\\View\\Backend\\System\\ErrorLogs": {
-            "accessRole": "system",
+            "accessRole": "admin,system",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -82,7 +72,7 @@
             "url": "\/backend\/system\/errorlogs"
         },
         "Framelix\\Framelix\\View\\Backend\\System\\SystemEventLogs": {
-            "accessRole": "system",
+            "accessRole": "admin,system",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -92,7 +82,7 @@
             "url": "\/backend\/system\/systemeventlogs"
         },
         "Framelix\\Framelix\\View\\Backend\\SystemValue": {
-            "accessRole": true,
+            "accessRole": "admin",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -142,7 +132,7 @@
             "url": "\/backend\/user\/password"
         },
         "Framelix\\Framelix\\View\\Backend\\User\\Roles": {
-            "accessRole": "admin",
+            "accessRole": "admin,usermanagement",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -162,7 +152,7 @@
             "url": "\/backend\/user\/search"
         },
         "Framelix\\Framelix\\View\\Backend\\UserProfile\\Email": {
-            "accessRole": true,
+            "accessRole": "admin,myprofile",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -172,7 +162,7 @@
             "url": "\/backend\/userprofile\/email"
         },
         "Framelix\\Framelix\\View\\Backend\\UserProfile\\EmailVerification": {
-            "accessRole": true,
+            "accessRole": "admin,myprofile",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -182,7 +172,7 @@
             "url": "\/backend\/userprofile\/emailverification"
         },
         "Framelix\\Framelix\\View\\Backend\\UserProfile\\Fido2": {
-            "accessRole": true,
+            "accessRole": "admin,myprofile",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -192,7 +182,7 @@
             "url": "\/backend\/userprofile\/fido2"
         },
         "Framelix\\Framelix\\View\\Backend\\UserProfile\\Index": {
-            "accessRole": true,
+            "accessRole": "admin,myprofile",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -202,7 +192,7 @@
             "url": "\/backend\/userprofile"
         },
         "Framelix\\Framelix\\View\\Backend\\UserProfile\\Password": {
-            "accessRole": true,
+            "accessRole": "admin,myprofile",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -212,7 +202,7 @@
             "url": "\/backend\/userprofile\/password"
         },
         "Framelix\\Framelix\\View\\Backend\\UserProfile\\TwoFactor": {
-            "accessRole": true,
+            "accessRole": "admin,myprofile",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,
@@ -232,7 +222,7 @@
             "url": "\/jscv"
         },
         "Framelix\\Framelix\\View\\MPdfBase": {
-            "accessRole": true,
+            "accessRole": "admin",
             "customUrl": null,
             "devModeOnly": false,
             "multilanguage": true,

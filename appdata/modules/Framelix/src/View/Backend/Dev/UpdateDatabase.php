@@ -19,7 +19,6 @@ use function sleep;
 
 class UpdateDatabase extends View
 {
-    protected string|bool $accessRole = "dev";
     protected bool $devModeOnly = true;
 
     public function onRequest(): void

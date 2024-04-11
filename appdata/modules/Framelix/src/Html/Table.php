@@ -335,7 +335,7 @@ class Table implements JsonSerializable
             $cell = null;
             if($deleteUrl){
                 $requestOptions = new JsRequestOptions($deleteUrl);
-                $cell = TableCell::create('<framelix-button icon="732" bgcolor="hsla(360,65%,var(--color-default-contrast-bg),0.5)" textcolor="white" confirm-message="__framelix_delete_sure__" '.$requestOptions->toDefaultAttrStr().'></framelix-button>');
+                $cell = TableCell::create('<framelix-button icon="732" bgcolor="hsl(360,65%,var(--color-default-lightness-bg))" textcolor="invert" confirm-message="__framelix_delete_sure__" '.$requestOptions->toDefaultAttrStr().'></framelix-button>');
             }
             if (!in_array("_deletable", $this->columnOrder)) {
                 array_unshift($this->columnOrder, "_deletable");

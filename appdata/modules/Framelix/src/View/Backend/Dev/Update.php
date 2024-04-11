@@ -7,7 +7,6 @@ use Framelix\Framelix\View\Backend\View;
 
 class Update extends View
 {
-    protected string|bool $accessRole = "dev";
     protected bool $devModeOnly = true;
 
     public function onRequest(): void

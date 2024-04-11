@@ -151,10 +151,6 @@
         "Der angeforderten Seite fehlen Parameter",
         "19d82"
     ],
-    "__framelix_forgotpassword__": [
-        "Passwort vergessen",
-        "98f13"
-    ],
     "__framelix_form_2fa_backup_code_used__": [
         "Du hast einen One Time Backup Code f\u00fcr deine 2-Faktor Authentifizierung verwendet. Dieser Code kann nun nicht mehr verwendet werden.",
         "d1917"
@@ -866,30 +862,6 @@
     "__framelix_view_backend_dev_updatedatabase_updatenow__": [
         "Datenbank jetzt aktualisieren",
         "65805"
-    ],
-    "__framelix_view_backend_forgotpassword__": [
-        "Passwort vergessen",
-        "98f13"
-    ],
-    "__framelix_view_backend_forgotpassword_mailbody__": [
-        "Du hast einen Passwort Reset angefordert, f\u00fcr deinen Account auf {0}.<br\/>Bitte \u00f6ffne den Link um dein Passwort zur\u00fcck zu setzen.",
-        "461ea"
-    ],
-    "__framelix_view_backend_forgotpassword_resetdone__": [
-        "Du hast dein neues Passwort gesetzt. Du kannst dich jetzt damit einloggen.",
-        "44075"
-    ],
-    "__framelix_view_backend_forgotpassword_sendmail__": [
-        "Sende Best\u00e4tigungslink",
-        "0e1e0"
-    ],
-    "__framelix_view_backend_forgotpassword_sentmail__": [
-        "Falls die E-Mail {0} im System existiert, dann haben wir dir einen Best\u00e4tigungslink gesendet. Du musst die Mail innerhalb der n\u00e4chsten Stunde \u00f6ffnen.",
-        "d9ef2"
-    ],
-    "__framelix_view_backend_forgotpassword_token_invalid__": [
-        "Der Token ist nicht oder nicht mehr g\u00fcltig. Bitte probiere es erneut.",
-        "ccf87"
     ],
     "__framelix_view_backend_login2fa__": [
         "Gib deinen 2-Faktor Code ein",

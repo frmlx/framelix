@@ -15,7 +15,7 @@ use Framelix\Framelix\View\Backend\View;
 
 class Roles extends View
 {
-    protected string|bool $accessRole = "admin";
+    protected string|bool $accessRole = "admin,usermanagement";
     private User $storable;
 
     public function onRequest(): void

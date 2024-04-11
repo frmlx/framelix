@@ -93,7 +93,7 @@ class Response
         JsonUtils::output([
             'toastMessages' => Toast::getQueueMessages(true),
             'errorMessages' => $errorMessages,
-            'buffer' => Buffer::getAll(),
+            'content' => Buffer::getAll(),
         ]);
         throw new StopExecution();
     }

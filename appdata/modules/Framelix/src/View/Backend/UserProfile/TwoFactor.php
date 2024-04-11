@@ -24,7 +24,7 @@ use const FRAMELIX_MODULE;
 class TwoFactor extends View
 {
 
-    protected string|bool $accessRole = true;
+    protected string|bool $accessRole = "admin,myprofile";
 
     private User $storable;
 

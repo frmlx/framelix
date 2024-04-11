@@ -116,9 +116,6 @@
     "__framelix_error_invalid_url__": [
         "The requested page is missing some required parameters"
     ],
-    "__framelix_forgotpassword__": [
-        "Forgot password"
-    ],
     "__framelix_form_2fa_backup_code_used__": [
         "You have used a one time backup code for your 2-factor authentication. This code cannot be used anymore."
     ],
@@ -610,6 +607,9 @@
     "__framelix_user_role_system__": [
         "System"
     ],
+    "__framelix_user_role_backend__": [
+        "My Profile"
+    ],
     "__framelix_view_backend_dev_langeditor__": [
         "Translation editor"
     ],
@@ -646,24 +646,6 @@
     ],
     "__framelix_view_backend_dev_updatedatabase_updatenow__": [
         "Update database now"
-    ],
-    "__framelix_view_backend_forgotpassword__": [
-        "Forgot password"
-    ],
-    "__framelix_view_backend_forgotpassword_mailbody__": [
-        "You have requested a password reset of your account at {0}.<br\/>Please open the following link to reset your password"
-    ],
-    "__framelix_view_backend_forgotpassword_resetdone__": [
-        "You have set your new password. You can now login with this new password."
-    ],
-    "__framelix_view_backend_forgotpassword_sendmail__": [
-        "Send verification link"
-    ],
-    "__framelix_view_backend_forgotpassword_sentmail__": [
-        "If the email '{0}' exist, we have sent you a verification email. This mail must be opened within the next hour."
-    ],
-    "__framelix_view_backend_forgotpassword_token_invalid__": [
-        "The verification token is invalid. Please try again."
     ],
     "__framelix_view_backend_login2fa__": [
         "Please enter your 2-Factor code"

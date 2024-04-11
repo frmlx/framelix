@@ -71,7 +71,7 @@ class FramelixRequest {
 
   /**
    * Create a jscall request
-   * @param {string} signedUrl The signed call url generated from backend JsCall::getUrl
+   * @param {string} signedUrl The signed call url generated from backend JsCall::getSignedUrl
    * @param {Object=} parameters Parameters to pass by
    * @param {boolean|Cash=} showProgressBar Show progress bar at top of page or in given container
    * @return {FramelixRequest}
