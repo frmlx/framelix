@@ -329,7 +329,7 @@ class Config
         self::addAvailableUserRole('dev', '__framelix_user_role_dev__');
         self::addAvailableUserRole('system', '__framelix_user_role_system__');
         self::addAvailableUserRole('usermanagement', '__framelix_edituser_sidebar_title__');
-        self::addAvailableUserRole('myprofile', '__framelix_user_role_backend__');
+        self::addAvailableUserRole('myprofile', '__framelix_user_role_myprofile__');
 
         $bundle = self::createCompilerFileBundle("Framelix", "js", "general-vendor-native");
         $bundle->matchFilter = $matchFilterDefault;

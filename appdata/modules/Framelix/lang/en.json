@@ -1,7 +1,4 @@
 {
-    "__framelix_url_expired__": [
-        "The URL you are about to load has expired. Please refresh the page."
-    ],
     "__framelix_alert_hidden__": [
         "Information is now hidden."
     ],
@@ -589,6 +586,9 @@
     "__framelix_unknown_user__": [
         "System\/Guest"
     ],
+    "__framelix_url_expired__": [
+        "The URL you are about to load has expired. Please refresh the page."
+    ],
     "__framelix_user_edituser_validation_adminrequired__": [
         "There is always at least one, non locked, administrator account that must exist."
     ],
@@ -604,11 +604,11 @@
     "__framelix_user_role_dev__": [
         "Developer"
     ],
+    "__framelix_user_role_myprofile__": [
+        "My Profile"
+    ],
     "__framelix_user_role_system__": [
         "System"
-    ],
-    "__framelix_user_role_backend__": [
-        "My Profile"
     ],
     "__framelix_view_backend_dev_langeditor__": [
         "Translation editor"
