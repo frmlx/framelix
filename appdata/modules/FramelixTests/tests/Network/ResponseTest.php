@@ -52,7 +52,7 @@ final class ResponseTest extends TestCase
         }, [], StopExecution::class);
         Buffer::$startBufferIndex = $oldIndex;
         $this->assertSame(200, http_response_code());
-        $this->assertSame('{"toastMessages":[],"errorMessages":{"test":"Error"},"buffer":""}', Buffer::get());
+        $this->assertSame('{"toastMessages":[],"errorMessages":{"test":"Error"},"content":""}', Buffer::get());
         FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("storablefile", true));
     }
 
