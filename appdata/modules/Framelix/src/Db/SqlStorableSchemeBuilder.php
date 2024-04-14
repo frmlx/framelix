@@ -388,7 +388,7 @@ class SqlStorableSchemeBuilder
                     if ($existingSchemeData['id'] ?? null) {
                         $query = '
                             UPDATE ' . StorableSchema::SCHEMA_TABLE . ' 
-                            SET storableClassParents =' . $this->db->escapeValue($storableClassParents) . '
+                            SET storableClassParents = ' .$storableClassParents . '
                             WHERE id = ' . (int)$existingSchemeData['id'] . '
                         ';
                     } else {
