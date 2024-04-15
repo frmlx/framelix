@@ -23,7 +23,7 @@ class UpdateDatabase extends View
 
     public function onRequest(): void
     {
-        if (Request::getPost('safeQueriesExecute') || Request::getPost('unsafeQueriesExecute')) {
+        if (Request::getPost('framelix-form-update-database')) {
             if (Request::getPost('safeQueriesExecute')) {
                 // wait 3 seconds to prevent opcache in default configs
                 sleep(3);
