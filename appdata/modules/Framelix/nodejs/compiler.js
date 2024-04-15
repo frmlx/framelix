@@ -6,7 +6,7 @@ const sass = require('sass')
 const cmdParams = JSON.parse((Buffer.from(process.argv[2], 'base64').toString('utf8')))
 
 let fileDataCombined = ''
-if (cmdParams.type === 'js' && cmdParams.options.jsStrict && cmdParams.options.compile) {
+if (cmdParams.type === 'js' && cmdParams.options.jsStrict && cmdParams.options.compile && cmdParams.files.length) {
   fileDataCombined += '\'use strict\';\n\n'
 }
 for (let i = 0; i < cmdParams.files.length; i++) {
@@ -24,7 +24,7 @@ for (let i = 0; i < cmdParams.files.length; i++) {
   fileDataCombined += fileData
 }
 
-if (cmdParams.options.compile) {
+if (cmdParams.options.compile && cmdParams.files.length) {
   if (cmdParams.type === 'js') {
     fileDataCombined = babelCore.transform(fileDataCombined, {
       'comments': false,
