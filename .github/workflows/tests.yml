@@ -1,5 +1,10 @@
 name: Framelix Unit Tests
 on:
+  workflow_run:
+    workflows: ['Build and Deploy Docker Image']
+    types: [completed]
+    branches:
+        - master
   push:
     branches:
       - master
