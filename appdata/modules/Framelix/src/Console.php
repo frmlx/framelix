@@ -168,16 +168,17 @@ class Console
     /**
      * Call console script via php command line interpreter in a separate process
      * @param string $methodName
+     * @param string $module Specific module, use "all" to run for all installed modules
      * @param array|null $parameters
      * @return Shell
      */
-    public static function callMethodInSeparateProcess(string $methodName, ?array $parameters = null): Shell
+    public static function callMethodInSeparateProcess(string $methodName, string $module = "all", ?array $parameters = null): Shell
     {
         if (!is_array($parameters)) {
             $parameters = [];
         }
         array_unshift($parameters, $methodName);
-        array_unshift($parameters, "all");
+        array_unshift($parameters, $module);
         array_unshift($parameters, self::CONSOLE_SCRIPT);
         $shell = Shell::prepare("{*}", $parameters);
         $shell->execute();

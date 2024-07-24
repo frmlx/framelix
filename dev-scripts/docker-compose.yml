@@ -1,5 +1,3 @@
-version: "3.4"
-
 volumes:
     mariadb:
       name: ${COMPOSE_PROJECT_NAME}_mariadb
@@ -8,7 +6,7 @@ volumes:
 
 services:
   mariadb:
-    image: mariadb:10.11
+    image: mariadb:lts
     restart: on-failure
     volumes:
       - mariadb:/var/lib/mysql
@@ -16,8 +14,9 @@ services:
       - MARIADB_ROOT_PASSWORD=app
       - MARIADB_USER=app
       - MARIADB_PASSWORD=app
+      - MARIADB_AUTO_UPGRADE=1
     healthcheck:
-      test: mysql -u root '-papp' -e '\q'
+      test: mariadb -u root '-papp' -e '\q'
       interval: 5s
       timeout: 5s
       retries: 5

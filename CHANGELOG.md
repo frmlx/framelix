@@ -1,3 +1,8 @@
+# [4.0.0-alpha.20 - 2024-07-24]
+
+* updated dependencies
+* https://github.com/frmlx/framelix/compare/4.0.0-alpha.19...4.0.0-alpha.20
+
 # [4.0.0-alpha.19 - 2024-04-13]
 
 * a lot of updates, features and refactoring

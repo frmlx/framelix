@@ -155,16 +155,16 @@ class Setup extends View
         $form->addSubmitButton('setup', '__framelix_setup_finish_setup__');
         $form->show();
         ?>
-      <script>
-        (function () {
-          // check if scripts have been loaded successfully, if not, we are on the wrong path
-          if (typeof FramelixDeviceDetection === 'undefined') {
-            const spl = window.location.pathname.split('/')
-            spl.splice(1, 1)
-            window.location.pathname = spl.join('/')
-          }
-        })()
-      </script>
+        <script>
+          (function () {
+            // check if scripts have been loaded successfully, if not, we are on the wrong path
+            if (typeof FramelixDeviceDetection === 'undefined') {
+              const spl = window.location.pathname.split('/')
+              spl.splice(1, 1)
+              window.location.pathname = spl.join('/')
+            }
+          })()
+        </script>
         <?php
     }
 

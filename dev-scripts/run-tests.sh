@@ -43,7 +43,7 @@ echo "Done."
 echo ""
 
 cecho b "# Drop databases"
-docker $DOCKER_EXECPARAMS_MARIADB "mysql -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests; DROP DATABASE IF EXISTS FramelixDocs; DROP DATABASE IF EXISTS FramelixStarter;'"
+docker $DOCKER_EXECPARAMS_MARIADB "mariadb -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests; DROP DATABASE IF EXISTS FramelixDocs; DROP DATABASE IF EXISTS FramelixStarter;'"
 echo ""
 echo "Done."
 echo ""

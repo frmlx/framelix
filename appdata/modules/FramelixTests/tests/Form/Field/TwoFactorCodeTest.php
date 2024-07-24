@@ -5,13 +5,14 @@ namespace Form\Field;
 use Framelix\Framelix\Form\Field\TwoFactorCode;
 use Framelix\Framelix\Network\Cookie;
 use Framelix\FramelixTests\TestCase;
+use RobThree\Auth\Providers\Qr\QRServerProvider;
 use RobThree\Auth\TwoFactorAuth;
 
 final class TwoFactorCodeTest extends TestCase
 {
     public function tests(): void
     {
-        $tfa = new TwoFactorAuth();
+        $tfa = new TwoFactorAuth(new QRServerProvider());
         $secret = $tfa->createSecret();
 
         $field = new TwoFactorCode();

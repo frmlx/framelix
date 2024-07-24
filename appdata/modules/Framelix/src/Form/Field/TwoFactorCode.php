@@ -5,6 +5,7 @@ namespace Framelix\Framelix\Form\Field;
 use Framelix\Framelix\Form\Field;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Cookie;
+use RobThree\Auth\Providers\Qr\QRServerProvider;
 use RobThree\Auth\TwoFactorAuth;
 
 use function in_array;
@@ -44,7 +45,7 @@ class TwoFactorCode extends Field
         $valid = false;
         $secret = Cookie::get(self::COOKIE_NAME_SECRET, encrypted: true);
         if ($secret && strlen($value) === 6) {
-            $tfa = new TwoFactorAuth();
+            $tfa = new TwoFactorAuth(new QRServerProvider());
             $result = $tfa->verifyCode($secret, $value);
             if ($result) {
                 $valid = true;

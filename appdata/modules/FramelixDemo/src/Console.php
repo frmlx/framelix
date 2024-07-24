@@ -82,7 +82,19 @@ class Console extends \Framelix\Framelix\Console
 
     public static function appWarmup(): int
     {
-        self::cleanupDemoData();
+        self::callMethodInSeparateProcess('updateDatabaseSafe');
+
+        $user = User::getByEmail('test@test.local', true);
+        if (!$user) {
+            // create the test user if not yet exist
+            $user = new  User();
+            $user->email = "test@test.local";
+            $pw = RandomGenerator::getRandomString(5, 10);
+            $user->setPassword($pw);
+            $user->flagLocked = false;
+            $user->store();
+            $user->addRole('admin');
+        }
         return 0;
     }
 
