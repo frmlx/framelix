@@ -3,9 +3,8 @@
         "robthree/twofactorauth": "^3.0",
         "lbuchs/webauthn": "^2.2",
         "mpdf/qrcode": "^1.2",
-        "phpoffice/phpspreadsheet": "^2.1",
+        "phpoffice/phpspreadsheet": "^2.2",
         "mpdf/mpdf": "^8.2",
-        "phpmailer/phpmailer": "^6.9",
-        "brainfoolong/cryptojs-aes-php": "^2.3"
+        "phpmailer/phpmailer": "^6.9"
     }
 }
