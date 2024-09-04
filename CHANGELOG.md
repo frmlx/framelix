@@ -1,3 +1,10 @@
+# [4.0.0-alpha.21 - 2024-09-04]
+
+* added ImageUtils::compress
+* replaced brainfoolong/cryptojs-aes-php with brainfoolong/js-aes-php
+* updated dependencies
+* https://github.com/frmlx/framelix/compare/4.0.0-alpha.20...4.0.0-alpha.21
+
 # [4.0.0-alpha.20 - 2024-07-24]
 
 * updated dependencies
