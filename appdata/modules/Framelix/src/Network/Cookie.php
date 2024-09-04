@@ -5,7 +5,7 @@ namespace Framelix\Framelix\Network;
 use Framelix\Framelix\Framelix;
 use Framelix\Framelix\Utils\CryptoUtils;
 use Framelix\Framelix\Utils\JsonUtils;
-use Nullix\CryptoJsAes\CryptoJsAes;
+use Nullix\JsAesPhp\JsAesPhp;
 use Throwable;
 
 use function base64_decode;
@@ -38,7 +38,7 @@ class Cookie
             }
         }
         if ($encrypted) {
-            $value = CryptoJsAes::decrypt(base64_decode($value), CryptoUtils::hash($name));
+            $value = JsAesPhp::decrypt($value, CryptoUtils::hash($name));
         } else {
             // simply ignoring any json parse errors as this value can be modified by the user
             try {
@@ -74,7 +74,7 @@ class Cookie
             unset($_COOKIE[$name]);
         } else {
             if ($encrypted) {
-                $value = base64_encode(CryptoJsAes::encrypt($value, CryptoUtils::hash($name)));
+                $value = JsAesPhp::encrypt($value, CryptoUtils::hash($name));
             } else {
                 $value = base64_encode(JsonUtils::encode($value));
             }

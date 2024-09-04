@@ -27,10 +27,10 @@ final class CookieTest extends TestCase
         // test encryption
         Cookie::set('fooencrypted', '123456', encrypted: true);
         $this->assertSame('123456', Cookie::get('fooencrypted', encrypted: true));
-        // missing encrypted flag will return the raw array from encryption
-        $this->assertIsArray(Cookie::get('fooencrypted'));
+        // missing encrypted flag will return null because value cannot be json decoded
+        $this->assertNull(Cookie::get('fooencrypted'));
         $_COOKIE['fooencrypted__s'] .= "11";
-        // missing encrypted flag will return the raw array from encryption
+        // missing encrypted flag will return null because value cannot be json decoded
         $this->assertNull(Cookie::get('fooencrypted'));
     }
 }

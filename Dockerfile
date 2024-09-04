@@ -70,4 +70,5 @@ RUN chmod +x "$FRAMELIX_SYSTEMDIR/entrypoint.sh"
 # health check
 HEALTHCHECK --interval=1m --timeout=3s CMD framelix_console all healthCheck -q || exit 1
 
+SHELL ["/bin/bash", "-c"]
 ENTRYPOINT $FRAMELIX_SYSTEMDIR/entrypoint.sh
