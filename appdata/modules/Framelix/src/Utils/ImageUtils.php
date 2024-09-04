@@ -4,11 +4,13 @@ namespace Framelix\Framelix\Utils;
 
 use Framelix\Framelix\Exception\FatalError;
 
-use function end;
 use function explode;
+use function file_exists;
+use function file_put_contents;
 use function implode;
 use function is_numeric;
 use function strtolower;
+use function unlink;
 
 class ImageUtils
 {
@@ -40,26 +42,49 @@ class ImageUtils
      * @param string $dstPath destination path of image
      * @param int $maxWidth Max width of image in pixels
      * @param int $maxHeight Max height of image in pixels
+     * @param string $fit Sharp parameter, see https://sharp.pixelplumbing.com/api-resize#resize
+     * @param string $position Sharp parameter, see https://sharp.pixelplumbing.com/api-resize#resize
      * @return Shell Return the shell command that have been executed
      */
-    public static function resize(string $srcPath, string $dstPath, int $maxWidth, int $maxHeight): Shell
+    public static function resize(string $srcPath, string $dstPath, int $maxWidth, int $maxHeight, string $fit = "inside", string $position = "centre"): Shell
     {
-        $pathParts = explode(".", mb_strtolower($srcPath));
-        $extension = end($pathParts);
-
-        $shell = Shell::prepare(
-            'convert {*}',
-            [
-                $srcPath . ($extension == "gif" ? '[0]' : ''),
-                '-resize',
-                "{$maxWidth}x{$maxHeight}>",
-                '-quality',
-                '85',
-                $dstPath,
-            ]
+        if (file_exists($dstPath)) {
+            unlink($dstPath);
+        }
+        return self::executeNodeJsSharpCmd(
+        /**@lang JavaScript */ '
+          sharp(' . JsonUtils::encode($srcPath) . ').resize(' . JsonUtils::encode(
+                ["width" => $maxWidth, "height" => $maxHeight, "fit" => $fit, "position" => $position]
+            ) . ').toFile(' . JsonUtils::encode($dstPath) . ')
+        '
         );
-        $shell->execute();
-        return $shell;
+    }
+
+    /**
+     * Compress an image, can also convert on the file to new filetype
+     * @param string $srcPath source path of image
+     * @param string $dstPath destination path of image Only png, jpeg, jpg, gif and webp is supported
+     * @return Shell Return the shell command that have been executed
+     */
+    public static function compress(string $srcPath, string $dstPath): Shell
+    {
+        $extension = strtolower(pathinfo($dstPath, PATHINFO_EXTENSION));
+        $code = /**@lang JavaScript */
+            'const img = sharp(' . JsonUtils::encode($srcPath) . ');';
+        if ($extension === "png") {
+            $code .= "img.png({quality:80});";
+        }
+        if ($extension === "jpg" || $extension === "jpeg") {
+            $code .= "img.jpeg({quality:80, mozjpeg:true});";
+        }
+        if ($extension === "gif") {
+            $code .= "img.gif();";
+        }
+        if ($extension === "webp") {
+            $code .= "img.webp({quality:80});";
+        }
+        $code .= "img.toFile(" . JsonUtils::encode($dstPath) . ");";
+        return self::executeNodeJsSharpCmd($code);
     }
 
     /**
@@ -119,6 +144,19 @@ class ImageUtils
         $expectedSizePixels = $imageData['width'] * $imageData['height'];
         $diff = 1 / $expectedSizePixels * $diffPixels;
         return $diff <= $threshold;
+    }
+
+    public static function executeNodeJsSharpCmd(string $jsCode): Shell
+    {
+        $tmpFolder = FileUtils::getTmpFolder();
+        $tmpFile = $tmpFolder . "/sharp.js";
+
+        $jsCode = 'const sharp = require("' . (__DIR__ . "/../../node_modules/sharp/lib/index.js") . '");' . "\n" . $jsCode;
+        file_put_contents($tmpFile, $jsCode);
+
+        $shell = Shell::prepare("node {*}", [$tmpFile]);
+        $shell->execute();
+        return $shell;
     }
 
 }

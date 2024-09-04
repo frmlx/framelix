@@ -5,12 +5,14 @@ namespace Utils;
 use Framelix\Framelix\Utils\ImageUtils;
 use Framelix\FramelixTests\TestCase;
 
+use function filesize;
 use function unlink;
 
 use const FRAMELIX_TMP_FOLDER;
 
 final class ImageUtilsTest extends TestCase
 {
+
     public function testCompare(): void
     {
         $this->assertTrue(
@@ -47,11 +49,10 @@ final class ImageUtilsTest extends TestCase
     {
         $testImage = __DIR__ . "/../../test-files/imageutils/test-image.jpg";
         $testResizedImage = FRAMELIX_TMP_FOLDER . "/test-image-resized.jpg";
-        ImageUtils::resize($testImage, $testResizedImage, 100, 100);
+        $shell = ImageUtils::resize($testImage, $testResizedImage, 100, 100);
         $this->assertEquals(['type' => 'jpeg', 'width' => 100, 'height' => 67],
             ImageUtils::getImageData($testResizedImage));
         unlink($testResizedImage);
-
 
         $testImage = __DIR__ . "/../../test-files/imageutils/test-image.png";
         $testResizedImage = FRAMELIX_TMP_FOLDER . "/test-image-resized.png";
@@ -59,6 +60,33 @@ final class ImageUtilsTest extends TestCase
         $this->assertEquals(['type' => 'png', 'width' => 100, 'height' => 100],
             ImageUtils::getImageData($testResizedImage));
         unlink($testResizedImage);
+    }
+
+    public function testCompress(): void
+    {
+        $testImage = __DIR__ . "/../../test-files/imageutils/test-image-uncompressed.jpg";
+        $testImageCompressed = FRAMELIX_TMP_FOLDER . "/test-image-compressed.jpg";
+        ImageUtils::compress($testImage, $testImageCompressed);
+        $this->assertTrue(filesize($testImageCompressed) < filesize($testImage));
+        unlink($testImageCompressed);
+
+        $testImage = __DIR__ . "/../../test-files/imageutils/test-image-uncompressed.png";
+        $testImageCompressed = FRAMELIX_TMP_FOLDER . "/test-image-compressed.png";
+        ImageUtils::compress($testImage, $testImageCompressed);
+        $this->assertTrue(filesize($testImageCompressed) < filesize($testImage));
+        unlink($testImageCompressed);
+
+        $testImage = __DIR__ . "/../../test-files/imageutils/test-image-uncompressed.png";
+        $testImageCompressed = FRAMELIX_TMP_FOLDER . "/test-image-compressed.webp";
+        ImageUtils::compress($testImage, $testImageCompressed);
+        $this->assertTrue(filesize($testImageCompressed) < filesize($testImage));
+        unlink($testImageCompressed);
+
+        $testImage = __DIR__ . "/../../test-files/imageutils/test-image-uncompressed.png";
+        $testImageCompressed = FRAMELIX_TMP_FOLDER . "/test-image-compressed.gif";
+        ImageUtils::compress($testImage, $testImageCompressed);
+        $this->assertTrue(filesize($testImageCompressed) < filesize($testImage));
+        unlink($testImageCompressed);
     }
 
     public function testPdfToImage(): void
@@ -76,4 +104,5 @@ final class ImageUtilsTest extends TestCase
             ImageUtils::getImageData($testResizedImage));
         unlink($testResizedImage);
     }
+
 }
