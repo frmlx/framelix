@@ -4,6 +4,7 @@ class FramelixCustomElementButton extends FramelixCustomElement {
   async updateDomContents () {
     super.updateDomContents()
     const self = this
+    const selfCash = $(this)
     const icon = this.getAttribute('icon')
     let disabled = this.hasAttribute('disabled')
     const bgcolor = this.getAttribute('bgcolor')
@@ -17,17 +18,24 @@ class FramelixCustomElementButton extends FramelixCustomElement {
       this.removeAttribute('tabindex')
       this.removeAttribute('role')
     }
-    this.toggleAttribute('haslabel', this.originalHtml.trim().length >= 1)
     if (!this.hasAttribute('raw')) {
-      let html = ''
+      selfCash.empty()
+      const contents = this.originalContents
       if (icon) {
-        html += '<div class="icon"><framelix-icon icon="' + icon + '"></framelix-icon></div>'
+        selfCash.prepend('<div class="icon"><framelix-icon icon="' + icon + '"></framelix-icon></div>')
       }
-      const text = await FramelixLang.get(this.originalHtml.trim())
-      if (text.length) {
-        html += '<label class="label">' + text + '</label>'
+      // could be a translation string
+      if (contents.length === 1 && contents[0].nodeType === Node.TEXT_NODE && contents[0].nodeValue.trim().startsWith('__')) {
+        const value = contents[0].nodeValue.trim()
+        selfCash.append('<label class="label">&nbsp;</label>')
+        FramelixLang.get(value).then((value) => {
+          selfCash.find('label.label').html(value)
+          this.toggleAttribute('haslabel', value.length > 0)
+        })
+      } else {
+        selfCash.append($('<label class="label"></label>').append(contents))
+        this.toggleAttribute('haslabel', selfCash.find('label.label').text().trim().length > 0)
       }
-      this.innerHTML = html
     }
     if (bgcolor) {
       self.style.backgroundColor = bgcolor

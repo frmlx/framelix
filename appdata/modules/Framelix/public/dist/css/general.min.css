@@ -850,6 +850,9 @@ framelix-button[haslabel] .icon {
 framelix-button:not([haslabel]) .icon {
   background: transparent;
 }
+framelix-button:not([haslabel]) .label {
+  display: none;
+}
 framelix-button .label {
   cursor: pointer;
   flex: 1 1 auto;

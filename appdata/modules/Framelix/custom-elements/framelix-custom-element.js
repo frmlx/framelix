@@ -1,13 +1,13 @@
 class FramelixCustomElement extends HTMLElement {
   /**
-   * The original html before initialization
-   * @type {string}
+   * The original contents
+   * @type {Cash}
    */
-  originalHtml
+  originalContents
 
   async connectedCallback () {
-    if (this.originalHtml === undefined) {
-      this.originalHtml = this.innerHTML
+    if(this.originalContents === undefined){
+      this.originalContents = $(this).contents()
     }
     this.updateDomContents()
   }

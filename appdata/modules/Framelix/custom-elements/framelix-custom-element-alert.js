@@ -12,33 +12,44 @@ class FramelixCustomElementAlert extends FramelixCustomElement {
   }
 
   updateBodyHtml (html) {
-    if (this.originalHtml.trim().length) {
-      this.originalHtml = html
+    if ($(this).children('article').length) {
       $(this).find('article .text').html(html)
     } else {
-      this.originalHtml = html
-      this.updateDomContents()
+      $(this).html(html)
     }
+    this.originalContents = $(this).contents()
   }
 
   async updateDomContents () {
     super.updateDomContents()
     const self = this
+    const selfCash = $(this)
     const hidable = this.getAttribute('hidable')
     const bgcolor = this.getAttribute('bgcolor')
     const textcolor = this.getAttribute('textcolor')
     this.setAttribute('role', 'figure')
 
-    let text = this.getAttribute('header') ? `
-        <header><div class="text">${await FramelixLang.get(this.getAttribute('header'))}</div></header>
-    ` : ''
-    if (this.originalHtml.trim().length) {
-      text += `<article><div class="text">${await FramelixLang.get(this.originalHtml)}</div></article>`
+    const contents = this.originalContents
+    const header = this.getAttribute('header')
+    if (header !== null) {
+      selfCash.prepend(`<header><div class="text">&nbsp;</div></header>`)
+      FramelixLang.get(header).then((value) => {
+        selfCash.find('header .text').html(value)
+      })
     }
-
-    this.innerHTML = text
+    // could be a translation string
+    selfCash.append(`<article><div class="text">&nbsp;</div></article>`)
+    if (contents.length === 1 && contents[0].nodeType === Node.TEXT_NODE && contents[0].nodeValue.trim().startsWith('__')) {
+      const value = contents[0].nodeValue
+      this.removeChild(contents[0])
+      FramelixLang.get(value).then((value) => {
+        selfCash.find('article .text').html(value)
+      })
+    } else {
+      selfCash.find('article .text').append(contents)
+    }
     if (hidable) {
-      $(this).children().first().append(`<framelix-button theme="transparent" icon="719" title="__framelix_alert_hide__" small></framelix-button>`)
+      selfCash.children().first().append(`<framelix-button theme="transparent" icon="719" title="__framelix_alert_hide__" small></framelix-button>`)
     }
 
     if (bgcolor) {

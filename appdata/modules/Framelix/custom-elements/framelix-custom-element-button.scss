@@ -53,6 +53,10 @@ framelix-button {
     background: transparent;
   }
 
+  &:not([haslabel]) .label {
+    display: none;
+  }
+
   .label {
     cursor: pointer;
     flex: 1 1 auto;
