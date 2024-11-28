@@ -32,7 +32,7 @@ class Archiver
         }
         array_unshift($commandParams, $archivePath);
         $shell = Shell::prepare(
-            '7zz l -slt {*}',
+            '7z l -slt {*}',
             $commandParams
         );
         $shell->execute();
@@ -78,7 +78,7 @@ class Archiver
         array_unshift($commandParams, $filePathInArchive);
         array_unshift($commandParams, $archivePath);
         $shell = Shell::prepare(
-            '7zz d {*}',
+            '7z d {*}',
             $commandParams
         );
         $shell->execute();
@@ -106,7 +106,7 @@ class Archiver
             $params[] = $archivePath;
             $params[] = $pathOnDisk;
             $shell = Shell::prepare(
-                '7zz u -spf {*}',
+                '7z u -spf {*}',
                 $params
             );
             $shell->execute();
@@ -122,7 +122,7 @@ class Archiver
             // remove file before renaming to avoid conflicts
             self::removeFile($archivePath, $pathInArchive);
             $shell = Shell::prepare(
-                '7zz rn {*}',
+                '7z rn {*}',
                 [$archivePath, $pathOnDisk, $pathInArchive]
             );
             $shell->execute();
@@ -162,7 +162,7 @@ class Archiver
                 throw new FatalError("'$outputDirectory' is not empty");
             }
         }
-        $shell = Shell::prepare('7zz x {*}', [$archivePath, "-o" . $outputDirectory, "-r", "-y"]);
+        $shell = Shell::prepare('7z x {*}', [$archivePath, "-o" . $outputDirectory, "-r", "-y"]);
         $shell->execute();
         if ($shell->status) {
             throw new FatalError("Error extracting archive: " . Shell::convertCliOutputToHtml($shell->output, false));

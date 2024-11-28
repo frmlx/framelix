@@ -13,12 +13,8 @@ use Throwable;
 use function header;
 use function is_float;
 use function is_int;
-use function ob_end_clean;
-use function ob_get_contents;
-use function ob_start;
 use function reset;
 use function str_starts_with;
-use function utf8_decode;
 
 class SpreadsheetWrapper
 {
@@ -69,9 +65,9 @@ class SpreadsheetWrapper
     /**
      * Excel constructor.
      *
-     * @param null|Spreadsheet $spreadsheet Pass a spreadsheet instance if required, otherwise it's a new instance
+     * @param Spreadsheet|null $spreadsheet Pass a spreadsheet instance if required, otherwise it's a new instance
      */
-    public function __construct(Spreadsheet $spreadsheet = null)
+    public function __construct(?Spreadsheet $spreadsheet = null)
     {
         $this->spreadsheet = $spreadsheet ?? new Spreadsheet();
     }
@@ -82,7 +78,7 @@ class SpreadsheetWrapper
      * @param int|null $rowAsColumnIndexNames If int than use the cell names as array index
      * @return array
      */
-    public function toArray(PhpSpreadsheet\Worksheet\Worksheet|int $sheet, int $rowAsColumnIndexNames = null): array
+    public function toArray(PhpSpreadsheet\Worksheet\Worksheet|int $sheet, ?int $rowAsColumnIndexNames = null): array
     {
         if (is_int($sheet)) {
             $sheet = $this->spreadsheet->getSheet($sheet);
@@ -226,28 +222,19 @@ class SpreadsheetWrapper
     /**
      * Download excel file
      * @param string $filename
-     * @param bool $utf8Decoded Maybe required when you use CSV files
      * @return never
      */
-    public function download(string $filename, bool $utf8Decoded = false): never
+    public function download(string $filename): never
     {
         $writer = $this->getWriterByFilename($filename);
-        Response::download(function () use ($writer, $utf8Decoded) {
+        Response::download(function () use ($writer) {
             try {
-                if ($utf8Decoded) {
-                    ob_start();
-                    $writer->save("php://output");
-                    $data = ob_get_contents();
-                    ob_end_clean();
-                    echo utf8_decode($data);
-                } else {
-                    $writer->save("php://output");
-                }
+                $writer->save("php://output");
             } catch (Throwable) {
                 header("Content-Type: text/plain");
                 header("Content-Transfer-Encoding: 8bit");
             }
-        });
+        }, $filename);
     }
 
     /**

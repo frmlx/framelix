@@ -263,7 +263,7 @@ class Lang
      * @param string|null $lang
      * @return void
      */
-    public static function set(string $key, string $value, string $lang = null): void
+    public static function set(string $key, string $value, ?string $lang = null): void
     {
         self::$values[$lang ?? Config::$language][$key] = $value;
     }

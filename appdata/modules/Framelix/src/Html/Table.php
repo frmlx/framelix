@@ -4,9 +4,7 @@ namespace Framelix\Framelix\Html;
 
 use Framelix\Framelix\Db\StorableSchemaProperty;
 use Framelix\Framelix\Exception\FatalError;
-use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Html\TypeDefs\JsRequestOptions;
-use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\JsCall;
 use Framelix\Framelix\ObjectTransformable;
 use Framelix\Framelix\Storable\Storable;

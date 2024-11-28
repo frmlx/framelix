@@ -45,12 +45,19 @@ if (preg_match("~^[0-9]+\.[0-9]+\.[0-9]+~i", $version)) {
     file_put_contents($coreFile, $coreFileData);
 
     echo "# Running npm install and composer install for modules integrated into the image\n";
+    runCmd("framelix_composer_install");
     runCmd("framelix_npm_modules_install");
     runCmd("framelix_composer_modules_install");
     echo "Done.\n\n";
 
     echo "Production build process completed.\n\n";
-} elseif ($version !== 'dev' && $version !== 'master') {
+} elseif ($version === 'dev' || $version === 'master') {
+    runCmd("framelix_composer_install");
+    runCmd("framelix_npm_modules_install");
+    runCmd("framelix_composer_modules_install");
+
+    echo "Dev build process completed.\n\n";
+} else {
     echo "Missing proper -v parameter, given: $version, but must be dev/master or tag name";
     exit(1);
 }

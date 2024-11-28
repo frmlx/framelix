@@ -8,7 +8,6 @@ use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Html\QuickSearch;
 use Framelix\Framelix\Html\Table;
 use Framelix\Framelix\Html\TableCell;
-use Framelix\Framelix\Html\TypeDefs\ElementColor;
 use Framelix\Framelix\Storable\Storable;
 use Framelix\Framelix\Storable\StorableFile;
 use Framelix\Framelix\StorableMeta;
@@ -107,7 +106,7 @@ class Income extends StorableMeta
         return $quickSearch;
     }
 
-    public function getQuickSearchCondition(array $options = null): LazySearchCondition
+    public function getQuickSearchCondition(?array $options = null): LazySearchCondition
     {
         $condition = parent::getQuickSearchCondition($options);
         if ($options['fixation'] ?? false) {

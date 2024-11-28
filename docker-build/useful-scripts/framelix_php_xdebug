@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
 # enables xdebug for the time this script is running
-INI_PATH=/etc/php/8.3/cli/conf.d/99-phpunit.ini
-printf 'zend_extension=xdebug.so\nxdebug.mode=coverage\nmemory_limit=-1' > $INI_PATH
+INI_PATH=/etc/php/$PHP_VERSION/cli/conf.d/99-phpunit.ini
+printf 'zend_extension=xdebug.so\nxdebug.mode=coverage\nmemory_limit=-1\nopcache.jit=disable' > $INI_PATH
 framelix_php "$@"
 RESULT=$?
 rm -f $INI_PATH

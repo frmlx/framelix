@@ -66,7 +66,7 @@ class Response
         self::header('Content-Description: File Transfer');
         self::header('Content-Type: ' . $filetype);
         self::header(
-            'Content-Disposition: attachment; filename="' . ($filename ?? "download.txt") . '"'
+            'Content-Disposition: attachment; filename="' . ($filename ?? "download_unnamed.txt") . '"'
         );
         self::header('Expires: 0');
         self::header('Pragma: public');

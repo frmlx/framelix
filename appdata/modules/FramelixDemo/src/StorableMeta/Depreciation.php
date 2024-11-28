@@ -89,7 +89,7 @@ class Depreciation extends StorableMeta
         return $quickSearch;
     }
 
-    public function getQuickSearchCondition(array $options = null): LazySearchCondition
+    public function getQuickSearchCondition(?array $options = null): LazySearchCondition
     {
         $condition = parent::getQuickSearchCondition($options);
         if ($options['noclosed'] ?? false) {

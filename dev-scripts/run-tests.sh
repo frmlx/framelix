@@ -17,7 +17,7 @@ while getopts "f:t:" opt; do
   esac
 done
 
-DOCKER_EXECPARAMS=" compose -f $SCRIPTDIR/docker-compose.yml exec -t "
+DOCKER_EXECPARAMS=" compose $COMPOSER_FILE_ARGS exec -t "
 DOCKER_EXECPARAMS_APP="$DOCKER_EXECPARAMS app bash -c "
 DOCKER_EXECPARAMS_PW="$DOCKER_EXECPARAMS playwright bash -c "
 DOCKER_EXECPARAMS_MARIADB="$DOCKER_EXECPARAMS mariadb bash -c "
@@ -32,7 +32,7 @@ fi
 
 if [ $TESTTYPE == "phpstan" ]; then
   cecho b "# Php Stan Static Code Analyzer"
-  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata  && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
+  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 

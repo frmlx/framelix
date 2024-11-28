@@ -1,10 +1,11 @@
-ARG OS_IMAGE=ubuntu:22.04
+ARG OS_IMAGE=ubuntu:24.04
 
 # CHECK OUT MORE AVAILABLE IMAGES FROM https://hub.docker.com/_/ubuntu
 FROM $OS_IMAGE
 
 ARG FRAMELIX_BUILD_VERSION=dev
 
+ENV PHP_VERSION="8.4"
 ENV FRAMELIX_APPDATA="/framelix/appdata"
 ENV FRAMELIX_USERDATA="/framelix/userdata"
 ENV FRAMELIX_SYSTEMDIR="/framelix/system"
@@ -18,13 +19,13 @@ RUN export DEBIAN_FRONTEND=noninteractive &&  \
 
 # add node source
 RUN  mkdir -p /etc/apt/keyrings && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN NODE_MAJOR=20 && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN NODE_MAJOR=22 && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 
 RUN export DEBIAN_FRONTEND=noninteractive &&  \
     add-apt-repository ppa:ondrej/php -y &&  \
     add-apt-repository ppa:ondrej/nginx-mainline -y && \
     apt update && \
-    apt install ca-certificates cron nginx nodejs php8.3-xdebug php8.3-cli php8.3-fpm php8.3-common php8.3-mysql php8.3-zip php8.3-gd php8.3-mbstring php8.3-curl php8.3-xml php8.3-bcmath php8.3-sqlite3 php8.3-pgsql 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
+    apt install ca-certificates cron nginx nodejs php${PHP_VERSION}-xdebug php${PHP_VERSION}-cli php${PHP_VERSION}-fpm php${PHP_VERSION}-common php${PHP_VERSION}-mysql php${PHP_VERSION}-zip php${PHP_VERSION}-gd php${PHP_VERSION}-mbstring php${PHP_VERSION}-curl php${PHP_VERSION}-xml php${PHP_VERSION}-bcmath php${PHP_VERSION}-sqlite3 php${PHP_VERSION}-pgsql 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
     rm /etc/php/*/*/conf.d/*-xdebug.ini && \
     apt upgrade -y
 
@@ -39,8 +40,8 @@ RUN mkdir -p /opt/phpstorm-coverage && chmod 0777 /opt/phpstorm-coverage
 COPY docker-build/misc-conf/imagemagick-policy.xml /etc/ImageMagick-6/policy.xml
 
 # php
-COPY docker-build/php-config/php.ini /etc/php/8.3/cli/php.ini
-COPY docker-build/php-config/php.ini /etc/php/8.3/fpm/php.ini
+COPY docker-build/php-config/php.ini /etc/php/$PHP_VERSION/cli/php.ini
+COPY docker-build/php-config/php.ini /etc/php/$PHP_VERSION/fpm/php.ini
 COPY docker-build/php-config/fpm-pool.conf $FRAMELIX_SYSTEMDIR/fpm-pool.conf
 
 # nginx
@@ -57,9 +58,6 @@ RUN crontab $FRAMELIX_SYSTEMDIR/cronjobs
 
 # create some useful-scripts symlinks
 RUN chmod +x $FRAMELIX_SYSTEMDIR/useful-scripts/* && ln -s $FRAMELIX_SYSTEMDIR/useful-scripts/* /usr/bin
-
-# install composer and npm stuff
-RUN framelix_composer_install; framelix_npm_modules_install; framelix_composer_modules_install
 
 # some additional build steps (to include appdata, etc...) for dev/production builds
 RUN php -f $FRAMELIX_SYSTEMDIR/build-image.php "$FRAMELIX_BUILD_VERSION"

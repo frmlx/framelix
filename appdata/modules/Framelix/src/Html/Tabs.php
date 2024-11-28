@@ -44,7 +44,7 @@ class Tabs implements JsonSerializable
         string $id,
         ?string $label,
         View|Url|string $content,
-        array $urlParameters = null,
+        ?array $urlParameters = null,
         ?string $tabColor = null,
         ?string $accessRole = null,
         HtmlAttributes|null $optionalButtonAttributes = null,

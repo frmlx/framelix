@@ -93,15 +93,17 @@ cecho y "# Starting php fpm service"
 echo ""
 
 # create config based on env variables
-cat /framelix/system/fpm-pool.conf >/etc/php/8.3/fpm/pool.d/www.conf
+cat /framelix/system/fpm-pool.conf >/etc/php/$PHP_VERSION/fpm/pool.d/www.conf
 echo "
 user = $NGINX_USERNAME
 group = $NGINX_GROUPNAME
 listen.owner = $NGINX_USERNAME
-listen.group = $NGINX_GROUPNAME" >>/etc/php/8.3/fpm/pool.d/www.conf
-php-fpm8.3 -R -y /etc/php/8.3/fpm/php-fpm.conf
+listen.group = $NGINX_GROUPNAME" >>/etc/php/$PHP_VERSION/fpm/pool.d/www.conf
+CMD="php-fpm$PHP_VERSION -R -y /etc/php/$PHP_VERSION/fpm/php-fpm.conf"
+eval ${CMD}
+
 if [ "$?" != "0" ]; then
-  cecho r "Error starting php-fpm8.3 Aborting."
+  cecho r "Error starting php-fpm$PHP_VERSION Aborting."
   exit 1
 fi
 

@@ -23,7 +23,7 @@ if [ "$DEL_VOL" == "1" ]; then
   docker volume rm "${COMPOSE_PROJECT_NAME}_postgres"
 fi
 
-docker compose -f $SCRIPTDIR/docker-compose.yml pull --ignore-pull-failures
-docker compose -f $SCRIPTDIR/docker-compose.yml up -d
-docker compose -f $SCRIPTDIR/docker-compose.yml exec -t app bash -c "framelix_wait_for_ready"
+docker compose $COMPOSER_FILE_ARGS pull --ignore-pull-failures
+docker compose $COMPOSER_FILE_ARGS up -d
+docker compose $COMPOSER_FILE_ARGS exec -t app bash -c "framelix_wait_for_ready"
 

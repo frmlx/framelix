@@ -32,13 +32,6 @@ final class SpreadsheetWrapper extends TestCase
         }, [], StopExecution::class);
         Buffer::clear();
 
-        Buffer::start();
-        $this->assertExceptionOnCall(function () use ($wrapper) {
-            $wrapper->download("test.csv", true);
-        }, [], StopExecution::class);
-        Buffer::clear();
-
-
         $wrapper = \Framelix\Framelix\Utils\SpreadsheetWrapper::create();
         $wrapper->setFromArrayMultiple([
             "sheet1" => [
@@ -67,12 +60,6 @@ final class SpreadsheetWrapper extends TestCase
         Buffer::start();
         $this->assertExceptionOnCall(function () use ($wrapper) {
             $wrapper->download("test.csv");
-        }, [], StopExecution::class);
-        Buffer::clear();
-
-        Buffer::start();
-        $this->assertExceptionOnCall(function () use ($wrapper) {
-            $wrapper->download("test.csv", true);
         }, [], StopExecution::class);
         Buffer::clear();
 

@@ -10,8 +10,6 @@ use Framelix\Framelix\Utils\JsonUtils;
 use Framelix\Framelix\View;
 use Framelix\FramelixTests\TestCase;
 
-use function var_dump;
-
 final class JsCallTest extends TestCase
 {
 

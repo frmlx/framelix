@@ -178,7 +178,7 @@ abstract class StorableMeta implements JsonSerializable
      * @param array|null $options Option values set by the user in the interface
      * @return LazySearchCondition
      */
-    public function getQuickSearchCondition(array $options = null): LazySearchCondition
+    public function getQuickSearchCondition(?array $options = null): LazySearchCondition
     {
         $this->initContext(self::CONTEXT_QUICK_SEARCH);
         $lazyCondition = clone $this->lazySearchConditionDefault;
@@ -214,7 +214,7 @@ abstract class StorableMeta implements JsonSerializable
      * @param array|null $options Option values set by the user in the interface
      * @return Storable[]
      */
-    public function getQuickSearchResult(string $query, array $options = null): array
+    public function getQuickSearchResult(string $query, ?array $options = null): array
     {
         return $this->storable::getByCondition(
             $this->getQuickSearchCondition($options)->getPreparedCondition(

@@ -9,6 +9,12 @@ source $BASEDIR/.env
 DOCKER_REPO=framelix/framelix
 DOCKER_TAGNAME_LOCAL=$DOCKER_REPO:local
 
+
+COMPOSER_FILE_ARGS="-f $SCRIPTDIR/docker-compose.yml"
+if [ -f "$SCRIPTDIR/docker-compose.override.yml" ]; then
+  COMPOSER_FILE_ARGS="-f $SCRIPTDIR/docker-compose.yml -f $SCRIPTDIR/docker-compose.override.yml"
+fi
+
 cecho() {
   local code="\033["
   case "$1" in
