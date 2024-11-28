@@ -26,7 +26,7 @@ if (preg_match("~^[0-9]+\.[0-9]+\.[0-9]+~i", $version)) {
 
     echo "# Extracting packages and move to appdata\n";
     runCmd("mkdir -p $modulesFolder");
-    runCmd("7zz x $tmpFolder/package.zip -spf -y -o$tmpFolder");
+    runCmd("7z x $tmpFolder/package.zip -spf -y -o$tmpFolder");
     runCmd("mv $tmpFolder/*/appdata/modules/Framelix $modulesFolder/Framelix");
     runCmd("mv $tmpFolder/*/appdata/modules/FramelixDemo $modulesFolder/FramelixDemo");
     runCmd("mv $tmpFolder/*/appdata/modules/FramelixDocs $modulesFolder/FramelixDocs");
