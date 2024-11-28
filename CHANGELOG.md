@@ -1,3 +1,9 @@
+# [4.0.0-alpha.22 - 2024-11-28]
+
+* upgrade to php 8.4 and ubuntu 24.04
+* updated dependencies
+* https://github.com/frmlx/framelix/compare/4.0.0-alpha.21...4.0.0-alpha.22
+
 # [4.0.0-alpha.21 - 2024-09-04]
 
 * added ImageUtils::compress
