@@ -19,7 +19,7 @@ jobs:
           ref: ${{ github.ref_name }}
 
       - name: Create .env file
-        run: cp dev-scripts/.env_git_tests dev-scripts/.env
+        run: cp dev-scripts/.env_hub_deploy dev-scripts/.env
 
       - name: Build and deploy image
         run: bash dev-scripts/docker-hub.sh -v "${{ github.ref_name }}" -p
