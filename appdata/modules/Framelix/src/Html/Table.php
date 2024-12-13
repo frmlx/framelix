@@ -534,20 +534,21 @@ class Table implements JsonSerializable
                         $columnName
                     ) : null;
                     if ($group === 'tbody' && isset($this->footerSumColumns[$columnName])) {
+                        $addValue = $value;
                         if (!isset($footerSums[$columnName])) {
                             $footerSums[$columnName] = ['value' => 0, 'type' => 'default'];
                         }
-                        if (is_string($value)) {
-                            $value = NumberUtils::toFloat($value);
+                        if (is_string($addValue)) {
+                            $addValue = NumberUtils::toFloat($addValue);
                         }
-                        if (is_int($value) || is_float($value)) {
+                        if (is_int($addValue) || is_float($addValue)) {
                             $footerSums[$columnName]['type'] = 'number';
                             $footerSums[$columnName]['decimals'] = $storableSchemaProperty->decimals ?? null;
-                            $footerSums[$columnName]['value'] += $value;
-                        } elseif ($value instanceof Time) {
+                            $footerSums[$columnName]['value'] += $addValue;
+                        } elseif ($addValue instanceof Time) {
                             $footerSums[$columnName]['type'] = "time";
                             $footerSums[$columnName]['value'] = round(
-                                $footerSums[$columnName]['value'] + Time::toHours($value),
+                                $footerSums[$columnName]['value'] + Time::toHours($addValue),
                                 4
                             );
                         }
