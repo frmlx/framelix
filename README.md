@@ -1,7 +1,7 @@
 [![UnitTestsBadge](https://github.com/frmlx/framelix/actions/workflows/tests.yml/badge.svg)](https://github.com/frmlx/framelix/actions/workflows/tests.yml) 
 [![CoverageBadge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brainfoolong/2e4ba189fbb1a23bff14e73cb893bc3e/raw/framelix-unit-tests-coverage-data.json)](https://github.com/frmlx/framelix/actions/workflows/tests.yml) 
 [![PlaywrightBadge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brainfoolong/91cdcb4629cfb14f8c00ab5ea4e485ec/raw/framelix-playwright-tests.json)](https://github.com/frmlx/framelix/actions/workflows/tests.yml)
-[![SlackJoin](https://framelix.com/slack-badge.svg)](https://framelix.com/getstarted/issues)
+[![SlackJoin](https://framelix.top/slack-badge.svg)](https://framelix.top/getstarted/issues)
 
 # Framelix - A rich featured, Full-Stack PHP Framework
 
@@ -14,4 +14,4 @@ daily business in data manegement development. Make your apps fast and reliable 
 
 ## Check out the docs
 
-Everything you need to know, including playground and live examples plus to get you started with development is at our docs website https://framelix.com
+Everything you need to know, including playground and live examples plus to get you started with development is at our docs website https://framelix.top
