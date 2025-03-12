@@ -26,7 +26,7 @@ jobs:
 
       - name: Upload userdata after deploy
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: userdata-after-phpunit
           path: ./userdata
@@ -40,7 +40,7 @@ jobs:
 
       - name: Upload docker logs to GitHub
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docker-logs
           path: ./logs
