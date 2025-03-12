@@ -34,6 +34,7 @@ services:
       retries: 5
   playwright:
     image: mcr.microsoft.com/playwright:v1.51.0-noble
+    # update @playwright/test in appdata/playwright/package.json as well when changing version
     restart: on-failure
     volumes:
       - ../appdata:/framelix/appdata
