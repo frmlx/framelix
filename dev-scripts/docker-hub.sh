@@ -30,7 +30,7 @@ fi
 
 # check if version is already in docker hub
 if [ "$BUILD_VERSION" != "dev" ]; then
-  docker pull $DOCKER_REPO:$BUILD_VERSION > /dev/null
+  $DOCKER_CMD pull $DOCKER_REPO:$BUILD_VERSION > /dev/null
   if [ "$?" == "0" ]; then
     cecho r "Docker Image Tag '$BUILD_VERSION' already exist in docker hub. Use a new version number."
     exit 1
@@ -38,7 +38,7 @@ if [ "$BUILD_VERSION" != "dev" ]; then
 fi
 
 # remove all images of framelix locally
-docker rmi $(docker images | grep "$DOCKER_REPO") > /dev/null 2>&1
+$DOCKER_CMD rmi $($DOCKER_CMD images | grep "$DOCKER_REPO") > /dev/null 2>&1
 
 # build image
 bash $SCRIPTDIR/build-image.sh -v $BUILD_VERSION
@@ -82,8 +82,8 @@ bash $SCRIPTDIR/stop-container.sh
 
 if [ "$PUSH" == "1" ] ; then
   if [ "$BUILD_VERSION" == "dev" ]; then
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:dev
-    docker push  $DOCKER_REPO:dev
+    $DOCKER_CMD tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:dev
+    $DOCKER_CMD push  $DOCKER_REPO:dev
   else
 
     MAJOR_VERSION=$(echo $BUILD_VERSION| cut -d'.' -f 1)
@@ -95,18 +95,18 @@ if [ "$PUSH" == "1" ] ; then
       PRE_VERSION=""
     fi
 
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:edge
-    docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$BUILD_VERSION
-    docker push $DOCKER_REPO:$BUILD_VERSION
-    docker push $DOCKER_REPO:edge
+    $DOCKER_CMD tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:edge
+    $DOCKER_CMD tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$BUILD_VERSION
+    $DOCKER_CMD push $DOCKER_REPO:$BUILD_VERSION
+    $DOCKER_CMD push $DOCKER_REPO:edge
 
     if [ "$PRE_VERSION" == "" ]; then
       # production tags
-      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
-      docker tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
+      $DOCKER_CMD tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MINOR_VERSION
+      $DOCKER_CMD tag $DOCKER_TAGNAME_LOCAL $DOCKER_REPO:$MAJOR_VERSION
 
-      docker push $DOCKER_REPO:$MINOR_VERSION
-      docker push $DOCKER_REPO:$MAJOR_VERSION
+      $DOCKER_CMD push $DOCKER_REPO:$MINOR_VERSION
+      $DOCKER_CMD push $DOCKER_REPO:$MAJOR_VERSION
     fi
   fi
 fi

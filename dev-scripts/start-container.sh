@@ -19,11 +19,11 @@ source $SCRIPTDIR/stop-container.sh
 
 if [ "$DEL_VOL" == "1" ]; then
   echo "Delete database volumes"
-  docker volume rm "${COMPOSE_PROJECT_NAME}_mariadb"
-  docker volume rm "${COMPOSE_PROJECT_NAME}_postgres"
+  $DOCKER_CMD volume rm "${COMPOSE_PROJECT_NAME}_mariadb"
+  $DOCKER_CMD volume rm "${COMPOSE_PROJECT_NAME}_postgres"
 fi
 
-docker compose $COMPOSER_FILE_ARGS pull --ignore-pull-failures
-docker compose $COMPOSER_FILE_ARGS up -d
-docker compose $COMPOSER_FILE_ARGS exec -t app bash -c "framelix_wait_for_ready"
+$DOCKER_COMPOSE pull
+$DOCKER_COMPOSE up -d
+$DOCKER_COMPOSE_EXEC_APP "framelix_wait_for_ready"
 

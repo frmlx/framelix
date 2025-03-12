@@ -3,7 +3,7 @@
 SCRIPTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 source $SCRIPTDIR/lib.sh
 
-cecho b "Build Docker Image for $DOCKER_TAGNAME_LOCAL"
+cecho b "Build Image for $DOCKER_TAGNAME_LOCAL"
 echo "Available command line flags:"
 echo "-v : Version of build: dev/master, or tagname"
 
@@ -22,8 +22,12 @@ fi
 echo "Version selected: $BUILD_VERSION"
 
 source $SCRIPTDIR/stop-container.sh
-docker image rm $DOCKER_TAGNAME_LOCAL
-docker build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $SCRIPTDIR/..
+$DOCKER_CMD image rm $DOCKER_TAGNAME_LOCAL
+if [ "$DOCKER_CMD" == "podman" ]; then
+  $DOCKER_CMD build --format docker -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $SCRIPTDIR/..
+else
+  $DOCKER_CMD build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $SCRIPTDIR/..
+fi
 
 if [ "$?" != "0" ]; then
   cecho r "Build failed"

@@ -17,39 +17,34 @@ while getopts "f:t:" opt; do
   esac
 done
 
-DOCKER_EXECPARAMS=" compose $COMPOSER_FILE_ARGS exec -t "
-DOCKER_EXECPARAMS_APP="$DOCKER_EXECPARAMS app bash -c "
-DOCKER_EXECPARAMS_PW="$DOCKER_EXECPARAMS playwright bash -c "
-DOCKER_EXECPARAMS_MARIADB="$DOCKER_EXECPARAMS mariadb bash -c "
-
 cecho y "[i] Running tests"
 
 if [ $TESTTYPE == "install-deps" ]; then
   cecho b "# Install/Update composer and npm dependencies"
-  docker $DOCKER_EXECPARAMS_APP "framelix_npm_modules_install && framelix_composer_modules_install && cd /framelix/appdata/playwright && npm install -y"
+  $DOCKER_COMPOSE_EXEC_APP "framelix_npm_modules_install && framelix_composer_modules_install && cd /framelix/appdata/playwright && npm install -y"
   exit $?
 fi
 
 if [ $TESTTYPE == "phpstan" ]; then
   cecho b "# Php Stan Static Code Analyzer"
-  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
+  $DOCKER_COMPOSE_EXEC_APP "cd /framelix/appdata && framelix_php vendor/bin/phpstan analyze --memory-limit 1G --no-progress"
   exit $?
 fi
 
 cecho b "# Removing all userdata files and databases to start clean with each full test run"
-docker $DOCKER_EXECPARAMS_APP "rm -Rfv /framelix/userdata/* && mkdir -p /framelix/userdata/tmp && chmod 0777 /framelix/userdata/tmp"
+$DOCKER_COMPOSE_EXEC_APP "rm -Rfv /framelix/userdata/* && mkdir -p /framelix/userdata/tmp && chmod 0777 /framelix/userdata/tmp"
 echo ""
 echo "Done."
 echo ""
 
 cecho b "# Drop databases"
-docker $DOCKER_EXECPARAMS_MARIADB "mariadb -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests; DROP DATABASE IF EXISTS FramelixDocs; DROP DATABASE IF EXISTS FramelixStarter;'"
+$DOCKER_COMPOSE_EXEC_MARIADB "mariadb -u root -papp -e 'DROP DATABASE IF EXISTS unittests; DROP DATABASE IF EXISTS FramelixTests; DROP DATABASE IF EXISTS FramelixDocs; DROP DATABASE IF EXISTS FramelixStarter;'"
 echo ""
 echo "Done."
 echo ""
 
 cecho b "# Run appWarmup"
-docker $DOCKER_EXECPARAMS_APP "framelix_console all appWarmup"
+$DOCKER_COMPOSE_EXEC_APP "framelix_console all appWarmup"
 echo ""
 echo "Done."
 echo ""
@@ -58,7 +53,7 @@ if [ $TESTTYPE == "phpunit" ]; then
   # phpunit with process isolation have a bug with enabling xdebug on the fly with -d ini parameters
   # so, modifying the php config globally for the time this test is running
   cecho b "# Php Unit Tests"
-  docker $DOCKER_EXECPARAMS_APP "cd /framelix/appdata && framelix_php_xdebug vendor/bin/phpunit --coverage-clover /framelix/userdata/clover.xml --log-junit /framelix/userdata/phpunit-results.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
+  $DOCKER_COMPOSE_EXEC_APP "cd /framelix/appdata && framelix_php_xdebug vendor/bin/phpunit --coverage-clover /framelix/userdata/clover.xml --log-junit /framelix/userdata/phpunit-results.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration modules/FramelixTests/tests/_phpunit.xml && framelix_php hooks/after-phpunit.php"
   exit $?
 fi
 
@@ -70,12 +65,12 @@ if [ $TESTTYPE == "playwright" ]; then
     TESTFILE="/framelix/appdata/playwright/tests/$TESTFILE.spec.ts"
   fi
 
-  docker $DOCKER_EXECPARAMS_PW "mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright install && npx playwright test $TESTFILE"
+  $DOCKER_COMPOSE_EXEC_PW "mkdir -p /framelix/userdata/playwright/results && chmod 0777 -R /framelix/userdata/playwright && cd /framelix/appdata/playwright && npx playwright install && npx playwright test $TESTFILE"
 
   RESULT=$?
 
   if [ "$TESTFILE" == "" ]; then
-    docker $DOCKER_EXECPARAMS_APP "framelix_php /framelix/appdata/hooks/after-playwright.php"
+    $DOCKER_COMPOSE_EXEC_APP "framelix_php /framelix/appdata/hooks/after-playwright.php"
   fi
 
   exit $RESULT

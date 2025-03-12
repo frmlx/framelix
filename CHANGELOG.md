@@ -1,3 +1,11 @@
+# [4.0.0-alpha.23 - 2025-03-12]
+
+* updated to php v8.4.4
+* updated dependencies
+* updated to playwright v1.51.0
+* https://github.com/frmlx/framelix/compare/4.0.0-alpha.22...4.0.0-alpha.23
+
+
 # [4.0.0-alpha.22 - 2024-11-28]
 
 * upgrade to php 8.4 and ubuntu 24.04
