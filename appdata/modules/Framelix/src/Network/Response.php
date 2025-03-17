@@ -63,6 +63,7 @@ class Response
                 $filename = basename($fileOrData);
             }
         }
+        Buffer::clear();
         self::header('Content-Description: File Transfer');
         self::header('Content-Type: ' . $filetype);
         self::header(
