@@ -63,7 +63,9 @@ class Response
                 $filename = basename($fileOrData);
             }
         }
-        Buffer::clear();
+        if (!defined('FRAMELIX_UNIT_TESTS') || !FRAMELIX_UNIT_TESTS) {
+            Buffer::clear();
+        }
         self::header('Content-Description: File Transfer');
         self::header('Content-Type: ' . $filetype);
         self::header(

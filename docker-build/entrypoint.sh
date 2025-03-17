@@ -17,10 +17,21 @@ cecho() {
   echo -e "$text"
 }
 
+# catch sigterm and shutdown when sigterm is received
+_term() {
+  cecho r "# SIGTERM received - Stopping services"
+  LOOP_ACTIVE=0
+  service nginx stop
+}
+
+trap _term SIGTERM
+
+LOOP_ACTIVE=1
+
 # in case the ready file already exist, delete it
 rm -f /framelix/system/READY
 
-cecho b "# FRAMELIX DOCKER - 😜  Huhuu!"
+cecho b "# FRAMELIX here - 😜  Huhuu!"
 echo ""
 
 if [ -z "$FRAMELIX_MODULES" ]; then
@@ -169,7 +180,7 @@ echo ""
 echo ""
 
 echo "" >/framelix/system/READY
-cecho g "# ✅  FRAMELIX DOCKER INITIALIZED - Tailing all logs from here on"
+cecho g "# ✅  FRAMELIX READY"
 echo ""
 echo ""
 echo ""
@@ -180,6 +191,12 @@ ps -AF
 echo ""
 echo ""
 
-cecho y "# All /var/log/*.log files"
-echo ""
-tail -f /var/log/*.log -f /var/log/nginx/*.log
+while true
+do
+  if [ "$LOOP_ACTIVE" -eq 0 ]; then
+    break
+  fi
+  sleep 1
+done
+
+cecho g "# Stopped"
