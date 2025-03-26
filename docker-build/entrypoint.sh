@@ -17,17 +17,6 @@ cecho() {
   echo -e "$text"
 }
 
-# catch sigterm and shutdown when sigterm is received
-_term() {
-  cecho r "# SIGTERM received - Stopping services"
-  LOOP_ACTIVE=0
-  service nginx stop
-}
-
-trap _term SIGTERM
-
-LOOP_ACTIVE=1
-
 # in case the ready file already exist, delete it
 rm -f /framelix/system/READY
 
@@ -190,13 +179,3 @@ echo ""
 ps -AF
 echo ""
 echo ""
-
-while true
-do
-  if [ "$LOOP_ACTIVE" -eq 0 ]; then
-    break
-  fi
-  sleep 1
-done
-
-cecho g "# Stopped"
