@@ -89,6 +89,7 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
 
     public function onRequest(): void
     {
+        $this->metaRobots = "all";
         $this->clientId = Cookie::get('unique-client-id');
         if (!$this->clientId) {
             $this->clientId = RandomGenerator::getRandomString(10, 20);
@@ -332,8 +333,10 @@ abstract class View extends \Framelix\Framelix\View\Backend\View
             );
             $codeLanguage = "php";
             $buttonsHtml = '<framelix-button 
-            ' . (new JsRequestOptions(JsCall::getSignedUrl([View::class, "onJsCall"], 'phpCode', ['callable' => $row['method']]),
-                    JsRequestOptions::RENDER_TARGET_MODAL_NEW))->toDefaultAttrStr() . ' 
+            ' . (new JsRequestOptions(
+                    JsCall::getSignedUrl([View::class, "onJsCall"], 'phpCode', ['callable' => $row['method']]),
+                    JsRequestOptions::RENDER_TARGET_MODAL_NEW
+                ))->toDefaultAttrStr() . ' 
             theme="primary" 
             icon="789">Run the code bellow</framelix-button>';
             Buffer::start();
