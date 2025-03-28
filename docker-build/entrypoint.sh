@@ -20,7 +20,7 @@ cecho() {
 # in case the ready file already exist, delete it
 rm -f /framelix/system/READY
 
-cecho b "# FRAMELIX here - 😜  Huhuu!"
+cecho b "# FRAMELIX DOCKER - 😜  Huhuu!"
 echo ""
 
 if [ -z "$FRAMELIX_MODULES" ]; then
@@ -169,7 +169,7 @@ echo ""
 echo ""
 
 echo "" >/framelix/system/READY
-cecho g "# ✅  FRAMELIX READY"
+cecho g "# ✅  FRAMELIX DOCKER INITIALIZED - Tailing all logs from here on"
 echo ""
 echo ""
 echo ""
@@ -179,3 +179,7 @@ echo ""
 ps -AF
 echo ""
 echo ""
+
+cecho y "# All /var/log/*.log files"
+echo ""
+tail -f /var/log/*.log -f /var/log/nginx/*.log
