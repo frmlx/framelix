@@ -1,9 +1,16 @@
+# [4.0.0-alpha.25 - 2025-03-28]
+
+* fixed container no restart after shutdown
+* fixed robots tag for docs pages
+* https://github.com/frmlx/framelix/compare/4.0.0-alpha.24...4.0.0-alpha.25
+
+
 # [4.0.0-alpha.24 - 2025-03-17]
 
 * updated to php v8.4.5
 * added phpunit single test file possibility
 * fixed Response::download memory issue
-* https://github.com/frmlx/framelix/compare/4.0.0-alpha.22...4.0.0-alpha.23
+* https://github.com/frmlx/framelix/compare/4.0.0-alpha.23...4.0.0-alpha.24
 
 
 # [4.0.0-alpha.23 - 2025-03-12]
