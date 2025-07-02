@@ -74,6 +74,7 @@ abstract class BaseTypeDef implements JsonSerializable, \Stringable
         }
         foreach ($srcTypeDefFiles as $typeDefFile) {
             /** @var static $class */
+            /** @phpstan-ignore-next-line  */
             $class = ClassUtils::getClassNameForFile($typeDefFile);
             $reflection = new ReflectionClass($class);
             $props = $reflection->getProperties();

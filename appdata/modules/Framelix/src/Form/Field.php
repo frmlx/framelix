@@ -295,7 +295,7 @@ abstract class Field implements JsonSerializable
                     $this->maxWidth += 20;
                 }
             }
-            if ($this instanceof Number && $schemaProperty->decimals > 0 && property_exists($this, "decimals")) {
+            if ($this instanceof Number && $schemaProperty->decimals > 0) {
                 $this->decimals = (int)$schemaProperty->decimals;
             }
         }
@@ -411,7 +411,7 @@ abstract class Field implements JsonSerializable
                                     $isVisible = $submittedValueEntry === $requiredValueEntry;
                                 } else {
                                     $isVisible = !!preg_match(
-                                        "~" . preg_quote($requiredValueEntry) . "~i",
+                                        "~" . preg_quote($requiredValueEntry, "~") . "~i",
                                         $submittedValueEntry
                                     );
                                 }
@@ -425,7 +425,7 @@ abstract class Field implements JsonSerializable
                                     $isVisible = $submittedValueEntry !== $requiredValueEntry;
                                 } else {
                                     $isVisible = !preg_match(
-                                        "~" . preg_quote($requiredValueEntry) . "~i",
+                                        "~" . preg_quote($requiredValueEntry, "~") . "~i",
                                         $submittedValueEntry
                                     );
                                 }

@@ -948,7 +948,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         return null;
     }
 
-    final public function getDeleteUrl(string|Url|null $redirectToUrlAfterDelete = null): ?string
+    final public function getDeleteUrl(string|Url|null $redirectToUrlAfterDelete = null): ?Url
     {
         if (!$this->isDeletable()) {
             return null;

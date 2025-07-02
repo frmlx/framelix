@@ -433,9 +433,9 @@ abstract class Sql
         // replace php class names to real table names
         preg_match_all(
             "~" .
-            preg_quote($this->quoteChars[0]) .
+            preg_quote($this->quoteChars[0], "~") .
             "(Framelix\\\\[a-zA-Z0-9_\\\\]+)" .
-            preg_quote($this->quoteChars[1]) .
+            preg_quote($this->quoteChars[1], "~") .
             "~",
             $query,
             $classNames

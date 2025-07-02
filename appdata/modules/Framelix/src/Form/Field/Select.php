@@ -83,9 +83,9 @@ class Select extends Field
     /**
      * If this isset to StorableArray class, the field will set those array values based on user selected values
      * This work for multiple or single selects
-     * @var string|null
+     * @var string|StorableArray|null
      */
-    public ?string $storableArrayClass = null;
+    public string|StorableArray|null $storableArrayClass = null;
 
     /**
      * If loadUrlOnChange isset, specify the target to load the url into
@@ -115,7 +115,6 @@ class Select extends Field
         if (!$this->storableArrayClass || !class_exists($this->storableArrayClass)) {
             return null;
         }
-        /** @var StorableArray $class */
         $class = $this->storableArrayClass;
         $values = $this->getConvertedSubmittedValue();
         return call_user_func_array([$class, 'setValues'], [$storable, !is_array($values) ? [$values] : $values]);
@@ -124,7 +123,7 @@ class Select extends Field
 
     /**
      * Add options by using given storables as key/label
-     * @param Storable[]|null $storables
+     * @param Storable[]|array|null $storables
      */
     public function addOptionsByStorables(?array $storables): void
     {

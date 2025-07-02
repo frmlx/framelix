@@ -168,6 +168,7 @@ class FileUtils
             return $files;
         }
         $directory = self::normalizePath($directory);
+        /** @phpstan-ignore-next-line  */
         $scan = scandir($directory, $sortOrder);
         foreach ($scan as $file) {
             if ($file == "." || $file == "..") {

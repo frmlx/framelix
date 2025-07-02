@@ -174,7 +174,7 @@ class Browser
         }
         if (!$this->validateSsl) {
             curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
         }
         if ($this->userPwd) {
             curl_setopt($this->curl, CURLOPT_USERPWD, $this->userPwd);
