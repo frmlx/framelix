@@ -17,17 +17,16 @@ RUN mkdir -p $FRAMELIX_APPDATA $FRAMELIX_SYSTEMDIR /run/php
 RUN export DEBIAN_FRONTEND=noninteractive &&  \
     apt update && apt install software-properties-common gnupg curl -y --no-install-recommends
 
-# add node source
-RUN  mkdir -p /etc/apt/keyrings && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN NODE_MAJOR=22 && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-
 RUN export DEBIAN_FRONTEND=noninteractive &&  \
     add-apt-repository ppa:ondrej/php -y &&  \
-    add-apt-repository ppa:ondrej/nginx-mainline -y && \
+    add-apt-repository ppa:ondrej/nginx -y && \
     apt update && \
-    apt install ca-certificates cron nginx nodejs php${PHP_VERSION}-xdebug php${PHP_VERSION}-cli php${PHP_VERSION}-fpm php${PHP_VERSION}-common php${PHP_VERSION}-mysql php${PHP_VERSION}-zip php${PHP_VERSION}-gd php${PHP_VERSION}-mbstring php${PHP_VERSION}-curl php${PHP_VERSION}-xml php${PHP_VERSION}-bcmath php${PHP_VERSION}-sqlite3 php${PHP_VERSION}-pgsql 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
+    apt install ca-certificates cron nginx php${PHP_VERSION}-xdebug php${PHP_VERSION}-cli php${PHP_VERSION}-fpm php${PHP_VERSION}-common php${PHP_VERSION}-mysql php${PHP_VERSION}-zip php${PHP_VERSION}-gd php${PHP_VERSION}-mbstring php${PHP_VERSION}-curl php${PHP_VERSION}-xml php${PHP_VERSION}-bcmath php${PHP_VERSION}-sqlite3 php${PHP_VERSION}-pgsql 7zip imagemagick git ghostscript nano -y --no-install-recommends && \
     rm /etc/php/*/*/conf.d/*-xdebug.ini && \
     apt upgrade -y
+
+# install bun
+RUN cd /tmp && curl -L --output  /tmp/bun.zip https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip && 7z e bun.zip && mv /tmp/bun /usr/bin/bun && chmod +x /usr/bin/bun && rm -Rfv /tmp/*
 
 # system and other stuff
 COPY docker-build/entrypoint.sh $FRAMELIX_SYSTEMDIR/entrypoint.sh

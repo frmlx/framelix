@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+# this script is executed once after all is initialized, started and setup
+# use it with mount override to provide custom boot scripts

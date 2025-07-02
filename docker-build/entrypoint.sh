@@ -63,7 +63,7 @@ fi
 
 if [ -z "$NGINX_USERNAME" ]; then
   NGINX_USERNAME="framelix_$NGINX_USER"
-  useradd -g "$NGINX_GROUP" -s /usr/bin/bash --no-create-home "$NGINX_USERNAME"
+  useradd -u "$NGINX_USER" -g "$NGINX_GROUP" -s /usr/bin/bash --no-create-home "$NGINX_USERNAME"
   echo "Created user '$NGINX_USERNAME' with ID $NGINX_USER because it didn't exist"
 fi
 
@@ -150,9 +150,10 @@ echo ""
 echo "Done."
 echo ""
 
-cecho y "# Start NodeJS module servers"
+cecho y "# Execute custom boot scripts"
 echo ""
-framelix_start_module_servers
+chmod +x /usr/bin/framelix_custom_boot
+framelix_custom_boot
 echo ""
 echo "Done."
 echo ""
@@ -163,8 +164,8 @@ output=`nginx -v 2>&1`
 echo "* Nginx: $output"
 output=`php -r 'echo PHP_VERSION;'`
 echo "* PHP: $output"
-output=`node -v`
-echo "* NodeJS: $output"
+output=`bun -v`
+echo "* Bun: $output"
 echo ""
 echo ""
 

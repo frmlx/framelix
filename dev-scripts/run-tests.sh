@@ -21,7 +21,7 @@ cecho y "[i] Running tests"
 
 if [ $TESTTYPE == "install-deps" ]; then
   cecho b "# Install/Update composer and npm dependencies"
-  $DOCKER_COMPOSE_EXEC_APP "framelix_npm_modules_install && framelix_composer_modules_install && cd /framelix/appdata/playwright && npm install -y"
+  $DOCKER_COMPOSE_EXEC_APP "framelix_npm_modules_install && framelix_composer_modules_install && cd /framelix/appdata/playwright && bun install -y"
   exit $?
 fi
 

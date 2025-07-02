@@ -44,7 +44,7 @@ if (preg_match("~^[0-9]+\.[0-9]+\.[0-9]+~i", $version)) {
     );
     file_put_contents($coreFile, $coreFileData);
 
-    echo "# Running npm install and composer install for modules integrated into the image\n";
+    echo "# Running bun install and composer install for modules integrated into the image\n";
     runCmd("framelix_composer_install");
     runCmd("framelix_npm_modules_install");
     runCmd("framelix_composer_modules_install");

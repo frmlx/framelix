@@ -33,7 +33,7 @@ services:
       timeout: 5s
       retries: 5
   playwright:
-    image: mcr.microsoft.com/playwright:v1.51.0-noble
+    image: mcr.microsoft.com/playwright:v1.53.2-noble
     # update @playwright/test in appdata/playwright/package.json as well when changing version
     restart: on-failure
     volumes:
@@ -53,8 +53,8 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ../appdata:/framelix/appdata
-      - ../userdata:/framelix/userdata
+      - ../appdata:/framelix/appdata:z,U
+      - ../userdata:/framelix/userdata:z,U
     ports:
       - "127.0.0.1:${FRAMELIX_TEST_PORT}:${FRAMELIX_TEST_PORT}"
       - "127.0.0.1:${FRAMELIX_DOCS_PORT}:${FRAMELIX_DOCS_PORT}"

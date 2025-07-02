@@ -1,9 +1,0 @@
-#!/usr/bin/bash
-
-for d in /framelix/appdata/modules/*/; do
-  if test -f "$d/nodejs/start.js"; then
-    echo "NodeJS Module found in $d/nodejs/start.js - Starting ..."
-    node $d/nodejs/start.js &
-    echo " done."
-  fi
-done

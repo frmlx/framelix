@@ -154,7 +154,7 @@ class ImageUtils
         $jsCode = 'const sharp = require("' . (__DIR__ . "/../../node_modules/sharp/lib/index.js") . '");' . "\n" . $jsCode;
         file_put_contents($tmpFile, $jsCode);
 
-        $shell = Shell::prepare("node {*}", [$tmpFile]);
+        $shell = Shell::prepare("bun {*}", [$tmpFile]);
         $shell->execute();
         return $shell;
     }

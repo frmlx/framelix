@@ -1,3 +1,16 @@
+# [4.0.0-alpha.26 - TBA]
+
+* upgraded to nginx version: nginx/1.28.0
+* upgraded to PHP: 8.4.8
+* upgraded vendor libraries
+* added `framelix_custom_boot` to be able to add any custom startup script
+* changed from docker hub to ghcr.io
+* fixed permissions on boot
+* removed default nodejs starter script in favor to `framelix_custom_boot`
+* removed `nodejs` and preinstall `bun` instead
+* https://github.com/frmlx/framelix/compare/4.0.0-alpha.25...4.0.0-alpha.26
+
+
 # [4.0.0-alpha.25 - 2025-03-28]
 
 * fixed container no restart after shutdown

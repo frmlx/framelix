@@ -6,7 +6,7 @@ ROOTDIR="$BASEDIR/.."
 
 source $BASEDIR/.env
 
-DOCKER_REPO=docker.io/framelix/framelix
+DOCKER_REPO=ghcr.io/frmlx/framelix
 DOCKER_TAGNAME_LOCAL=$DOCKER_REPO:local
 
 COMPOSER_FILE_ARGS="-f $SCRIPTDIR/docker-compose.yml"

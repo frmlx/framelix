@@ -111,7 +111,7 @@ class Compiler
                 'options' => $bundleOptions,
             ];
             $shell = Shell::prepare(
-                "node {*}",
+                "bun {*}",
                 [
                     __DIR__ . "/../../nodejs/compiler.js",
                     base64_encode(JsonUtils::encode($cmdParams)),
