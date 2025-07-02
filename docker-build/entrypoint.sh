@@ -78,7 +78,7 @@ echo ""
 cecho y "# Creating nginx config files based on environment variables"
 echo ""
 
-echo "user $NGINX_USERNAME $NGINX_GROUPNAME;" >/etc/nginx/nginx-framelix-dynamic.conf
+echo "user $NGINX_USERNAME $NGINX_GROUPNAME;" >/etc/nginx/nginx-user.conf
 
 php -f /framelix/system/create-nginx-sites-conf.php
 
@@ -132,7 +132,6 @@ echo ""
 
 cecho y "# Cleanup before warmup"
 echo ""
-rm /framelix/userdata/tmp/newest-version.json >/dev/null 2>&1
 echo "" > /var/log/framelix-cron.log
 echo ""
 echo "Done."

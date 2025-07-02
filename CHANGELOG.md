@@ -4,7 +4,8 @@
 * upgraded to PHP: 8.4.8
 * upgraded vendor libraries
 * added `framelix_custom_boot` to be able to add any custom startup script
-* changed from docker hub to ghcr.io
+* added more configuration files to be able to modify nginx behaviour
+* changed from docker hub package hosting to ghcr.io package hosting
 * fixed permissions on boot
 * removed default nodejs starter script in favor to `framelix_custom_boot`
 * removed `nodejs` and preinstall `bun` instead
