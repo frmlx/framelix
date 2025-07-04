@@ -15,7 +15,7 @@ use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Mpdf\QrCode\QrCode;
 
-class MPdfBase extends View
+abstract class MPdfBase extends View
 {
 
     /**

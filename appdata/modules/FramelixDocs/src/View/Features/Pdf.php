@@ -13,7 +13,7 @@ class Pdf extends View
     {
         // generally you should extend from the MpdfBase, so you can link to that pdf page
         // for the case if this demo, we manually generate that view
-        $instance = new MPdfBase();
+        $instance = new PdfExampleExtend();
         $instance->init();
 
         $instance->startHtml();
