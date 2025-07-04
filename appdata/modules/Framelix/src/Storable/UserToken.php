@@ -20,6 +20,7 @@ use const FRAMELIX_MODULE;
  */
 class UserToken extends StorableExtended
 {
+
     /**
      * Internal cache
      * @var array
@@ -55,6 +56,7 @@ class UserToken extends StorableExtended
     public static function setCookieValue(?string $token, ?int $lifetime = null): void
     {
         unset(self::$cache['getByCookie']);
+        User::setCurrentUser(null);
         Cookie::set(
             str_replace("{module}", FRAMELIX_MODULE, Config::$userTokenCookieName),
             $token,
@@ -104,4 +106,5 @@ class UserToken extends StorableExtended
         parent::setupStorableSchema($selfStorableSchema);
         $selfStorableSchema->addIndex('token', 'unique');
     }
+
 }

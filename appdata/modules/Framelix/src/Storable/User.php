@@ -2,7 +2,6 @@
 
 namespace Framelix\Framelix\Storable;
 
-use Framelix\Framelix\Config;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
@@ -52,13 +51,6 @@ class User extends StorableExtended
         $token = UserToken::getByCookie();
         self::$cache[$key] = null;
         if ($token?->user) {
-            if (!$token->simulatedUser) {
-                if ($token->user->language !== Config::$language && Url::getBrowserUrl()->getLanguage()) {
-                    $token->user->language = Config::$language;
-                    $token->user->preserveUpdateUserAndTime();
-                    $token->user->store(true);
-                }
-            }
             self::$cache[$key] = $originalUser ? $token->user : $token->simulatedUser ?? $token->user;
         }
         return self::$cache[$key];
@@ -67,7 +59,7 @@ class User extends StorableExtended
     /**
      * Set current logged-in user
      * Is required when some api require a user and set it to a system user
-     * @param User|null $user
+     * @param User|null $user Null will reset the cache, so next User::get will check the cookie again
      */
     public static function setCurrentUser(?User $user): void
     {
