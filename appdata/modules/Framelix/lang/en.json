@@ -725,6 +725,7 @@
     "__framelix_view_backend_userprofile_2fa_regenerate_codes__": [
         "Create and download new backup codes"
     ],
+    "__framelix_wait_for_unblock__" : "Too many requests. Wait {0} for new try.",
     "__framelix_view_backend_userprofile_2fa_regenerate_codes_warning__": [
         "Are you sure? This will disable all previous backup codes!"
     ],

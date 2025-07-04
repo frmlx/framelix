@@ -6,38 +6,41 @@ use Framelix\Framelix\Config;
 use Framelix\Framelix\Storable\BruteForceProtection;
 use Framelix\FramelixTests\TestCaseDbTypes;
 
-use function sleep;
-
 abstract class BruteForceProtectionTestBase extends TestCaseDbTypes
 {
+
     public function test(): void
     {
         $this->setupDatabase();
         Config::$clientIpOverride = '127.0.0.1';
-        BruteForceProtection::reset('testid1', 'test');
-        $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, 1, 1, 'test'));
-        BruteForceProtection::countUp('testid1', 'test');
-        BruteForceProtection::countUp('testid1', 'test');
-        // after reaching threshold, it is blocked until enough time has passed
-        // in this test we use minimal time possible
-        $this->assertTrue(BruteForceProtection::isBlocked('testid1', true, 1, 1, 'test'));
-        $this->assertToastError();
-        sleep(1);
-        $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, 1, 1, 'test'));
 
-        BruteForceProtection::countUp('testid1', 'test');
-        $this->assertTrue(BruteForceProtection::isBlocked('testid1', false, 1, 1, 'test'));
-        sleep(2);
-        // still blocked, must wait 2 seconds because 2 counts already exist
-        $this->assertTrue(BruteForceProtection::isBlocked('testid1', false, 1, 2, 'test'));
-        sleep(2);
-        $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, 1, 1, 'test'));
-        // count up block again
-        BruteForceProtection::countUp('testid1', 'test');
-        $this->assertTrue(BruteForceProtection::isBlocked('testid1', false, 1, 1, 'test'));
-        // do the same check but choose a higher treshold which is not blocked
-        $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, 5, 1, 'test'));
+        $maxAttempts = 2;
+        $timeRangeSpan = 60;
+        $mustWaitSecondsIfBlocked = 60;
+
         BruteForceProtection::reset('testid1', 'test');
-        $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, 1, 1, 'test'));
+        $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, $maxAttempts, $timeRangeSpan, $mustWaitSecondsIfBlocked, connectionId: 'test'));
+
+        BruteForceProtection::logAttempt('testid1', connectionId: 'test');
+        $this->assertFalse(BruteForceProtection::isBlocked('testid1', false, $maxAttempts, $timeRangeSpan, $mustWaitSecondsIfBlocked, connectionId: 'test'));
+
+        BruteForceProtection::logAttempt('testid1', connectionId: 'test');
+        $this->assertTrue(BruteForceProtection::isBlocked('testid1', true, $maxAttempts, $timeRangeSpan, $mustWaitSecondsIfBlocked, connectionId: 'test'));
+
+        $this->assertToastError();
+
+        $this->assertTrue(
+            BruteForceProtection::isBlocked('testid1', true, $maxAttempts, $timeRangeSpan, $mustWaitSecondsIfBlocked, "now + 50 seconds", connectionId: 'test')
+        );
+
+        // timespan is 60 seconds, we simulate that 65 seconds has passed, so its valid again
+        $this->assertFalse(
+            BruteForceProtection::isBlocked('testid1', true, $maxAttempts, $timeRangeSpan, $mustWaitSecondsIfBlocked, "now + 65 seconds", connectionId: 'test')
+        );
+
+        // after reset it should work out of the box
+        BruteForceProtection::reset('testid1', 'test');
+        $this->assertFalse(BruteForceProtection::isBlocked('testid1', true, $maxAttempts, $timeRangeSpan, $mustWaitSecondsIfBlocked, connectionId: 'test'));
     }
+
 }

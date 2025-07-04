@@ -66,7 +66,6 @@ class Login extends View
                     $user->twoFactorBackupCodes = array_values($backupCodes);
                     $user->store();
                 }
-                BruteForceProtection::reset('backend-login');
                 self::redirectToDefaultUrl();
             case 'login':
                 $form = self::getForm(
@@ -78,7 +77,7 @@ class Login extends View
                 if (BruteForceProtection::isBlocked('backend-login')) {
                     Url::getBrowserUrl()->redirect();
                 }
-                BruteForceProtection::countUp('backend-login');
+                BruteForceProtection::logAttempt('backend-login');
                 if (!$user?->passwordVerify(Request::getPost('password'))) {
                     // create system event logs
                     $logCategory = SystemEventLog::CATEGORY_LOGIN_FAILED;
@@ -118,7 +117,6 @@ class Login extends View
                 if ((Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
                     SystemEventLog::create($logCategory, null, ['email' => $email]);
                 }
-                BruteForceProtection::reset('backend-login');
                 self::redirectToDefaultUrl();
 
             case 'webauthn-getargs':

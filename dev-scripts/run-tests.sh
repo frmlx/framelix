@@ -43,13 +43,15 @@ echo ""
 echo "Done."
 echo ""
 
-cecho b "# Run appWarmup"
-$DOCKER_COMPOSE_EXEC_APP "framelix_console all appWarmup"
-echo ""
-echo "Done."
-echo ""
-
 if [ $TESTTYPE == "phpunit" ]; then
+
+  cecho b "# Run appWarmup"
+  $DOCKER_COMPOSE_EXEC_APP "framelix_console FramelixTests appWarmup"
+  echo ""
+  echo "Done."
+  echo ""
+
+
   # phpunit with process isolation have a bug with enabling xdebug on the fly with -d ini parameters
   # so, modifying the php config globally for the time this test is running
   cecho b "# Php Unit Tests"
@@ -63,6 +65,13 @@ if [ $TESTTYPE == "phpunit" ]; then
 fi
 
 if [ $TESTTYPE == "playwright" ]; then
+
+  cecho b "# Run appWarmup"
+  $DOCKER_COMPOSE_EXEC_APP "framelix_console all appWarmup"
+  echo ""
+  echo "Done."
+  echo ""
+
   cecho b "# Playwright End-to-End Tests"
   PLAYWRIGHT_CACHE=/framelix/system/playwright/cache
 

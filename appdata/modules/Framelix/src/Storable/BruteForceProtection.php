@@ -9,24 +9,30 @@ use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 
 use function md5;
-use function time;
 
 /**
- * BruteForceProtection
  * Very simple ip based brute force protection
  * Choose limits very high to prevent false positive from same networks (Big companies with lots of clients under same ip)
  * @property string $idHash
- * @property int $count
- * @property DateTime $lastCount
+ * @property mixed $logs
+ * @property DateTime $lastLog
  */
 class BruteForceProtection extends Storable
 {
+
+    public const int MAX_ENTRY_AGE = 86400;
 
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
         parent::setupStorableSchema($selfStorableSchema);
         $selfStorableSchema->properties['idHash']->length = 32;
         $selfStorableSchema->addIndex('idHash', 'unique');
+        $selfStorableSchema->addIndex('lastLog', 'index');
+    }
+
+    public static function cleanup(): void
+    {
+        self::deleteMultiple(self::getByCondition('lastLog < {0}', [DateTime::create("now - " . self::MAX_ENTRY_AGE . " seconds")]));
     }
 
     /**
@@ -45,15 +51,18 @@ class BruteForceProtection extends Storable
     }
 
     /**
-     * Count up for current ip and given id
+     * Log and attempt
      * @param string $id
+     * @param string|DateTime $logTimestamp The timestamp to use for this log
      * @param string|null $connectionId Database connection id to use
      * @return void
      */
-    public static function countUp(
+    public static function logAttempt(
         string $id,
-        ?string $connectionId = null
+        string|DateTime $logTimestamp = "now",
+        ?string $connectionId = null,
     ): void {
+        self::cleanup();
         $idHash = self::getIdHash($id);
         $entry = self::getByConditionOne('idHash = {0}', [$idHash], connectionId: $connectionId);
         if (!$entry) {
@@ -62,75 +71,73 @@ class BruteForceProtection extends Storable
                 $entry->connectionId = $connectionId;
             }
             $entry->idHash = $idHash;
-            $entry->count = 0;
+            $entry->logs = [];
         }
-        $entry->count++;
-        $entry->lastCount = DateTime::create('now');
+        $logs = $entry->logs;
+        $logs[] = DateTime::create($logTimestamp)->getTimestamp();
+        $entry->logs = $logs;
+        $entry->lastLog = DateTime::create($logTimestamp);
         $entry->store();
     }
 
     /**
      * Check if given current client ip and given id is blocked
      * @param string $id
-     * @param bool $addToast If true, it will add an error toast which defined how long the user must wait
-     * @param int $blockCountTreshold When count reaches this treshold, it will return false when lastlog was not long enough ago
-     * @param int $waitSecondsPerCount A client must wait $waitSecondsPerCount*countsOverTreshold seconds since the last log to make this function return true
+     * @param bool $addToast If true, it will add an error toast which describes how long the user must wait
+     * @param int $maxAttempts Maximum allowed attempts in $withinTimeRange
+     * @param int $timeRangeSpan Number of seconds (between $timeRangeEnd - $withinTimeRange and $timeRangeEnd) in which the attempts are counted
+     * @param int $mustWaitSecondsIfBlocked Number of seconds the user must wait after last log if he is blocked
+     * @param string|DateTime $timeRangeEnd Count attempts until this time
      * @param string|null $connectionId Database connection id to use
      * @return bool Return false when is not blocked
      */
     public static function isBlocked(
         string $id,
         bool $addToast = true,
-        int $blockCountTreshold = 60,
-        int $waitSecondsPerCount = 60,
-        ?string $connectionId = null
+        int $maxAttempts = 60,
+        int $timeRangeSpan = 60,
+        int $mustWaitSecondsIfBlocked = 60,
+        string|DateTime $timeRangeEnd = "now",
+        ?string $connectionId = null,
     ): bool {
-        $until = self::getBlockReleaseTime($id, $blockCountTreshold, $waitSecondsPerCount, $connectionId);
-        if (!$until) {
-            return false;
-        }
-        if ($addToast) {
-            Toast::error(
-                Lang::get(
-                    '__myself_wait_for_unblock__',
-                    [$until->getRelativeTimeUnits(DateTime::create('now'))]
-                )
-            );
-        }
-        return true;
-    }
-
-    /**
-     * Get end time when block is released
-     * Returns null if current client ip and given id isn't blocked
-     * @param string $id
-     * @param int $blockCountTreshold When count exceed this treshold, it will return a time when lastlog was not long enough ago
-     * @param int $waitSecondsPerCount A client must wait $waitSecondsPerCount*countsOverTreshold seconds since the last log to make this function return true
-     * @param string|null $connectionId Database connection id to use
-     * @return DateTime|null
-     */
-    public static function getBlockReleaseTime(
-        string $id,
-        int $blockCountTreshold = 60,
-        int $waitSecondsPerCount = 60,
-        ?string $connectionId = null
-    ): ?DateTime {
         $idHash = self::getIdHash($id);
         $entry = self::getByConditionOne('idHash = {0}', [$idHash], connectionId: $connectionId);
-        if (!$entry) {
-            return null;
+        if (!$entry || !$entry->logs) {
+            return false;
         }
-        if ($entry->count <= $blockCountTreshold) {
-            return null;
+        // cleanup logs older then max timespan
+        $logs = $entry->logs;
+        $count = 0;
+        $logsModified = false;
+        $timeRangeEndTimestamp = DateTime::create($timeRangeEnd)->getTimestamp();
+        $timeRangeStartTimestamp = $timeRangeEndTimestamp - $timeRangeSpan;
+        foreach ($logs as $key => $log) {
+            if ($log >= $timeRangeStartTimestamp && $log <= $timeRangeEndTimestamp) {
+                $count++;
+            }
+            if ($log < $timeRangeStartTimestamp) {
+                unset($logs[$key]);
+                $logsModified = true;
+            }
         }
-        $overTreshold = $entry->count - $blockCountTreshold;
-        $until = $entry->lastCount->clone();
-        $waitSeconds = $waitSecondsPerCount * $overTreshold;
-        $until->modify("+ $waitSeconds seconds");
-        if ($until->getTimestamp() <= time()) {
-            return null;
+        if ($logsModified) {
+            $entry->logs = $logs;
+            $entry->store();
         }
-        return $until;
+        if ($count >= $maxAttempts) {
+            if ($addToast) {
+                $waitUntil = $entry->lastLog;
+                $waitUntil->modify("+ $mustWaitSecondsIfBlocked seconds");
+                Toast::error(
+                    Lang::get(
+                        '__framelix_wait_for_unblock__',
+                        [$waitUntil->getRelativeTimeUnits(DateTime::create($timeRangeEnd))]
+                    )
+                );
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -142,4 +149,5 @@ class BruteForceProtection extends Storable
     {
         return md5(Request::getClientIp() . "-" . $id);
     }
+
 }
