@@ -1,8 +1,11 @@
 {
   "name": "framelix",
+  "scripts": {
+    "upgradeall" : "bun run npm-check-updates -u && bun install"
+  },
   "dependencies": {
-    "@babel/core": "^7.27.7",
-    "@babel/preset-env": "^7.27.2",
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
     "@popperjs/core": "^2.11.8",
     "cash-dom": "^8.1.5",
     "dayjs": "^1.11.13",
@@ -13,5 +16,8 @@
     "sortablejs": "^1.15.6",
     "swiped-events": "^1.2.0"
   },
-  "web-types": "dev/web-types/web-types.json"
+  "web-types": "dev/web-types/web-types.json",
+  "devDependencies": {
+    "npm-check-updates": "^18.0.1"
+  }
 }
