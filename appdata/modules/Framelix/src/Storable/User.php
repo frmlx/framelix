@@ -22,7 +22,7 @@ use function strlen;
  * @property bool $flagLocked
  * @property string|null $twoFactorSecret
  * @property mixed|null $twoFactorBackupCodes
- * @property mixed|null $settings
+ * @property mixed|null $additionalData
  */
 class User extends StorableExtended
 {
@@ -145,7 +145,7 @@ class User extends StorableExtended
     protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
     {
         parent::setupStorableSchema($selfStorableSchema);
-        $selfStorableSchema->properties['settings']->lazyFetch = true;
+        $selfStorableSchema->properties['additionalData']->lazyFetch = true;
         $selfStorableSchema->addIndex('email', 'unique');
     }
 
