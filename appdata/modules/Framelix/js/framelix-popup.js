@@ -95,7 +95,7 @@ class FramelixPopup {
         offsetByMouseEvent: ev,
         width: null,
         textAlign: 'center',
-        data: { tooltip: true }
+        data: { tooltip: true },
       })
       // a tooltip is above everything
       instance.popperEl.css('z-index', 999)
@@ -103,7 +103,9 @@ class FramelixPopup {
     $(document).on('click', function (ev) {
       for (let id in FramelixPopup.instances) {
         const instance = FramelixPopup.instances[id]
-        if (!instance.popperEl) continue
+        if (!instance.popperEl) {
+          continue
+        }
         const popperEl = instance.popperEl[0]
         const contains = popperEl.contains(ev.target)
         if (instance.options.closeMethods.indexOf('click-outside') > -1 && !contains) {
@@ -119,10 +121,14 @@ class FramelixPopup {
     })
     // listen to dom changes to auto hide popups when the target element isn't visible in the dom anymore
     FramelixDom.addChangeListener('framelix-popup', function () {
-      if (!FramelixObjectUtils.hasKeys(FramelixPopup.instances)) return
+      if (!FramelixObjectUtils.hasKeys(FramelixPopup.instances)) {
+        return
+      }
       for (let id in FramelixPopup.instances) {
         const instance = FramelixPopup.instances[id]
-        if (!instance.popperEl) continue
+        if (!instance.popperEl) {
+          continue
+        }
         if (!FramelixDom.isVisible(instance.target) || !FramelixDom.isVisible(instance.popperEl)) {
           instance.destroy()
         } else {
@@ -145,17 +151,37 @@ class FramelixPopup {
    */
   static show (target, content, options) {
     const lastModal = FramelixModal.modalsContainer.children().last()
-    if (!options) options = {}
-    if (options.group === undefined) options.group = 'popup'
-    if (options.offset === undefined) options.offset = [0, 5]
-    if (options.color === undefined) options.color = 'dark'
-    if (options.width === undefined) options.width = '300px'
-    if (options.textAlign === undefined) options.textAlign = 'center'
-    if (options.appendTo === undefined) options.appendTo = lastModal.length ? lastModal : 'body'
-    if (options.padding === undefined) options.padding = '5px 10px'
-    if (options.closeMethods === undefined) options.closeMethods = 'click-outside'
-    if (typeof options.closeMethods === 'string') options.closeMethods = options.closeMethods.replace(/\s/g, '').split(',')
-    if (target instanceof cash) target = target[0]
+    if (!options) {
+      options = {}
+    }
+    if (options.group === undefined) {
+      options.group = 'popup'
+    }
+    if (options.offset === undefined) {
+      options.offset = [0, 5]
+    }
+    if (options.color === undefined) {
+      options.color = 'dark'
+    }
+    if (options.width === undefined) {
+      options.width = '300px'
+    }
+    if (options.textAlign === undefined) {
+      options.textAlign = 'center'
+    }
+    if (options.appendTo === undefined) {
+      options.appendTo = lastModal.length ? lastModal : 'body'
+    }
+    if (options.padding === undefined) {
+      options.padding = '5px 10px'
+    }
+    if (options.closeMethods === undefined) {
+      options.closeMethods = 'click-outside'
+    }
+    if (typeof options.closeMethods === 'string') {
+      options.closeMethods = options.closeMethods.replace(/\s/g, '').split(',')
+    }
+    target = FramelixDom.getNativeElement(target)
 
     const instance = new FramelixPopup()
     instance.options = options
@@ -173,19 +199,21 @@ class FramelixPopup {
     }
     let popperOptions = {}
     popperOptions.placement = options.placement || 'top'
-    if (!popperOptions.modifiers) popperOptions.modifiers = []
+    if (!popperOptions.modifiers) {
+      popperOptions.modifiers = []
+    }
     popperOptions.modifiers.push({
       name: 'offset',
       options: {
         offset: options.offset,
-      }
+      },
     })
     popperOptions.modifiers.push({
       name: 'preventOverflow',
       options: {
         padding: 10,
         altAxis: true,
-        tether: !options.stickInViewport
+        tether: !options.stickInViewport,
       },
     })
     popperOptions.modifiers.push({
@@ -194,7 +222,9 @@ class FramelixPopup {
         padding: 5,
       },
     })
-    if (!target.popperInstances) target.popperInstances = {}
+    if (!target.popperInstances) {
+      target.popperInstances = {}
+    }
     if (target.popperInstances[options.group]) {
       target.popperInstances[options.group].destroy()
     }
@@ -266,7 +296,9 @@ class FramelixPopup {
       instance.destroy()
     })
     Framelix.addEscapeAction(function () {
-      if (!instance.resolvers) return false
+      if (!instance.resolvers) {
+        return false
+      }
       instance.destroy()
       return true
     })
@@ -278,10 +310,7 @@ class FramelixPopup {
    * @param {HTMLElement|Cash} el
    */
   static destroyInstancesOnTarget (el) {
-    if (el instanceof cash) {
-      el = el[0]
-    }
-    if (el.popperInstances) {
+    if (el && el.popperInstances) {
       for (let group in el.popperInstances) {
         el.popperInstances[group].destroy()
       }
@@ -318,8 +347,12 @@ class FramelixPopup {
    */
   async destroy () {
     // already destroyed
-    if (!this.resolvers) return
-    for (let key in this.resolvers) await this.resolvers[key]()
+    if (!this.resolvers) {
+      return
+    }
+    for (let key in this.resolvers) {
+      await this.resolvers[key]()
+    }
     this.resolvers = null
     delete FramelixPopup.instances[this.id]
     if (this.popperEl) {

@@ -41,7 +41,7 @@ class Console extends \Framelix\Framelix\Console
             $obj = new  User();
             $obj->email = "user$i@test.local";
             $obj->setPassword($pw);
-            $obj->settings = ['pwRaw' => $pw];
+            $obj->additionalData = ['pwRaw' => $pw];
             $obj->flagLocked = false;
             $obj->store();
             $obj->addRole('admin');

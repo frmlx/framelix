@@ -6,7 +6,6 @@ use Framelix\Framelix\Backend\Sidebar;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\ErrorHandler;
 use Framelix\Framelix\Exception\StopExecution;
-use Framelix\Framelix\Form\Field\Html;
 use Framelix\Framelix\Form\Field\Select;
 use Framelix\Framelix\Form\Field\Toggle;
 use Framelix\Framelix\Form\Form;
@@ -141,11 +140,12 @@ abstract class View extends \Framelix\Framelix\View
                     $url = Url::getBrowserUrl();
                     $url->replaceLanguage($supportedLanguage);
                     $field->addOption(
-                        $url->getUrlAsString(),
-                        Lang::ISO_LANG_CODES[$supportedLanguage] ?? $supportedLanguage
+                        $supportedLanguage,
+                        '<div data-url="' . $url->getUrlAsString() . '">' . (Lang::ISO_LANG_CODES[$supportedLanguage] ?? $supportedLanguage) . '</div>',
+
                     );
                 }
-                $field->defaultValue = Url::getBrowserUrl()->getUrlAsString();
+                $field->defaultValue = Config::$language;
                 $form->addField($field);
             }
 
@@ -162,12 +162,13 @@ abstract class View extends \Framelix\Framelix\View
               (async function () {
                 const form = FramelixForm.getById('framelix_user_settings')
                 await form.rendered
-                const languageSelect = FramelixFormField.getFieldByName(FramelixModal.modalsContainer, 'languageSelect')
+                /** @type {FramelixFormFieldSelect} */
+                const languageSelect = FramelixFormFieldSelect.getFieldByName(FramelixModal.modalsContainer, 'languageSelect')
                 if (languageSelect) {
                   languageSelect.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
-                    const v = languageSelect.getValue()
-                    if (v) {
-                      window.location.href = v
+                    const v = languageSelect.getSelectedOptionElements()
+                    if (v.length) {
+                      window.location.href = v.find('[data-url]').attr('data-url')
                     }
                   })
                 }
@@ -234,9 +235,11 @@ abstract class View extends \Framelix\Framelix\View
             Response::header('X-Robots-Tag: ' . $this->metaRobots);
         }
 
+        $user = User::get();
+
         $htmlAttributes = new HtmlAttributes();
         $htmlAttributes->set('data-appstate', $appIsSetup ? 'ok' : 'setup');
-        $htmlAttributes->set('data-user', User::get());
+        $htmlAttributes->set('data-user', $user);
         $htmlAttributes->set('data-sidebar-position', $this->sidebarPosition);
         $htmlAttributes->set('data-show-sidebar', (int)$this->showSidebar);
         $htmlAttributes->set('data-show-topbar', (int)$this->showTopBar);
@@ -292,8 +295,10 @@ abstract class View extends \Framelix\Framelix\View
                         ?>
                         <framelix-button theme="transparent"
                                          class="framelix-user-settings"
-                            <?= new JsRequestOptions(JsCall::getSignedUrl([$this::class, 'onJsCall'], 'settings', ['forceColorScheme' => $this->forceColorScheme]),
-                                new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500)))->toDefaultAttrStr() ?>
+                            <?= new JsRequestOptions(
+                                JsCall::getSignedUrl([$this::class, 'onJsCall'], 'settings', ['forceColorScheme' => $this->forceColorScheme]),
+                                new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))
+                            )->toDefaultAttrStr() ?>
                                          icon="739"
                                          title="__framelix_backend_user_settings__"></framelix-button>
                         <?php

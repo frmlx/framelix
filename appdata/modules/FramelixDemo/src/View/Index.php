@@ -25,7 +25,7 @@ class Index extends View
             if ($user) {
                 $pw = RandomGenerator::getRandomString(5, 10);
                 $user->setPassword($pw);
-                $user->settings = ['pwRaw' => $pw];
+                $user->additionalData = ['pwRaw' => $pw];
                 $user->store();
             }
             Toast::success('A new password has been generated');
@@ -85,13 +85,13 @@ class Index extends View
                 $user->email = "admin@test.local";
                 $pw = RandomGenerator::getRandomString(5, 10);
                 $user->setPassword($pw);
-                $user->settings = ['pwRaw' => $pw];
+                $user->additionalData = ['pwRaw' => $pw];
                 $user->flagLocked = false;
                 $user->store();
                 $user->addRole('admin');
             }
             echo 'E-Mail: <code>' . $user->email . '</code><br/>';
-            echo 'Password: <code>' . $user->settings['pwRaw'] . '</code><br/>';
+            echo 'Password: <code>' . $user->additionalData['pwRaw'] . '</code><br/>';
             ?>
           <br/>
           If you can't login, someone probably have changed the password. Click the PW reset button bellow, to

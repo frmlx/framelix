@@ -46,6 +46,7 @@ use const SORT_DESC;
  */
 abstract class View implements JsonSerializable
 {
+
     /**
      * Increase this number when something important changes in metadata handling
      */
@@ -114,13 +115,6 @@ abstract class View implements JsonSerializable
      * @var string|null
      */
     protected ?string $tabId = null;
-
-    /**
-     * Allow multilanguage for this page
-     * If disabled, the page has the default system language (or the language you set in Lang::$lang)
-     * @var bool
-     */
-    protected bool $multilanguage = true;
 
     /**
      * The view is default hidden from access via url
@@ -195,10 +189,9 @@ abstract class View implements JsonSerializable
             $urlPath = preg_replace("~[^a-z0-9-_/+.,]~i", "", $urlPath);
         }
         $url = Url::getApplicationUrl();
-        // check if multilanguage, append language in uri
+        // append language in uri
         if (
             count(Config::$languagesAvailable) > 1
-            && $metadata['multilanguage']
             && (
                 ($language === 'default' && Config::$languageInGeneratedViewUrls)
                 || ($language !== 'default' && is_string($language))
@@ -260,21 +253,12 @@ abstract class View implements JsonSerializable
      * @param bool $setActiveLanguageFromUrl Does set the current active language to the detected language from url
      * @codeCoverageIgnore
      */
-    public static function loadViewForCurrentUrl(
-        bool $setActiveLanguageFromUrl = true
-    ): void {
+    public static function loadViewForCurrentUrl(): void {
         $url = Url::create();
         $view = self::findViewForUrl($url);
         if (!$view) {
             http_response_code(404);
             return;
-        }
-        $foundLanguage = $url->getLanguage();
-        $viewMetadata = self::getMetadataForView($view);
-        if ($foundLanguage && $viewMetadata['multilanguage']) {
-            if ($setActiveLanguageFromUrl) {
-                Config::$language = $foundLanguage;
-            }
         }
         self::$activeView = $view;
         if ($tabId = Request::getHeader('HTTP_X_TAB_ID')) {
@@ -437,7 +421,6 @@ abstract class View implements JsonSerializable
                     'accessRole' => $defaultProps['accessRole'],
                     'customUrl' => $defaultProps['customUrl'],
                     'devModeOnly' => $defaultProps['devModeOnly'],
-                    'multilanguage' => $defaultProps['multilanguage'],
                     'urlPriority' => $defaultProps['urlPriority'],
                     'hiddenView' => $defaultProps['hiddenView'] ?? false,
                     'pageTitle' => $pageTitle,
@@ -519,4 +502,5 @@ abstract class View implements JsonSerializable
      * On request
      */
     abstract public function onRequest(): void;
+
 }

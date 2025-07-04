@@ -116,7 +116,9 @@ class FramelixFormFieldSelect extends FramelixFormField {
       for (let key in this.options) {
         const optionValue = this.stringifyValue(this.options[key][0])
         const checked = arrValues.indexOf(optionValue) > -1
-        if (this.dropdown && !checked) continue
+        if (this.dropdown && !checked) {
+          continue
+        }
         const el = this.getOptionHtml(key, checked)
         this.optionsContainer.append(el)
         countChecked++
@@ -136,13 +138,15 @@ class FramelixFormFieldSelect extends FramelixFormField {
   getValue () {
     const values = FormDataJson.toJson(this.optionsContainer[0], {
       'includeDisabled': true,
-      'flatList': true
+      'flatList': true,
     })
     let arr = []
     for (let i = 0; i < values.length; i++) {
       arr.push(values[i][1])
     }
-    if (!arr.length) return null
+    if (!arr.length) {
+      return null
+    }
     return this.multiple ? arr : arr[0]
   }
 
@@ -152,10 +156,14 @@ class FramelixFormFieldSelect extends FramelixFormField {
    * @return {Promise<string|true>}
    */
   async validate () {
-    if (!this.isVisible()) return true
+    if (!this.isVisible()) {
+      return true
+    }
 
     const parentValidation = await super.validate()
-    if (parentValidation !== true) return parentValidation
+    if (parentValidation !== true) {
+      return parentValidation
+    }
 
     let value = this.getValue()
     if (value !== null) {
@@ -180,7 +188,9 @@ class FramelixFormFieldSelect extends FramelixFormField {
    */
   addOptions (options) {
     if (options) {
-      for (let key in options) this.addOption(key, options[key])
+      for (let key in options) {
+        this.addOption(key, options[key])
+      }
     }
   }
 
@@ -201,7 +211,9 @@ class FramelixFormFieldSelect extends FramelixFormField {
    */
   removeOption (value) {
     let i = this.indexOfOptionValue(value)
-    if (i > -1) this.options.splice(i, 1)
+    if (i > -1) {
+      this.options.splice(i, 1)
+    }
   }
 
   /**
@@ -210,7 +222,9 @@ class FramelixFormFieldSelect extends FramelixFormField {
    */
   removeOptions (options) {
     if (options) {
-      for (let key in options) this.removeOption(options[key])
+      for (let key in options) {
+        this.removeOption(options[key])
+      }
     }
   }
 
@@ -229,6 +243,14 @@ class FramelixFormFieldSelect extends FramelixFormField {
   }
 
   /**
+   * Get currently selected option elements
+   * @returns {Cash}
+   */
+  getSelectedOptionElements () {
+    return this.container.find('.framelix-form-field-select-options .framelix-form-field-select-option-checked')
+  }
+
+  /**
    * Get option html
    * @param {number} optionIndex
    * @param {boolean} checked
@@ -238,19 +260,21 @@ class FramelixFormFieldSelect extends FramelixFormField {
     const optionValue = this.options[optionIndex][0]
     const optionLabel = this.options[optionIndex][1]
     const option = $(`
-        <label class="framelix-form-field-select-option">
+        <label class="framelix-form-field-select-option ${checked ? 'framelix-form-field-select-option-checked' : ''}">
             <div class="framelix-form-field-select-option-checkbox">
                 <input type="checkbox" name="${this.name + (this.multiple ? '[]' : '')}" ${this.disabled ? 'disabled' : ''}>
             </div>
-            <div class="framelix-form-field-select-option-label"></div>
+            <div class="framelix-form-field-select-option-label">${optionLabel}</div>
         </label>
       `)
     const input = option.find('input')
     input.attr('value', optionValue)
     input.prop('checked', checked)
-    FramelixLang.get(optionLabel).then(function (result) {
-      option.find('.framelix-form-field-select-option-label').html(result)
-    })
+    if (optionLabel.startsWith('__') && optionLabel.endsWith('__')) {
+      FramelixLang.get(optionLabel).then(function (result) {
+        option.find('.framelix-form-field-select-option-label').html(result)
+      })
+    }
     return option
   }
 
@@ -284,7 +308,7 @@ class FramelixFormFieldSelect extends FramelixFormField {
       appendTo: this.field,
       padding: '',
       offset: [0, 0],
-      color: this.optionsContainer.parent()
+      color: this.optionsContainer.parent(),
     })
     this.optionsPopup.destroyed.then(function () {
       let values = []
@@ -382,7 +406,9 @@ class FramelixFormFieldSelect extends FramelixFormField {
         }
       })
       container.on('click', 'label', function (ev) {
-        if (!ev.shiftKey) return
+        if (!ev.shiftKey) {
+          return
+        }
         const input = $(this).find('input')[0]
         container.find('input').prop('checked', input.checked)
         updateValue()
@@ -415,7 +441,7 @@ class FramelixFormFieldSelect extends FramelixFormField {
             ev.stopPropagation()
             self.destroyDropdown()
             self.setValue(null, true)
-          })
+          }),
         )
       }
       if (this.dropdown) {
@@ -437,10 +463,14 @@ class FramelixFormFieldSelect extends FramelixFormField {
         pickerEl.append(dropdownBtn)
       }
       this.container.on(FramelixFormField.EVENT_CHANGE_USER, function () {
-        if (!self.loadUrlOnChange) return
+        if (!self.loadUrlOnChange) {
+          return
+        }
         const isJsCall = self.loadUrlOnChange.includes('/jscall?phpMethod')
         let target = self.loadUrlTarget
-        if (isJsCall && target !== 'none') target = 'modal'
+        if (isJsCall && target !== 'none') {
+          target = 'modal'
+        }
 
         let callUrl
         if (isJsCall) {

@@ -2,10 +2,9 @@
     "directoryListHash": "3|3752842495",
     "views": {
         "Framelix\\FramelixStarter\\View\\Index": {
-            "accessRole": true,
+            "accessRole": "admin",
             "customUrl": null,
             "devModeOnly": false,
-            "multilanguage": true,
             "urlPriority": 0,
             "hiddenView": false,
             "pageTitle": "Framelix Starter Page",

@@ -53,7 +53,7 @@ class User extends StorableExtended
         self::$cache[$key] = null;
         if ($token?->user) {
             if (!$token->simulatedUser) {
-                if ($token->user->language !== Config::$language) {
+                if ($token->user->language !== Config::$language && Url::getBrowserUrl()->getLanguage()) {
                     $token->user->language = Config::$language;
                     $token->user->preserveUpdateUserAndTime();
                     $token->user->store(true);

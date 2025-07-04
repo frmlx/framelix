@@ -20,7 +20,6 @@ class StorableFileThumbnail extends View
 {
     protected string|bool $accessRole = "*";
     protected ?string $customUrl = "~/storablefilethumbnail/(?<id>[0-9]+)-(?<thumbSize>[0-9]+)\.(?<extension>[a-z]+)$~";
-    protected bool $multilanguage = false;
 
     public function onRequest(): void
     {

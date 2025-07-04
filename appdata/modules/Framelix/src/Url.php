@@ -124,7 +124,7 @@ class Url implements JsonSerializable
         }
         if (!$url) {
             $url = (Request::isHttps() ? 'https' : 'http') . "://"
-                . ($_SERVER['HTTP_HOST'] ?? Config::$applicationHost) . $_SERVER['REQUEST_URI'];
+                . ($_SERVER['HTTP_HOST'] ?? Config::$applicationHost) . ($_SERVER['REQUEST_URI'] ?? "/");
         }
         $instance = new self();
         $instance->update($url, true);

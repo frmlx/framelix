@@ -5,6 +5,7 @@ namespace Framelix\Framelix;
 use Framelix\Framelix\Exception\FatalError;
 use Framelix\Framelix\Html\Compiler;
 use Framelix\Framelix\Html\TypeDefs\BaseTypeDef;
+use Framelix\Framelix\Storable\User;
 use Framelix\Framelix\Utils\Buffer;
 use Framelix\Framelix\Utils\FileUtils;
 use Framelix\Framelix\View\Backend\Setup;
@@ -35,6 +36,7 @@ use const FRAMELIX_MODULE;
  */
 class Framelix
 {
+
     /**
      * The version of the framelix core itself
      * Will be replaced in production build with actual version number
@@ -45,7 +47,6 @@ class Framelix
      * @var string[]
      */
     public static array $registeredModules = [];
-
 
     /**
      * Initializes the framework
@@ -118,6 +119,23 @@ class Framelix
         // in case user browser lang is available, use this as default
         if ($lang) {
             Config::$language = $lang;
+        }
+        // check if user has specific language settings
+        $url = Url::getBrowserUrl();
+        $user = User::get();
+        if (!$url->getLanguage() && $user && $user->language && in_array($user->language, Config::$languagesAvailable)) {
+            Config::$language = $user->language;
+        }
+        // if language is set in url, force set by url
+        $foundLanguage = $url->getLanguage();
+        if ($foundLanguage) {
+            // set language to user if it has changed
+            if ($user && $user->language !== $foundLanguage) {
+                $user->language = $foundLanguage;
+                $user->preserveUpdateUserAndTime();
+                $user->store();
+            }
+            Config::$language = $foundLanguage;
         }
     }
 

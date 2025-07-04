@@ -40,7 +40,9 @@ class FramelixDom {
         }
         valid = true
       }
-      if (!valid) return
+      if (!valid) {
+        return
+      }
       clearTimeout(observerTimeout)
       observerTimeout = setTimeout(function () {
         for (let i = 0; i < FramelixDom.changeListeners.length; i++) {
@@ -63,8 +65,26 @@ class FramelixDom {
       attributes: true,
       childList: true,
       characterData: true,
-      subtree: true
+      subtree: true,
     })
+  }
+
+  /**
+   * Get native HTMLElement of given parameter
+   * @param {*} el
+   * @returns {HTMLElement|null}
+   */
+  static getNativeElement (el) {
+    if (!el) {
+      return null
+    }
+    if (el instanceof HTMLElement) {
+      return el
+    }
+    if (el instanceof $) {
+      return el[0]
+    }
+    return null
   }
 
   /**
@@ -73,10 +93,7 @@ class FramelixDom {
    * @param {HTMLElement|Cash} el
    */
   static isInDom (el) {
-    if (el instanceof cash) {
-      el = el[0]
-    }
-    return document.body.contains(el)
+    return document.body.contains(this.getNativeElement(el))
   }
 
   /**
@@ -85,12 +102,10 @@ class FramelixDom {
    * @param {HTMLElement|Cash} el
    */
   static isVisible (el) {
-    if (el instanceof cash) {
-      el = el[0]
-    }
-    if (FramelixDom.isInDom(el)) {
-      el = el.getBoundingClientRect()
-      return el.width > 0 || el.height > 0
+    el = this.getNativeElement(el)
+    if (el && FramelixDom.isInDom(el)) {
+      const domRect = el.getBoundingClientRect()
+      return domRect.width > 0 || domRect.height > 0
     }
     return false
   }
@@ -104,7 +119,7 @@ class FramelixDom {
   static addChangeListener (id, callback) {
     const row = {
       'id': id,
-      'callback': callback
+      'callback': callback,
     }
     FramelixDom.changeListeners.push(row)
   }

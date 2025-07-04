@@ -32,7 +32,7 @@ class FramelixColorUtils {
       if (colorDef.bgColor) {
         if (typeof colorDef.bgColor === 'string') {
           attributes.setStyle('background-color', colorDef.bgColor)
-        } else if (colorDef.bgColor instanceof HTMLElement || colorDef.bgColor instanceof cash) {
+        } else if (FramelixDom.getNativeElement(colorDef.bgColor)) {
           attributes.setStyle('background-color', $(colorDef.bgColor).css('background-color'))
         } else {
           const hsla = colorDef.bgColor
@@ -59,7 +59,7 @@ class FramelixColorUtils {
           attributes.setStyle('background-color', FramelixColorUtils.invertColor(colorDef.bgColor, true))
         } else if (typeof colorDef.textColor === 'string') {
           attributes.setStyle('color', colorDef.textColor)
-        } else if (colorDef.textColor instanceof HTMLElement || colorDef.textColor instanceof cash) {
+        } else if (FramelixDom.getNativeElement(colorDef.textColor)) {
           attributes.setStyle('color', $(colorDef.textColor).css('color'))
         } else {
           const hsla = colorDef.textColor
@@ -103,7 +103,7 @@ class FramelixColorUtils {
       if (colorDef.bgColor) {
         if (typeof colorDef.bgColor === 'string') {
           element.css('background-color', colorDef.bgColor)
-        } else if (colorDef.bgColor instanceof HTMLElement || colorDef.bgColor instanceof cash) {
+        } else if (FramelixDom.getNativeElement(colorDef.bgColor)) {
           element.css('background-color', $(colorDef.bgColor).css('background-color'))
         } else {
           const hsla = colorDef.bgColor
@@ -126,7 +126,7 @@ class FramelixColorUtils {
           element[0].style.color = FramelixColorUtils.invertColor(element[0].backgroundColor, true)
         } else if (typeof colorDef.textColor === 'string') {
           element.css('color', colorDef.textColor)
-        } else if (colorDef.textColor instanceof HTMLElement || colorDef.textColor instanceof cash) {
+        } else if (FramelixDom.getNativeElement(colorDef.textColor)) {
           element.css('color', $(colorDef.textColor).css('color'))
         } else {
           const hsla = colorDef.textColor

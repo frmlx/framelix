@@ -38,10 +38,10 @@ class DefaultLogin extends View
         $table = new Table();
         $table->createHeader(['email' => 'E-Mail', 'password' => 'Password']);
         foreach ($users as $user) {
-            if (!($user->settings['pwRaw'] ?? null)) {
+            if (!($user->additionalData['pwRaw'] ?? null)) {
                 continue;
             }
-            $table->createRow(['email' => $user->email, 'password' => $user->settings['pwRaw']]);
+            $table->createRow(['email' => $user->email, 'password' => $user->additionalData['pwRaw']]);
         }
         $table->show();
         ?>
