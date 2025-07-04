@@ -12,7 +12,7 @@
           "description": "Displays the content as a tooltip. Accepts a language key as well."
         },
         {
-          "name": "data-toolip",
+          "name": "data-tooltip",
           "description": "Alias for 'title'"
         },
         {
