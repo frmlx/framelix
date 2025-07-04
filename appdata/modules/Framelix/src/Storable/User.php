@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Storable;
 
+use Framelix\Framelix\Config;
 use Framelix\Framelix\Db\StorableSchema;
 use Framelix\Framelix\Url;
 use Framelix\Framelix\Utils\ArrayUtils;
@@ -20,6 +21,7 @@ use function strlen;
  * @property string $email
  * @property string|null $password
  * @property bool $flagLocked
+ * @property string|null $language
  * @property string|null $twoFactorSecret
  * @property mixed|null $twoFactorBackupCodes
  * @property mixed|null $additionalData
@@ -50,6 +52,13 @@ class User extends StorableExtended
         $token = UserToken::getByCookie();
         self::$cache[$key] = null;
         if ($token?->user) {
+            if (!$token->simulatedUser) {
+                if ($token->user->language !== Config::$language) {
+                    $token->user->language = Config::$language;
+                    $token->user->preserveUpdateUserAndTime();
+                    $token->user->store(true);
+                }
+            }
             self::$cache[$key] = $originalUser ? $token->user : $token->simulatedUser ?? $token->user;
         }
         return self::$cache[$key];
