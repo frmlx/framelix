@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Db;
 
+use Cstp\Ouced\Db;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Exception\FatalError;
@@ -89,6 +90,18 @@ abstract class Sql
     protected array $cache = [];
 
     /**
+     * The callable to call when a query error happens and the transaction is rollbacked
+     * @var callable|null
+     */
+    protected mixed $onErrorRollback = null;
+
+    /**
+     * Is a transaction currently not commited
+     * @var bool
+     */
+    protected bool $transactionOpen = false;
+
+    /**
      * Get instance for given id
      * Must be called from a class that extend from Sql
      * @param string $id
@@ -165,6 +178,42 @@ abstract class Sql
         ?string $valueAsArrayIndex = null,
         ?int $limit = null
     ): array;
+
+
+
+    /**
+     * Start a database transaction
+     * @param callable|null $onErrorRollback
+     * @return void
+     */
+    public function beginTransaction(?callable $onErrorRollback = null): void
+    {
+        $this->onErrorRollback = $onErrorRollback;
+        $this->query('BEGIN');
+        $this->transactionOpen = true;
+    }
+
+    /**
+     * Rollback the database transaction
+     * @return void
+     */
+    public function rollbackTransaction(): void
+    {
+        $this->transactionOpen = false;
+        $this->onErrorRollback = null;
+        $this->query('ROLLBACK');
+    }
+
+    /**
+     * Commit the database transaction
+     * @return void
+     */
+    public function commitTransaction(): void
+    {
+        $this->transactionOpen = false;
+        $this->query('COMMIT');
+        $this->onErrorRollback = null;
+    }
 
     /**
      * Disconnect from database
@@ -521,6 +570,17 @@ abstract class Sql
             $str = str_replace('{' . $key . '}', $this->escapeValue($value), $str);
         }
         return $str;
+    }
+
+    protected function transactionErrorHandler(): void
+    {
+        if ($this->onErrorRollback) {
+            call_user_func($this->onErrorRollback);
+            $this->onErrorRollback = null;
+        }
+        if ($this->transactionOpen) {
+            $this->rollbackTransaction();
+        }
     }
 
 }

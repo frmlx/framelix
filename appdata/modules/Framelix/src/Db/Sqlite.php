@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Db;
 
+use Cstp\Ouced\Db;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Exception\FatalError;
 use SQLite3;
@@ -16,6 +17,7 @@ use function substr;
 
 class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
 {
+
     public SQLite3|null $connection;
     public SQLite3Result|bool|null $lastResult = null;
 
@@ -68,7 +70,7 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
     }
 
     /**
-     * Exce raw query without expecting any result
+     * Exec raw query without expecting any result
      * This is a sqlite special to execute multiple queries in one command
      * @param string $query
      * @return bool
@@ -81,6 +83,7 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
                 throw new FatalError($this->connection->lastErrorMsg());
             }
         } catch (Throwable $e) {
+            $this->transactionErrorHandler();
             $errorMessage = "Sqlite Error (" . $this->connection->lastErrorCode() . "): " . $e->getMessage();
             if (Config::$devMode) {
                 $errorMessage .= " in query: " . $query;
@@ -105,6 +108,7 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
                 throw new FatalError("No Sqlite Result: " . $this->connection->lastErrorMsg());
             }
         } catch (Throwable $e) {
+            $this->transactionErrorHandler();
             $errorMessage = "Sqlite Error (" . $this->connection->lastErrorCode() . "): " . $e->getMessage();
             if (Config::$devMode) {
                 $errorMessage .= " in query: " . $query;
@@ -256,4 +260,5 @@ class Sqlite extends Sql implements SchemeBuilderRequirementsInterface
         $this->cache[$cacheKey] = $arr;
         return $this->cache[$cacheKey];
     }
+
 }

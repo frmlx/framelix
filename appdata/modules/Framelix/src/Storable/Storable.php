@@ -53,6 +53,13 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
     public static bool $prefetchEnabled = true;
 
     /**
+     * Use transaction for store/delete
+     * This will prevent corrupt database entries if store fails
+     * @var bool
+     */
+    public static bool $useTransactions = true;
+
+    /**
      * Internal db cache
      * @var array
      */
@@ -81,7 +88,6 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
      * @var array
      */
     protected array $propertyCache = [];
-
 
     public static function onJsCall(JsCall $jsCall): void
     {
@@ -342,7 +348,6 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
                 $properties
             ) . "\nFROM `$storableSchema->tableName` as t0\n";
 
-
         $querySearch = "";
         if ($condition) {
             $querySearch .= $condition;
@@ -542,9 +547,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
      * Setup self storable schema
      * @param StorableSchema $selfStorableSchema
      */
-    protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void
-    {
-    }
+    protected static function setupStorableSchema(StorableSchema $selfStorableSchema): void {}
 
     /**
      * Fetch the whole schema table if not yet fetched
@@ -807,6 +810,14 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
         }
         $class = get_class($this);
         $db = $this->getDb();
+        $isNewObject = !$this->id;
+        if (self::$useTransactions) {
+            $db->beginTransaction(function () use ($isNewObject) {
+                if ($isNewObject) {
+                    $this->id = null;
+                }
+            });
+        }
         // get next available id from database
         $existingId = $this->id;
         if (!$existingId) {
@@ -820,6 +831,10 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
             $db->insert($storableSchema->tableName, $storeValues);
         } else {
             $db->update($storableSchema->tableName, $storeValues, "id = $existingId");
+        }
+
+        if (self::$useTransactions) {
+            $db->commitTransaction();
         }
         // unset all modified flags after stored in database
         unset($this->propertyCache['modified']);
@@ -854,17 +869,27 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
             );
         }
         $db = $this->getDb();
+        if (self::$useTransactions) {
+            $db->beginTransaction();
+        }
+        $logCategory = SystemEventLog::CATEGORY_STORABLE_DELETED;
+        $createLog = !($this instanceof SystemEventLog) && (Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null);
         $storableSchema = Storable::getStorableSchema($this);
         $db->delete($storableSchema->tableName, "id = " . $this->id);
         $db->delete(StorableSchema::ID_TABLE, "id = " . $this->id);
         $id = $this->id;
-        $textString = $this->getRawTextString();
+        $textString = null;
+        if ($createLog) {
+            $textString = $this->getRawTextString();
+        }
         unset(self::$dbCache[$this->connectionId][$this->id]);
         $this->id = null;
+        if (self::$useTransactions) {
+            $db->commitTransaction();
+        }
         $this->onDatabaseUpdated();
         // create system event logs
-        $logCategory = SystemEventLog::CATEGORY_STORABLE_DELETED;
-        if (!($this instanceof SystemEventLog) && (Config::$enabledBuiltInSystemEventLogs[$logCategory] ?? null)) {
+        if ($createLog) {
             SystemEventLog::create(
                 $logCategory,
                 null,
@@ -964,9 +989,7 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
      * This function is called when the database has been updated after a store() or delete() call
      * You can hook into that by override this method
      */
-    protected function onDatabaseUpdated(): void
-    {
-    }
+    protected function onDatabaseUpdated(): void {}
 
     /**
      * Get the converted value that takes original database value and converts it to the final type
@@ -1040,4 +1063,5 @@ abstract class Storable implements JsonSerializable, ObjectTransformable
             };
         }
     }
+
 }

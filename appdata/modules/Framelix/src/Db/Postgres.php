@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Db;
 
+use Cstp\Ouced\Db;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Exception\FatalError;
 use PgSql\Connection;
@@ -126,6 +127,7 @@ class Postgres extends Sql
                 throw new FatalError($error);
             }
         } catch (Throwable $e) {
+            $this->transactionErrorHandler();
             $errorMessage = "Postgres Error: " . $e->getMessage();
             if (Config::$devMode) {
                 $errorMessage .= " in query: " . $query;

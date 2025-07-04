@@ -80,7 +80,8 @@ abstract class StorableTestBase extends TestCaseDbTypes
         // 1x to insert into storable table
         // 1x to fetch storableClassId
         // 2x systemlog insert
-        $this->assertExecutedQueries(6);
+        // 4x for begin and commit transaction
+        $this->assertExecutedQueries(10);
 
         $this->startRecordExecutedQueries();
         $storable = $storable->clone();
@@ -98,7 +99,8 @@ abstract class StorableTestBase extends TestCaseDbTypes
         // 1x to insert into id table
         // 1x to insert into storable table
         // 2x systemlog insert
-        $this->assertExecutedQueries(4);
+        // 4x for begin and commit transaction
+        $this->assertExecutedQueries(8);
         $this->assertSame(
             'foobar@test2.me',
             $db->fetchOne("SELECT name FROM framelix_framelixtests_storable_teststorable1 WHERE id = " . $storable)
@@ -128,7 +130,8 @@ abstract class StorableTestBase extends TestCaseDbTypes
         // 1x to insert into id table
         // 1x to insert into storable table
         // 2x systemlog insert
-        $this->assertExecutedQueries(4);
+        // 4x for begin and commit transaction
+        $this->assertExecutedQueries(8);
         $this->assertSame(
             'foobar@test2.me',
             $db->fetchOne("SELECT name FROM framelix_framelixtests_storable_teststorable2 WHERE id = " . $storable)
@@ -149,7 +152,8 @@ abstract class StorableTestBase extends TestCaseDbTypes
         // 1x to insert into id table
         // 1x to insert into storable table
         // 2x systemlog insert
-        $this->assertExecutedQueries(4);
+        // 4x for begin and commit transaction
+        $this->assertExecutedQueries(8);
         $this->assertSame(
             'foobar@test3.me',
             $db->fetchOne("SELECT name FROM framelix_framelixtests_storable_teststorable2 WHERE id = " . $storable)
@@ -160,7 +164,8 @@ abstract class StorableTestBase extends TestCaseDbTypes
         $storable->store();
         // 1x to update
         // 2x systemlog insert
-        $this->assertExecutedQueries(3);
+        // 4x for begin and commit transaction
+        $this->assertExecutedQueries(7);
         $this->assertSame(
             'foobar@test4.me',
             $db->fetchOne("SELECT name FROM framelix_framelixtests_storable_teststorable2 WHERE id = " . $storable)
@@ -179,7 +184,8 @@ abstract class StorableTestBase extends TestCaseDbTypes
         // 1x to delete from id table
         // 1x to delete from storable table
         // 2x systemlog insert
-        $this->assertExecutedQueries(4);
+        // 4x for begin and commit transaction
+        $this->assertExecutedQueries(8);
         $this->assertSame(
             null,
             $db->fetchOne(

@@ -2,6 +2,7 @@
 
 namespace Framelix\Framelix\Db;
 
+use Cstp\Ouced\Db;
 use Framelix\Framelix\Config;
 use Framelix\Framelix\Exception\FatalError;
 use mysqli;
@@ -19,6 +20,7 @@ use const MYSQLI_REPORT_ALL;
 
 class Mysql extends Sql implements SchemeBuilderRequirementsInterface
 {
+
     public ?mysqli $connection = null;
     public bool|mysqli_result $lastResult = false;
 
@@ -126,6 +128,7 @@ class Mysql extends Sql implements SchemeBuilderRequirementsInterface
             }
             // @codeCoverageIgnoreEnd
         } catch (Throwable $e) {
+            $this->transactionErrorHandler();
             $errorMessage = "Mysql Error: " . $e->getMessage();
             if (Config::$devMode) {
                 $errorMessage .= " in query: " . $query;
@@ -260,4 +263,5 @@ class Mysql extends Sql implements SchemeBuilderRequirementsInterface
         }
         return $this->cache[$cacheKey];
     }
+
 }
