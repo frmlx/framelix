@@ -86,6 +86,13 @@ abstract class View extends \Framelix\Framelix\View
     protected bool $showTopBar = true;
 
     /**
+     * Sidebar position
+     * @var string
+     */
+    #[ExpectedValues(values: ['s', 'l'])]
+    protected string $sidebarPosition = "left";
+
+    /**
      * Forces screen size to be always that
      * @var string|null
      */
@@ -142,15 +149,12 @@ abstract class View extends \Framelix\Framelix\View
                 $form->addField($field);
             }
 
-            $field = new Toggle();
-            $field->name = "darkMode";
-            $field->label = Lang::get('__framelix_darkmode__') . HtmlUtils::getFramelixIcon('790');
-            $form->addField($field);
-
-            $field = new Html();
-            $field->name = "resetAlerts";
-            $field->defaultValue = '<framelix-button class="framelix_reset_alerts" icon="785">__framelix_reset_alerts__</framelix-button>';
-            $form->addField($field);
+            if (!Request::getGet('forceColorScheme')) {
+                $field = new Toggle();
+                $field->name = "darkMode";
+                $field->label = Lang::get('__framelix_darkmode__') . HtmlUtils::getFramelixIcon('790');
+                $form->addField($field);
+            }
 
             $form->show();
             ?>
@@ -175,10 +179,18 @@ abstract class View extends \Framelix\Framelix\View
                   })
                   darkModeToggle.setValue(FramelixLocalStorage.get('framelix-darkmode'))
                 }
-                form.container.on('click', '.framelix_reset_alerts', function () {
-                  FramelixCustomElementAlert.resetAllAlerts()
-                  FramelixToast.success('__framelix_reset_alerts_done__')
-                })
+                if (FramelixLocalStorage.get('framelix_alerts_hidden')) {
+                  const field = new FramelixFormFieldToggle()
+                  field.name = 'resetAlerts'
+                  field.defaultValue = '<framelix-button class="framelix_reset_alerts" icon="785">__framelix_reset_alerts__</framelix-button>'
+                  form.addField(field)
+                  form.render()
+
+                  form.container.on('click', '.framelix_reset_alerts', function () {
+                    FramelixCustomElementAlert.resetAllAlerts()
+                    FramelixToast.success('__framelix_reset_alerts_done__')
+                  })
+                }
               })()
             </script>
             <?php
@@ -225,6 +237,7 @@ abstract class View extends \Framelix\Framelix\View
         $htmlAttributes = new HtmlAttributes();
         $htmlAttributes->set('data-appstate', $appIsSetup ? 'ok' : 'setup');
         $htmlAttributes->set('data-user', User::get());
+        $htmlAttributes->set('data-sidebar-position', $this->sidebarPosition);
         $htmlAttributes->set('data-show-sidebar', (int)$this->showSidebar);
         $htmlAttributes->set('data-show-topbar', (int)$this->showTopBar);
         $htmlAttributes->set('data-view', get_class(self::$activeView));
@@ -238,8 +251,10 @@ abstract class View extends \Framelix\Framelix\View
             $htmlAttributes->set('data-screen-size-force', $this->forceScreenSize);
         }
         if (Config::$backendFaviconFilePath) {
-            $this->addHtmlInsert('before-head-close',
-                '<link rel="icon" href="' . Url::getUrlToPublicFile(Config::$backendFaviconFilePath) . '">');
+            $this->addHtmlInsert(
+                'before-head-close',
+                '<link rel="icon" href="' . Url::getUrlToPublicFile(Config::$backendFaviconFilePath) . '">'
+            );
         }
 
         Buffer::start();
@@ -277,8 +292,8 @@ abstract class View extends \Framelix\Framelix\View
                         ?>
                         <framelix-button theme="transparent"
                                          class="framelix-user-settings"
-                            <?= (new JsRequestOptions(JsCall::getSignedUrl([self::class, 'onJsCall'], 'settings'),
-                                new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500))))->toDefaultAttrStr() ?>
+                            <?= new JsRequestOptions(JsCall::getSignedUrl([$this::class, 'onJsCall'], 'settings', ['forceColorScheme' => $this->forceColorScheme]),
+                                new JsRenderTarget(modalOptions: new ModalShowOptions(maxWidth: 500)))->toDefaultAttrStr() ?>
                                          icon="739"
                                          title="__framelix_backend_user_settings__"></framelix-button>
                         <?php
