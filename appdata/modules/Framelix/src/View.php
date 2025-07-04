@@ -134,11 +134,11 @@ abstract class View implements JsonSerializable
     public static function getTranslatedPageTitle(
         string $viewClass,
         bool $cleanHtmlEscaped,
-        ?string $override = null
+        ?string $override = null,
     ): string {
         if (__CLASS__ !== static::class) {
             throw new FatalError(
-                "getTranslatedPageTitle only can be called on " . __CLASS__ . ", not on a child. This prevent unintentional class loads"
+                "getTranslatedPageTitle only can be called on " . __CLASS__ . ", not on a child. This prevent unintentional class loads",
             );
         }
 
@@ -158,16 +158,16 @@ abstract class View implements JsonSerializable
      * Get url for given view class
      * @param string $viewClass
      * @param array|null $parameters If url is expected to be a regex, then replace regex parameters with it
-     * @param string|null $language If "default", it will add a language depending on Config::$languageInGeneratedViewUrls
-     *  If any other string, it will add the provided language
-     *  If null, no language is added
+     * @param string|null $language If "default", it will add a language depending on
+     *     Config::$languageInGeneratedViewUrls If any other string, it will add the provided language If null, no
+     *     language is added
      * @return Url|null Null if class is not found or not mapped
      */
     public static function getUrl(string $viewClass, ?array $parameters = null, ?string $language = "default"): ?Url
     {
         if (__CLASS__ !== static::class) {
             throw new FatalError(
-                "getUrl only can be called on " . __CLASS__ . ", not on a child. This prevent unintentional class loads"
+                "getUrl only can be called on " . __CLASS__ . ", not on a child. This prevent unintentional class loads",
             );
         }
         if (!isset(self::$availableViews[$viewClass])) {
@@ -226,7 +226,7 @@ abstract class View implements JsonSerializable
                         $matchedViews[] = [
                             "class" => $class,
                             "urlPriority" => $row['urlPriority'],
-                            'parameters' => $match
+                            'parameters' => $match,
                         ];
                     }
                 } elseif ($row['customUrl'] === $relativeUrl) {
@@ -249,11 +249,10 @@ abstract class View implements JsonSerializable
     }
 
     /**
-     * Load view for current url
-     * @param bool $setActiveLanguageFromUrl Does set the current active language to the detected language from url
      * @codeCoverageIgnore
      */
-    public static function loadViewForCurrentUrl(): void {
+    public static function loadViewForCurrentUrl(): void
+    {
         $url = Url::create();
         $view = self::findViewForUrl($url);
         if (!$view) {
@@ -396,7 +395,7 @@ abstract class View implements JsonSerializable
         }
         if ($update) {
             $metadata = [
-                'directoryListHash' => $directoryListHash
+                'directoryListHash' => $directoryListHash,
             ];
             foreach ($viewFiles as $viewFile) {
                 $viewClass = ClassUtils::getClassNameForFile($viewFile);
@@ -448,7 +447,7 @@ abstract class View implements JsonSerializable
     public function jsonSerialize(): PhpToJsData
     {
         $properties = [
-            'url' => View::getUrl(get_class($this))
+            'url' => View::getUrl(get_class($this)),
         ];
         return new PhpToJsData($properties, $this, 'FramelixView');
     }
