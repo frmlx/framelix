@@ -121,7 +121,7 @@ class BruteForceProtection extends Storable
             }
         }
         if ($logsModified) {
-            $entry->logs = $logs;
+            $entry->logs = array_values($logs);
             $entry->store();
         }
         if ($count >= $maxAttempts) {
