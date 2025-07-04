@@ -83,13 +83,13 @@ class FramelixCustomElementButton extends FramelixCustomElement {
           ev.stopPropagation()
           ev.preventDefault()
           const target = this.getAttribute('target') || '_self'
-          const link = $('<a>').attr('href', href).attr('target', target)
-          link.css('display', 'hidden')
-          $('body').append()
-          link.trigger('click')
-          setTimeout(function () {
-            link.remove()
-          }, 1000)
+          if (target === 'blank') {
+            window.open(href)
+          } else if (target === 'top') {
+            window.top.location.href = href
+          } else {
+            window.location.href = href
+          }
         }
       })
       this.addEventListener('keydown', function (ev) {
