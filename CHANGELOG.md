@@ -9,6 +9,7 @@
 * fixed permissions on boot
 * removed default nodejs starter script in favor to `framelix_custom_boot`
 * removed `nodejs` and preinstall `bun` instead
+*  a lot more
 * https://github.com/frmlx/framelix/compare/4.0.0-alpha.25...4.0.0-alpha.26
 
 
