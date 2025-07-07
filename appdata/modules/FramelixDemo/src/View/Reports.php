@@ -2,6 +2,8 @@
 
 namespace Framelix\FramelixDemo\View;
 
+use avadim\FastExcelReader\Excel;
+use avadim\FastExcelWriter\Style;
 use Framelix\Framelix\DateTime;
 use Framelix\Framelix\Form\Field\Date;
 use Framelix\Framelix\Form\Form;
@@ -9,32 +11,29 @@ use Framelix\Framelix\Html\Tabs;
 use Framelix\Framelix\Lang;
 use Framelix\Framelix\Network\Request;
 use Framelix\Framelix\Storable\StorableArray;
+use Framelix\Framelix\Utils\FastExcelWrapper;
 use Framelix\Framelix\Utils\HtmlUtils;
 use Framelix\Framelix\Utils\NumberUtils;
-use Framelix\Framelix\Utils\SpreadsheetWrapper;
 use Framelix\Framelix\View\Backend\View;
 use Framelix\FramelixDemo\Config;
 use Framelix\FramelixDemo\Storable\Fixation;
 use Framelix\FramelixDemo\Storable\Income;
 use Framelix\FramelixDemo\Storable\Invoice;
 use Framelix\FramelixDemo\Storable\Outgoing;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
 use function ceil;
 use function count;
-use function is_array;
 use function ksort;
 
 class Reports extends View
 {
+
     protected string|bool $accessRole = "admin,reports";
 
     public static function getReportSheet(
         \Framelix\Framelix\Date $dateFrom,
         \Framelix\Framelix\Date $dateTo
-    ): SpreadsheetWrapper {
+    ): FastExcelWrapper {
         $rangeLabel = $dateFrom->getRawTextString() . " - " . $dateTo->getRawTextString();
         $excelDataOutgoings = [
             [
@@ -159,17 +158,15 @@ class Reports extends View
                 $excelDataProfitLoss[$key][2] += $income->net;
                 $excelDataProfitLoss[$key][3] += $income->net;
             }
-            if (is_array($summaryKeys)) {
-                foreach ($summaryKeys as $summaryKey) {
-                    if (!isset($excelDataSummaryKeys[$summaryKey->key])) {
-                        $excelDataSummaryKeys[$summaryKey->key] = [
-                            $summaryKey->key,
-                            $summaryKey->name,
-                            0.0
-                        ];
-                    }
-                    $excelDataSummaryKeys[$summaryKey->key][2] += $summaryKey->getSummableNet($income);
+            foreach ($summaryKeys as $summaryKey) {
+                if (!isset($excelDataSummaryKeys[$summaryKey->key])) {
+                    $excelDataSummaryKeys[$summaryKey->key] = [
+                        $summaryKey->key,
+                        $summaryKey->name,
+                        0.0
+                    ];
                 }
+                $excelDataSummaryKeys[$summaryKey->key][2] += $summaryKey->getSummableNet($income);
             }
         }
         foreach ($invoicesReverseCharge as $invoice) {
@@ -194,8 +191,8 @@ class Reports extends View
             Lang::get('__framelixdemo_view_report_profitloss__') => $excelDataProfitLoss,
             Lang::get('__framelixdemo_storable_invoice_flagreversecharge_label__') => $excelDataReverseCharge
         ];
-        $spreadsheetWrapper = SpreadsheetWrapper::create();
-        $spreadsheetWrapper->setFromArrayMultiple($excelData, true, "A1:*1");
+        $excel = new FastExcelWrapper();
+        $sheet = null;
         $widths = [
             [0, 8, 15, 30, 32, 15, 11, 11, 10],
             [0, 10, 15, 30, 35, 15, 11],
@@ -203,36 +200,34 @@ class Reports extends View
             [0, 30, 30, 30, 30],
             [0, 30, 30]
         ];
-        $sheetNr = 0;
-        foreach ($excelData as $label => $rows) {
-            $sheet = $spreadsheetWrapper->spreadsheet->getSheet($sheetNr);
-            $lastColumn = $sheet->getHighestDataColumn();
-            $sheetLabel = $label . ' | ' . $rangeLabel;
-            $sheet->getHeaderFooter()
-                ->setOddFooter('&L&B&R' . $sheetLabel . ' &P / &N');
-            $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-            $sheet->insertNewRowBefore(1);
-            $sheet->setCellValue("A1", $sheetLabel);
-            $sheet->getStyle("A1")->getFont()->setSize(24)->setBold(true);
-
-            $style = $sheet->getStyle("A2:{$lastColumn}2");
-            $style->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-            $style->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('f5f5f5');
-            $style->getFont()->setBold(true);
-            $style->getAlignment()->setWrapText(true);
-
-            $style = $sheet->getStyle("A3:{$lastColumn}" . $sheet->getHighestDataRow());
-            $style->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-            $sheet->mergeCells("A1:" . $lastColumn . "1");
-            if (isset($widths[$sheetNr])) {
-                foreach ($widths[$sheetNr] as $columnIndex => $width) {
-                    $sheet->getColumnDimensionByColumn($columnIndex)->setWidth($width);
-                }
+        $sheetKey = 0;
+        foreach ($excelData as $sheetLabel => $sheetData) {
+            if (!$sheet) {
+                $sheet = $excel->excel->sheet();
+            } else {
+                $sheet = $excel->excel->makeSheet($sheetLabel);
             }
-
-            $sheetNr++;
+            $sheet->setName($sheetLabel);
+            $sheetWidths = $widths[$sheetKey];
+            $colStyles = [];
+            foreach ($sheetWidths as $key => $sheetWidth) {
+                $colStyles[$key + 1] = [Style::WIDTH => $sheetWidth];
+            }
+            $rowStyles = [];
+            for ($row = 2; $row <= count($sheetData) + 1; $row++) {
+                $rowStyles[$row] = [
+                    Style::BORDER => [Style::BORDER_ALL => [Style::BORDER_STYLE => Style::BORDER_THIN]]
+                ];
+            }
+            $maxColumn = count($sheetData[0]);
+            $header = $sheetLabel . ' | ' . $rangeLabel;
+            $excel->setFromArray([[$header]], 1, sheet: $sheet, cellStyles: ["A1" => [Style::FONT => [Style::FONT_SIZE => 20]]]);
+            $sheet->mergeCells("A1:" . Excel::colLetter($maxColumn) . "1");
+            $excel->setFromArray($sheetData, 2, true, true, sheet: $sheet, rowStyles: $rowStyles, colStyles: $colStyles);
+            $sheet->pageLandscape();
+            $sheetKey++;
         }
-        return $spreadsheetWrapper;
+        return $excel;
     }
 
     public function onRequest(): void
@@ -597,4 +592,5 @@ class Reports extends View
 
         return $form;
     }
+
 }

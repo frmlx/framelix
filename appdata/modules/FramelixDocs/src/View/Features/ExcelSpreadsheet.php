@@ -3,16 +3,18 @@
 namespace Framelix\FramelixDocs\View\Features;
 
 use Framelix\Framelix\DateTime;
+use Framelix\Framelix\Utils\FastExcelWrapper;
 use Framelix\Framelix\Utils\SpreadsheetWrapper;
 use Framelix\FramelixDocs\View\View;
 
 class ExcelSpreadsheet extends View
 {
+
     protected string $pageTitle = 'Spreadsheet/Excel';
 
     public static function download(): void
     {
-        $instance = SpreadsheetWrapper::create();
+        $instance = new FastExcelWrapper();
         $arr = [
             [
                 'id' => 'ID',
@@ -27,7 +29,7 @@ class ExcelSpreadsheet extends View
                 'timestamp' => DateTime::create('now + ' . $i . ' days'),
             ];
         }
-        $instance->setFromArray($arr, autoFilterRange: "A1:*1");
+        $instance->setFromArray($arr, 1);
         $instance->download('you-got-a-framelix-spreadsheet.xlsx');
     }
 
@@ -37,13 +39,13 @@ class ExcelSpreadsheet extends View
         <p>
             Framelix have
             integrated <?= $this->getLinkToExternalPage(
-                'https://phpspreadsheet.readthedocs.io/en/latest/',
-                'PhpSpreadsheet'
-            ) ?>, a tool to generate spreadsheet files (for Excel, OpenOffice, etc...)
+                'https://github.com/aVadim483/fast-excel-writer',
+                'FastExcelWriter'
+            ) ?>, a tool to generate spreadsheet files of any size for Excel, OpenOffice, etc...
         </p>
         <p>
             We have a small wrapper around it, for most common
-            features. <?= $this->getSourceFileLinkTag([SpreadsheetWrapper::class]) ?>
+            features. <?= $this->getSourceFileLinkTag([FastExcelWrapper::class]) ?>
         </p>
         <?php
 
@@ -53,4 +55,5 @@ class ExcelSpreadsheet extends View
         );
         $this->showPhpExecutableMethodsCodeBlock();
     }
+
 }

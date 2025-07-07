@@ -57,7 +57,11 @@ if [ $TESTTYPE == "phpunit" ]; then
   cecho b "# Php Unit Tests"
 
   if [ "$TESTFILE" != "" ]; then
+    TESTFILE="${TESTFILE%.php}"
+    PREFIX="appdata/modules/FramelixTests/tests/"
+    TESTFILE=$(echo "$TESTFILE" | sed 's|^appdata/modules/FramelixTests/tests/||')
     TESTFILE="/framelix/appdata/modules/FramelixTests/tests/$TESTFILE.php"
+    echo "Single Testfile: $TESTFILE"
   fi
 
   $DOCKER_COMPOSE_EXEC_APP "cd /framelix/appdata && framelix_php_xdebug vendor/bin/phpunit --coverage-clover /framelix/userdata/clover.xml --log-junit /framelix/userdata/phpunit-results.xml --bootstrap modules/FramelixTests/tests/_bootstrap.php --configuration modules/FramelixTests/tests/_phpunit.xml $TESTFILE && framelix_php hooks/after-phpunit.php"
