@@ -258,7 +258,7 @@ class FramelixFormFieldSelect extends FramelixFormField {
    */
   getOptionHtml (optionIndex, checked) {
     const optionValue = this.options[optionIndex][0]
-    const optionLabel = this.options[optionIndex][1]
+    const optionLabel = this.options[optionIndex][1] + ''
     const option = $(`
         <label class="framelix-form-field-select-option ${checked ? 'framelix-form-field-select-option-checked' : ''}">
             <div class="framelix-form-field-select-option-checkbox">
