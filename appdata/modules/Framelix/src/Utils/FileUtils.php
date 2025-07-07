@@ -27,12 +27,6 @@ class FileUtils
 {
 
     /**
-     * Folders created with getTmpFolder
-     * @var array
-     */
-    private static array $tmpFolders = [];
-
-    /**
      * Write given contents to a file path
      * Advantage over file_put_contents is, that it will retry when file is blocked for some reason
      * @param string $path
@@ -58,7 +52,7 @@ class FileUtils
     }
 
     /**
-     * Get a  path to a temporary folder in the userdatas space
+     * Get a path to a new temporary folder in the userdatas space
      * This directory is automatically deleted when the script ends
      * @param string $module
      * @param bool $deleteOnScriptEnd
@@ -71,16 +65,11 @@ class FileUtils
         } while (file_exists($path));
         mkdir($path, 0777, true);
         if ($deleteOnScriptEnd) {
-            if (!self::$tmpFolders) {
-                register_shutdown_function(function () {
-                    foreach (self::$tmpFolders as $folder) {
-                        if (is_dir($folder)) {
-                            self::deleteDirectory($folder);
-                        }
-                    }
-                });
-            }
-            self::$tmpFolders[] = $path;
+            register_shutdown_function(function () use ($path) {
+                if (is_dir($path)) {
+                    self::deleteDirectory($path);
+                }
+            });
         }
         return $path;
     }
@@ -168,7 +157,7 @@ class FileUtils
             return $files;
         }
         $directory = self::normalizePath($directory);
-        /** @phpstan-ignore-next-line  */
+        /** @phpstan-ignore-next-line */
         $scan = scandir($directory, $sortOrder);
         foreach ($scan as $file) {
             if ($file == "." || $file == "..") {

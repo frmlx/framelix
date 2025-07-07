@@ -101,9 +101,12 @@ final class FileUtilsTest extends TestCase
     public function testTmpFolder1(): void
     {
         FileUtils::deleteDirectory(FileUtils::getUserdataFilepath("tmp", false, autoCreateFolder: false));
-        $folder = FileUtils::getTmpFolder();
+        $folder = FileUtils::getTmpFolder(deleteOnScriptEnd: false);
+        $file = fopen($folder."/test2.txt", "w");
+        fwrite($file, "1");
+        // write a normal file will close filehandlers automatically
         file_put_contents($folder . "/test1.tmp", '1');
-        $this->assertCount(1, FileUtils::getFiles($folder));
+        $this->assertCount(2, FileUtils::getFiles($folder));
     }
 
     #[Depends("testTmpFolder1")]
