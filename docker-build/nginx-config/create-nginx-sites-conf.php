@@ -3,7 +3,8 @@
 
 $templateNonSSL = '
 server {
-    listen 0.0.0.0:{port};
+    listen {port};
+    listen [::]:{port};
     root /framelix/appdata/modules/{module}/public;
     include /etc/nginx/snippets/framelix/vhost.conf;
 }
@@ -11,7 +12,8 @@ server {
 
 $templateSSL = '
 server {
-    listen 0.0.0.0:{port} ssl;
+    listen {port} ssl;
+    listen [::]:{port} ssl;
     root /framelix/appdata/modules/{module}/public;
 
     ssl_certificate     {pubKeyPath};
