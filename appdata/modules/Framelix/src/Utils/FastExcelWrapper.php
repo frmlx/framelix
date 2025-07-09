@@ -33,9 +33,9 @@ class FastExcelWrapper
     private static ?string $tmpDir = null;
 
     /**
-     * @var self[]|null
+     * @var self[]
      */
-    private static array|null $instances = [];
+    private static array $instances = [];
 
     public static function readFileToArray(string $path, int|string|null $sheet = null): array
     {
@@ -171,7 +171,7 @@ class FastExcelWrapper
                         if ($allowFormulas) {
                             if ($originalValue instanceof FastExcelCell && $originalValue->hasRelativeReference) {
                                 $value = preg_replace_callback("~\\\$\\\$\\\$_\(([-0-9]+),([-0-9]+)\)~", function ($matches) use ($sheet) {
-                                    return Helper::colLetter($sheet->getCurrentColId() + $matches[2] + 1) . (($sheet->getCurrentRowId() + 1) + $matches[1]);
+                                    return Helper::colLetter($sheet->getCurrentColId() + (int)$matches[2] + 1) . (($sheet->getCurrentRowId() + 1) + (int)$matches[1]);
                                 }, $value);
                             }
                         } else {
