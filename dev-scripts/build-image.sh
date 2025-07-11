@@ -8,9 +8,11 @@ echo "Available command line flags:"
 echo "-v : Version of build: dev/master, or tagname"
 
 BUILD_VERSION=0
-while getopts "v:" opt; do
+USECACHE=""
+while getopts "v:n" opt; do
   case $opt in
   v) BUILD_VERSION=$OPTARG ;;
+  n) USECACHE="--no-cache" ;;
   esac
 done
 
@@ -24,9 +26,9 @@ echo "Version selected: $BUILD_VERSION"
 source $SCRIPTDIR/stop-container.sh
 $DOCKER_CMD image rm $DOCKER_TAGNAME_LOCAL
 if [ "$DOCKER_CMD" == "podman" ]; then
-  $DOCKER_CMD build --format docker -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $SCRIPTDIR/..
+  $DOCKER_CMD build --format docker -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $USECACHE $SCRIPTDIR/..
 else
-  $DOCKER_CMD build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $SCRIPTDIR/..
+  $DOCKER_CMD build -t $DOCKER_TAGNAME_LOCAL --build-arg "FRAMELIX_BUILD_VERSION=$BUILD_VERSION" $USECACHE $SCRIPTDIR/..
 fi
 
 if [ "$?" != "0" ]; then
